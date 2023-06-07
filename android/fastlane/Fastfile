@@ -1,0 +1,58 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+
+default_platform(:android)
+
+platform :android do
+  desc "Runs all the tests"
+  lane :test do
+    gradle(task: "test")
+  end
+
+  desc "Submit a new beta build to Google Play"
+  lane :beta do
+    key_properties = File.read('../key.properties')
+    env = File.read('../.env')
+    
+    current_version_code = google_play_track_version_codes(track: 'internal')
+    new_version_code = current_version_code[0] + 1
+    
+    gradle(
+      task: "bundle",
+      properties: {
+        "versionCode" => new_version_code,
+        "versionName" => env.match(/version=(.*)/)[1].strip[1..-1],
+        "storeFile" => key_properties.match(/storeFile=(.*)/)[1].strip,
+        "storePassword" => key_properties.match(/storePassword=(.*)/)[1].strip,
+        "keyAlias" => key_properties.match(/keyAlias=(.*)/)[1].strip,
+        "keyPassword" => key_properties.match(/keyPassword=(.*)/)[1].strip,
+      }
+    )
+    supply(
+      track: 'internal',
+      aab: '../build/app/outputs/bundle/release/app-release.aab',
+      release_status: 'draft',
+      version_code: new_version_code,
+      version_name: env.match(/version=(.*)/)[1].strip[1..-1],
+    )
+  end
+
+  desc "Deploy a new version to the Google Play"
+  lane :deploy do
+    gradle(task: "clean assembleRelease")
+    upload_to_play_store
+  end
+end

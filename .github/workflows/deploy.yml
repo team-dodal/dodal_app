@@ -1,0 +1,98 @@
+name: Deploy android and ios
+
+on:
+  push:
+    branches: [develop]
+
+jobs:
+  app_deployment:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      #   common config
+      - uses: ruby/setup-ruby@v1
+        name: Setup Ruby
+        with:
+          ruby-version: "2.6"
+          bundler-cache: true
+
+      - name: Setup JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+      - run: flutter pub get
+
+      - name: Install fastlane
+        run: brew install fastlane
+
+      #   android config
+      - name: Create keystore file, Configure key properties
+        run: |
+          echo "${{ secrets.PLAY_STORE_UPLOAD_KEY }}" | base64 --decode > app/upload-keystore.jks
+          echo "storeFile=upload-keystore.jks" >> key.properties
+          echo "keyAlias=${{ secrets.KEYSTORE_KEY_ALIAS }}" >> key.properties
+          echo "storePassword=${{ secrets.KEYSTORE_STORE_PASSWORD }}" >> key.properties
+          echo "keyPassword=${{ secrets.KEYSTORE_KEY_PASSWORD }}" >> key.properties
+        working-directory: android
+
+      - name: Get version
+        run: |
+          git fetch --tags
+          echo version="$(git describe --tags `git rev-list --tags --max-count=1`)" >> .env
+
+      - name: Create GCP API file
+        run: cat "$ENCODING_GCP_API_KEY" | base64 --decode > gcp-api-key.json
+        env:
+          ENCODING_GCP_API_KEY: ${{ secrets.ENCODING_GCP_API_KEY }}
+        working-directory: android
+
+      - name: Init gradle wrapper
+        run: |
+          gradle wrapper
+          chmod +x ./gradlew
+        working-directory: android
+
+      #   ios config
+      #       - name: Pod install
+      #         run: pod install
+      #         working-directory: ios
+      - uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_KEY }}
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+
+      - name: Create app store api key json file
+        run: |
+          echo '{"key_id": "${{ secrets.APP_STORE_API_KEY_ID }}"}' > $APP_STORE_API_KEY_ID.json
+          echo '{"issuer_id": "${{ secrets.APP_STORE_API_ISSUER_ID }}"}' > $(APP_STORE_API_KEY_ID).json
+          echo '{"key": "${{ secrets.APP_STORE_API_KEY }}"}' > $(APP_STORE_API_KEY_ID).json
+        working-directory: ios
+
+      - name: Create env file
+        run: |
+          touch .env
+          echo "iosCertUrl=${{ secrets.IOS_CERT_URL }}" >> .env
+          echo "apiKeyPath=${{ secrets.APP_STORE_API_KEY }}.json" >> .env
+        working-directory: ios
+
+      - name: Get version
+        run: |
+          git fetch --tags
+          echo version="$(git describe --tags `git rev-list --tags --max-count=1`)" >> .env
+        working-directory: ios
+
+        #   deploy android
+      - name: Run fastlane android
+        run: fastlane beta
+        working-directory: android
+
+      #   ios deploy
+      - name: Run fastlane ios
+        run: fastlane beta
+        working-directory: ios

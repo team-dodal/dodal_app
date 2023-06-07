@@ -1,0 +1,47 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Push a new release build to the App Store"
+  lane :beta do
+    env = File.read('../.env')
+
+    match(
+      git_url: env.match(/iosCertUrl=(.*)/)[1].strip,
+      type: "appstore",
+      readonly: false,
+    )
+ 
+    current_version_code = latest_testflight_build_number
+    build_number = (current_version_code + 1).to_s
+
+    increment_build_number(build_number: build_number)
+    build_app(workspace: "Runner.xcworkspace", scheme: "Runner")
+      
+    pilot(
+      skip_waiting_for_build_processing: true,
+      api_key_path: env.match(/apiKeyPath=(.*)/)[1].strip,
+      app_version: env.match(/version=(.*)/)[1].strip[1..-1],
+    )
+  end
+
+  lane :release do
+    increment_build_number(xcodeproj: "Runner.xcodeproj")
+    build_app(workspace: "Runner.xcworkspace", scheme: "Runner")
+    upload_to_app_store
+  end
+end

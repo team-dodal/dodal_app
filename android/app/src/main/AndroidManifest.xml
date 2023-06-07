@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="dodal_app"
+        android:label="도달"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
