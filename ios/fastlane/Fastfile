@@ -17,26 +17,46 @@ default_platform(:ios)
 
 platform :ios do
   desc "Push a new release build to the App Store"
-  lane :beta do
-    env = File.read('../.env')
+  lane :beta do |options|
+    password = '111111'
+    keychainName = 'ios-keychain'
 
+    ENV['MATCH_PASSWORD']=password
+    ENV['FASTLANE_PASSWORD']=password
+    
+    create_keychain(
+      name: keychainName,
+      password: password,
+      unlock: true,
+      timeout: 0,
+      lock_when_sleeps: true,
+      # require_create: true,
+    )
+    
+    version = options[:version]
     match(
-      git_url: env.match(/iosCertUrl=(.*)/)[1].strip,
+      git_url: "https://github.com/team-dodal/ios_certification.git",
+      keychain_name: keychainName,
+      keychain_password: password,
       type: "appstore",
       readonly: false,
     )
- 
+    
     current_version_code = latest_testflight_build_number
-    build_number = (current_version_code + 1).to_s
-
-    increment_build_number(build_number: build_number)
-    build_app(workspace: "Runner.xcworkspace", scheme: "Runner")
+    build_number = (current_version_code + 1)
+    # increment_build_number(build_number: build_number)
+    gym(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      xcargs: "FLUTTER_BUILD_NAME='#{build_number}'"
+    )
       
     pilot(
       skip_waiting_for_build_processing: true,
-      api_key_path: env.match(/apiKeyPath=(.*)/)[1].strip,
-      app_version: env.match(/version=(.*)/)[1].strip[1..-1],
+      api_key_path: "app-store-api-key.json",
+      app_version: version,
     )
+    delete_keychain(name: 'ios-keychain')
   end
 
   lane :release do

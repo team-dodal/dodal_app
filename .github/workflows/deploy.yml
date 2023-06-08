@@ -45,11 +45,10 @@ jobs:
         run: |
           git fetch --tags
           echo version="$(git describe --tags `git rev-list --tags --max-count=1`)" >> .env
+        working-directory: android
 
       - name: Create GCP API file
-        run: cat "$ENCODING_GCP_API_KEY" | base64 --decode > gcp-api-key.json
-        env:
-          ENCODING_GCP_API_KEY: ${{ secrets.ENCODING_GCP_API_KEY }}
+        run: echo "${{ secrets.ENCODING_GCP_API_KEY }}" | base64 --decode > gcp-api-key.json
         working-directory: android
 
       - name: Init gradle wrapper
@@ -69,9 +68,9 @@ jobs:
 
       - name: Create app store api key json file
         run: |
-          echo '{"key_id": "${{ secrets.APP_STORE_API_KEY_ID }}"}' > $APP_STORE_API_KEY_ID.json
-          echo '{"issuer_id": "${{ secrets.APP_STORE_API_ISSUER_ID }}"}' > $(APP_STORE_API_KEY_ID).json
-          echo '{"key": "${{ secrets.APP_STORE_API_KEY }}"}' > $(APP_STORE_API_KEY_ID).json
+          echo '{"key_id": "${{ secrets.APP_STORE_API_KEY_ID }}"}' > api-key.json
+          echo '{"issuer_id": "${{ secrets.APP_STORE_API_ISSUER_ID }}"}' > api-key.json
+          echo '{"key": "${{ secrets.APP_STORE_API_KEY }}"}' > api-key.json
         working-directory: ios
 
       - name: Create env file
