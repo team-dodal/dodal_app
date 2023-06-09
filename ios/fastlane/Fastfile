@@ -22,7 +22,6 @@ platform :ios do
     keychainName = 'ios-keychain'
 
     ENV['MATCH_PASSWORD']=password
-    ENV['FASTLANE_PASSWORD']=password
     
     create_keychain(
       name: keychainName,
@@ -30,25 +29,27 @@ platform :ios do
       unlock: true,
       timeout: 0,
       lock_when_sleeps: true,
-      # require_create: true,
     )
     
     version = options[:version]
     match(
-      git_url: "https://github.com/team-dodal/ios_certification.git",
+      git_url: "git@github.com:team-dodal/ios_certification.git",
       keychain_name: keychainName,
       keychain_password: password,
       type: "appstore",
-      readonly: false,
+      api_key_path: "app-store-api-key.json",
+      readonly: true,
     )
     
-    current_version_code = latest_testflight_build_number
-    build_number = (current_version_code + 1)
-    # increment_build_number(build_number: build_number)
+    current_version_code = latest_testflight_build_number(
+      api_key_path: "app-store-api-key.json",
+    )
+    build_number = current_version_code.to_i + 1
+    
     gym(
       workspace: "Runner.xcworkspace",
       scheme: "Runner",
-      xcargs: "FLUTTER_BUILD_NAME='#{build_number}'"
+      xcargs: "FLUTTER_BUILD_NAME='#{version}' FLUTTER_BUILD_NUMBER='#{build_number}'"
     )
       
     pilot(
