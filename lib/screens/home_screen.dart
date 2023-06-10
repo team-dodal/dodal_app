@@ -1,3 +1,4 @@
+import 'package:dodal_app/services/google_auth.dart';
 import 'package:dodal_app/services/kakao_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -11,11 +12,15 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   var _userInfo;
 
-  _kakaoLogin() async {
-    final info = await KakaoAuthService.login();
+  _kakaoSignIn() async {
+    final info = await KakaoAuthService.signIn();
     setState(() {
       _userInfo = info;
     });
+  }
+
+  _googleSignIn() {
+    GoogleAuthService.signIn();
   }
 
   @override
@@ -32,8 +37,12 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             if (_userInfo != null) Container(child: Text('$_userInfo')),
             ElevatedButton(
-              onPressed: _kakaoLogin,
-              child: const Text('kakao Login'),
+              onPressed: _kakaoSignIn,
+              child: const Text('Kakao SignIn'),
+            ),
+            ElevatedButton(
+              onPressed: _googleSignIn,
+              child: const Text('Google SignIn'),
             ),
           ],
         ),

@@ -10,7 +10,7 @@ class KakaoAuthService {
     );
   }
 
-  static Future<void> logout() async {
+  static Future<void> signOut() async {
     try {
       await UserApi.instance.logout();
     } catch (error) {
@@ -18,19 +18,19 @@ class KakaoAuthService {
     }
   }
 
-  static login() async {
-    if (await KakaoAuthService.checkLoginStatus()) {
+  static signIn() async {
+    if (await KakaoAuthService.checkSignInStatus()) {
       return await UserApi.instance.me();
     } else {
       if (await isKakaoTalkInstalled()) {
-        return await KakaoAuthService.loginWithApp();
+        return await KakaoAuthService.signInWithApp();
       } else {
-        return await KakaoAuthService.loginWithWeb();
+        return await KakaoAuthService.signInWithWeb();
       }
     }
   }
 
-  static Future<User?> loginWithApp() async {
+  static Future<User?> signInWithApp() async {
     try {
       await UserApi.instance.loginWithKakaoTalk();
       return await UserApi.instance.me();
@@ -39,11 +39,11 @@ class KakaoAuthService {
       if (error is PlatformException && error.code == 'CANCELED') {
         return null;
       }
-      return await KakaoAuthService.loginWithWeb();
+      return await KakaoAuthService.signInWithWeb();
     }
   }
 
-  static Future<User?> loginWithWeb() async {
+  static Future<User?> signInWithWeb() async {
     try {
       await UserApi.instance.loginWithKakaoAccount();
       return await UserApi.instance.me();
@@ -53,7 +53,7 @@ class KakaoAuthService {
     }
   }
 
-  static Future<bool> checkLoginStatus() async {
+  static Future<bool> checkSignInStatus() async {
     if (await AuthApi.instance.hasToken()) {
       try {
         await UserApi.instance.accessTokenInfo();
