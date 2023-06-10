@@ -1,12 +1,12 @@
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:flutter_config/flutter_config.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class KakaoAuthService {
   static init() {
     KakaoSdk.init(
-      nativeAppKey: FlutterConfig.get('KAKAO_NATIVE_APP_KEY'),
-      javaScriptAppKey: FlutterConfig.get('KAKAO_JAVASCRIPT_APP_KEY'),
+      nativeAppKey: dotenv.get('KAKAO_NATIVE_APP_KEY'),
+      javaScriptAppKey: dotenv.get('KAKAO_JAVASCRIPT_APP_KEY'),
     );
   }
 

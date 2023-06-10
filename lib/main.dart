@@ -2,11 +2,10 @@ import 'package:dodal_app/screens/home_screen.dart';
 import 'package:dodal_app/services/kakao_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:dodal_app/theme/theme_data.dart';
-import 'package:flutter_config/flutter_config.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await FlutterConfig.loadEnvVariables();
+  await dotenv.load(fileName: ".env");
   KakaoAuthService.init();
 
   runApp(const App());
