@@ -1,24 +1,16 @@
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:flutter_config/flutter_config.dart';
 
 class KakaoAuthService {
   static init() {
     KakaoSdk.init(
-      nativeAppKey: '23b4901366941958edb9bdde0a4721c0',
-      javaScriptAppKey: '1b3fb5c581ec97b0612d3b0db5bd7a45',
+      nativeAppKey: FlutterConfig.get('KAKAO_NATIVE_APP_KEY'),
+      javaScriptAppKey: FlutterConfig.get('KAKAO_JAVASCRIPT_APP_KEY'),
     );
   }
 
-  static getUserInfo() async {
-    try {
-      final info = await UserApi.instance.me();
-      print(info);
-    } catch (error) {
-      print('사용자 정보 요청 실패 $error');
-    }
-  }
-
-  static logout() async {
+  static Future<void> logout() async {
     try {
       await UserApi.instance.logout();
     } catch (error) {
@@ -31,25 +23,24 @@ class KakaoAuthService {
       return await UserApi.instance.me();
     } else {
       if (await isKakaoTalkInstalled()) {
-        return KakaoAuthService.loginWithApp();
+        return await KakaoAuthService.loginWithApp();
       } else {
-        return KakaoAuthService.loginWithWeb();
+        return await KakaoAuthService.loginWithWeb();
       }
     }
   }
 
   static Future<User?> loginWithApp() async {
     try {
-      await UserApi.instance.loginWithKakaoAccount();
+      await UserApi.instance.loginWithKakaoTalk();
       return await UserApi.instance.me();
     } catch (error) {
       print('카카오계정으로 로그인 실패 $error');
       if (error is PlatformException && error.code == 'CANCELED') {
         return null;
       }
-      KakaoAuthService.loginWithWeb();
+      return await KakaoAuthService.loginWithWeb();
     }
-    return null;
   }
 
   static Future<User?> loginWithWeb() async {
@@ -58,11 +49,11 @@ class KakaoAuthService {
       return await UserApi.instance.me();
     } catch (error) {
       print('카카오계정으로 로그인 실패 $error');
+      return null;
     }
-    return null;
   }
 
-  static checkLoginStatus() async {
+  static Future<bool> checkLoginStatus() async {
     if (await AuthApi.instance.hasToken()) {
       try {
         await UserApi.instance.accessTokenInfo();
