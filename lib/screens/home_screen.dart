@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:dodal_app/services/google_auth.dart';
 import 'package:dodal_app/services/kakao_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../services/apple_auth.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,6 +25,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _googleSignIn() async {
     final info = await GoogleAuthService.signIn();
+    setState(() {
+      _userInfo = info;
+    });
+  }
+
+  _appleSignIn() async {
+    final info = await AppleAuthService.signIn();
     setState(() {
       _userInfo = info;
     });
@@ -47,6 +58,11 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: _googleSignIn,
               child: const Text('Google SignIn'),
             ),
+            if (Platform.isIOS)
+              ElevatedButton(
+                onPressed: _appleSignIn,
+                child: const Text('Apple SignIn'),
+              ),
           ],
         ),
       ),
