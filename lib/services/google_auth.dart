@@ -12,12 +12,12 @@ class GoogleAuthService {
     );
   }
 
-  static Future<void> signIn() async {
+  static Future<GoogleSignInAccount?> signIn() async {
     try {
-      final res = await instance.signIn();
-      print(res);
+      return await instance.signIn();
     } catch (error) {
-      print(error);
+      print('구글 로그인 실패 $error');
+      return null;
     }
   }
 }

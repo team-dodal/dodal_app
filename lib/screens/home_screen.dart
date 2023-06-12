@@ -19,8 +19,11 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  _googleSignIn() {
-    GoogleAuthService.signIn();
+  _googleSignIn() async {
+    final info = await GoogleAuthService.signIn();
+    setState(() {
+      _userInfo = info;
+    });
   }
 
   @override

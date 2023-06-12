@@ -63,7 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '963272106482',
     projectId: 'dodal-5d31c',
     storageBucket: 'dodal-5d31c.appspot.com',
-    androidClientId: '963272106482-1ho8ld1m6i6sd9p73kn0uqrtb31a44q4.apps.googleusercontent.com',
+    androidClientId: '963272106482-b4ofsg7q6lujll08161mlph5utmje828.apps.googleusercontent.com',
     iosClientId: '963272106482-fhc4cfiv8cjpet24ldcf1r405s2eigfn.apps.googleusercontent.com',
     iosBundleId: 'com.project.dodalApp',
   );
