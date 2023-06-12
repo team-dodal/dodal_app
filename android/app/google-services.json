@@ -14,11 +14,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "963272106482-1ho8ld1m6i6sd9p73kn0uqrtb31a44q4.apps.googleusercontent.com",
+          "client_id": "963272106482-cififbcm9unrcggf3doni2slve3dia0c.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.project.dodal_app",
-            "certificate_hash": "30762ff6066251a5ebec1a26ba1a398536a161dc"
+            "certificate_hash": "cf95e0454609ddbb3dd11c901d2e8cc313542cbd"
+          }
+        },
+        {
+          "client_id": "963272106482-uqqff37ubo4n7clitrr20hpsbhv37rum.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.project.dodal_app",
+            "certificate_hash": "d6aa65cbb5862f1ff6ec5665cb77b7a4b9a9279a"
           }
         },
         {

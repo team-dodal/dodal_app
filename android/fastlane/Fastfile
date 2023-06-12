@@ -25,7 +25,6 @@ platform :android do
   desc "Submit a new beta build to Google Play"
   lane :beta do |options|
     version = options[:version]
-    key_properties = File.read('../key.properties')
     
     current_version_code = google_play_track_version_codes(track: 'internal')
     new_version_code = current_version_code[0] + 1
@@ -35,10 +34,6 @@ platform :android do
       properties: {
         "versionCode" => new_version_code,
         "versionName" => version,
-        "storeFile" => key_properties.match(/storeFile=(.*)/)[1].strip,
-        "storePassword" => key_properties.match(/storePassword=(.*)/)[1].strip,
-        "keyAlias" => key_properties.match(/keyAlias=(.*)/)[1].strip,
-        "keyPassword" => key_properties.match(/keyPassword=(.*)/)[1].strip,
       }
     )
     supply(

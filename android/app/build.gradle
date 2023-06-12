@@ -1,5 +1,5 @@
 def keystoreProperties = new Properties()
-def keystorePropertiesFile = rootProject.file('key.properties')
+def keystorePropertiesFile = rootProject.file('app/keystore/key.properties')
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
@@ -14,16 +14,6 @@ if (localPropertiesFile.exists()) {
 def flutterRoot = localProperties.getProperty('flutter.sdk')
 if (flutterRoot == null) {
     throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
-}
-
-def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
-if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
-}
-
-def flutterVersionName = localProperties.getProperty('flutter.versionName')
-if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
 }
 
 apply plugin: 'com.android.application'
@@ -63,16 +53,25 @@ android {
     }
 
     signingConfigs {
-       release {
-            keyAlias project.hasProperty('keyAlias')? project.keyAlias :null
-            keyPassword project.hasProperty('keyPassword')? project.keyPassword :null
-            storePassword project.hasProperty('storePassword')? project.storePassword :null
-            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-       }
+        debug {
+            keyAlias keystoreProperties.getProperty('debugKeyAlias')
+            keyPassword keystoreProperties.getProperty('keyPassword')
+            storePassword keystoreProperties.getProperty('storePassword')
+            storeFile file(keystoreProperties.getProperty('debugStoreFile'))
+        }
+        release {
+            keyAlias keystoreProperties.getProperty('releaseKeyAlias')
+            keyPassword keystoreProperties.getProperty('keyPassword')
+            storePassword keystoreProperties.getProperty('storePassword')
+            storeFile file(keystoreProperties.getProperty('releaseStoreFile'))
+        }
    }
    buildTypes {
        release {
-           signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
+       }
+       debug {
+            signingConfig signingConfigs.debug
        }
    }
 }
