@@ -1,40 +1,47 @@
 import 'dart:io';
-
-import 'package:dodal_app/services/google_auth.dart';
-import 'package:dodal_app/services/kakao_auth.dart';
 import 'package:flutter/material.dart';
+import '../services/social_auth.dart';
 
-import '../services/apple_auth.dart';
-
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
+  _socialSignIn(BuildContext context, SocialType type) async {
+    final Object? data;
+    switch (type) {
+      case SocialType.GOOGLE:
+        data = await GoogleAuthService.signIn();
+      case SocialType.KAKAO:
+        data = await KakaoAuthService.signIn();
+      case SocialType.APPLE:
+        data = await AppleAuthService.signIn();
+      default:
+        return;
+    }
+    if (data == null) return;
 
-class _HomeScreenState extends State<HomeScreen> {
-  var _userInfo;
-
-  _kakaoSignIn() async {
-    final info = await KakaoAuthService.signIn();
-    setState(() {
-      _userInfo = info;
-    });
+    if (context.mounted) {
+      _showDialog(context, '$data');
+    }
   }
 
-  _googleSignIn() async {
-    final info = await GoogleAuthService.signIn();
-    setState(() {
-      _userInfo = info;
-    });
-  }
-
-  _appleSignIn() async {
-    final info = await AppleAuthService.signIn();
-    setState(() {
-      _userInfo = info;
-    });
+  _showDialog(BuildContext context, String data) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            decoration: const BoxDecoration(color: Colors.white),
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(data),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -49,18 +56,23 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (_userInfo != null) Container(child: Text('$_userInfo')),
             ElevatedButton(
-              onPressed: _kakaoSignIn,
+              onPressed: () {
+                _socialSignIn(context, SocialType.KAKAO);
+              },
               child: const Text('Kakao SignIn'),
             ),
             ElevatedButton(
-              onPressed: _googleSignIn,
+              onPressed: () {
+                _socialSignIn(context, SocialType.GOOGLE);
+              },
               child: const Text('Google SignIn'),
             ),
             if (Platform.isIOS)
               ElevatedButton(
-                onPressed: _appleSignIn,
+                onPressed: () {
+                  _socialSignIn(context, SocialType.APPLE);
+                },
                 child: const Text('Apple SignIn'),
               ),
           ],
