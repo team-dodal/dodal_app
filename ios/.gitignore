@@ -33,5 +33,6 @@ Runner/GeneratedPluginRegistrant.*
 !default.pbxuser
 !default.perspectivev3
 
-
+Runner.app.*
+Runner.ipa
 report.xml
