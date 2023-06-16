@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import '../services/social_auth.dart';
+import '../utilities/social_auth.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

@@ -39,6 +39,7 @@ dependencies:
   firebase_core: ^2.13.1
   google_sign_in: ^6.1.4
   sign_in_with_apple: ^4.3.0
+  dio: ^5.2.1+1
 
 dev_dependencies:
   flutter_test:

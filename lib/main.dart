@@ -1,5 +1,4 @@
 import 'package:dodal_app/screens/home_screen.dart';
-import 'package:dodal_app/services/social_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:dodal_app/theme/theme_data.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -9,7 +8,6 @@ import 'firebase_options.dart';
 void main() async {
   await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  KakaoAuthService.init();
 
   runApp(const App());
 }
