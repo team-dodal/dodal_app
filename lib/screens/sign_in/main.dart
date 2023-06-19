@@ -1,9 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import '../utilities/social_auth.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+import '../../utilities/social_auth.dart';
+
+class SignInScreen extends StatelessWidget {
+  const SignInScreen({super.key});
 
   _socialSignIn(BuildContext context, SocialType type) async {
     final Object? data;
