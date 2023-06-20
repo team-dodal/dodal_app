@@ -41,6 +41,8 @@ dependencies:
   sign_in_with_apple: ^4.3.0
   dio: ^5.2.1+1
   animations: ^2.0.7
+  firebase_messaging: ^14.6.3
+  flutter_local_notifications: ^14.1.1
 
 dev_dependencies:
   flutter_test:
