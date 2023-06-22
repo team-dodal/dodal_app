@@ -1,7 +1,9 @@
 import 'package:animations/animations.dart';
+import 'package:dodal_app/helper/slide_page_route.dart';
 import 'package:dodal_app/screens/main_route/home_screen.dart';
 import 'package:dodal_app/screens/main_route/mypage_screen.dart';
-import 'package:dodal_app/screens/settings/main.dart';
+import 'package:dodal_app/screens/notification/main.dart';
+import 'package:dodal_app/screens/settings_menu/main.dart';
 import 'package:flutter/material.dart';
 
 import '../../model/navigation_route.dart';
@@ -36,11 +38,8 @@ class _MainRouteState extends State<MainRoute> {
   final PageController _pageController = PageController();
   int _currentIndex = 0;
 
-  void _routeSettingsScreen() {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (BuildContext context) {
-      return const SettingScreen();
-    }));
+  void _handleActionBtn(Widget screen) {
+    Navigator.of(context).push(SlidePageRoute(screen: screen));
   }
 
   @override
@@ -55,9 +54,18 @@ class _MainRouteState extends State<MainRoute> {
       appBar: AppBar(
         title: Text(_routes.map((route) => route.name).toList()[_currentIndex]),
         actions: [
+          if (_currentIndex == 0)
+            IconButton(
+              onPressed: () {
+                _handleActionBtn(const NotiFicationScreen());
+              },
+              icon: const Icon(Icons.notifications_none),
+            ),
           if (_currentIndex == 2)
             IconButton(
-              onPressed: _routeSettingsScreen,
+              onPressed: () {
+                _handleActionBtn(const SettingsMenuScreen());
+              },
               icon: const Icon(Icons.settings),
             )
         ],

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class SettingScreen extends StatelessWidget {
-  const SettingScreen({super.key});
+class NotiFicationScreen extends StatelessWidget {
+  const NotiFicationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: const Text('알림'),
       ),
     );
   }

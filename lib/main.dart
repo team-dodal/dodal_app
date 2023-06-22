@@ -1,3 +1,4 @@
+import 'package:dodal_app/screens/main_route/main.dart';
 import 'package:dodal_app/utilities/fcm.dart';
 import 'package:flutter/material.dart';
 import 'package:dodal_app/theme/theme_data.dart';
@@ -22,7 +23,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: lightTheme,
-      home: const Scaffold(),
+      home: const MainRoute(),
     );
   }
 }
