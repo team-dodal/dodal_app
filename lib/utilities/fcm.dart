@@ -3,70 +3,78 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 // 백그라운드 핸들러
 Future<void> backgroundHandler(RemoteMessage message) async {
-  print("Handling a background message: ${message.messageId}");
+  if (Fcm.isAllow) {
+    print("Handling a background message: ${message.messageId}");
+  }
 }
 
-Future<String?> fcmInit() async {
-  // firebase core 기능 사용을 위한 필수 initializing
-  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-
-  await messaging.setForegroundNotificationPresentationOptions(
-    alert: true,
-    badge: true,
-    sound: true,
-  );
-
-  await messaging.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
-  );
-
+class Fcm {
+  static final messaging = FirebaseMessaging.instance;
+  static late String? token;
+  static late bool isAllow;
   // foreground에서의 푸시 알림 표시를 위한 알림 중요도 설정 (안드로이드)
-  const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  static const channel = AndroidNotificationChannel(
     'high_importance_channel',
     'High Importance Channel',
-    description: 'alert',
+    description: 'notification',
     importance: Importance.max,
   );
-
-  // foreground 에서의 푸시 알림 표시를 위한 local notifications 설정
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  static final flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel);
 
-  // foreground 푸시 알림 핸들링
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    RemoteNotification? notification = message.notification;
-    AndroidNotification? android = message.notification?.android;
+  static init() async {
+    FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+    token = await messaging.getToken();
 
-    if (message.notification != null && android != null) {
-      flutterLocalNotificationsPlugin.show(
-          notification.hashCode,
-          notification?.title,
-          notification?.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              channelDescription: channel.description,
-              icon: android.smallIcon,
-            ),
-          ));
-      print('Message also contained a notification: ${message.notification}');
-    }
-  });
+    await requestPermission();
 
-  // firebase token 발급
-  String? firebaseToken = await messaging.getToken();
+    // foreground 에서의 푸시 알림 표시를 위한 local notifications 설정
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
 
-  return firebaseToken;
+    foregroundHandler();
+  }
+
+  static requestPermission() async {
+    await messaging.setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+    final permission = await messaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+    isAllow = permission.authorizationStatus == AuthorizationStatus.authorized;
+  }
+
+  static foregroundHandler() {
+    // foreground 푸시 알림 핸들링
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+
+      if (message.notification != null && android != null) {
+        if (isAllow) {
+          flutterLocalNotificationsPlugin.show(
+              notification.hashCode,
+              notification?.title,
+              notification?.body,
+              NotificationDetails(
+                android: AndroidNotificationDetails(
+                  channel.id,
+                  channel.name,
+                  channelDescription: channel.description,
+                  icon: "@mipmap/ic_launcher",
+                ),
+              ));
+          print(
+              'Message also contained a notification: ${message.notification}');
+        }
+      }
+    });
+  }
 }

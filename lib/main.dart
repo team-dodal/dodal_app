@@ -1,4 +1,4 @@
-import 'package:dodal_app/screens/main_route/main.dart';
+import 'package:dodal_app/screens/main.dart';
 import 'package:dodal_app/utilities/fcm.dart';
 import 'package:flutter/material.dart';
 import 'package:dodal_app/theme/theme_data.dart';
@@ -9,8 +9,8 @@ import 'firebase_options.dart';
 void main() async {
   await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  String? firebaseToken = await fcmInit();
-  print(firebaseToken);
+  await Fcm.init();
+  print(Fcm.token);
 
   runApp(const App());
 }
@@ -21,9 +21,9 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: '도달',
       theme: lightTheme,
-      home: const MainRoute(),
+      home: const InitRoute(),
     );
   }
 }
