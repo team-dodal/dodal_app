@@ -1,7 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/helper/slide_page_route.dart';
 import 'package:dodal_app/screens/create_feed/main.dart';
-import 'package:dodal_app/screens/group_menu/main.dart';
+import 'package:dodal_app/screens/group_settings_menu/main.dart';
 import 'package:dodal_app/screens/group_route/chat_screen.dart';
 import 'package:dodal_app/screens/group_route/home_feed_screen.dart';
 import 'package:dodal_app/screens/group_route/ranking_screen.dart';
@@ -27,7 +27,8 @@ class _GroupRouteState extends State<GroupRoute> with TickerProviderStateMixin {
   late TabController _tabController;
 
   void _routeMenuScreen() {
-    Navigator.of(context).push(SlidePageRoute(screen: const GroupMenuScreen()));
+    Navigator.of(context)
+        .push(SlidePageRoute(screen: const GroupSettingsMenuScreen()));
   }
 
   @override

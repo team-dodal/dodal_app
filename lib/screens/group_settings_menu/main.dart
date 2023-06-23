@@ -1,9 +1,9 @@
-import 'package:dodal_app/screens/group_menu/manage_group_screen.dart';
-import 'package:dodal_app/screens/group_menu/modify_group_screen.dart';
+import 'package:dodal_app/screens/group_settings_menu/manage_group_screen.dart';
+import 'package:dodal_app/screens/group_settings_menu/modify_group_screen.dart';
 import 'package:flutter/material.dart';
 
-class GroupMenuScreen extends StatelessWidget {
-  const GroupMenuScreen({super.key});
+class GroupSettingsMenuScreen extends StatelessWidget {
+  const GroupSettingsMenuScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
