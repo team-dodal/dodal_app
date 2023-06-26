@@ -1,10 +1,10 @@
 import 'dart:io';
+import 'package:dodal_app/screens/main_route/main.dart';
 import 'package:dodal_app/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../utilities/social_auth.dart';
-import '../main_route/main.dart';
 import '../sign_up/main.dart';
 
 class SignInScreen extends StatelessWidget {
@@ -33,11 +33,17 @@ class SignInScreen extends StatelessWidget {
       secureStorage.write(key: 'refreshToken', value: res.refreshToken);
     }
 
-    if (context.mounted) {
+    if (!context.mounted) return;
+
+    if (res.isSigned) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (ctx) => const MainRoute()),
+          (route) => false);
+    } else {
       Navigator.of(context).push(
         MaterialPageRoute(
-            builder: (ctx) =>
-                res.isSigned ? const MainRoute() : const SignUpScreen()),
+          builder: (ctx) => SignUpScreen(socialType: type, socialId: id!),
+        ),
       );
     }
   }
@@ -45,10 +51,7 @@ class SignInScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('도달'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
+      appBar: AppBar(title: const Text('도달')),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.max,

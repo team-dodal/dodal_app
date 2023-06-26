@@ -1,8 +1,10 @@
-import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 Future<Dio> dio() async {
+  FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+
   Dio dio = Dio(BaseOptions(
     baseUrl: dotenv.get('BASE_URL'),
   ));
@@ -10,11 +12,11 @@ Future<Dio> dio() async {
   dio.interceptors.add(
     InterceptorsWrapper(
       onRequest: (RequestOptions options, RequestInterceptorHandler handler) {
-        log('request interceptor');
+        final accessToken = secureStorage.read(key: 'accessToken');
+        options.headers['Authorization'] = 'Bearer $accessToken';
         return handler.next(options);
       },
       onResponse: (Response response, ResponseInterceptorHandler handler) {
-        log('response interceptor');
         return handler.next(response);
       },
       onError: (DioException e, ErrorInterceptorHandler handler) {
