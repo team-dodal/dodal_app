@@ -23,9 +23,3 @@ deploy_ios:
 	fastlane beta version:$(get_last_version)
 
 deploy_start: deploy_android deploy_ios
-
-codegen:
-	source .env && \
-	curl -X GET $$BASE_URL/v3/api-docs -o sample.json && \
-	npx json2yaml sample.json > sample.yaml && \
-	openapi-generator-cli generate -i sample.yaml -o ./api -g dart-dio

@@ -1,48 +1,45 @@
 import 'dart:io';
+import 'package:dodal_app/services/user_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../utilities/social_auth.dart';
+import '../main_route/main.dart';
+import '../sign_up/main.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
 
+  final secureStorage = const FlutterSecureStorage();
+
   _socialSignIn(BuildContext context, SocialType type) async {
-    final Object? data;
+    final String? id;
     switch (type) {
       case SocialType.GOOGLE:
-        data = await GoogleAuthService.signIn();
+        id = await GoogleAuthService.signIn();
       case SocialType.KAKAO:
-        data = await KakaoAuthService.signIn();
+        id = await KakaoAuthService.signIn();
       case SocialType.APPLE:
-        data = await AppleAuthService.signIn();
+        id = await AppleAuthService.signIn();
       default:
         return;
     }
-    if (data == null) return;
+    if (id == null) return;
+
+    SignInResponse res = await UserService.signIn(type, id);
+
+    if (res.accessToken != null && res.refreshToken != null) {
+      secureStorage.write(key: 'accessToken', value: res.accessToken);
+      secureStorage.write(key: 'refreshToken', value: res.refreshToken);
+    }
 
     if (context.mounted) {
-      _showDialog(context, '$data');
+      Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (ctx) =>
+                res.isSigned ? const MainRoute() : const SignUpScreen()),
+      );
     }
-  }
-
-  _showDialog(BuildContext context, String data) {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          child: Container(
-            decoration: const BoxDecoration(color: Colors.white),
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(data),
-              ],
-            ),
-          ),
-        );
-      },
-    );
   }
 
   @override

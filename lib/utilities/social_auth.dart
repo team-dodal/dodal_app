@@ -9,7 +9,7 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 enum SocialType { KAKAO, GOOGLE, APPLE }
 
 class AppleAuthService {
-  static Future<AuthorizationCredentialAppleID?> signIn() async {
+  static Future<String?> signIn() async {
     try {
       final idCredential = await SignInWithApple.getAppleIDCredential(
         scopes: [
@@ -18,7 +18,7 @@ class AppleAuthService {
         ],
       );
       log('${idCredential.identityToken}');
-      return idCredential;
+      return idCredential.userIdentifier;
     } catch (error) {
       log('애플 로그인 실패 $error');
       return null;
@@ -34,9 +34,10 @@ class GoogleAuthService {
     ],
   );
 
-  static Future<GoogleSignInAccount?> signIn() async {
+  static Future<String?> signIn() async {
     try {
-      return await GoogleSignIn().signIn();
+      final res = await GoogleSignIn().signIn();
+      return res!.id;
     } catch (err) {
       log('$err');
       return null;
@@ -45,7 +46,7 @@ class GoogleAuthService {
 }
 
 class KakaoAuthService {
-  static Future<User?> signIn() async {
+  static signIn() async {
     KakaoSdk.init(
       nativeAppKey: dotenv.get('KAKAO_NATIVE_APP_KEY'),
       javaScriptAppKey: dotenv.get('KAKAO_JAVASCRIPT_APP_KEY'),
@@ -57,10 +58,11 @@ class KakaoAuthService {
     }
   }
 
-  static Future<User?> signInWithApp() async {
+  static Future<String?> signInWithApp() async {
     try {
       await UserApi.instance.loginWithKakaoTalk();
-      return await UserApi.instance.me();
+      final user = await UserApi.instance.me();
+      return user.id.toString();
     } catch (error) {
       log('카카오계정으로 로그인 실패 $error');
       if (error is PlatformException && error.code == 'CANCELED') {
@@ -70,10 +72,11 @@ class KakaoAuthService {
     }
   }
 
-  static Future<User?> signInWithWeb() async {
+  static Future<String?> signInWithWeb() async {
     try {
       await UserApi.instance.loginWithKakaoAccount();
-      return await UserApi.instance.me();
+      final user = await UserApi.instance.me();
+      return user.id.toString();
     } catch (error) {
       log('카카오계정으로 로그인 실패 $error');
       return null;
