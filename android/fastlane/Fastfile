@@ -29,6 +29,7 @@ platform :android do
     current_version_code = google_play_track_version_codes(track: 'internal')
     new_version_code = current_version_code[0] + 1
     
+    sh("echo 'ANDROID_BUILD_NUMBER=#{new_version_code}' >> ../../deploy.history")
     gradle(
       task: "bundle",
       properties: {

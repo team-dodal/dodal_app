@@ -45,6 +45,7 @@ platform :ios do
       api_key_path: "app-store-api-key.json",
     )
     build_number = current_version_code.to_i + 1
+    sh("echo 'IOS_BUILD_NUMBER=#{build_number}' >> ../../deploy.history")
     
     gym(
       workspace: "Runner.xcworkspace",
