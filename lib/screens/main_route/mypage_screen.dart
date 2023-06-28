@@ -1,4 +1,5 @@
 import 'package:dodal_app/screens/modify_user/main.dart';
+import 'package:dodal_app/widgets/mypage/calendar_marker.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -27,18 +28,19 @@ class MyPageScreen extends StatelessWidget {
               formatButtonVisible: false,
               titleCentered: true,
             ),
-            calendarStyle: CalendarStyle(
-              weekendTextStyle: const TextStyle(color: Colors.red),
-              markerSizeScale: 1,
-              markersAnchor: 1,
-              markerDecoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.4),
-                shape: BoxShape.circle,
-              ),
+            calendarStyle: const CalendarStyle(
+              weekendTextStyle: TextStyle(color: Colors.red),
+              markersAlignment: Alignment.center,
+            ),
+            calendarBuilders: CalendarBuilders(
+              markerBuilder: (context, day, events) {
+                if (events.isEmpty) return null;
+                return CalendarMarker(text: day.day.toString());
+              },
             ),
             eventLoader: (day) {
-              if (day.day % 2 == 0) return ['test'];
-              return [];
+              if (day.day % 2 == 0) return [];
+              return ['test'];
             },
           )
         ],

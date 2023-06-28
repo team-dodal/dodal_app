@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/helper/slide_page_route.dart';
+import 'package:dodal_app/screens/main_route/feed_screen.dart';
 import 'package:dodal_app/screens/main_route/home_screen.dart';
 import 'package:dodal_app/screens/main_route/mypage_screen.dart';
 import 'package:dodal_app/screens/notification/main.dart';
@@ -14,6 +15,11 @@ final List<NavigationRoute> _routes = [
     name: '홈',
     icon: const Icon(Icons.home),
     screen: const HomeScreen(),
+  ),
+  NavigationRoute(
+    icon: const Icon(Icons.feed),
+    name: '피드',
+    screen: const FeedScreen(),
   ),
   NavigationRoute(
     name: '그룹',
@@ -61,7 +67,7 @@ class _MainRouteState extends State<MainRoute> {
               },
               icon: const Icon(Icons.notifications_none),
             ),
-          if (_currentIndex == 2)
+          if (_currentIndex == 3)
             IconButton(
               onPressed: () {
                 _handleActionBtn(const SettingsMenuScreen());
@@ -81,6 +87,7 @@ class _MainRouteState extends State<MainRoute> {
         child: _routes.map((route) => route.screen).toList()[_currentIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         items: _routes
             .map((route) =>
                 BottomNavigationBarItem(icon: route.icon!, label: route.name))
