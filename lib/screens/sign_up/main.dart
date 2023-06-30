@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../services/user_service.dart';
-import '../../utilities/fcm.dart';
 import '../main_route/main.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -33,9 +32,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
     SignUpResponse res = await UserService.signUp(
       widget.socialType,
       widget.socialId,
+      'test@test.com',
       _nickname,
+      '안녕하세요',
       ["001001", "002003", "004001"],
-      Fcm.token!,
     );
 
     if (res.accessToken != null && res.refreshToken != null) {

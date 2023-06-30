@@ -35,18 +35,20 @@ class UserService {
   static signUp(
     SocialType socialType,
     String socialId,
+    String email,
     String nickname,
+    String content,
     List<String> category,
-    String fcmToken,
   ) async {
     try {
       final service = await dio();
       final res = await service.post('/api/v1/users/sign-up', data: {
         "social_type": socialType.name,
         "social_id": socialId,
+        "email": email,
         "nickname": nickname,
+        "content": content,
         "favorite_category": category,
-        "fcm_token": fcmToken,
       });
       return SignUpResponse.fromJson(res.data['result']);
     } catch (err) {
