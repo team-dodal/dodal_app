@@ -32,7 +32,6 @@ class App extends StatelessWidget {
       home: FutureBuilder(
         future: UserService.user(),
         builder: (ctx, snapshot) {
-          print(snapshot);
           final isLoading = snapshot.connectionState == ConnectionState.waiting;
           if (isLoading) return const Placeholder();
           return const Placeholder();

@@ -4,8 +4,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 Future<Dio> dio() async {
   FlutterSecureStorage secureStorage = const FlutterSecureStorage();
-  final accessToken = await secureStorage.read(key: 'accessToken');
-  final refreshToken = await secureStorage.read(key: 'refreshToken');
 
   Dio dio = Dio(BaseOptions(
     baseUrl: dotenv.get('BASE_URL'),
@@ -13,18 +11,55 @@ Future<Dio> dio() async {
 
   dio.interceptors.add(
     InterceptorsWrapper(
-      onRequest: (RequestOptions options, RequestInterceptorHandler handler) {
-        final accessToken = secureStorage.read(key: 'accessToken');
+      onRequest:
+          (RequestOptions options, RequestInterceptorHandler handler) async {
+        final accessToken = await secureStorage.read(key: 'accessToken');
         options.headers['Authorization'] = 'Bearer $accessToken';
         return handler.next(options);
       },
       onResponse: (Response response, ResponseInterceptorHandler handler) {
         return handler.next(response);
       },
-      onError: (DioException e, ErrorInterceptorHandler handler) {
+      onError: (DioException e, ErrorInterceptorHandler handler) async {
         if (e.response?.statusCode == 401) {
-          print(accessToken);
-          print(refreshToken);
+          Dio refreshDio = Dio(BaseOptions(
+            baseUrl: dotenv.get('BASE_URL'),
+          ));
+          refreshDio.interceptors.clear();
+          refreshDio.interceptors.add(InterceptorsWrapper(
+            onRequest: (options, handler) async {
+              final refreshToken =
+                  await secureStorage.read(key: 'refreshToken');
+              options.headers['Authorization'] = 'Bearer $refreshToken';
+              return handler.next(options);
+            },
+            onError: (e, handler) async {
+              if (e.response!.statusCode == 401) {
+                secureStorage.deleteAll();
+                handler.reject(e);
+              }
+            },
+          ));
+
+          try {
+            final res = await refreshDio.post('/api/v1/users/access-token');
+            final newAccessToken = res.data['result'];
+            await secureStorage.write(
+                key: 'accessToken', value: newAccessToken);
+            e.requestOptions.headers['Authorization'] =
+                'Bearer $newAccessToken';
+
+            final clonedRequest = await dio.request(
+              e.requestOptions.path,
+              options: Options(
+                method: e.requestOptions.method,
+                headers: e.requestOptions.headers,
+              ),
+              data: e.requestOptions.data,
+              queryParameters: e.requestOptions.queryParameters,
+            );
+            return handler.resolve(clonedRequest);
+          } catch (err) {}
         }
         return handler.next(e);
       },
