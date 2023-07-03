@@ -4,6 +4,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 Future<Dio> dio() async {
   FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+  final accessToken = await secureStorage.read(key: 'accessToken');
+  final refreshToken = await secureStorage.read(key: 'refreshToken');
 
   Dio dio = Dio(BaseOptions(
     baseUrl: dotenv.get('BASE_URL'),
@@ -20,6 +22,10 @@ Future<Dio> dio() async {
         return handler.next(response);
       },
       onError: (DioException e, ErrorInterceptorHandler handler) {
+        if (e.response?.statusCode == 401) {
+          print(accessToken);
+          print(refreshToken);
+        }
         return handler.next(e);
       },
     ),

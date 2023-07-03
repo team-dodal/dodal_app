@@ -55,4 +55,45 @@ class UserService {
       throw Exception(err);
     }
   }
+
+  static user() async {
+    try {
+      final service = await dio();
+      final res = await service.get('/api/v1/users/me');
+      return res.data['result'];
+    } catch (err) {
+      throw Exception(err);
+    }
+  }
+
+  static uploadProfileImg(String profile) async {
+    try {
+      final service = await dio();
+      final res =
+          await service.post('/api/v1/users/profile', data: {profile: profile});
+      return res.data['result'];
+    } catch (err) {
+      throw Exception(err);
+    }
+  }
+
+  static checkNickName(String nickname) async {
+    try {
+      final service = await dio();
+      final res = await service.post('/api/v1/users/nickname/$nickname');
+      return res.data['result'];
+    } catch (err) {
+      throw Exception(err);
+    }
+  }
+
+  static removeUser() async {
+    try {
+      final service = await dio();
+      final res = await service.delete('/api/v1/users/me');
+      return res.data['result'];
+    } catch (err) {
+      throw Exception(err);
+    }
+  }
 }
