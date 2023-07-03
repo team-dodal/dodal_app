@@ -37,6 +37,7 @@ class UserService {
     String socialId,
     String email,
     String nickname,
+    String profileUrl,
     String content,
     List<String> category,
   ) async {
@@ -47,8 +48,9 @@ class UserService {
         "social_id": socialId,
         "email": email,
         "nickname": nickname,
+        "profile_url": profileUrl,
         "content": content,
-        "favorite_category": category,
+        "tag_list": category,
       });
       return SignUpResponse.fromJson(res.data['result']);
     } catch (err) {
@@ -62,7 +64,7 @@ class UserService {
       final res = await service.get('/api/v1/users/me');
       return res.data['result'];
     } catch (err) {
-      throw Exception(err);
+      return Future.error(err.toString());
     }
   }
 
@@ -90,8 +92,7 @@ class UserService {
   static removeUser() async {
     try {
       final service = await dio();
-      final res = await service.delete('/api/v1/users/me');
-      return res.data['result'];
+      await service.delete('/api/v1/users/me');
     } catch (err) {
       throw Exception(err);
     }

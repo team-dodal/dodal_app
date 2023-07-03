@@ -36,7 +36,7 @@ Future<Dio> dio() async {
             onError: (e, handler) async {
               if (e.response!.statusCode == 401) {
                 secureStorage.deleteAll();
-                handler.reject(e);
+                return handler.reject(e);
               }
             },
           ));
@@ -45,7 +45,9 @@ Future<Dio> dio() async {
             final res = await refreshDio.post('/api/v1/users/access-token');
             final newAccessToken = res.data['result'];
             await secureStorage.write(
-                key: 'accessToken', value: newAccessToken);
+              key: 'accessToken',
+              value: newAccessToken,
+            );
             e.requestOptions.headers['Authorization'] =
                 'Bearer $newAccessToken';
 

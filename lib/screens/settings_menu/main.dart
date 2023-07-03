@@ -1,4 +1,5 @@
 import 'package:dodal_app/screens/sign_in/main.dart';
+import 'package:dodal_app/services/user_service.dart';
 import 'package:dodal_app/utilities/fcm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -14,14 +15,18 @@ class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
   FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 
   _signOut() async {
-    await secureStorage.delete(key: 'accessToken');
-    await secureStorage.delete(key: 'refreshToken');
+    secureStorage.deleteAll();
 
     if (context.mounted) {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (ctx) => const SignInScreen()),
           (route) => false);
     }
+  }
+
+  _removeMyAccount() async {
+    await UserService.removeUser();
+    secureStorage.deleteAll();
   }
 
   @override
@@ -44,7 +49,14 @@ class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
           ListTile(
             title: const Text('로그아웃'),
             onTap: _signOut,
-          )
+          ),
+          ListTile(
+            title: const Text(
+              '회원 탈퇴',
+              style: TextStyle(color: Colors.red),
+            ),
+            onTap: _removeMyAccount,
+          ),
         ],
       ),
     );

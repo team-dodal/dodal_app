@@ -1,3 +1,5 @@
+import 'package:dodal_app/screens/main_route/main.dart';
+import 'package:dodal_app/screens/sign_in/main.dart';
 import 'package:dodal_app/services/user_service.dart';
 import 'package:dodal_app/theme/theme_data.dart';
 import 'package:dodal_app/utilities/fcm.dart';
@@ -16,11 +18,13 @@ void main() async {
   await Fcm.init();
   await initializeDateFormatting();
 
-  runApp(const App());
+  runApp(App());
 }
 
 class App extends StatelessWidget {
-  const App({super.key});
+  App({super.key});
+
+  final Future<dynamic> _user = UserService.user();
 
   @override
   Widget build(BuildContext context) {
@@ -30,17 +34,16 @@ class App extends StatelessWidget {
       darkTheme: ThemeData.dark(useMaterial3: true),
       themeMode: ThemeMode.dark,
       home: FutureBuilder(
-        future: UserService.user(),
+        future: _user,
         builder: (ctx, snapshot) {
           final isLoading = snapshot.connectionState == ConnectionState.waiting;
           if (isLoading) return const Placeholder();
-          return const Placeholder();
-          // FlutterNativeSplash.remove();
-          // if (snapshot.data!) {
-          //   return const MainRoute();
-          // } else {
-          //   return const SignInScreen();
-          // }
+          FlutterNativeSplash.remove();
+          if (snapshot.data != null) {
+            return const MainRoute();
+          } else {
+            return const SignInScreen();
+          }
         },
       ),
     );

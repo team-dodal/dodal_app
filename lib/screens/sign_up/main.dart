@@ -24,6 +24,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
   FlutterSecureStorage secureStorage = const FlutterSecureStorage();
   String _nickname = '';
+  String _content = '';
 
   _submit() async {
     if (!_formKey.currentState!.validate()) return;
@@ -34,7 +35,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       widget.socialId,
       'test@test.com',
       _nickname,
-      '안녕하세요',
+      '',
+      _content,
       ["001001", "002003", "004001"],
     );
 
@@ -65,6 +67,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   _nickname = value!;
                 },
                 validator: Validator.nickname,
+              ),
+              const SizedBox(height: 40),
+              TextFormField(
+                decoration: const InputDecoration(labelText: '한 줄 소개'),
+                onSaved: (value) {
+                  _content = value!;
+                },
+                validator: Validator.content,
               ),
             ],
           ),
