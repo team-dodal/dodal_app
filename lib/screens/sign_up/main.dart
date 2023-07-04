@@ -66,7 +66,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 onSaved: (value) {
                   _nickname = value!;
                 },
-                validator: Validator.nickname,
+                validator: Validator.signUpNickname,
               ),
               const SizedBox(height: 40),
               TextFormField(
@@ -74,7 +74,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 onSaved: (value) {
                   _content = value!;
                 },
-                validator: Validator.content,
+                validator: Validator.signUpContent,
               ),
             ],
           ),

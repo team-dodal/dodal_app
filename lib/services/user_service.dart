@@ -68,6 +68,15 @@ class UserService {
     }
   }
 
+  static updateFcmToken(String token) async {
+    try {
+      final service = await dio();
+      await service.post('/api/v1/users/fcm-token', data: {'fcm_token': token});
+    } catch (err) {
+      return Exception(err);
+    }
+  }
+
   static uploadProfileImg(String profile) async {
     try {
       final service = await dio();
