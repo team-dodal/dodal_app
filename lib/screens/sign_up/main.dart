@@ -1,5 +1,6 @@
 import 'package:dodal_app/helper/validator.dart';
 import 'package:dodal_app/utilities/social_auth.dart';
+import 'package:dodal_app/widgets/common/system_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -23,8 +24,29 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
   FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+  bool _nicknameChecked = false;
   String _nickname = '';
   String _content = '';
+
+  _checkingNickname() async {
+    final res = await UserService.checkNickName(_nickname);
+    if (!mounted) return;
+    showDialog(
+      context: context,
+      builder: (ctx) => SystemDialog(
+        title: res ? '사용할 수 있는 닉네임입니다.' : '사용할 수 없는 닉네임입니다.',
+        children: [
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('확인'),
+          ),
+        ],
+      ),
+    );
+    setState(() {
+      _nicknameChecked = res;
+    });
+  }
 
   _submit() async {
     if (!_formKey.currentState!.validate()) return;
@@ -61,12 +83,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
           padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
-              TextFormField(
-                decoration: const InputDecoration(labelText: '닉네임'),
-                onSaved: (value) {
-                  _nickname = value!;
-                },
-                validator: Validator.signUpNickname,
+              SizedBox(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        decoration: const InputDecoration(labelText: '닉네임'),
+                        onChanged: (value) {
+                          _nickname = value;
+                        },
+                        validator: (value) =>
+                            Validator.signUpNickname(value, _nicknameChecked),
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: _checkingNickname,
+                      child: Text(_nicknameChecked ? '확인 완료' : '중복 확인'),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 40),
               TextFormField(

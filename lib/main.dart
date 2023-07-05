@@ -39,8 +39,6 @@ class App extends StatelessWidget {
       child: MaterialApp(
         title: '도달',
         theme: lightTheme,
-        darkTheme: ThemeData.dark(useMaterial3: true),
-        themeMode: ThemeMode.dark,
         home: FutureBuilder(
           future: _user,
           builder: (ctx, snapshot) {

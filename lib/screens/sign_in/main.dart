@@ -3,7 +3,6 @@ import 'package:dodal_app/screens/main_route/main.dart';
 import 'package:dodal_app/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 import '../../utilities/social_auth.dart';
 import '../sign_up/main.dart';
 

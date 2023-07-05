@@ -91,10 +91,10 @@ class UserService {
   static checkNickName(String nickname) async {
     try {
       final service = await dio();
-      final res = await service.post('/api/v1/users/nickname/$nickname');
-      return res.data['result'];
+      await service.get('/api/v1/users/nickname/$nickname');
+      return true;
     } catch (err) {
-      throw Exception(err);
+      return false;
     }
   }
 
