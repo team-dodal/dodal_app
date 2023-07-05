@@ -1,9 +1,9 @@
 import 'dart:io';
-import 'package:dodal_app/screens/main_route/main.dart';
-import 'package:dodal_app/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../services/user_service.dart';
 import '../../utilities/social_auth.dart';
+import '../main_route/main.dart';
 import '../sign_up/main.dart';
 
 class SignInScreen extends StatelessWidget {
@@ -13,19 +13,26 @@ class SignInScreen extends StatelessWidget {
 
   _socialSignIn(BuildContext context, SocialType type) async {
     final String? id;
+    final String? email;
     switch (type) {
       case SocialType.GOOGLE:
-        id = await GoogleAuthService.signIn();
+        final res = await GoogleAuthService.signIn();
+        id = res!['id'];
+        email = res['email'];
       case SocialType.KAKAO:
-        id = await KakaoAuthService.signIn();
+        final res = await KakaoAuthService.signIn();
+        id = res!['id'];
+        email = res['email'];
       case SocialType.APPLE:
-        id = await AppleAuthService.signIn();
+        final res = await AppleAuthService.signIn();
+        id = res!['id'];
+        email = res['email'];
       default:
         return;
     }
-    if (id == null) return;
+    if (id == null && email == null) return;
 
-    SignInResponse res = await UserService.signIn(type, id);
+    SignInResponse res = await UserService.signIn(type, id as String);
 
     if (res.accessToken != null && res.refreshToken != null) {
       secureStorage.write(key: 'accessToken', value: res.accessToken);
@@ -41,7 +48,8 @@ class SignInScreen extends StatelessWidget {
     } else {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (ctx) => SignUpScreen(socialType: type, socialId: id!),
+          builder: (ctx) =>
+              SignUpScreen(socialType: type, socialId: id!, email: email!),
         ),
       );
     }

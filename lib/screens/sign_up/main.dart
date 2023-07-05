@@ -12,10 +12,12 @@ class SignUpScreen extends StatefulWidget {
     super.key,
     required this.socialType,
     required this.socialId,
+    required this.email,
   });
 
   final SocialType socialType;
   final String socialId;
+  final String email;
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -55,7 +57,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     SignUpResponse res = await UserService.signUp(
       widget.socialType,
       widget.socialId,
-      'test@test.com',
+      widget.email,
       _nickname,
       '',
       _content,

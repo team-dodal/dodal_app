@@ -1,10 +1,12 @@
+import 'dart:developer';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 // 백그라운드 핸들러
 Future<void> backgroundHandler(RemoteMessage message) async {
   if (Fcm.isAllow) {
-    print("Handling a background message: ${message.messageId}");
+    log("Handling a background message: ${message.messageId}");
   }
 }
 
@@ -71,8 +73,7 @@ class Fcm {
                   icon: "@mipmap/ic_launcher",
                 ),
               ));
-          print(
-              'Message also contained a notification: ${message.notification}');
+          log('Message also contained a notification: ${message.notification}');
         }
       }
     });
