@@ -20,7 +20,7 @@ class AppleAuthService {
       log('${idCredential.identityToken}');
       return {
         'id': idCredential.userIdentifier.toString(),
-        'email': idCredential.email.toString()
+        'email': idCredential.email ?? ''
       };
     } catch (error) {
       log('애플 로그인 실패 $error');
