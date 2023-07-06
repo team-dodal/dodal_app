@@ -1,6 +1,7 @@
-import 'package:dodal_app/helper/validator.dart';
+import 'package:animations/animations.dart';
+import 'package:dodal_app/screens/sign_up/Input_form_screen.dart';
+import 'package:dodal_app/screens/sign_up/tag_select_screen.dart';
 import 'package:dodal_app/utilities/social_auth.dart';
-import 'package:dodal_app/widgets/common/system_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -24,44 +25,32 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  final _formKey = GlobalKey<FormState>();
   FlutterSecureStorage secureStorage = const FlutterSecureStorage();
-  bool _nicknameChecked = false;
-  String _nickname = '';
-  String _content = '';
+  int _currentIndex = 0;
+  String nickname = '';
+  String content = '';
+  String image = '';
+  List<String> category = [];
 
-  _checkingNickname() async {
-    final res = await UserService.checkNickName(_nickname);
-    if (!mounted) return;
-    showDialog(
-      context: context,
-      builder: (ctx) => SystemDialog(
-        title: res ? '사용할 수 있는 닉네임입니다.' : '사용할 수 없는 닉네임입니다.',
-        children: [
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('확인'),
-          ),
-        ],
-      ),
-    );
-    setState(() {
-      _nicknameChecked = res;
-    });
+  Future<bool> _handlePopState() async {
+    if (_currentIndex > 0) {
+      setState(() {
+        _currentIndex -= 1;
+      });
+      return false;
+    }
+    return true;
   }
 
   _submit() async {
-    if (!_formKey.currentState!.validate()) return;
-    _formKey.currentState!.save();
-
     SignUpResponse res = await UserService.signUp(
       widget.socialType,
       widget.socialId,
       widget.email,
-      _nickname,
-      '',
-      _content,
-      ["001001", "002003", "004001"],
+      nickname,
+      image,
+      content,
+      category,
     );
 
     if (res.accessToken != null && res.refreshToken != null) {
@@ -79,53 +68,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('회원 가입')),
-      body: Form(
-        key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              SizedBox(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        decoration: const InputDecoration(labelText: '닉네임'),
-                        onChanged: (value) {
-                          _nickname = value;
-                        },
-                        validator: (value) =>
-                            Validator.signUpNickname(value, _nicknameChecked),
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: _checkingNickname,
-                      child: Text(_nicknameChecked ? '확인 완료' : '중복 확인'),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 40),
-              TextFormField(
-                decoration: const InputDecoration(labelText: '한 줄 소개'),
-                onSaved: (value) {
-                  _content = value!;
-                },
-                validator: Validator.signUpContent,
-              ),
-            ],
-          ),
+      body: WillPopScope(
+        onWillPop: _handlePopState,
+        child: PageTransitionSwitcher(
+          child: [
+            InputFormScreen(
+              step: _currentIndex + 1,
+              nextStep: (data) {
+                nickname = data['nickname'];
+                image = data['image'];
+                content = data['content'];
+                setState(() {
+                  _currentIndex += 1;
+                });
+              },
+            ),
+            TagSelectScreen(
+              step: _currentIndex + 1,
+              nextStep: (data) {
+                category = data['category'];
+              },
+            ),
+          ][_currentIndex],
+          transitionBuilder: (child, animation, secondaryAnimation) {
+            return SharedAxisTransition(
+              animation: animation,
+              secondaryAnimation: secondaryAnimation,
+              transitionType: SharedAxisTransitionType.horizontal,
+              child: child,
+            );
+          },
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Container(
-        margin: const EdgeInsets.only(left: 10, right: 10),
-        width: double.infinity,
-        child: FloatingActionButton(
-          onPressed: _submit,
-          child: const Text('회원가입'),
-        ),
-      ),
     );
   }
 }
