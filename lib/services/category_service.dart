@@ -1,11 +1,38 @@
-import 'package:dodal_app/services/common/main.dart';
+import '../model/category_model.dart';
+import '../model/tag_model.dart';
+import 'common/main.dart';
+
+List<Category> parseCategories(Map<String, dynamic> data) {
+  final List<dynamic> categoryList = data['categories'];
+  final List<Category> categories = categoryList.map((categoryData) {
+    final List<dynamic> tagList = categoryData['tags'];
+    final List<Tag> tags = tagList.map((tagData) {
+      return Tag(
+        name: tagData['name'],
+        value: tagData['value'],
+      );
+    }).toList();
+
+    return Category(
+      name: categoryData['name'],
+      value: categoryData['value'],
+      tags: tags,
+    );
+  }).toList();
+
+  return categories;
+}
 
 class CategoryService {
-  static getAllTags() async {
+  static Future<List<Category>> getAllCategories() async {
     try {
       final service = await dio();
       final res = await service.get('/api/v1/categories/tags');
-      return res.data['result'];
+
+      final responseData = res.data['result'];
+      final List<Category> categories = parseCategories(responseData);
+
+      return categories;
     } catch (err) {
       throw Exception(err);
     }
