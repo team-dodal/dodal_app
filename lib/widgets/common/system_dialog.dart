@@ -1,5 +1,6 @@
-import 'package:dodal_app/theme/theme_data.dart';
 import 'package:flutter/material.dart';
+
+import '../../theme/typo.dart';
 
 class SystemDialog extends StatelessWidget {
   const SystemDialog({

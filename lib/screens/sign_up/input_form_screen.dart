@@ -1,8 +1,16 @@
+import 'dart:io';
+
+import 'package:dodal_app/theme/color.dart';
+import 'package:dodal_app/theme/typo.dart';
+import 'package:dodal_app/widgets/sign_up/text_input.dart';
 import 'package:flutter/material.dart';
 
 import '../../helper/validator.dart';
 import '../../services/user_service.dart';
+import '../../widgets/common/image_bottom_sheet.dart';
 import '../../widgets/common/system_dialog.dart';
+
+const double SUBMIT_BUTTON_HEIGHT = 90;
 
 class InputFormScreen extends StatefulWidget {
   const InputFormScreen({
@@ -23,6 +31,7 @@ class _InputFormScreenState extends State<InputFormScreen> {
   bool _nicknameChecked = false;
   String _nickname = '';
   String _content = '';
+  File? _image;
 
   _checkingNickname() async {
     final res = await UserService.checkNickName(_nickname);
@@ -44,56 +53,116 @@ class _InputFormScreenState extends State<InputFormScreen> {
     });
   }
 
+  _showBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => ImageBottomSheet(
+        setImage: (image) {
+          setState(() {
+            _image = image;
+          });
+        },
+      ),
+    );
+  }
+
   _handleNextStep() async {
     if (!_formKey.currentState!.validate()) return;
     _formKey.currentState!.save();
     widget.nextStep({
       'nickname': _nickname,
       'content': _content,
-      'image': '',
+      'image': _image,
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          Text('${widget.step} / 2'),
-          SizedBox(
-            child: Row(
+    return Scaffold(
+      appBar: AppBar(title: const Text('회원가입')),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding:
+              const EdgeInsets.fromLTRB(20, 20, 20, 20 + SUBMIT_BUTTON_HEIGHT),
+          child: Form(
+            key: _formKey,
+            child: Column(
               children: [
-                Expanded(
-                  child: TextFormField(
-                    decoration: const InputDecoration(labelText: '닉네임'),
-                    onChanged: (value) {
-                      _nickname = value;
-                    },
-                    validator: (value) =>
-                        Validator.signUpNickname(value, _nicknameChecked),
+                Text('${widget.step} / 2'),
+                Text(
+                  '자신을 소개해주세요!',
+                  style: Typo(context)
+                      .headline2()!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
+                GestureDetector(
+                  onTap: _showBottomSheet,
+                  child: Container(
+                    clipBehavior: Clip.hardEdge,
+                    width: 100,
+                    height: 100,
+                    decoration: const BoxDecoration(
+                      color: AppColors.systemGrey3,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Builder(
+                      builder: (context) {
+                        if (_image != null) {
+                          return Image.file(
+                            _image!,
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: double.infinity,
+                          );
+                        }
+                        return const Icon(Icons.add, size: 40);
+                      },
+                    ),
                   ),
                 ),
-                ElevatedButton(
+                TextInput(
+                  title: '닉네임',
+                  required: true,
+                  wordLength: '${_nickname.length} / 16',
+                  maxLength: 16,
+                  validator: (value) {
+                    return Validator.signUpNickname(value, _nicknameChecked);
+                  },
+                  onChanged: (value) {
+                    setState(() {
+                      _nickname = value;
+                    });
+                  },
                   onPressed: _checkingNickname,
-                  child: Text(_nicknameChecked ? '확인 완료' : '중복 확인'),
+                  buttonText: _nicknameChecked ? '확인 완료' : '중복 확인',
+                ),
+                const SizedBox(height: 40),
+                TextInput(
+                  title: '한 줄 소개',
+                  wordLength: '${_content.length} / 50',
+                  maxLength: 50,
+                  multiLine: true,
+                  validator: Validator.signUpContent,
+                  onChanged: (value) {
+                    setState(() {
+                      _content = value;
+                    });
+                  },
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 40),
-          TextFormField(
-            decoration: const InputDecoration(labelText: '한 줄 소개'),
-            onSaved: (value) {
-              _content = value!;
-            },
-            validator: Validator.signUpContent,
-          ),
-          FloatingActionButton(
+        ),
+      ),
+      bottomSheet: SafeArea(
+        child: SizedBox(
+          height: SUBMIT_BUTTON_HEIGHT,
+          width: MediaQuery.of(context).size.width,
+          child: ElevatedButton(
             onPressed: _handleNextStep,
             child: const Text('다음'),
           ),
-        ],
+        ),
       ),
     );
   }

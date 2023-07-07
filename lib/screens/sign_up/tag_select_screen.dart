@@ -16,30 +16,28 @@ class TagSelectScreen extends StatefulWidget {
 
 class _TagSelectScreenState extends State<TagSelectScreen> {
   _handleNextStep() async {
-    widget.nextStep();
+    widget.nextStep({
+      "category": ["001001", "002003", "004001"]
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              Text('${widget.step} / 2'),
-            ],
-          ),
-        ),
-        Positioned(
+    return Scaffold(
+      appBar: AppBar(title: const Text('회원가입')),
+      body: const SingleChildScrollView(
+        child: Column(),
+      ),
+      bottomSheet: SafeArea(
+        child: SizedBox(
+          height: 90,
+          width: MediaQuery.of(context).size.width,
           child: ElevatedButton(
-            style: const ButtonStyle(
-                minimumSize: MaterialStatePropertyAll(Size.infinite)),
             onPressed: _handleNextStep,
             child: const Text('다음'),
           ),
         ),
-      ],
+      ),
     );
   }
 }
