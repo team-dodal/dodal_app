@@ -1,3 +1,4 @@
+import 'package:dodal_app/theme/color.dart';
 import 'package:flutter/material.dart';
 
 import '../../theme/typo.dart';
@@ -7,20 +8,25 @@ class SystemDialog extends StatelessWidget {
     super.key,
     required this.title,
     this.subTitle = '',
-    required this.children,
+    this.children,
   });
 
   final String title;
   final String? subTitle;
-  final List<Widget> children;
+  final List<Widget>? children;
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
       shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(8))),
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+      ),
       child: Container(
         padding: const EdgeInsets.all(20),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(4)),
+          color: AppColors.bgColor1,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -42,19 +48,21 @@ class SystemDialog extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 24),
-            Row(
-              children: [
-                for (int i = 0; i < children.length; i++)
-                  Expanded(
-                    child: Row(
-                      children: [
-                        Expanded(child: children[i]),
-                        if (i != children.length - 1) const SizedBox(width: 6),
-                      ],
+            if (children != null)
+              Row(
+                children: [
+                  for (int i = 0; i < children!.length; i++)
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Expanded(child: children![i]),
+                          if (i != children!.length - 1)
+                            const SizedBox(width: 6),
+                        ],
+                      ),
                     ),
-                  ),
-              ],
-            )
+                ],
+              )
           ],
         ),
       ),

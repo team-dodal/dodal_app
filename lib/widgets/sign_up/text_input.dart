@@ -13,9 +13,12 @@ class TextInput extends StatelessWidget {
     this.wordLength,
     this.required = false,
     this.multiLine = false,
+    this.placeholder = '',
     required this.maxLength,
+    required this.controller,
   });
 
+  final TextEditingController controller;
   final bool required;
   final String? title;
   final String? wordLength;
@@ -25,6 +28,7 @@ class TextInput extends StatelessWidget {
   final String? buttonText;
   final bool multiLine;
   final int maxLength;
+  final String placeholder;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +49,7 @@ class TextInput extends StatelessWidget {
                   '*',
                   style: Typo(context)
                       .body1()!
-                      .copyWith(fontWeight: FontWeight.bold),
+                      .copyWith(fontWeight: FontWeight.bold, color: Colors.red),
                 )
             ]),
             if (wordLength != null)
@@ -58,44 +62,68 @@ class TextInput extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 10),
-        Container(
-          padding: const EdgeInsets.fromLTRB(18, 8, 8, 8),
-          decoration: const BoxDecoration(
-            color: AppColors.bgColor2,
-            borderRadius: BorderRadius.all(Radius.circular(8)),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    counterText: '',
+        Row(
+          children: [
+            Expanded(
+              child: TextFormField(
+                controller: controller,
+                decoration: InputDecoration(
+                  fillColor: AppColors.bgColor2,
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                  onChanged: onChanged,
-                  validator: validator,
-                  minLines: multiLine ? 3 : 1,
-                  maxLines: multiLine ? 10 : 1,
-                  maxLength: maxLength,
-                ),
-              ),
-              if (onPressed != null)
-                ElevatedButton(
-                  style: const ButtonStyle(
-                    padding: MaterialStatePropertyAll(
-                      EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    ),
-                    shape: MaterialStatePropertyAll(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(4)),
+                  counterText: '',
+                  hintText: placeholder,
+                  hintStyle: Typo(context).body2()!.copyWith(
+                        fontWeight: FontWeight.normal,
+                        color: AppColors.systemGrey2,
                       ),
-                    ),
-                  ),
-                  onPressed: onPressed,
-                  child: Text(buttonText!),
+                  suffixIcon: Builder(builder: (context) {
+                    if (onPressed == null) return const SizedBox();
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: Colors.transparent),
+                          backgroundColor: AppColors.systemGrey5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 8,
+                          ),
+                        ),
+                        onPressed: onPressed,
+                        child: Text(
+                          buttonText!,
+                          style: Typo(context).body3()!.copyWith(
+                                color: AppColors.orange,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                      ),
+                    );
+                  }),
+                  suffixIconConstraints:
+                      const BoxConstraints(minWidth: 24, minHeight: 24),
                 ),
-            ],
-          ),
+                style: Typo(context)
+                    .body2()!
+                    .copyWith(fontWeight: FontWeight.normal),
+                onChanged: (value) {
+                  if (onChanged == null) return;
+                  onChanged!(value);
+                },
+                validator: validator,
+                minLines: multiLine ? 3 : 1,
+                maxLines: multiLine ? 10 : 1,
+                maxLength: maxLength,
+              ),
+            ),
+          ],
         ),
       ],
     );

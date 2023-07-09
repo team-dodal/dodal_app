@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:animations/animations.dart';
-import 'package:dodal_app/screens/sign_up/Input_form_screen.dart';
+import 'package:dodal_app/screens/main_route/main.dart';
+import 'package:dodal_app/screens/sign_up/input_form_screen.dart';
 import 'package:dodal_app/screens/sign_up/tag_select_screen.dart';
+import 'package:dodal_app/services/user_service.dart';
 import 'package:dodal_app/utilities/social_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -42,34 +44,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   _submit() async {
-    print({
-      "socialType": widget.socialType,
-      "socialId": widget.socialId,
-      "email": widget.email,
-      "nickname": nickname,
-      "image": image,
-      "content": content,
-      "category": category,
-    });
-    // SignUpResponse res = await UserService.signUp(
-    //   widget.socialType,
-    //   widget.socialId,
-    //   widget.email,
-    //   nickname,
-    //   image,
-    //   content,
-    //   category,
-    // );
+    SignUpResponse res = await UserService.signUp(
+      widget.socialType,
+      widget.socialId,
+      widget.email,
+      nickname,
+      image,
+      content,
+      category,
+    );
 
-    // if (res.accessToken != null && res.refreshToken != null) {
-    //   secureStorage.write(key: 'accessToken', value: res.accessToken);
-    //   secureStorage.write(key: 'refreshToken', value: res.refreshToken);
+    if (res.accessToken != null && res.refreshToken != null) {
+      secureStorage.write(key: 'accessToken', value: res.accessToken);
+      secureStorage.write(key: 'refreshToken', value: res.refreshToken);
 
-    //   if (!mounted) return;
-    //   Navigator.of(context).push(
-    //     MaterialPageRoute(builder: (ctx) => const MainRoute()),
-    //   );
-    // }
+      if (!mounted) return;
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (ctx) => const MainRoute()),
+      );
+    }
   }
 
   @override
@@ -77,6 +70,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return WillPopScope(
       onWillPop: _handlePopState,
       child: PageTransitionSwitcher(
+        reverse: _currentIndex == 0 ? true : false,
+        transitionBuilder: (child, animation, secondaryAnimation) {
+          return SharedAxisTransition(
+            animation: animation,
+            secondaryAnimation: secondaryAnimation,
+            transitionType: SharedAxisTransitionType.horizontal,
+            child: child,
+          );
+        },
         child: [
           InputFormScreen(
             step: _currentIndex + 1,
@@ -88,6 +90,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 _currentIndex += 1;
               });
             },
+            nickname: nickname,
+            content: content,
+            image: image,
           ),
           TagSelectScreen(
             step: _currentIndex + 1,
@@ -97,14 +102,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             },
           ),
         ][_currentIndex],
-        transitionBuilder: (child, animation, secondaryAnimation) {
-          return SharedAxisTransition(
-            animation: animation,
-            secondaryAnimation: secondaryAnimation,
-            transitionType: SharedAxisTransitionType.horizontal,
-            child: child,
-          );
-        },
       ),
     );
   }

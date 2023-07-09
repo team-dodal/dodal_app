@@ -11,7 +11,7 @@ class User extends Equatable {
       : id = data['user_id'],
         email = data['email'],
         nickname = data['nickname'],
-        profileUrl = data['profile_url'],
+        profileUrl = data['profile_url'] ?? '',
         registerAt = DateTime.parse(data['register_at']),
         socialType = data['social_type'],
         tagList = (data['tag_list'] as List<dynamic>)

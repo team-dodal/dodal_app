@@ -25,7 +25,8 @@ class SignInScreen extends StatelessWidget {
         email = res['email'];
       case SocialType.APPLE:
         final res = await AppleAuthService.signIn();
-        id = res!['id'];
+        if (res == null) return;
+        id = res['id'];
         email = res['email'];
       default:
         return;

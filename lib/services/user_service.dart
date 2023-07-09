@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:dodal_app/utilities/social_auth.dart';
 
 import 'common/main.dart';
@@ -37,21 +40,22 @@ class UserService {
     String socialId,
     String email,
     String nickname,
-    String profileUrl,
+    File? profile,
     String content,
     List<String> category,
   ) async {
     try {
       final service = await dio();
-      final res = await service.post('/api/v1/users/sign-up', data: {
+      final formData = FormData.fromMap({
         "social_type": socialType.name,
         "social_id": socialId,
         "email": email,
         "nickname": nickname,
-        "profile_url": profileUrl,
+        "profile": profile,
         "content": content,
         "tag_list": category,
       });
+      final res = await service.post('/api/v1/users/sign-up', data: formData);
       return SignUpResponse.fromJson(res.data['result']);
     } catch (err) {
       throw Exception(err);
