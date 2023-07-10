@@ -6,9 +6,11 @@ class SubmitButton extends StatelessWidget {
   const SubmitButton({
     super.key,
     required this.onPress,
+    required this.title,
   });
 
   final void Function()? onPress;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class SubmitButton extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 20),
           ),
           child: Text(
-            '다음',
+            title,
             style: Typo(context).body1()!.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppColors.systemGrey5,

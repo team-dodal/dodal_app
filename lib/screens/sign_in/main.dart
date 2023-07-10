@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +7,7 @@ import '../../services/user_service.dart';
 import '../../utilities/social_auth.dart';
 import '../main_route/main.dart';
 import '../sign_up/main.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
@@ -67,56 +67,97 @@ class SignInScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xffFFE659),
-                  minimumSize: const Size(double.infinity, 64),
-                  foregroundColor: AppColors.systemBlack,
-                  textStyle: Typo(context)
-                      .body2()!
-                      .copyWith(fontWeight: FontWeight.bold),
-                ),
-                onPressed: () {
-                  _socialSignIn(context, SocialType.KAKAO);
-                },
-                child: const Row(
-                  children: [Text('Kakao SignIn')],
-                ),
+              Container(
+                width: 100,
+                height: 100,
+                decoration: const BoxDecoration(color: AppColors.basicColor1),
               ),
-              const SizedBox(height: 8),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.bgColor2,
-                  minimumSize: const Size(double.infinity, 64),
-                  foregroundColor: AppColors.systemBlack,
-                  textStyle: Typo(context)
-                      .body2()!
-                      .copyWith(fontWeight: FontWeight.bold),
-                ),
-                onPressed: () {
-                  _socialSignIn(context, SocialType.GOOGLE);
-                },
-                child: const Text('Google SignIn'),
-              ),
-              const SizedBox(height: 8),
-              if (Platform.isIOS)
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff000000),
-                    minimumSize: const Size(double.infinity, 64),
-                    foregroundColor: AppColors.bgColor1,
-                    textStyle: Typo(context)
-                        .body2()!
-                        .copyWith(fontWeight: FontWeight.bold),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xffFFE659),
+                      minimumSize: const Size(double.infinity, 64),
+                      foregroundColor: AppColors.systemBlack,
+                      textStyle: Typo(context)
+                          .body2()!
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () {
+                      _socialSignIn(context, SocialType.KAKAO);
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/icons/kakao_icon.svg',
+                          width: 18,
+                          height: 18,
+                        ),
+                        const SizedBox(width: 7),
+                        const Text('카카오로 시작하기'),
+                      ],
+                    ),
                   ),
-                  onPressed: () {
-                    _socialSignIn(context, SocialType.APPLE);
-                  },
-                  child: const Text('Apple SignIn'),
-                ),
+                  const SizedBox(height: 8),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.bgColor2,
+                      minimumSize: const Size(double.infinity, 64),
+                      foregroundColor: AppColors.systemBlack,
+                      textStyle: Typo(context)
+                          .body2()!
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () {
+                      _socialSignIn(context, SocialType.GOOGLE);
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/icons/google_icon.svg',
+                          width: 18,
+                          height: 18,
+                        ),
+                        const SizedBox(width: 7),
+                        const Text('구글로 시작하기'),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  if (Platform.isIOS)
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xff000000),
+                        minimumSize: const Size(double.infinity, 64),
+                        foregroundColor: AppColors.bgColor1,
+                        textStyle: Typo(context)
+                            .body2()!
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: () {
+                        _socialSignIn(context, SocialType.APPLE);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            'assets/icons/apple_icon.svg',
+                            width: 18,
+                            height: 18,
+                          ),
+                          const SizedBox(width: 7),
+                          const Text('Apple로 시작하기'),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
             ],
           ),
         ),

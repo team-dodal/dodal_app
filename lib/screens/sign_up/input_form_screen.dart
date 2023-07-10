@@ -154,7 +154,7 @@ class _InputFormScreenState extends State<InputFormScreen> {
                       vertical: 8,
                     ),
                     shape: BeveledRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(4),
                     ),
                   ),
                   onPressed: _nicknameChecked
@@ -190,6 +190,7 @@ class _InputFormScreenState extends State<InputFormScreen> {
         ),
       ),
       bottomSheet: SubmitButton(
+        title: '다음',
         onPress: _nicknameChecked ? _handleNextStep : null,
       ),
     );

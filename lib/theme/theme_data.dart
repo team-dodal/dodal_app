@@ -62,8 +62,8 @@ ThemeData lightTheme = ThemeData(
       foregroundColor: AppColors.bgColor1,
       textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
       elevation: 0,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(4)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(4),
       ),
     ),
   ),
@@ -76,8 +76,8 @@ ThemeData lightTheme = ThemeData(
       foregroundColor: AppColors.orange,
       side: BorderSide.none,
       textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(4)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(4),
       ),
       disabledBackgroundColor: AppColors.bgColor1,
       disabledForegroundColor: AppColors.systemGrey2,

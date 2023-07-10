@@ -107,7 +107,13 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
                         category: category,
                         handleSelect: handleSelect,
                         itemList: itemList,
-                      )
+                      ),
+                    const Center(
+                      child: Text(
+                        '관심사는 나중에 다시 수정할 수 있어요!',
+                        style: TextStyle(color: AppColors.systemGrey2),
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -116,6 +122,7 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
         ),
       ),
       bottomSheet: SubmitButton(
+        title: '완료',
         onPress: itemList.isEmpty ? null : _handleNextStep,
       ),
     );
