@@ -17,16 +17,19 @@ class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
   _signOut() async {
     secureStorage.deleteAll();
 
-    if (context.mounted) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (ctx) => const SignInScreen()),
-          (route) => false);
-    }
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (ctx) => const SignInScreen()),
+        (route) => false);
   }
 
   _removeMyAccount() async {
     await UserService.removeUser();
-    secureStorage.deleteAll();
+    await secureStorage.deleteAll();
+
+    if (!mounted) return;
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (ctx) => const SignInScreen()),
+        (route) => false);
   }
 
   @override

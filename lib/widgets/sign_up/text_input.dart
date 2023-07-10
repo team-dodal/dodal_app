@@ -5,30 +5,26 @@ import '../../theme/typo.dart';
 class TextInput extends StatelessWidget {
   const TextInput({
     super.key,
-    this.validator,
     this.onChanged,
     this.title = '',
-    this.onPressed,
-    this.buttonText = '',
     this.wordLength,
     this.required = false,
     this.multiLine = false,
     this.placeholder = '',
     required this.maxLength,
     required this.controller,
+    this.child,
   });
 
   final TextEditingController controller;
   final bool required;
   final String? title;
   final String? wordLength;
-  final String? Function(String?)? validator;
   final void Function(String)? onChanged;
-  final void Function()? onPressed;
-  final String? buttonText;
   final bool multiLine;
   final int maxLength;
   final String placeholder;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +61,7 @@ class TextInput extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: TextFormField(
+              child: TextField(
                 controller: controller,
                 decoration: InputDecoration(
                   fillColor: AppColors.bgColor2,
@@ -80,33 +76,10 @@ class TextInput extends StatelessWidget {
                         fontWeight: FontWeight.normal,
                         color: AppColors.systemGrey2,
                       ),
-                  suffixIcon: Builder(builder: (context) {
-                    if (onPressed == null) return const SizedBox();
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 12),
-                      child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: Colors.transparent),
-                          backgroundColor: AppColors.systemGrey5,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 8,
-                          ),
-                        ),
-                        onPressed: onPressed,
-                        child: Text(
-                          buttonText!,
-                          style: Typo(context).body3()!.copyWith(
-                                color: AppColors.orange,
-                                fontWeight: FontWeight.bold,
-                              ),
-                        ),
-                      ),
-                    );
-                  }),
+                  suffixIcon: Padding(
+                    padding: const EdgeInsets.only(right: 12),
+                    child: child,
+                  ),
                   suffixIconConstraints:
                       const BoxConstraints(minWidth: 24, minHeight: 24),
                 ),
@@ -117,7 +90,6 @@ class TextInput extends StatelessWidget {
                   if (onChanged == null) return;
                   onChanged!(value);
                 },
-                validator: validator,
                 minLines: multiLine ? 3 : 1,
                 maxLines: multiLine ? 10 : 1,
                 maxLength: maxLength,

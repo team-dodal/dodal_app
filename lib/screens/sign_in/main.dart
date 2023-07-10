@@ -1,4 +1,7 @@
 import 'dart:io';
+
+import 'package:dodal_app/theme/color.dart';
+import 'package:dodal_app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../services/user_service.dart';
@@ -61,30 +64,61 @@ class SignInScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('도달')),
       body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                _socialSignIn(context, SocialType.KAKAO);
-              },
-              child: const Text('Kakao SignIn'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                _socialSignIn(context, SocialType.GOOGLE);
-              },
-              child: const Text('Google SignIn'),
-            ),
-            if (Platform.isIOS)
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xffFFE659),
+                  minimumSize: const Size(double.infinity, 64),
+                  foregroundColor: AppColors.systemBlack,
+                  textStyle: Typo(context)
+                      .body2()!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
                 onPressed: () {
-                  _socialSignIn(context, SocialType.APPLE);
+                  _socialSignIn(context, SocialType.KAKAO);
                 },
-                child: const Text('Apple SignIn'),
+                child: const Row(
+                  children: [Text('Kakao SignIn')],
+                ),
               ),
-          ],
+              const SizedBox(height: 8),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.bgColor2,
+                  minimumSize: const Size(double.infinity, 64),
+                  foregroundColor: AppColors.systemBlack,
+                  textStyle: Typo(context)
+                      .body2()!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
+                onPressed: () {
+                  _socialSignIn(context, SocialType.GOOGLE);
+                },
+                child: const Text('Google SignIn'),
+              ),
+              const SizedBox(height: 8),
+              if (Platform.isIOS)
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xff000000),
+                    minimumSize: const Size(double.infinity, 64),
+                    foregroundColor: AppColors.bgColor1,
+                    textStyle: Typo(context)
+                        .body2()!
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: () {
+                    _socialSignIn(context, SocialType.APPLE);
+                  },
+                  child: const Text('Apple SignIn'),
+                ),
+            ],
+          ),
         ),
       ),
     );
