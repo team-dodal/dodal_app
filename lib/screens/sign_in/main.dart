@@ -1,11 +1,14 @@
 import 'dart:io';
+import 'package:dodal_app/model/my_info_model.dart';
+import 'package:dodal_app/providers/user_cubit.dart';
+import 'package:dodal_app/screens/main_route/main.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../services/user_service.dart';
 import '../../utilities/social_auth.dart';
-import '../main_route/main.dart';
 import '../sign_up/main.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -43,13 +46,15 @@ class SignInScreen extends StatelessWidget {
       secureStorage.write(key: 'refreshToken', value: res.refreshToken);
     }
 
-    if (!context.mounted) return;
-
     if (res.isSigned) {
+      final user = await UserService.user();
+      if (!context.mounted) return;
+      context.read<MyInfoCubit>().set(User.fromJson(user));
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (ctx) => const MainRoute()),
           (route) => false);
     } else {
+      if (!context.mounted) return;
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (ctx) =>

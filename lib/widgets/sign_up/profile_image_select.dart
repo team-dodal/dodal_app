@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/common/image_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class ProfileImageSelect extends StatefulWidget {
   const ProfileImageSelect(
@@ -44,8 +45,9 @@ class _ProfileImageSelectState extends State<ProfileImageSelect> {
             child: Builder(
               builder: (context) {
                 if (widget.image != null) {
-                  return Image.file(
-                    widget.image!,
+                  return FadeInImage(
+                    placeholder: MemoryImage(kTransparentImage),
+                    image: FileImage(widget.image!),
                     fit: BoxFit.cover,
                     width: double.infinity,
                     height: double.infinity,

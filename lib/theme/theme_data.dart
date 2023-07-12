@@ -56,6 +56,9 @@ ThemeData lightTheme = ThemeData(
       color: AppColors.systemBlack,
     ),
   ),
+  cardTheme: const CardTheme(
+    color: AppColors.bgColor1,
+  ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       backgroundColor: AppColors.orange,
