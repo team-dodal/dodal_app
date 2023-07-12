@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +24,7 @@ class SubmitButton extends StatelessWidget {
           onPressed: onPress,
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.orange,
-            padding: const EdgeInsets.only(bottom: 20),
+            padding: EdgeInsets.only(bottom: Platform.isIOS ? 20 : 0),
           ),
           child: Text(
             title,

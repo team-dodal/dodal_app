@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dodal_app/theme/color.dart';
+import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/system_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -35,25 +36,42 @@ class _ImageBottomSheetState extends State<ImageBottomSheet> {
     return Container(
       color: Colors.transparent,
       child: Container(
-        padding: const EdgeInsets.fromLTRB(8, 8, 8, 20),
         decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
+          borderRadius: BorderRadius.all(Radius.circular(16)),
           color: AppColors.bgColor1,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ListTile(
-              title: const Text('직접 촬영'),
-              onTap: () {
-                _pickImage(ImageSource.camera);
-              },
+            SizedBox(
+              height: 28,
+              child: Align(
+                alignment: Alignment.center,
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: AppColors.bgColor3,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
             ),
-            ListTile(
-              title: const Text('엘범에서 사진 선택'),
-              onTap: () {
-                _pickImage(ImageSource.gallery);
-              },
+            Column(
+              children: [
+                ListTile(
+                  title: Text('직접 촬영', style: Typo(context).body2()),
+                  onTap: () {
+                    _pickImage(ImageSource.camera);
+                  },
+                ),
+                ListTile(
+                  title: Text('엘범에서 사진 선택', style: Typo(context).body2()),
+                  onTap: () {
+                    _pickImage(ImageSource.gallery);
+                  },
+                ),
+              ],
             ),
           ],
         ),

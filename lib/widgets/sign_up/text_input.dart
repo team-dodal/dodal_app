@@ -14,6 +14,7 @@ class TextInput extends StatelessWidget {
     required this.maxLength,
     required this.controller,
     this.child,
+    this.textInputAction = TextInputAction.done,
   });
 
   final TextEditingController controller;
@@ -25,6 +26,7 @@ class TextInput extends StatelessWidget {
   final int maxLength;
   final String placeholder;
   final Widget? child;
+  final TextInputAction textInputAction;
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +92,10 @@ class TextInput extends StatelessWidget {
                   if (onChanged == null) return;
                   onChanged!(value);
                 },
+                textInputAction: textInputAction,
+                onSubmitted: (value) => textInputAction == TextInputAction.next
+                    ? FocusScope.of(context).nextFocus()
+                    : null,
                 minLines: multiLine ? 3 : 1,
                 maxLines: multiLine ? 10 : 1,
                 maxLength: maxLength,

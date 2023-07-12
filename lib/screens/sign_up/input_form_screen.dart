@@ -31,6 +31,7 @@ class InputFormScreen extends StatefulWidget {
 }
 
 class _InputFormScreenState extends State<InputFormScreen> {
+  ScrollController scrollController = ScrollController();
   TextEditingController nicknameController = TextEditingController();
   TextEditingController contentController = TextEditingController();
   bool _nicknameChecked = false;
@@ -81,6 +82,7 @@ class _InputFormScreenState extends State<InputFormScreen> {
   void dispose() {
     nicknameController.dispose();
     contentController.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -89,6 +91,7 @@ class _InputFormScreenState extends State<InputFormScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('프로필 설정')),
       body: SingleChildScrollView(
+        controller: scrollController,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 100),
           child: Column(
@@ -142,6 +145,7 @@ class _InputFormScreenState extends State<InputFormScreen> {
                 required: true,
                 wordLength: '${nicknameController.text.length}/16',
                 maxLength: 16,
+                textInputAction: TextInputAction.next,
                 onChanged: (value) {
                   setState(() {
                     _nicknameChecked = false;
@@ -189,10 +193,12 @@ class _InputFormScreenState extends State<InputFormScreen> {
           ),
         ),
       ),
-      bottomSheet: SubmitButton(
-        title: '다음',
-        onPress: _nicknameChecked ? _handleNextStep : null,
-      ),
+      bottomSheet: MediaQuery.of(context).viewInsets.bottom != 0
+          ? null
+          : SubmitButton(
+              title: '다음',
+              onPress: _nicknameChecked ? _handleNextStep : null,
+            ),
     );
   }
 }

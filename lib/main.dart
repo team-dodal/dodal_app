@@ -42,17 +42,19 @@ class App extends StatelessWidget {
         home: FutureBuilder(
           future: _user,
           builder: (ctx, snapshot) {
-            final isLoading =
-                snapshot.connectionState == ConnectionState.waiting;
-            if (isLoading) return const Placeholder();
-            FlutterNativeSplash.remove();
-            if (snapshot.data != null) {
-              return BlocBuilder<MyInfoCubit, User?>(builder: (context, state) {
-                context.read<MyInfoCubit>().set(User.fromJson(snapshot.data));
-                return const MainRoute();
-              });
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const SizedBox();
             } else {
-              return const SignInScreen();
+              FlutterNativeSplash.remove();
+              if (snapshot.data != null) {
+                return BlocBuilder<MyInfoCubit, User?>(
+                    builder: (context, state) {
+                  context.read<MyInfoCubit>().set(User.fromJson(snapshot.data));
+                  return const MainRoute();
+                });
+              } else {
+                return const SignInScreen();
+              }
             }
           },
         ),

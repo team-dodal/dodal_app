@@ -1,5 +1,5 @@
-import 'package:dodal_app/screens/modify_user/main.dart';
 import 'package:dodal_app/widgets/mypage/calendar_marker.dart';
+import 'package:dodal_app/widgets/mypage/user_info_box.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -12,13 +12,7 @@ class MyPageScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (ctx) => const ModifyUserScreen()));
-            },
-            child: const Text('유저 수정'),
-          ),
+          const UserInfoBox(),
           TableCalendar(
             firstDay: DateTime.utc(2023, 1, 1),
             lastDay: DateTime.utc(2033, 3, 14),

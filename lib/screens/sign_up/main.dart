@@ -59,8 +59,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
       secureStorage.write(key: 'refreshToken', value: res.refreshToken);
 
       if (!mounted) return;
-      Navigator.of(context).push(
+
+      Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (ctx) => const MainRoute()),
+        (route) => false,
       );
     }
   }
