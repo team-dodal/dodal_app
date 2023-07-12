@@ -8,42 +8,55 @@ ThemeData lightTheme = ThemeData(
     displayLarge: TextStyle(
       fontSize: 28,
       letterSpacing: 0.5,
+      fontWeight: FontWeight.w500,
       color: AppColors.systemBlack,
     ), // headline1
     headlineMedium: TextStyle(
       fontSize: 24,
       letterSpacing: 0.5,
+      fontWeight: FontWeight.w500,
       color: AppColors.systemBlack,
     ), // headline2
     headlineSmall: TextStyle(
       fontSize: 22,
       letterSpacing: 0.5,
+      fontWeight: FontWeight.w500,
       color: AppColors.systemBlack,
     ), // headline3
     titleLarge: TextStyle(
       fontSize: 20,
       letterSpacing: 0.5,
+      fontWeight: FontWeight.w500,
       color: AppColors.systemBlack,
     ), // headline4
     titleMedium: TextStyle(
       fontSize: 18,
       letterSpacing: 0.5,
+      fontWeight: FontWeight.w500,
       color: AppColors.systemBlack,
     ), // body1
     titleSmall: TextStyle(
       fontSize: 16,
       letterSpacing: 0.5,
+      fontWeight: FontWeight.w500,
       color: AppColors.systemBlack,
     ), // body2
-    bodyLarge: TextStyle(fontSize: 15, letterSpacing: 0.5), // body3
+    bodyLarge: TextStyle(
+      fontSize: 15,
+      letterSpacing: 0.5,
+      fontWeight: FontWeight.w500,
+      color: AppColors.systemBlack,
+    ), // body3
     bodyMedium: TextStyle(
       fontSize: 14,
       letterSpacing: 0.5,
+      fontWeight: FontWeight.w500,
       color: AppColors.systemBlack,
     ), // body4
     bodySmall: TextStyle(
       fontSize: 12,
       letterSpacing: 0.5,
+      fontWeight: FontWeight.w500,
       color: AppColors.systemBlack,
     ), // caption
   ),
@@ -63,6 +76,8 @@ ThemeData lightTheme = ThemeData(
     style: ElevatedButton.styleFrom(
       backgroundColor: AppColors.orange,
       foregroundColor: AppColors.bgColor1,
+      disabledBackgroundColor: AppColors.systemGrey3,
+      disabledForegroundColor: AppColors.systemGrey5,
       textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
       elevation: 0,
       shape: RoundedRectangleBorder(

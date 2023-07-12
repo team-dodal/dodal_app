@@ -3,14 +3,15 @@ import 'package:equatable/equatable.dart';
 
 class User extends Equatable {
   final int id;
-  final String email, nickname, profileUrl, socialType;
+  final String email, nickname, content, profileUrl, socialType;
   final DateTime registerAt;
   final List<Tag> tagList;
 
-  User.fromJson(Map<String, dynamic> data)
+  User.formJson(Map<String, dynamic> data)
       : id = data['user_id'],
         email = data['email'],
         nickname = data['nickname'],
+        content = data['content'],
         profileUrl = data['profile_url'] ?? '',
         registerAt = DateTime.parse(data['register_at']),
         socialType = data['social_type'],

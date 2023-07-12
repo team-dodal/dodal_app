@@ -1,5 +1,5 @@
 import 'package:dodal_app/theme/color.dart';
-import 'package:dodal_app/theme/typo.dart';
+import 'package:dodal_app/widgets/common/create_form_title.dart';
 import 'package:dodal_app/widgets/sign_up/category_content.dart';
 import 'package:dodal_app/widgets/sign_up/submit_button.dart';
 import 'package:flutter/material.dart';
@@ -63,43 +63,11 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      width: double.infinity,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                '${widget.step}',
-                                style: Typo(context)
-                                    .body1()!
-                                    .copyWith(fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                '/2',
-                                style: Typo(context).body1()!.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColors.systemGrey2,
-                                    ),
-                              )
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            '자신을 소개해주세요!',
-                            style: Typo(context)
-                                .headline2()!
-                                .copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            '1개 이상 선택하시면 딱 맞는 도전들을 추천드려요!',
-                            style: Typo(context)
-                                .body4()!
-                                .copyWith(color: AppColors.systemGrey1),
-                          ),
-                        ],
-                      ),
+                    CreateFormTitle(
+                      title: '무엇에 관심 있나요?',
+                      subTitle: '1개 이상 선택하시면 딱 맞는 도전들을 추천드려요!',
+                      currentStep: widget.step,
+                      steps: 2,
                     ),
                     const SizedBox(height: 40),
                     for (Category category in categories)

@@ -1,5 +1,6 @@
 import 'package:dodal_app/screens/sign_in/main.dart';
 import 'package:dodal_app/services/user_service.dart';
+import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/utilities/fcm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -56,7 +57,7 @@ class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
           ListTile(
             title: const Text(
               '회원 탈퇴',
-              style: TextStyle(color: Colors.red),
+              style: TextStyle(color: AppColors.danger),
             ),
             onTap: _removeMyAccount,
           ),

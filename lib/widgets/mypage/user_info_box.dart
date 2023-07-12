@@ -5,6 +5,7 @@ import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class UserInfoBox extends StatelessWidget {
@@ -15,77 +16,147 @@ class UserInfoBox extends StatelessWidget {
     return BlocBuilder<MyInfoCubit, User?>(builder: (context, user) {
       user!;
       return Card(
-        color: AppColors.bgColor1,
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 48,
-                      height: 48,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.systemGrey4,
+        elevation: 0,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        width: 48,
+                        height: 48,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.systemGrey4,
+                        ),
+                        clipBehavior: Clip.hardEdge,
+                        child: user.profileUrl != ''
+                            ? FadeInImage(
+                                placeholder: MemoryImage(kTransparentImage),
+                                image: NetworkImage(user.profileUrl),
+                                width: double.infinity,
+                                height: double.infinity,
+                              )
+                            : const SizedBox(),
                       ),
-                      clipBehavior: Clip.hardEdge,
-                      child: user.profileUrl != ''
-                          ? FadeInImage(
-                              placeholder: MemoryImage(kTransparentImage),
-                              image: NetworkImage(user.profileUrl),
-                              width: double.infinity,
-                              height: double.infinity,
-                            )
-                          : const SizedBox(),
-                    ),
-                    Text(user.nickname),
+                      const SizedBox(width: 10),
+                      Text(
+                        user.nickname,
+                        style: Typo(context)
+                            .body2()!
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (ctx) => const ModifyUserScreen()));
+                      },
+                      icon: SvgPicture.asset('assets/icons/pencil_icon.svg')),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Text(user.content, style: Typo(context).body4()),
+              const SizedBox(height: 16),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    for (final tag in user.tagList)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 2),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 4,
+                            horizontal: 10,
+                          ),
+                          decoration: const BoxDecoration(
+                              color: AppColors.lightOrange,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(100))),
+                          child: Text(
+                            tag.name,
+                            style: Typo(context)
+                                .caption()!
+                                .copyWith(color: AppColors.orange),
+                          ),
+                        ),
+                      )
                   ],
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (ctx) => const ModifyUserScreen()));
-                  },
-                  child: const Text('유저 수정'),
+              ),
+              const SizedBox(height: 16),
+              Container(
+                width: double.infinity,
+                height: 78,
+                decoration: const BoxDecoration(
+                  color: AppColors.bgColor2,
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
                 ),
-              ],
-            ),
-            const Text('data'),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  for (final tag in user.tagList)
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 4,
-                        horizontal: 10,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '최장 인증 연속 달성',
+                            style: Typo(context)
+                                .caption()!
+                                .copyWith(color: AppColors.systemGrey1),
+                          ),
+                          Text(
+                            '0일',
+                            style: Typo(context).body2()!.copyWith(
+                                  color: AppColors.systemGrey1,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                        ],
+                      )),
+                      Container(
+                        height: double.infinity,
+                        width: 1,
+                        decoration: const BoxDecoration(
+                          color: AppColors.orange,
+                        ),
                       ),
-                      decoration: const BoxDecoration(
-                          color: AppColors.lightOrange,
-                          borderRadius: BorderRadius.all(Radius.circular(100))),
-                      child: Text(
-                        tag.name,
-                        style: Typo(context).caption()!.copyWith(
-                              color: AppColors.orange,
-                            ),
-                      ),
-                    )
-                ],
-              ),
-            ),
-            Container(
-              child: const Row(
-                children: [
-                  // 최장 인증 연속 달성
-                  // 선
-                  // 현재 연속 달성
-                ],
-              ),
-            )
-          ],
+                      Expanded(
+                          child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '현재 연속 달성',
+                            style: Typo(context)
+                                .caption()!
+                                .copyWith(color: AppColors.systemGrey1),
+                          ),
+                          Text(
+                            '0일',
+                            style: Typo(context).body2()!.copyWith(
+                                  color: AppColors.systemGrey1,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                        ],
+                      ))
+                      // 최장 인증 연속 달성
+                      // 선
+                      // 현재 연속 달성
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       );
     });

@@ -1,3 +1,4 @@
+import 'package:dodal_app/theme/color.dart';
 import 'package:flutter/material.dart';
 
 class CalendarMarker extends StatefulWidget {
@@ -20,7 +21,7 @@ class _CalendarMarkerState extends State<CalendarMarker> {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: Colors.orange,
+            color: AppColors.orange,
             borderRadius: BorderRadius.circular(40),
           ),
           child: Center(

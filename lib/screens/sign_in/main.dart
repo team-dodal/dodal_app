@@ -23,10 +23,12 @@ class SignInScreen extends StatelessWidget {
     switch (type) {
       case SocialType.GOOGLE:
         final res = await GoogleAuthService.signIn();
-        id = res!['id'];
+        if (res == null) return;
+        id = res['id'];
         email = res['email'];
       case SocialType.KAKAO:
         final res = await KakaoAuthService.signIn();
+        if (res == null) return;
         id = res!['id'];
         email = res['email'];
       case SocialType.APPLE:
@@ -49,7 +51,7 @@ class SignInScreen extends StatelessWidget {
     if (res.isSigned) {
       final user = await UserService.user();
       if (!context.mounted) return;
-      context.read<MyInfoCubit>().set(User.fromJson(user));
+      context.read<MyInfoCubit>().set(User.formJson(user));
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (ctx) => const MainRoute()),
           (route) => false);

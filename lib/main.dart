@@ -49,7 +49,7 @@ class App extends StatelessWidget {
               if (snapshot.data != null) {
                 return BlocBuilder<MyInfoCubit, User?>(
                     builder: (context, state) {
-                  context.read<MyInfoCubit>().set(User.fromJson(snapshot.data));
+                  context.read<MyInfoCubit>().set(User.formJson(snapshot.data));
                   return const MainRoute();
                 });
               } else {

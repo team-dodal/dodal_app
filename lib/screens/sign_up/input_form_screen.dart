@@ -2,13 +2,13 @@ import 'dart:io';
 
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
+import 'package:dodal_app/widgets/common/create_form_title.dart';
 import 'package:dodal_app/widgets/sign_up/profile_image_select.dart';
 import 'package:dodal_app/widgets/sign_up/submit_button.dart';
 import 'package:dodal_app/widgets/sign_up/text_input.dart';
 import 'package:flutter/material.dart';
 
 import '../../services/user_service.dart';
-import '../../widgets/common/system_dialog.dart';
 
 class InputFormScreen extends StatefulWidget {
   const InputFormScreen({
@@ -35,26 +35,28 @@ class _InputFormScreenState extends State<InputFormScreen> {
   TextEditingController nicknameController = TextEditingController();
   TextEditingController contentController = TextEditingController();
   bool _nicknameChecked = false;
+  String? _nicknameError;
   File? _image;
 
   _checkingNickname() async {
+    if (nicknameController.text.isEmpty) {
+      setState(() {
+        _nicknameError = '닉네임을 입력해주세요!';
+      });
+      return;
+    }
     final res = await UserService.checkNickName(nicknameController.text);
     if (!mounted) return;
-    showDialog(
-      context: context,
-      builder: (ctx) => SystemDialog(
-        title: res ? '사용할 수 있는 닉네임입니다.' : '사용할 수 없는 닉네임입니다.',
-        children: [
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('확인'),
-          ),
-        ],
-      ),
-    );
-    setState(() {
-      _nicknameChecked = res;
-    });
+    if (res) {
+      setState(() {
+        _nicknameError = null;
+        _nicknameChecked = res;
+      });
+    } else {
+      setState(() {
+        _nicknameError = '사용할 수 없는 닉네임입니다!';
+      });
+    }
   }
 
   _handleNextStep() async {
@@ -96,37 +98,10 @@ class _InputFormScreenState extends State<InputFormScreen> {
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 100),
           child: Column(
             children: [
-              SizedBox(
-                width: double.infinity,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          '${widget.step}',
-                          style: Typo(context)
-                              .body1()!
-                              .copyWith(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          '/2',
-                          style: Typo(context).body1()!.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.systemGrey2,
-                              ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      '자신을 소개해주세요!',
-                      style: Typo(context)
-                          .headline2()!
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
+              CreateFormTitle(
+                title: '자신을 소개해주세요!',
+                currentStep: widget.step,
+                steps: 2,
               ),
               const SizedBox(height: 60),
               ProfileImageSelect(
@@ -169,17 +144,25 @@ class _InputFormScreenState extends State<InputFormScreen> {
                   child: const Text('중복 확인'),
                 ),
               ),
-              if (_nicknameChecked)
-                Row(
-                  children: [
+              const SizedBox(height: 6),
+              Row(
+                children: [
+                  if (_nicknameChecked)
                     Text(
                       '중복 확인 완료되었습니다.',
                       style: Typo(context)
                           .caption()!
-                          .copyWith(color: Colors.green),
+                          .copyWith(color: AppColors.success),
                     ),
-                  ],
-                ),
+                  if (_nicknameError != null)
+                    Text(
+                      _nicknameError!,
+                      style: Typo(context)
+                          .caption()!
+                          .copyWith(color: AppColors.danger),
+                    ),
+                ],
+              ),
               const SizedBox(height: 40),
               TextInput(
                 controller: contentController,

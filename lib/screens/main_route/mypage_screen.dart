@@ -1,3 +1,4 @@
+import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/mypage/calendar_marker.dart';
 import 'package:dodal_app/widgets/mypage/user_info_box.dart';
 import 'package:flutter/material.dart';
@@ -8,11 +9,16 @@ class MyPageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const UserInfoBox(),
+          Container(
+            width: double.infinity,
+            height: 8,
+            decoration: const BoxDecoration(color: AppColors.systemGrey4),
+          ),
           TableCalendar(
             firstDay: DateTime.utc(2023, 1, 1),
             lastDay: DateTime.utc(2033, 3, 14),
@@ -23,7 +29,7 @@ class MyPageScreen extends StatelessWidget {
               titleCentered: true,
             ),
             calendarStyle: const CalendarStyle(
-              weekendTextStyle: TextStyle(color: Colors.red),
+              weekendTextStyle: TextStyle(color: AppColors.danger),
               markersAlignment: Alignment.center,
             ),
             calendarBuilders: CalendarBuilders(
