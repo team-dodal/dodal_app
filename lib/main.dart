@@ -54,7 +54,9 @@ class _AppState extends State<App> {
           future: _user,
           builder: (ctx, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Scaffold();
+              return const Scaffold(
+                body: CircularProgressIndicator(),
+              );
             } else {
               if (snapshot.data != null) {
                 return BlocBuilder<MyInfoCubit, User?>(

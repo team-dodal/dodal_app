@@ -6,11 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class ProfileImageSelect extends StatefulWidget {
-  const ProfileImageSelect(
-      {super.key, required this.onChanged, required this.image});
+  const ProfileImageSelect({
+    super.key,
+    required this.onChanged,
+    required this.image,
+  });
 
   final Function onChanged;
-  final File? image;
+  final dynamic image;
 
   @override
   State<ProfileImageSelect> createState() => _ProfileImageSelectState();
@@ -44,10 +47,12 @@ class _ProfileImageSelectState extends State<ProfileImageSelect> {
             ),
             child: Builder(
               builder: (context) {
-                if (widget.image != null) {
+                if (widget.image != null && widget.image != '') {
                   return FadeInImage(
                     placeholder: MemoryImage(kTransparentImage),
-                    image: FileImage(widget.image!),
+                    image: widget.image is File
+                        ? FileImage(widget.image)
+                        : NetworkImage(widget.image) as ImageProvider,
                     fit: BoxFit.cover,
                     width: double.infinity,
                     height: double.infinity,

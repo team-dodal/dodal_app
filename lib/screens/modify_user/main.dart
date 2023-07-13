@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:dodal_app/providers/user_cubit.dart';
+import 'package:dodal_app/services/user_service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/modify_user/input_form_content.dart';
 import 'package:dodal_app/widgets/modify_user/tag_select_content.dart';
@@ -16,16 +19,18 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
   ScrollController scrollController = ScrollController();
   TextEditingController nicknameController = TextEditingController();
   TextEditingController contentController = TextEditingController();
+  String _imageUrl = '';
+  File? _uploadImage;
   bool nicknameChecked = true;
   List<String> _category = [];
 
   _submit() async {
-    // var res = await UserService.updateUser(
-    //   nickname: nicknameController.text,
-    //   profile: profile,
-    //   content: contentController.text,
-    //   category: category,
-    // );
+    await UserService.updateUser(
+      nickname: nicknameController.text,
+      profile: _uploadImage,
+      content: contentController.text,
+      category: _category,
+    );
   }
 
   @override
@@ -35,6 +40,7 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
     contentController.text = user.content;
     setState(() {
       _category = user.tagList.map((tag) => '${tag.value}').toList();
+      _imageUrl = user.profileUrl;
     });
     super.initState();
   }
@@ -66,6 +72,13 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
             InputFormContent(
               nicknameController: nicknameController,
               contentController: contentController,
+              imageUrl: _imageUrl,
+              uploadImage: _uploadImage,
+              setImage: (image) {
+                setState(() {
+                  _uploadImage = image;
+                });
+              },
               nicknameChecked: nicknameChecked,
               setNicknameChecked: (value) {
                 setState(() {

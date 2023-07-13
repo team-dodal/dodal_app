@@ -80,9 +80,11 @@ class _TextInputState extends State<TextInput> {
             if (widget.wordLength != null)
               Text(
                 widget.wordLength!,
-                style: Typo(context)
-                    .body2()!
-                    .copyWith(color: AppColors.systemGrey2),
+                style: Typo(context).body2()!.copyWith(
+                      color: _isFocused
+                          ? AppColors.systemBlack
+                          : AppColors.systemGrey2,
+                    ),
               ),
           ],
         ),
