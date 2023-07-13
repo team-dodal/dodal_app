@@ -1,8 +1,8 @@
 import 'package:dodal_app/theme/color.dart';
+import 'package:dodal_app/theme/typo.dart';
 import 'package:flutter/material.dart';
-import '../../theme/typo.dart';
 
-class TextInput extends StatelessWidget {
+class TextInput extends StatefulWidget {
   const TextInput({
     super.key,
     this.onChanged,
@@ -29,6 +29,33 @@ class TextInput extends StatelessWidget {
   final TextInputAction textInputAction;
 
   @override
+  State<TextInput> createState() => _TextInputState();
+}
+
+class _TextInputState extends State<TextInput> {
+  final FocusNode _focusNode = FocusNode();
+  bool _isFocused = false;
+
+  void _onTextFieldFocusChange() {
+    setState(() {
+      _isFocused = _focusNode.hasFocus;
+    });
+  }
+
+  @override
+  void initState() {
+    _focusNode.addListener(_onTextFieldFocusChange);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.removeListener(_onTextFieldFocusChange);
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -37,12 +64,12 @@ class TextInput extends StatelessWidget {
           children: [
             Row(children: [
               Text(
-                title!,
+                widget.title!,
                 style: Typo(context)
                     .body1()!
                     .copyWith(fontWeight: FontWeight.bold),
               ),
-              if (required)
+              if (widget.required)
                 Text(
                   '*',
                   style: Typo(context)
@@ -50,9 +77,9 @@ class TextInput extends StatelessWidget {
                       .copyWith(fontWeight: FontWeight.bold, color: Colors.red),
                 )
             ]),
-            if (wordLength != null)
+            if (widget.wordLength != null)
               Text(
-                wordLength!,
+                widget.wordLength!,
                 style: Typo(context)
                     .body2()!
                     .copyWith(color: AppColors.systemGrey2),
@@ -64,23 +91,27 @@ class TextInput extends StatelessWidget {
           children: [
             Expanded(
               child: TextField(
-                controller: controller,
+                controller: widget.controller,
+                focusNode: _focusNode,
                 decoration: InputDecoration(
-                  fillColor: AppColors.bgColor2,
+                  fillColor:
+                      _isFocused ? AppColors.systemGrey5 : AppColors.bgColor2,
                   filled: true,
                   border: OutlineInputBorder(
                     borderSide: BorderSide.none,
                     borderRadius: BorderRadius.circular(8),
                   ),
+                  focusedBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: AppColors.systemBlack)),
                   counterText: '',
-                  hintText: placeholder,
+                  hintText: widget.placeholder,
                   hintStyle: Typo(context).body2()!.copyWith(
                         fontWeight: FontWeight.normal,
                         color: AppColors.systemGrey2,
                       ),
                   suffixIcon: Padding(
                     padding: const EdgeInsets.only(right: 12),
-                    child: child,
+                    child: widget.child,
                   ),
                   suffixIconConstraints:
                       const BoxConstraints(minWidth: 24, minHeight: 24),
@@ -89,16 +120,17 @@ class TextInput extends StatelessWidget {
                     .body2()!
                     .copyWith(fontWeight: FontWeight.normal),
                 onChanged: (value) {
-                  if (onChanged == null) return;
-                  onChanged!(value);
+                  if (widget.onChanged == null) return;
+                  widget.onChanged!(value);
                 },
-                textInputAction: textInputAction,
-                onSubmitted: (value) => textInputAction == TextInputAction.next
-                    ? FocusScope.of(context).nextFocus()
-                    : null,
-                minLines: multiLine ? 3 : 1,
-                maxLines: multiLine ? 10 : 1,
-                maxLength: maxLength,
+                textInputAction: widget.textInputAction,
+                onSubmitted: (value) =>
+                    widget.textInputAction == TextInputAction.next
+                        ? FocusScope.of(context).nextFocus()
+                        : null,
+                minLines: widget.multiLine ? 3 : 1,
+                maxLines: widget.multiLine ? 10 : 1,
+                maxLength: widget.maxLength,
               ),
             ),
           ],

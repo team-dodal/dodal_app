@@ -22,13 +22,24 @@ void main() async {
   await Fcm.init();
   await initializeDateFormatting();
 
-  runApp(App());
+  runApp(const App());
 }
 
-class App extends StatelessWidget {
-  App({super.key});
+class App extends StatefulWidget {
+  const App({super.key});
 
+  @override
+  State<App> createState() => _AppState();
+}
+
+class _AppState extends State<App> {
   final Future<dynamic> _user = UserService.user();
+
+  @override
+  void initState() {
+    FlutterNativeSplash.remove();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +54,8 @@ class App extends StatelessWidget {
           future: _user,
           builder: (ctx, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const SizedBox();
+              return const Scaffold();
             } else {
-              FlutterNativeSplash.remove();
               if (snapshot.data != null) {
                 return BlocBuilder<MyInfoCubit, User?>(
                     builder: (context, state) {

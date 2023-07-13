@@ -25,21 +25,40 @@ class CreateFormTitle extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(
-                '$currentStep',
-                style: Typo(context)
-                    .body1()!
-                    .copyWith(fontWeight: FontWeight.bold),
-              ),
-              Text(
-                '/$steps',
-                style: Typo(context).body1()!.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: currentStep == steps
-                          ? AppColors.systemBlack
-                          : AppColors.systemGrey2,
+              for (var step = 1; step <= steps; step++)
+                Row(
+                  children: [
+                    Container(
+                      width: 22,
+                      height: 22,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: step == currentStep
+                            ? AppColors.systemBlack
+                            : AppColors.systemGrey4,
+                      ),
+                      child: Center(
+                        child: Text(
+                          '$step',
+                          style: Typo(context).body4()!.copyWith(
+                                color: step == currentStep
+                                    ? AppColors.systemGrey5
+                                    : AppColors.systemGrey2,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                      ),
                     ),
-              )
+                    if (step != steps)
+                      Container(
+                        height: 1,
+                        width: 8,
+                        decoration: const BoxDecoration(
+                          color: AppColors.systemGrey3,
+                        ),
+                      )
+                  ],
+                ),
             ],
           ),
           const SizedBox(height: 12),

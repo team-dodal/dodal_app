@@ -1,14 +1,12 @@
 import 'dart:io';
-
+import 'package:dodal_app/services/user_service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/create_form_title.dart';
 import 'package:dodal_app/widgets/sign_up/profile_image_select.dart';
 import 'package:dodal_app/widgets/sign_up/submit_button.dart';
-import 'package:dodal_app/widgets/sign_up/text_input.dart';
+import 'package:dodal_app/widgets/common/text_input.dart';
 import 'package:flutter/material.dart';
-
-import '../../services/user_service.dart';
 
 class InputFormScreen extends StatefulWidget {
   const InputFormScreen({
@@ -99,7 +97,7 @@ class _InputFormScreenState extends State<InputFormScreen> {
           child: Column(
             children: [
               CreateFormTitle(
-                title: '자신을 소개해주세요!',
+                title: '도달러들에게\n자신을 소개해주세요.',
                 currentStep: widget.step,
                 steps: 2,
               ),

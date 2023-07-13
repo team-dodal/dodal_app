@@ -32,8 +32,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String content = '';
   File? image;
   List<String> category = [];
+  bool _pageDirectionReverse = false;
 
   Future<bool> _handlePopState() async {
+    _pageDirectionReverse = true;
     if (_currentIndex > 0) {
       setState(() {
         _currentIndex -= 1;
@@ -72,7 +74,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return WillPopScope(
       onWillPop: _handlePopState,
       child: PageTransitionSwitcher(
-        reverse: _currentIndex == 0 ? true : false,
+        reverse: _pageDirectionReverse,
         transitionBuilder: (child, animation, secondaryAnimation) {
           return SharedAxisTransition(
             animation: animation,
@@ -89,6 +91,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               content = data['content'];
               image = data['image'];
               setState(() {
+                _pageDirectionReverse = false;
                 _currentIndex += 1;
               });
             },
@@ -99,6 +102,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           TagSelectScreen(
             step: _currentIndex + 1,
             nextStep: (data) {
+              _pageDirectionReverse = false;
               category = data['category'];
               _submit();
             },
