@@ -1,0 +1,120 @@
+import 'package:dodal_app/services/user_service.dart';
+import 'package:dodal_app/theme/color.dart';
+import 'package:dodal_app/theme/typo.dart';
+import 'package:dodal_app/widgets/common/text_input.dart';
+import 'package:dodal_app/widgets/sign_up/profile_image_select.dart';
+import 'package:flutter/material.dart';
+
+class InputFormContent extends StatefulWidget {
+  const InputFormContent({
+    super.key,
+    required this.nicknameController,
+    required this.contentController,
+    required this.nicknameChecked,
+    required this.setNicknameChecked,
+  });
+
+  final TextEditingController nicknameController;
+  final TextEditingController contentController;
+  final bool nicknameChecked;
+  final void Function(bool) setNicknameChecked;
+
+  @override
+  State<InputFormContent> createState() => _InputFormContentState();
+}
+
+class _InputFormContentState extends State<InputFormContent> {
+  String? _nicknameError;
+
+  _checkingNickname() async {
+    if (widget.nicknameController.text.isEmpty) {
+      setState(() {
+        _nicknameError = '닉네임을 입력해주세요!';
+      });
+      return;
+    }
+    final res = await UserService.checkNickName(widget.nicknameController.text);
+    if (!mounted) return;
+    if (res) {
+      setState(() {
+        _nicknameError = null;
+        widget.setNicknameChecked(res);
+      });
+    } else {
+      setState(() {
+        _nicknameError = '사용할 수 없는 닉네임입니다!';
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+      child: Column(
+        children: [
+          ProfileImageSelect(
+            onChanged: (image) {},
+            image: null,
+          ),
+          const SizedBox(height: 35),
+          TextInput(
+            controller: widget.nicknameController,
+            title: '닉네임',
+            placeholder: '사용하실 닉네임을 입력해주세요.',
+            required: true,
+            wordLength: '${widget.nicknameController.text.length}/16',
+            maxLength: 16,
+            textInputAction: TextInputAction.next,
+            onChanged: (value) {
+              setState(() {
+                widget.setNicknameChecked(false);
+              });
+            },
+            child: OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 8,
+                ),
+                shape: BeveledRectangleBorder(
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+              onPressed: widget.nicknameChecked ? null : _checkingNickname,
+              child: const Text('중복 확인'),
+            ),
+          ),
+          const SizedBox(height: 6),
+          Row(
+            children: [
+              if (widget.nicknameChecked)
+                Text(
+                  '중복 확인 완료되었습니다.',
+                  style: Typo(context)
+                      .caption()!
+                      .copyWith(color: AppColors.success),
+                ),
+              if (_nicknameError != null)
+                Text(
+                  _nicknameError!,
+                  style: Typo(context)
+                      .caption()!
+                      .copyWith(color: AppColors.danger),
+                ),
+            ],
+          ),
+          const SizedBox(height: 40),
+          TextInput(
+            controller: widget.contentController,
+            title: '한 줄 소개',
+            placeholder: '소개하고 싶은 문구를 입력해주세요.',
+            wordLength: '${widget.contentController.text.length}/50',
+            maxLength: 50,
+            multiLine: true,
+          ),
+        ],
+      ),
+    );
+  }
+}

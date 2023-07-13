@@ -72,23 +72,33 @@ class UserService {
     }
   }
 
+  static updateUser({
+    required String nickname,
+    required File? profile,
+    required String content,
+    required List<String> category,
+  }) async {
+    final formData = FormData.fromMap({
+      "nickname": nickname,
+      "profile": profile,
+      "content": content,
+      "tag_list": category,
+    });
+    try {
+      final service = await dio();
+      final res = await service.patch('/api/v1/users/me', data: formData);
+      return res.data['result'];
+    } catch (err) {
+      return Exception(err);
+    }
+  }
+
   static updateFcmToken(String token) async {
     try {
       final service = await dio();
       await service.post('/api/v1/users/fcm-token', data: {'fcm_token': token});
     } catch (err) {
       return Exception(err);
-    }
-  }
-
-  static uploadProfileImg(String profile) async {
-    try {
-      final service = await dio();
-      final res =
-          await service.post('/api/v1/users/profile', data: {profile: profile});
-      return res.data['result'];
-    } catch (err) {
-      throw Exception(err);
     }
   }
 
