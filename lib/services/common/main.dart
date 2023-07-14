@@ -1,4 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:dodal_app/main.dart';
+import 'package:dodal_app/screens/sign_in/main.dart';
+import 'package:dodal_app/widgets/common/system_dialog.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -22,9 +26,7 @@ Future<Dio> dio() async {
       },
       onError: (DioException e, ErrorInterceptorHandler handler) async {
         if (e.response?.statusCode == 401) {
-          Dio refreshDio = Dio(BaseOptions(
-            baseUrl: dotenv.get('BASE_URL'),
-          ));
+          Dio refreshDio = Dio(BaseOptions(baseUrl: dotenv.get('BASE_URL')));
           refreshDio.interceptors.clear();
           refreshDio.interceptors.add(InterceptorsWrapper(
             onRequest: (options, handler) async {
@@ -34,9 +36,36 @@ Future<Dio> dio() async {
               return handler.next(options);
             },
             onError: (e, handler) async {
+              final refreshToken =
+                  await secureStorage.read(key: 'refreshToken');
+
               if (e.response!.statusCode == 401) {
+                navigatorKey.currentState!.pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (ctx) => const SignInScreen()),
+                  (route) => false,
+                );
+
+                if (refreshToken != null) {
+                  showDialog(
+                    context: navigatorKey.currentContext!,
+                    builder: (context) {
+                      return SystemDialog(
+                        title: '알림',
+                        subTitle: '다시 로그인 해주세요.',
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('확인'),
+                          )
+                        ],
+                      );
+                    },
+                  );
+                }
                 secureStorage.deleteAll();
-                return handler.reject(e);
+                return handler.next(e);
               }
             },
           ));

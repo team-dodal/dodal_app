@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dodal_app/model/my_info_model.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/services/user_service.dart';
 import 'package:dodal_app/theme/color.dart';
@@ -25,12 +26,15 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
   List<String> _category = [];
 
   _submit() async {
-    await UserService.updateUser(
+    final res = await UserService.updateUser(
       nickname: nicknameController.text,
       profile: _uploadImage,
       content: contentController.text,
       category: _category,
     );
+    if (!mounted) return;
+    context.read<MyInfoCubit>().set(User.formJson(res));
+    Navigator.of(context).pop();
   }
 
   @override

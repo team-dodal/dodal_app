@@ -68,7 +68,7 @@ class UserService {
       final res = await service.get('/api/v1/users/me');
       return res.data['result'];
     } catch (err) {
-      return Future.error(err.toString());
+      return Exception(err);
     }
   }
 
