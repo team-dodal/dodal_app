@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:animations/animations.dart';
 import 'package:dodal_app/screens/main_route/main.dart';
+import 'package:dodal_app/screens/sign_up/agreement_screen.dart';
 import 'package:dodal_app/screens/sign_up/input_form_screen.dart';
 import 'package:dodal_app/screens/sign_up/tag_select_screen.dart';
 import 'package:dodal_app/services/user_service.dart';
@@ -28,6 +29,7 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   FlutterSecureStorage secureStorage = const FlutterSecureStorage();
   int _currentIndex = 0;
+  int steps = 3;
   String nickname = '';
   String content = '';
   File? image;
@@ -84,7 +86,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
           );
         },
         child: [
+          AgreementScreen(steps: steps, step: _currentIndex + 1),
           InputFormScreen(
+            steps: steps,
             step: _currentIndex + 1,
             nextStep: (data) {
               nickname = data['nickname'];
@@ -100,6 +104,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             image: image,
           ),
           TagSelectScreen(
+            steps: steps,
             step: _currentIndex + 1,
             nextStep: (data) {
               _pageDirectionReverse = false;

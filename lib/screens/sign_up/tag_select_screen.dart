@@ -11,9 +11,11 @@ class TagSelectScreen extends StatefulWidget {
     super.key,
     required this.step,
     required this.nextStep,
+    required this.steps,
   });
 
   final int step;
+  final int steps;
   final Function nextStep;
 
   @override
@@ -67,7 +69,7 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
                       title: '무엇에 관심 있나요?',
                       subTitle: '1개 이상 선택하시면 딱 맞는 도전들을 추천드려요!',
                       currentStep: widget.step,
-                      steps: 2,
+                      steps: widget.steps,
                     ),
                     const SizedBox(height: 40),
                     for (Category category in categories)

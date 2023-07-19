@@ -16,10 +16,12 @@ class InputFormScreen extends StatefulWidget {
     required this.nickname,
     required this.content,
     this.image,
+    required this.steps,
   });
 
   final Function nextStep;
   final int step;
+  final int steps;
   final String nickname;
   final String content;
   final File? image;
@@ -99,7 +101,7 @@ class _InputFormScreenState extends State<InputFormScreen> {
               CreateFormTitle(
                 title: '도달러들에게\n자신을 소개해주세요.',
                 currentStep: widget.step,
-                steps: 2,
+                steps: widget.steps,
               ),
               const SizedBox(height: 60),
               ProfileImageSelect(
