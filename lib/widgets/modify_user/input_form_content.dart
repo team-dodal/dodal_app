@@ -66,7 +66,7 @@ class _InputFormContentState extends State<InputFormContent> {
           ProfileImageSelect(
             onChanged: widget.setImage,
             image: widget.uploadImage ??
-                BlocProvider.of<MyInfoCubit>(context).state!.profileUrl,
+                BlocProvider.of<UserCubit>(context).state!.profileUrl,
           ),
           const SizedBox(height: 35),
           TextInput(

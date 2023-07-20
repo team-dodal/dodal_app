@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:animations/animations.dart';
-import 'package:dodal_app/screens/main_route/main.dart';
 import 'package:dodal_app/screens/sign_up/agreement_screen.dart';
 import 'package:dodal_app/screens/sign_up/input_form_screen.dart';
 import 'package:dodal_app/screens/sign_up/tag_select_screen.dart';
+import 'package:dodal_app/screens/welcome/main.dart';
 import 'package:dodal_app/services/user_service.dart';
 import 'package:dodal_app/utilities/social_auth.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +65,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       if (!mounted) return;
 
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (ctx) => const MainRoute()),
+        MaterialPageRoute(builder: (ctx) => const WelcomeScreen()),
         (route) => false,
       );
     }
@@ -86,7 +86,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
           );
         },
         child: [
-          AgreementScreen(steps: steps, step: _currentIndex + 1),
+          AgreementScreen(
+            steps: steps,
+            step: _currentIndex + 1,
+            nextStep: () {
+              setState(() {
+                _pageDirectionReverse = false;
+                _currentIndex += 1;
+              });
+            },
+          ),
           InputFormScreen(
             steps: steps,
             step: _currentIndex + 1,

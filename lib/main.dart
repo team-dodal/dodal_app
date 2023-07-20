@@ -1,4 +1,4 @@
-import 'package:dodal_app/model/my_info_model.dart';
+import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/screens/main_route/main.dart';
 import 'package:dodal_app/screens/sign_in/main.dart';
@@ -37,9 +37,18 @@ class _AppState extends State<App> {
 
   checkingLoginStatus() async {
     try {
-      final user = await UserService.user();
+      UserResponse user = await UserService.user();
       if (!mounted) return;
-      context.read<MyInfoCubit>().set(User.formJson(user));
+      context.read<UserCubit>().set(User(
+            id: user.id!,
+            email: user.email!,
+            nickname: user.nickname!,
+            content: user.content!,
+            profileUrl: user.profileUrl!,
+            registerAt: user.registerAt!,
+            socialType: user.socialType!,
+            tagList: user.tagList!,
+          ));
       setState(() {
         _isLogin = true;
       });
@@ -61,7 +70,7 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => MyInfoCubit()),
+        BlocProvider(create: (context) => UserCubit()),
       ],
       child: MaterialApp(
         title: '도달',

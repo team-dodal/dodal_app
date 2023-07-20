@@ -1,19 +1,8 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
+import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/utilities/social_auth.dart';
-
 import 'common/main.dart';
-
-class SignInResponse {
-  bool isSigned;
-  String? accessToken, refreshToken;
-
-  SignInResponse.fromJson(Map<String, dynamic> data)
-      : isSigned = data['is_signed']!.toLowerCase() == 'true',
-        accessToken = data['access_token'],
-        refreshToken = data['refresh_token'];
-}
 
 class SignUpResponse {
   String? accessToken, refreshToken;
@@ -21,6 +10,43 @@ class SignUpResponse {
   SignUpResponse.fromJson(Map<String, dynamic> data)
       : accessToken = data['access_token'],
         refreshToken = data['refresh_token'];
+}
+
+class UserResponse {
+  final int? id;
+  final String? email, nickname, content, profileUrl, socialType;
+  final DateTime? registerAt;
+  final List<Tag>? tagList;
+
+  UserResponse.formJson(Map<String, dynamic> data)
+      : id = data['user_id'],
+        email = data['email'],
+        nickname = data['nickname'],
+        content = data['content'],
+        profileUrl = data['profile_url'] ?? '',
+        registerAt = data['register_at'] != null
+            ? DateTime.parse(data['register_at'])
+            : null,
+        socialType = data['social_type'],
+        tagList = (data['tag_list'] as List<dynamic>?)
+                ?.map((e) => Tag(name: e['name'], value: e['value']))
+                .toList() ??
+            [];
+}
+
+class SignInResponse extends UserResponse {
+  final String? accessToken, refreshToken;
+  final bool isSigned;
+
+  SignInResponse.fromJson(Map<String, dynamic> data)
+      : accessToken = data['access_token'],
+        refreshToken = data['refresh_token'],
+        isSigned = data['is_signed']!.toLowerCase() == 'true',
+        super.formJson(data);
+}
+
+class ModifyUserResponse extends UserResponse {
+  ModifyUserResponse.fromJson(Map<String, dynamic> data) : super.formJson(data);
 }
 
 class UserService {
@@ -66,7 +92,7 @@ class UserService {
     try {
       final service = await dio();
       final res = await service.get('/api/v1/users/me');
-      return res.data['result'];
+      return UserResponse.formJson(res.data['result']);
     } catch (err) {
       return Exception(err);
     }
@@ -87,7 +113,7 @@ class UserService {
     try {
       final service = await dio();
       final res = await service.patch('/api/v1/users/me', data: formData);
-      return res.data['result'];
+      return ModifyUserResponse.fromJson(res.data['result']);
     } catch (err) {
       return Exception(err);
     }

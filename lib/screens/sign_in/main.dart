@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:dodal_app/model/my_info_model.dart';
+import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/screens/main_route/main.dart';
 import 'package:dodal_app/theme/color.dart';
@@ -43,26 +43,33 @@ class SignInScreen extends StatelessWidget {
 
     SignInResponse res = await UserService.signIn(type, id as String);
 
-    if (res.accessToken != null && res.refreshToken != null) {
-      secureStorage.write(key: 'accessToken', value: res.accessToken);
-      secureStorage.write(key: 'refreshToken', value: res.refreshToken);
-    }
+    secureStorage.write(key: 'accessToken', value: res.accessToken);
+    secureStorage.write(key: 'refreshToken', value: res.refreshToken);
 
-    if (res.isSigned) {
-      final user = await UserService.user();
-      if (!context.mounted) return;
-      context.read<MyInfoCubit>().set(User.formJson(user));
-      Navigator.of(context).pushAndRemoveUntil(
+    if (context.mounted) {
+      if (res.isSigned) {
+        context.read<UserCubit>().set(User(
+              id: res.id!,
+              email: res.email!,
+              nickname: res.nickname!,
+              content: res.content!,
+              profileUrl: res.profileUrl!,
+              registerAt: res.registerAt!,
+              socialType: res.socialType!,
+              tagList: res.tagList!,
+            ));
+        Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (ctx) => const MainRoute()),
-          (route) => false);
-    } else {
-      if (!context.mounted) return;
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (ctx) =>
-              SignUpScreen(socialType: type, socialId: id!, email: email!),
-        ),
-      );
+          (route) => false,
+        );
+      } else {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (ctx) =>
+                SignUpScreen(socialType: type, socialId: id!, email: email!),
+          ),
+        );
+      }
     }
   }
 

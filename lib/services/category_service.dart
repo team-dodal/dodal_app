@@ -15,7 +15,9 @@ List<Category> parseCategories(Map<String, dynamic> data) {
 
     return Category(
       name: categoryData['name'],
+      subName: categoryData['sub_name'],
       value: categoryData['value'],
+      emoji: categoryData['emoji'],
       tags: tags,
     );
   }).toList();

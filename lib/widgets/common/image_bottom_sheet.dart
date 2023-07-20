@@ -40,6 +40,7 @@ class _ImageBottomSheetState extends State<ImageBottomSheet> {
           borderRadius: BorderRadius.all(Radius.circular(16)),
           color: AppColors.bgColor1,
         ),
+        padding: EdgeInsets.only(bottom: Platform.isIOS ? 20 : 0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

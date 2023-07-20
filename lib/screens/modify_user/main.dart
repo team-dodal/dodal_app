@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:dodal_app/model/my_info_model.dart';
+import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/services/user_service.dart';
 import 'package:dodal_app/theme/color.dart';
@@ -26,20 +26,29 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
   List<String> _category = [];
 
   _submit() async {
-    final res = await UserService.updateUser(
+    ModifyUserResponse res = await UserService.updateUser(
       nickname: nicknameController.text,
       profile: _uploadImage,
       content: contentController.text,
       category: _category,
     );
     if (!mounted) return;
-    context.read<MyInfoCubit>().set(User.formJson(res));
+    context.read<UserCubit>().set(User(
+          id: res.id!,
+          email: res.email!,
+          nickname: res.nickname!,
+          content: res.content!,
+          profileUrl: res.profileUrl!,
+          registerAt: res.registerAt!,
+          socialType: res.socialType!,
+          tagList: res.tagList!,
+        ));
     Navigator.of(context).pop();
   }
 
   @override
   void initState() {
-    final user = BlocProvider.of<MyInfoCubit>(context).state!;
+    final user = BlocProvider.of<UserCubit>(context).state!;
     nicknameController.text = user.nickname;
     contentController.text = user.content;
     setState(() {

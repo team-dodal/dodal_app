@@ -7,17 +7,16 @@ class User extends Equatable {
   final DateTime registerAt;
   final List<Tag> tagList;
 
-  User.formJson(Map<String, dynamic> data)
-      : id = data['user_id'],
-        email = data['email'],
-        nickname = data['nickname'],
-        content = data['content'],
-        profileUrl = data['profile_url'] ?? '',
-        registerAt = DateTime.parse(data['register_at']),
-        socialType = data['social_type'],
-        tagList = (data['tag_list'] as List<dynamic>)
-            .map((e) => Tag(name: e['name'], value: e['value']))
-            .toList();
+  const User({
+    required this.id,
+    required this.email,
+    required this.nickname,
+    required this.content,
+    required this.profileUrl,
+    required this.registerAt,
+    required this.socialType,
+    required this.tagList,
+  });
 
   @override
   bool get stringify => true;

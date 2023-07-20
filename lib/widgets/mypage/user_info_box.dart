@@ -1,4 +1,4 @@
-import 'package:dodal_app/model/my_info_model.dart';
+import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/screens/modify_user/main.dart';
 import 'package:dodal_app/theme/color.dart';
@@ -13,7 +13,7 @@ class UserInfoBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MyInfoCubit, User?>(builder: (context, user) {
+    return BlocBuilder<UserCubit, User?>(builder: (context, user) {
       user!;
       return Card(
         elevation: 0,
