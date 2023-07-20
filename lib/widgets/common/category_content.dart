@@ -22,9 +22,16 @@ class CategoryContent extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          category.name,
-          style: Typo(context).body1()!.copyWith(fontWeight: FontWeight.bold),
+        Row(
+          children: [
+            Text(
+              category.name,
+              style:
+                  Typo(context).body1()!.copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(width: 2),
+            Text(category.emoji, style: Typo(context).body1()),
+          ],
         ),
         const SizedBox(height: 5),
         Wrap(

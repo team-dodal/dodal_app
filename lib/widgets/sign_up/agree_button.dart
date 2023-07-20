@@ -34,23 +34,25 @@ class AgreeButton extends StatelessWidget {
                   },
                   borderRadius: BorderRadius.circular(26),
                   child: Ink(
-                    width: 26,
-                    height: 26,
+                    width: 22,
+                    height: 22,
                     decoration: BoxDecoration(
                       color: value ? AppColors.yellow : Colors.transparent,
                       shape: BoxShape.circle,
                       border: Border.all(
-                        width: 2,
-                        color: value ? AppColors.yellow : AppColors.systemGrey2,
+                        width: 1.5,
+                        color: value ? AppColors.yellow : AppColors.systemGrey3,
                       ),
                     ),
-                    child: SvgPicture.asset(
-                      'assets/icons/check_icon.svg',
-                      colorFilter: ColorFilter.mode(
-                        value ? AppColors.systemBlack : AppColors.systemGrey2,
-                        BlendMode.srcIn,
+                    child: Padding(
+                      padding: const EdgeInsets.all(3.5),
+                      child: SvgPicture.asset(
+                        'assets/icons/check_icon.svg',
+                        colorFilter: ColorFilter.mode(
+                          value ? AppColors.systemBlack : AppColors.systemGrey3,
+                          BlendMode.srcIn,
+                        ),
                       ),
-                      fit: BoxFit.none,
                     ),
                   ),
                 ),

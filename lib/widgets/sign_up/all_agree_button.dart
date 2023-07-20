@@ -20,6 +20,17 @@ class AllAgreeButton extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
+          color: value ? AppColors.bgColor1 : AppColors.systemGrey4,
+          boxShadow: [
+            value
+                ? const BoxShadow(
+                    color: AppColors.systemGrey3,
+                    offset: Offset(0, 0),
+                    blurRadius: 8,
+                    blurStyle: BlurStyle.outer,
+                  )
+                : const BoxShadow()
+          ],
           border: Border.all(
             color: value ? AppColors.systemBlack : AppColors.systemGrey4,
             width: 1,
@@ -31,26 +42,28 @@ class AllAgreeButton extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                  width: 26,
-                  height: 26,
+                  width: 22,
+                  height: 22,
                   decoration: BoxDecoration(
                     color: value ? AppColors.yellow : Colors.transparent,
                     shape: BoxShape.circle,
                     border: Border.all(
-                      width: 2,
-                      color: value ? AppColors.yellow : AppColors.systemGrey2,
+                      width: 1.5,
+                      color: value ? AppColors.yellow : AppColors.systemGrey3,
                     ),
                   ),
-                  child: SvgPicture.asset(
-                    'assets/icons/check_icon.svg',
-                    colorFilter: ColorFilter.mode(
-                      value ? AppColors.systemBlack : AppColors.systemGrey2,
-                      BlendMode.srcIn,
+                  child: Padding(
+                    padding: const EdgeInsets.all(3.5),
+                    child: SvgPicture.asset(
+                      'assets/icons/check_icon.svg',
+                      colorFilter: ColorFilter.mode(
+                        value ? AppColors.systemBlack : AppColors.systemGrey3,
+                        BlendMode.srcIn,
+                      ),
                     ),
-                    fit: BoxFit.none,
                   ),
                 ),
-                const SizedBox(width: 6),
+                const SizedBox(width: 9),
                 Text(
                   '모두 동의해요',
                   style: Typo(context).body1()!.copyWith(
@@ -66,21 +79,5 @@ class AllAgreeButton extends StatelessWidget {
         ),
       ),
     );
-
-    // OutlinedButton(
-    //   onPressed: onPressed,
-    //   style: OutlinedButton.styleFrom(
-    //     minimumSize: const Size(double.infinity, 72),
-    //     backgroundColor: value ? AppColors.bgColor1 : AppColors.systemGrey4,
-    //     shape: const RoundedRectangleBorder(
-    //       borderRadius: BorderRadius.all(Radius.circular(8)),
-    //     ),
-    //     side: BorderSide(
-    // color: value ? AppColors.systemBlack : AppColors.systemGrey4,
-    // width: 1,
-    //     ),
-    //   ),
-    //   child:
-    // );
   }
 }

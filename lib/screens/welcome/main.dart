@@ -8,42 +8,54 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future<UserResponse> user = UserService.user();
+    Future<dynamic> user = UserService.user();
     return Scaffold(
-      body: FutureBuilder(
-        future: user,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const SizedBox();
-          }
-          return Column(
-            children: [
-              Container(
-                width: 100,
-                height: 100,
-                decoration: const BoxDecoration(color: AppColors.basicColor1),
-              ),
-              Text(
-                '가입 완료!',
-                style: Typo(context).body1()!.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.orange,
-                    ),
-              ),
-              Text(
-                '${snapshot.data!.nickname}님, 환영해요',
-                style: Typo(context).headline2()!.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.systemBlack,
-                    ),
-              ),
-            ],
-          );
-        },
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 100,
+              height: 100,
+              decoration: const BoxDecoration(color: AppColors.basicColor1),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              '가입 완료!',
+              style: Typo(context).body1()!.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.orange,
+                  ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              '님, 환영해요',
+              style: Typo(context).headline2()!.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.systemBlack,
+                  ),
+            ),
+          ],
+        ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Text('도전하러 가기'),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: FloatingActionButton(
+          elevation: 0,
+          backgroundColor: AppColors.orange,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+          onPressed: () {},
+          child: Text(
+            '도전하러 가기',
+            style: Typo(context).body1()!.copyWith(
+                  color: AppColors.systemGrey5,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+        ),
       ),
     );
   }

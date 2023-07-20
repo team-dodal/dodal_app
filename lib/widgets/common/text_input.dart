@@ -89,53 +89,71 @@ class _TextInputState extends State<TextInput> {
           ],
         ),
         const SizedBox(height: 10),
-        Row(
-          children: [
-            Expanded(
-              child: TextField(
-                controller: widget.controller,
-                focusNode: _focusNode,
-                decoration: InputDecoration(
-                  fillColor:
-                      _isFocused ? AppColors.systemGrey5 : AppColors.bgColor2,
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.circular(8),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              _isFocused
+                  ? const BoxShadow(
+                      color: AppColors.systemGrey3,
+                      offset: Offset(0, 0),
+                      blurRadius: 8,
+                      blurStyle: BlurStyle.outer,
+                    )
+                  : const BoxShadow()
+            ],
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: widget.controller,
+                  focusNode: _focusNode,
+                  decoration: InputDecoration(
+                    fillColor:
+                        _isFocused ? AppColors.systemGrey5 : AppColors.bgColor2,
+                    filled: true,
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(color: AppColors.systemBlack),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    counterText: '',
+                    hintText: widget.placeholder,
+                    hintStyle: Typo(context).body2()!.copyWith(
+                          fontWeight: FontWeight.normal,
+                          color: AppColors.systemGrey2,
+                        ),
+                    suffixIcon: Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: widget.child,
+                    ),
+                    suffixIconConstraints:
+                        const BoxConstraints(minWidth: 24, minHeight: 24),
                   ),
-                  focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: AppColors.systemBlack)),
-                  counterText: '',
-                  hintText: widget.placeholder,
-                  hintStyle: Typo(context).body2()!.copyWith(
-                        fontWeight: FontWeight.normal,
-                        color: AppColors.systemGrey2,
-                      ),
-                  suffixIcon: Padding(
-                    padding: const EdgeInsets.only(right: 12),
-                    child: widget.child,
-                  ),
-                  suffixIconConstraints:
-                      const BoxConstraints(minWidth: 24, minHeight: 24),
+                  style: Typo(context)
+                      .body2()!
+                      .copyWith(fontWeight: FontWeight.normal),
+                  onChanged: (value) {
+                    if (widget.onChanged == null) return;
+                    widget.onChanged!(value);
+                  },
+                  textInputAction: widget.textInputAction,
+                  onSubmitted: (value) =>
+                      widget.textInputAction == TextInputAction.next
+                          ? FocusScope.of(context).nextFocus()
+                          : null,
+                  minLines: widget.multiLine ? 3 : 1,
+                  maxLines: widget.multiLine ? 10 : 1,
+                  maxLength: widget.maxLength,
                 ),
-                style: Typo(context)
-                    .body2()!
-                    .copyWith(fontWeight: FontWeight.normal),
-                onChanged: (value) {
-                  if (widget.onChanged == null) return;
-                  widget.onChanged!(value);
-                },
-                textInputAction: widget.textInputAction,
-                onSubmitted: (value) =>
-                    widget.textInputAction == TextInputAction.next
-                        ? FocusScope.of(context).nextFocus()
-                        : null,
-                minLines: widget.multiLine ? 3 : 1,
-                maxLines: widget.multiLine ? 10 : 1,
-                maxLength: widget.maxLength,
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );

@@ -19,6 +19,7 @@ Future<Dio> dio() async {
           (RequestOptions options, RequestInterceptorHandler handler) async {
         final accessToken = await secureStorage.read(key: 'accessToken');
         options.headers['Authorization'] = 'Bearer $accessToken';
+        print(accessToken);
         return handler.next(options);
       },
       onResponse: (Response response, ResponseInterceptorHandler handler) {
