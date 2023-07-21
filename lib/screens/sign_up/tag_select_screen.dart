@@ -1,7 +1,7 @@
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/common/create_form_title.dart';
 import 'package:dodal_app/widgets/common/category_content.dart';
-import 'package:dodal_app/widgets/sign_up/submit_button.dart';
+import 'package:dodal_app/widgets/common/submit_button.dart';
 import 'package:flutter/material.dart';
 import '../../model/category_model.dart';
 import '../../services/category_service.dart';

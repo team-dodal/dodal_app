@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:animations/animations.dart';
 import 'package:dodal_app/screens/sign_up/agreement_screen.dart';
 import 'package:dodal_app/screens/sign_up/input_form_screen.dart';
 import 'package:dodal_app/screens/sign_up/tag_select_screen.dart';
 import 'package:dodal_app/screens/welcome/main.dart';
 import 'package:dodal_app/services/user_service.dart';
 import 'package:dodal_app/utilities/social_auth.dart';
+import 'package:dodal_app/widgets/common/create_screen_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -34,25 +34,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String content = '';
   File? image;
   List<String> category = [];
-  bool _pageDirectionReverse = false;
-
-  Future<bool> _handlePopState() async {
-    _pageDirectionReverse = true;
-    if (_currentIndex > 0) {
-      setState(() {
-        _currentIndex -= 1;
-      });
-      return false;
-    }
-    return true;
-  }
-
-  _dismissKeyboard(context) {
-    FocusScopeNode currentFocus = FocusScope.of(context);
-    if (!currentFocus.hasPrimaryFocus) {
-      currentFocus.unfocus();
-    }
-  }
 
   _submit() async {
     SignUpResponse res = await UserService.signUp(
@@ -80,61 +61,47 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _handlePopState,
-      child: GestureDetector(
-        onTap: () {
-          _dismissKeyboard(context);
-        },
-        child: PageTransitionSwitcher(
-          reverse: _pageDirectionReverse,
-          transitionBuilder: (child, animation, secondaryAnimation) {
-            return SharedAxisTransition(
-              animation: animation,
-              secondaryAnimation: secondaryAnimation,
-              transitionType: SharedAxisTransitionType.horizontal,
-              child: child,
-            );
+    return CreateScreenLayout(
+      currentIndex: _currentIndex,
+      popStep: () {
+        setState(() {
+          _currentIndex -= 1;
+        });
+      },
+      children: [
+        AgreementScreen(
+          steps: steps,
+          step: _currentIndex + 1,
+          nextStep: () {
+            setState(() {
+              _currentIndex += 1;
+            });
           },
-          child: [
-            AgreementScreen(
-              steps: steps,
-              step: _currentIndex + 1,
-              nextStep: () {
-                setState(() {
-                  _pageDirectionReverse = false;
-                  _currentIndex += 1;
-                });
-              },
-            ),
-            InputFormScreen(
-              steps: steps,
-              step: _currentIndex + 1,
-              nextStep: (data) {
-                nickname = data['nickname'];
-                content = data['content'];
-                image = data['image'];
-                setState(() {
-                  _pageDirectionReverse = false;
-                  _currentIndex += 1;
-                });
-              },
-              nickname: nickname,
-              content: content,
-              image: image,
-            ),
-            TagSelectScreen(
-              steps: steps,
-              step: _currentIndex + 1,
-              nextStep: (data) {
-                _pageDirectionReverse = false;
-                category = data['category'];
-                _submit();
-              },
-            ),
-          ][_currentIndex],
         ),
-      ),
+        InputFormScreen(
+          steps: steps,
+          step: _currentIndex + 1,
+          nextStep: (data) {
+            nickname = data['nickname'];
+            content = data['content'];
+            image = data['image'];
+            setState(() {
+              _currentIndex += 1;
+            });
+          },
+          nickname: nickname,
+          content: content,
+          image: image,
+        ),
+        TagSelectScreen(
+          steps: steps,
+          step: _currentIndex + 1,
+          nextStep: (data) {
+            category = data['category'];
+            _submit();
+          },
+        ),
+      ],
     );
   }
 }

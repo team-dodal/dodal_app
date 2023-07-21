@@ -1,7 +1,7 @@
 import 'package:dodal_app/widgets/common/create_form_title.dart';
 import 'package:dodal_app/widgets/sign_up/agree_button.dart';
 import 'package:dodal_app/widgets/sign_up/all_agree_button.dart';
-import 'package:dodal_app/widgets/sign_up/submit_button.dart';
+import 'package:dodal_app/widgets/common/submit_button.dart';
 import 'package:flutter/material.dart';
 
 class AgreementScreen extends StatefulWidget {

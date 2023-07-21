@@ -1,8 +1,8 @@
-import 'package:dodal_app/screens/create_group/main.dart';
+import 'package:dodal_app/screens/create_challenge/main.dart';
 import 'package:flutter/material.dart';
 
-class GroupScreen extends StatelessWidget {
-  const GroupScreen({super.key});
+class ChallengeScreen extends StatelessWidget {
+  const ChallengeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class GroupScreen extends StatelessWidget {
           ElevatedButton(
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (ctx) => const CreateGroupScreen()));
+                    builder: (ctx) => const CreateChallengeScreen()));
               },
               child: const Text('그룹 생성')),
         ],

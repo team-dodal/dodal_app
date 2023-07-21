@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import '../../model/navigation_route.dart';
 import '../../services/user_service.dart';
 import '../../utilities/fcm.dart';
-import 'group_screen.dart';
+import 'challenge_screen.dart';
 
 final List<NavigationRoute> _routes = [
   NavigationRoute(
@@ -24,7 +24,7 @@ final List<NavigationRoute> _routes = [
   ),
   NavigationRoute(
     name: '그룹',
-    screen: const GroupScreen(),
+    screen: const ChallengeScreen(),
     icon: const Icon(Icons.group),
   ),
   NavigationRoute(
