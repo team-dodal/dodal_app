@@ -112,22 +112,8 @@ class _TextInputState extends State<TextInput> {
                   decoration: InputDecoration(
                     fillColor:
                         _isFocused ? AppColors.systemGrey5 : AppColors.bgColor2,
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide(color: AppColors.systemBlack),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
                     counterText: '',
                     hintText: widget.placeholder,
-                    hintStyle: Typo(context).body2()!.copyWith(
-                          fontWeight: FontWeight.normal,
-                          color: AppColors.systemGrey2,
-                        ),
                     suffixIcon: Padding(
                       padding: const EdgeInsets.only(right: 12),
                       child: widget.child,

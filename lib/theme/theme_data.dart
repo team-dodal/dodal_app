@@ -86,6 +86,24 @@ ThemeData lightTheme = ThemeData(
       ),
     ),
   ),
+  inputDecorationTheme: InputDecorationTheme(
+    filled: true,
+    fillColor: AppColors.bgColor2,
+    border: OutlineInputBorder(
+      borderSide: BorderSide.none,
+      borderRadius: BorderRadius.circular(8),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: const BorderSide(color: AppColors.systemBlack),
+      borderRadius: BorderRadius.circular(8),
+    ),
+    hintStyle: const TextStyle(
+      fontSize: 16,
+      letterSpacing: 0.5,
+      fontWeight: FontWeight.normal,
+      color: AppColors.systemGrey2,
+    ),
+  ),
   bottomSheetTheme: const BottomSheetThemeData(
     backgroundColor: AppColors.bgColor1,
   ),

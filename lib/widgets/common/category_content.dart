@@ -1,9 +1,8 @@
 import 'package:dodal_app/model/category_model.dart';
 import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/theme/color.dart';
+import 'package:dodal_app/theme/typo.dart';
 import 'package:flutter/material.dart';
-
-import '../../theme/typo.dart';
 
 class CategoryContent extends StatelessWidget {
   const CategoryContent({
@@ -43,21 +42,22 @@ class CategoryContent extends StatelessWidget {
                   padding: const EdgeInsets.only(right: 4),
                   child: OutlinedButton(
                     style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(100),
                         ),
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(100),
-                          ),
-                        ),
-                        side: isSelected
-                            ? BorderSide.none
-                            : const BorderSide(color: AppColors.systemGrey3),
-                        backgroundColor: isSelected
-                            ? AppColors.lightOrange
-                            : AppColors.bgColor1),
+                      ),
+                      side: isSelected
+                          ? const BorderSide(color: AppColors.lightOrange)
+                          : const BorderSide(color: AppColors.systemGrey3),
+                      backgroundColor: isSelected
+                          ? AppColors.lightOrange
+                          : AppColors.bgColor1,
+                    ),
                     onPressed: () {
                       handleSelect(tag.value);
                     },
