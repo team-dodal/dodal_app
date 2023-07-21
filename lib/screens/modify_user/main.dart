@@ -25,6 +25,13 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
   bool nicknameChecked = true;
   List<String> _category = [];
 
+  _dismissKeyboard(context) {
+    FocusScopeNode currentFocus = FocusScope.of(context);
+    if (!currentFocus.hasPrimaryFocus) {
+      currentFocus.unfocus();
+    }
+  }
+
   _submit() async {
     ModifyUserResponse res = await UserService.updateUser(
       nickname: nicknameController.text,
@@ -80,39 +87,44 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
       ),
       body: SingleChildScrollView(
         controller: scrollController,
-        child: Column(
-          children: [
-            InputFormContent(
-              nicknameController: nicknameController,
-              contentController: contentController,
-              imageUrl: _imageUrl,
-              uploadImage: _uploadImage,
-              setImage: (image) {
-                setState(() {
-                  _uploadImage = image;
-                });
-              },
-              nicknameChecked: nicknameChecked,
-              setNicknameChecked: (value) {
-                setState(() {
-                  nicknameChecked = value;
-                });
-              },
-            ),
-            Container(
-              width: double.infinity,
-              height: 8,
-              decoration: const BoxDecoration(color: AppColors.systemGrey4),
-            ),
-            TagSelectContent(
-              itemList: _category,
-              setItemList: (value) {
-                setState(() {
-                  _category = value;
-                });
-              },
-            ),
-          ],
+        child: GestureDetector(
+          onTap: () {
+            _dismissKeyboard(context);
+          },
+          child: Column(
+            children: [
+              InputFormContent(
+                nicknameController: nicknameController,
+                contentController: contentController,
+                imageUrl: _imageUrl,
+                uploadImage: _uploadImage,
+                setImage: (image) {
+                  setState(() {
+                    _uploadImage = image;
+                  });
+                },
+                nicknameChecked: nicknameChecked,
+                setNicknameChecked: (value) {
+                  setState(() {
+                    nicknameChecked = value;
+                  });
+                },
+              ),
+              Container(
+                width: double.infinity,
+                height: 8,
+                decoration: const BoxDecoration(color: AppColors.systemGrey4),
+              ),
+              TagSelectContent(
+                itemList: _category,
+                setItemList: (value) {
+                  setState(() {
+                    _category = value;
+                  });
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

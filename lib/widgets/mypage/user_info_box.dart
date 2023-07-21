@@ -3,10 +3,10 @@ import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/screens/modify_user/main.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
+import 'package:dodal_app/widgets/common/avatar_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class UserInfoBox extends StatelessWidget {
   const UserInfoBox({super.key});
@@ -27,22 +27,10 @@ class UserInfoBox extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Container(
+                      AvatarImage(
+                        image: user.profileUrl,
                         width: 48,
                         height: 48,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.systemGrey4,
-                        ),
-                        clipBehavior: Clip.hardEdge,
-                        child: user.profileUrl != ''
-                            ? FadeInImage(
-                                placeholder: MemoryImage(kTransparentImage),
-                                image: NetworkImage(user.profileUrl),
-                                width: double.infinity,
-                                height: double.infinity,
-                              )
-                            : const SizedBox(),
                       ),
                       const SizedBox(width: 10),
                       Text(

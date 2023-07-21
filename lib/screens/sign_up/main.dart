@@ -47,6 +47,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return true;
   }
 
+  _dismissKeyboard(context) {
+    FocusScopeNode currentFocus = FocusScope.of(context);
+    if (!currentFocus.hasPrimaryFocus) {
+      currentFocus.unfocus();
+    }
+  }
+
   _submit() async {
     SignUpResponse res = await UserService.signUp(
       widget.socialType,
@@ -75,53 +82,58 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: _handlePopState,
-      child: PageTransitionSwitcher(
-        reverse: _pageDirectionReverse,
-        transitionBuilder: (child, animation, secondaryAnimation) {
-          return SharedAxisTransition(
-            animation: animation,
-            secondaryAnimation: secondaryAnimation,
-            transitionType: SharedAxisTransitionType.horizontal,
-            child: child,
-          );
+      child: GestureDetector(
+        onTap: () {
+          _dismissKeyboard(context);
         },
-        child: [
-          AgreementScreen(
-            steps: steps,
-            step: _currentIndex + 1,
-            nextStep: () {
-              setState(() {
+        child: PageTransitionSwitcher(
+          reverse: _pageDirectionReverse,
+          transitionBuilder: (child, animation, secondaryAnimation) {
+            return SharedAxisTransition(
+              animation: animation,
+              secondaryAnimation: secondaryAnimation,
+              transitionType: SharedAxisTransitionType.horizontal,
+              child: child,
+            );
+          },
+          child: [
+            AgreementScreen(
+              steps: steps,
+              step: _currentIndex + 1,
+              nextStep: () {
+                setState(() {
+                  _pageDirectionReverse = false;
+                  _currentIndex += 1;
+                });
+              },
+            ),
+            InputFormScreen(
+              steps: steps,
+              step: _currentIndex + 1,
+              nextStep: (data) {
+                nickname = data['nickname'];
+                content = data['content'];
+                image = data['image'];
+                setState(() {
+                  _pageDirectionReverse = false;
+                  _currentIndex += 1;
+                });
+              },
+              nickname: nickname,
+              content: content,
+              image: image,
+            ),
+            TagSelectScreen(
+              steps: steps,
+              step: _currentIndex + 1,
+              nextStep: (data) {
                 _pageDirectionReverse = false;
-                _currentIndex += 1;
-              });
-            },
-          ),
-          InputFormScreen(
-            steps: steps,
-            step: _currentIndex + 1,
-            nextStep: (data) {
-              nickname = data['nickname'];
-              content = data['content'];
-              image = data['image'];
-              setState(() {
-                _pageDirectionReverse = false;
-                _currentIndex += 1;
-              });
-            },
-            nickname: nickname,
-            content: content,
-            image: image,
-          ),
-          TagSelectScreen(
-            steps: steps,
-            step: _currentIndex + 1,
-            nextStep: (data) {
-              _pageDirectionReverse = false;
-              category = data['category'];
-              _submit();
-            },
-          ),
-        ][_currentIndex],
+                category = data['category'];
+                _submit();
+              },
+            ),
+          ][_currentIndex],
+        ),
       ),
     );
   }

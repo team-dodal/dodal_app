@@ -3,7 +3,7 @@ import 'package:dodal_app/services/user_service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/create_form_title.dart';
-import 'package:dodal_app/widgets/sign_up/profile_image_select.dart';
+import 'package:dodal_app/widgets/common/avatar_image.dart';
 import 'package:dodal_app/widgets/sign_up/submit_button.dart';
 import 'package:dodal_app/widgets/common/text_input.dart';
 import 'package:flutter/material.dart';
@@ -104,7 +104,9 @@ class _InputFormScreenState extends State<InputFormScreen> {
                 steps: widget.steps,
               ),
               const SizedBox(height: 60),
-              ProfileImageSelect(
+              AvatarImage(
+                width: 100,
+                height: 100,
                 onChanged: (image) {
                   setState(() {
                     _image = image;

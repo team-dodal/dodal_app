@@ -6,27 +6,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-class ProfileImageSelect extends StatefulWidget {
-  const ProfileImageSelect({
+class AvatarImage extends StatefulWidget {
+  const AvatarImage({
     super.key,
-    required this.onChanged,
+    this.onChanged,
     required this.image,
+    required this.width,
+    required this.height,
   });
 
-  final Function onChanged;
+  final Function? onChanged;
   final dynamic image;
+  final double width, height;
 
   @override
-  State<ProfileImageSelect> createState() => _ProfileImageSelectState();
+  State<AvatarImage> createState() => _AvatarImageState();
 }
 
-class _ProfileImageSelectState extends State<ProfileImageSelect> {
+class _AvatarImageState extends State<AvatarImage> {
   _showBottomSheet() {
     showModalBottomSheet(
       context: context,
       builder: (context) => ImageBottomSheet(
         setImage: (image) {
-          widget.onChanged(image);
+          widget.onChanged!(image);
         },
       ),
     );
@@ -35,13 +38,13 @@ class _ProfileImageSelectState extends State<ProfileImageSelect> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: _showBottomSheet,
+      onTap: widget.onChanged != null ? _showBottomSheet : null,
       child: Stack(
         children: [
           Container(
             clipBehavior: Clip.hardEdge,
-            width: 100,
-            height: 100,
+            width: widget.width,
+            height: widget.height,
             decoration: const BoxDecoration(
               color: AppColors.systemGrey4,
               shape: BoxShape.circle,
@@ -63,10 +66,11 @@ class _ProfileImageSelectState extends State<ProfileImageSelect> {
               },
             ),
           ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: Container(
+          if (widget.onChanged != null)
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Container(
                 clipBehavior: Clip.hardEdge,
                 width: 26,
                 height: 26,
@@ -90,14 +94,9 @@ class _ProfileImageSelectState extends State<ProfileImageSelect> {
                     AppColors.orange,
                     BlendMode.srcIn,
                   ),
-                )
-                //  const Icon(
-                //   Icons.camera_alt_outlined,
-                //   color: Colors.white,
-                //   size: 18,
-                // ),
                 ),
-          )
+              ),
+            )
         ],
       ),
     );

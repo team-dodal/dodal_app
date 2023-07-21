@@ -5,7 +5,7 @@ import 'package:dodal_app/services/user_service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/text_input.dart';
-import 'package:dodal_app/widgets/sign_up/profile_image_select.dart';
+import 'package:dodal_app/widgets/common/avatar_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -63,7 +63,9 @@ class _InputFormContentState extends State<InputFormContent> {
       padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
       child: Column(
         children: [
-          ProfileImageSelect(
+          AvatarImage(
+            width: 100,
+            height: 100,
             onChanged: widget.setImage,
             image: widget.uploadImage ??
                 BlocProvider.of<UserCubit>(context).state!.profileUrl,

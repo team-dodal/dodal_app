@@ -1,42 +1,73 @@
+import 'package:dodal_app/model/user_model.dart';
+import 'package:dodal_app/providers/user_cubit.dart';
+import 'package:dodal_app/screens/main_route/main.dart';
 import 'package:dodal_app/services/user_service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    Future<dynamic> user = UserService.user();
+    final Future<UserResponse> user = UserService.user();
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 100,
-              height: 100,
-              decoration: const BoxDecoration(color: AppColors.basicColor1),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              '가입 완료!',
-              style: Typo(context).body1()!.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.orange,
-                  ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              '님, 환영해요',
-              style: Typo(context).headline2()!.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.systemBlack,
-                  ),
-            ),
-          ],
-        ),
+      body: FutureBuilder(
+        future: user,
+        builder: (context, snapshot) {
+          Widget? child;
+          if (snapshot.connectionState == ConnectionState.done) {
+            var user = snapshot.data!;
+            context.read<UserCubit>().set(User(
+                  id: user.id!,
+                  email: user.email!,
+                  nickname: user.nickname!,
+                  content: user.content!,
+                  profileUrl: user.profileUrl!,
+                  registerAt: user.registerAt!,
+                  socialType: user.socialType!,
+                  tagList: user.tagList!,
+                ));
+            final String? nickname = snapshot.data!.nickname;
+            child = Column(
+              children: [
+                Container(
+                  width: 100,
+                  height: 100,
+                  decoration: const BoxDecoration(color: AppColors.basicColor1),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  '가입 완료!',
+                  style: Typo(context).body1()!.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.orange,
+                      ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  '$nickname님, 환영해요',
+                  style: Typo(context).headline2()!.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.systemBlack,
+                      ),
+                )
+              ],
+            );
+          }
+
+          return Center(
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              AnimatedSwitcher(
+                duration: const Duration(seconds: 1),
+                child: child,
+              )
+            ]),
+          );
+        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Container(
@@ -47,7 +78,12 @@ class WelcomeScreen extends StatelessWidget {
           backgroundColor: AppColors.orange,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (ctx) => const MainRoute()),
+              (route) => false,
+            );
+          },
           child: Text(
             '도전하러 가기',
             style: Typo(context).body1()!.copyWith(

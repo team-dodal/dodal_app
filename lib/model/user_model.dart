@@ -26,6 +26,7 @@ class User extends Equatable {
         id,
         email,
         nickname,
+        content,
         profileUrl,
         registerAt,
         socialType,

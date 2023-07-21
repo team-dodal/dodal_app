@@ -88,13 +88,13 @@ class UserService {
     }
   }
 
-  static user() async {
+  static Future<UserResponse> user() async {
     try {
       final service = await dio();
       final res = await service.get('/api/v1/users/me');
       return UserResponse.formJson(res.data['result']);
     } catch (err) {
-      return Exception(err);
+      rethrow;
     }
   }
 
