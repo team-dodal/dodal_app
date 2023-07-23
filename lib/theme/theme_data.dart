@@ -77,8 +77,8 @@ ThemeData lightTheme = ThemeData(
     style: ElevatedButton.styleFrom(
       backgroundColor: AppColors.orange,
       foregroundColor: AppColors.bgColor1,
-      disabledBackgroundColor: AppColors.bgColor3,
-      disabledForegroundColor: AppColors.systemBlack,
+      disabledBackgroundColor: AppColors.bgColor4,
+      disabledForegroundColor: AppColors.systemGrey2,
       textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
       elevation: 0,
       shape: RoundedRectangleBorder(
@@ -88,7 +88,7 @@ ThemeData lightTheme = ThemeData(
   ),
   inputDecorationTheme: InputDecorationTheme(
     filled: true,
-    fillColor: AppColors.bgColor2,
+    fillColor: AppColors.bgColor3,
     border: OutlineInputBorder(
       borderSide: BorderSide.none,
       borderRadius: BorderRadius.circular(8),

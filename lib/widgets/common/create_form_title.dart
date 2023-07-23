@@ -45,7 +45,7 @@ class CreateFormTitle extends StatelessWidget {
                                 '$step',
                                 style: Typo(context).body4()!.copyWith(
                                       color: step == currentStep
-                                          ? AppColors.systemGrey5
+                                          ? AppColors.systemWhite
                                           : AppColors.systemGrey2,
                                       fontWeight: FontWeight.bold,
                                     ),

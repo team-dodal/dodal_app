@@ -128,14 +128,11 @@ class _InputFormScreenState extends State<InputFormScreen> {
                     _nicknameChecked = false;
                   });
                 },
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
+                      horizontal: 16,
                       vertical: 8,
-                    ),
-                    shape: BeveledRectangleBorder(
-                      borderRadius: BorderRadius.circular(4),
                     ),
                   ),
                   onPressed: _nicknameChecked

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dodal_app/model/tag_model.dart';
+import 'package:dodal_app/services/common/error_dialog.dart';
 import 'package:dodal_app/utilities/social_auth.dart';
 import 'common/main.dart';
 
@@ -23,7 +24,7 @@ class UserResponse {
         email = data['email'],
         nickname = data['nickname'],
         content = data['content'],
-        profileUrl = data['profile_url'] ?? '',
+        profileUrl = data['profile_url'],
         registerAt = data['register_at'] != null
             ? DateTime.parse(data['register_at'])
             : null,
@@ -56,7 +57,7 @@ class UserService {
       final res = await service.post('/api/v1/users/sign-in',
           data: {"social_type": socialType.name, "social_id": socialId});
       return SignInResponse.fromJson(res.data['result']);
-    } catch (err) {
+    } on DioException catch (err) {
       throw Exception(err);
     }
   }
@@ -77,45 +78,64 @@ class UserService {
         "social_id": socialId,
         "email": email,
         "nickname": nickname,
-        "profile": profile,
         "content": content,
         "tag_list": category,
       });
+      if (profile != null) {
+        formData.files.add(MapEntry(
+          'profile',
+          await MultipartFile.fromFile(profile.path),
+        ));
+      }
       final res = await service.post('/api/v1/users/sign-up', data: formData);
       return SignUpResponse.fromJson(res.data['result']);
-    } catch (err) {
-      throw Exception(err);
+    } on DioException catch (err) {
+      ResponseErrorDialog(err);
+      return null;
     }
   }
 
-  static Future<UserResponse> user() async {
+  static Future<UserResponse?> user() async {
     try {
       final service = await dio();
       final res = await service.get('/api/v1/users/me');
       return UserResponse.formJson(res.data['result']);
-    } catch (err) {
-      rethrow;
+    } on DioException catch (err) {
+      ResponseErrorDialog(err);
+      return null;
     }
   }
 
   static updateUser({
     required String nickname,
+    required String? profileUrl,
     required File? profile,
     required String content,
     required List<String> category,
   }) async {
-    final formData = FormData.fromMap({
+    FormData formData = FormData.fromMap({
       "nickname": nickname,
-      "profile": profile,
       "content": content,
       "tag_list": category,
     });
+    if (profile != null) {
+      formData.files.add(MapEntry(
+        'profile',
+        await MultipartFile.fromFile(profile.path),
+      ));
+    }
+    if (profileUrl != null) {
+      formData.fields.add(MapEntry('profile_url', profileUrl));
+    }
+
     try {
       final service = await dio();
+      service.options.contentType = 'multipart/form-data';
       final res = await service.patch('/api/v1/users/me', data: formData);
       return ModifyUserResponse.fromJson(res.data['result']);
-    } catch (err) {
-      return Exception(err);
+    } on DioException catch (err) {
+      ResponseErrorDialog(err);
+      return null;
     }
   }
 
@@ -123,8 +143,8 @@ class UserService {
     try {
       final service = await dio();
       await service.post('/api/v1/users/fcm-token', data: {'fcm_token': token});
-    } catch (err) {
-      return Exception(err);
+    } on DioException catch (err) {
+      ResponseErrorDialog(err);
     }
   }
 
@@ -133,8 +153,8 @@ class UserService {
       final service = await dio();
       await service.get('/api/v1/users/nickname/$nickname');
       return true;
-    } catch (err) {
-      return false;
+    } on DioException catch (err) {
+      ResponseErrorDialog(err);
     }
   }
 
@@ -142,8 +162,8 @@ class UserService {
     try {
       final service = await dio();
       await service.delete('/api/v1/users/me');
-    } catch (err) {
-      throw Exception(err);
+    } on DioException catch (err) {
+      ResponseErrorDialog(err);
     }
   }
 }

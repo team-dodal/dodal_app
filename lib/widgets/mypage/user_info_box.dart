@@ -14,7 +14,7 @@ class UserInfoBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UserCubit, User?>(builder: (context, user) {
-      user!;
+      if (user == null) return const SizedBox();
       return Card(
         elevation: 0,
         child: Padding(
@@ -84,7 +84,7 @@ class UserInfoBox extends StatelessWidget {
                 width: double.infinity,
                 height: 78,
                 decoration: const BoxDecoration(
-                  color: AppColors.bgColor2,
+                  color: AppColors.bgColor3,
                   borderRadius: BorderRadius.all(Radius.circular(8)),
                 ),
                 child: Padding(

@@ -34,7 +34,8 @@ class _AppState extends State<App> {
 
   checkingLoginStatus() async {
     try {
-      UserResponse user = await UserService.user();
+      UserResponse? user = await UserService.user();
+      if (user == null) return;
       if (!mounted) return;
       context.read<UserCubit>().set(User(
             id: user.id!,

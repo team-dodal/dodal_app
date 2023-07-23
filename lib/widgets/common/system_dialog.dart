@@ -1,17 +1,16 @@
 import 'package:dodal_app/theme/color.dart';
+import 'package:dodal_app/theme/typo.dart';
 import 'package:flutter/material.dart';
-
-import '../../theme/typo.dart';
 
 class SystemDialog extends StatelessWidget {
   const SystemDialog({
     super.key,
-    required this.title,
-    this.subTitle = '',
+    this.title,
+    required this.subTitle,
     this.children,
   });
 
-  final String title;
+  final String? title;
   final String? subTitle;
   final List<Widget>? children;
 
@@ -33,7 +32,7 @@ class SystemDialog extends StatelessWidget {
             Column(
               children: [
                 Text(
-                  title,
+                  title ?? '알림',
                   style: Typo(context)
                       .headline4()!
                       .copyWith(fontWeight: FontWeight.bold),
@@ -48,21 +47,35 @@ class SystemDialog extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 24),
-            if (children != null)
-              Row(
-                children: [
-                  for (int i = 0; i < children!.length; i++)
-                    Expanded(
-                      child: Row(
-                        children: [
-                          Expanded(child: children![i]),
-                          if (i != children!.length - 1)
-                            const SizedBox(width: 6),
-                        ],
+            Builder(builder: (context) {
+              if (children == null) {
+                return Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('확인'),
+                    )
+                  ],
+                );
+              } else {
+                return Row(
+                  children: [
+                    for (int i = 0; i < children!.length; i++)
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Expanded(child: children![i]),
+                            if (i != children!.length - 1)
+                              const SizedBox(width: 6),
+                          ],
+                        ),
                       ),
-                    ),
-                ],
-              )
+                  ],
+                );
+              }
+            })
           ],
         ),
       ),

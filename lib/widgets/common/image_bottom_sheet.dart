@@ -16,18 +16,32 @@ class ImageBottomSheet extends StatefulWidget {
 }
 
 class _ImageBottomSheetState extends State<ImageBottomSheet> {
-  void _pickImage(ImageSource type) async {
+  void _pickImage(ImageSource? type) async {
     final imagePicker = ImagePicker();
     late XFile? pickedImage;
 
+    if (type == null) {
+      widget.setImage(null);
+      Navigator.pop(context);
+      return;
+    }
+
     try {
-      pickedImage = await imagePicker.pickImage(source: type);
+      pickedImage = await imagePicker.pickImage(source: type, imageQuality: 0);
       if (pickedImage == null) return;
+      final fileSize = await pickedImage.length();
+      if (!mounted) return;
+      if (fileSize > 1000000) {
+        // 1MB
+        showDialog(
+            context: context,
+            builder: (ctx) => const SystemDialog(subTitle: '이미지의 용량이 너무 큽니다.'));
+      }
       widget.setImage(File(pickedImage.path));
     } catch (err) {
       showDialog(
           context: context,
-          builder: (ctx) => const SystemDialog(title: '이 이미지는 사용할 수 없습니다'));
+          builder: (ctx) => const SystemDialog(subTitle: '이 이미지는 사용할 수 없습니다'));
     }
   }
 
@@ -52,7 +66,7 @@ class _ImageBottomSheetState extends State<ImageBottomSheet> {
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: AppColors.bgColor3,
+                    color: AppColors.bgColor4,
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -70,6 +84,12 @@ class _ImageBottomSheetState extends State<ImageBottomSheet> {
                   title: Text('엘범에서 사진 선택', style: Typo(context).body2()),
                   onTap: () {
                     _pickImage(ImageSource.gallery);
+                  },
+                ),
+                ListTile(
+                  title: Text('기본 이미지로 변경', style: Typo(context).body2()),
+                  onTap: () {
+                    _pickImage(null);
                   },
                 ),
               ],

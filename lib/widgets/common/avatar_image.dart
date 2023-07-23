@@ -52,15 +52,26 @@ class _AvatarImageState extends State<AvatarImage> {
             child: Builder(
               builder: (context) {
                 if (widget.image != null && widget.image != '') {
-                  return FadeInImage(
-                    placeholder: MemoryImage(kTransparentImage),
-                    image: widget.image is File
-                        ? FileImage(widget.image)
-                        : NetworkImage(widget.image) as ImageProvider,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: double.infinity,
-                  );
+                  if (widget.image is File) {
+                    return FadeInImage(
+                      placeholder: MemoryImage(kTransparentImage),
+                      image: FileImage(widget.image),
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: double.infinity,
+                    );
+                  } else {
+                    return FadeInImage.memoryNetwork(
+                      placeholder: kTransparentImage,
+                      image: widget.image,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: double.infinity,
+                      imageErrorBuilder: (context, error, stackTrace) {
+                        return const SizedBox();
+                      },
+                    );
+                  }
                 }
                 return const SizedBox();
               },

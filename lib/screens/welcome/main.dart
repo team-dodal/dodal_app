@@ -12,7 +12,7 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Future<UserResponse> user = UserService.user();
+    final Future<UserResponse?> user = UserService.user();
     return Scaffold(
       body: FutureBuilder(
         future: user,
@@ -25,7 +25,7 @@ class WelcomeScreen extends StatelessWidget {
                   email: user.email!,
                   nickname: user.nickname!,
                   content: user.content!,
-                  profileUrl: user.profileUrl!,
+                  profileUrl: user.profileUrl,
                   registerAt: user.registerAt!,
                   socialType: user.socialType!,
                   tagList: user.tagList!,
@@ -87,7 +87,7 @@ class WelcomeScreen extends StatelessWidget {
           child: Text(
             '도전하러 가기',
             style: Typo(context).body1()!.copyWith(
-                  color: AppColors.systemGrey5,
+                  color: AppColors.systemWhite,
                   fontWeight: FontWeight.bold,
                 ),
           ),

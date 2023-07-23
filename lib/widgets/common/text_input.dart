@@ -111,7 +111,7 @@ class _TextInputState extends State<TextInput> {
                   focusNode: _focusNode,
                   decoration: InputDecoration(
                     fillColor:
-                        _isFocused ? AppColors.systemGrey5 : AppColors.bgColor2,
+                        _isFocused ? AppColors.systemWhite : AppColors.bgColor3,
                     counterText: '',
                     hintText: widget.placeholder,
                     suffixIcon: Padding(

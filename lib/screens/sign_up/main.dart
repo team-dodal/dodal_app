@@ -36,7 +36,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   List<String> category = [];
 
   _submit() async {
-    SignUpResponse res = await UserService.signUp(
+    SignUpResponse? res = await UserService.signUp(
       widget.socialType,
       widget.socialId,
       widget.email,
@@ -45,7 +45,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       content,
       category,
     );
-
+    if (res == null) return;
     if (res.accessToken != null && res.refreshToken != null) {
       secureStorage.write(key: 'accessToken', value: res.accessToken);
       secureStorage.write(key: 'refreshToken', value: res.refreshToken);

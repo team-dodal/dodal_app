@@ -20,7 +20,7 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
   ScrollController scrollController = ScrollController();
   TextEditingController nicknameController = TextEditingController();
   TextEditingController contentController = TextEditingController();
-  String _imageUrl = '';
+  String? _imageUrl;
   File? _uploadImage;
   bool nicknameChecked = true;
   List<String> _category = [];
@@ -33,19 +33,21 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
   }
 
   _submit() async {
-    ModifyUserResponse res = await UserService.updateUser(
+    ModifyUserResponse? res = await UserService.updateUser(
       nickname: nicknameController.text,
+      profileUrl: _imageUrl,
       profile: _uploadImage,
       content: contentController.text,
       category: _category,
     );
+    if (res == null) return;
     if (!mounted) return;
     context.read<UserCubit>().set(User(
           id: res.id!,
           email: res.email!,
           nickname: res.nickname!,
           content: res.content!,
-          profileUrl: res.profileUrl!,
+          profileUrl: res.profileUrl,
           registerAt: res.registerAt!,
           socialType: res.socialType!,
           tagList: res.tagList!,
@@ -100,6 +102,7 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
                 uploadImage: _uploadImage,
                 setImage: (image) {
                   setState(() {
+                    _imageUrl = null;
                     _uploadImage = image;
                   });
                 },

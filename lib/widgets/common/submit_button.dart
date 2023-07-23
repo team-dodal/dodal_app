@@ -30,7 +30,7 @@ class SubmitButton extends StatelessWidget {
             title,
             style: Typo(context).body1()!.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppColors.systemGrey5,
+                  color: AppColors.systemWhite,
                 ),
           ),
         ),

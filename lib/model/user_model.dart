@@ -3,7 +3,8 @@ import 'package:equatable/equatable.dart';
 
 class User extends Equatable {
   final int id;
-  final String email, nickname, content, profileUrl, socialType;
+  final String email, nickname, content, socialType;
+  final String? profileUrl;
   final DateTime registerAt;
   final List<Tag> tagList;
 
@@ -27,7 +28,7 @@ class User extends Equatable {
         email,
         nickname,
         content,
-        profileUrl,
+        profileUrl.toString(),
         registerAt,
         socialType,
         tagList.toString(),

@@ -1,13 +1,11 @@
 import 'dart:io';
 
-import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/services/user_service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/text_input.dart';
 import 'package:dodal_app/widgets/common/avatar_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class InputFormContent extends StatefulWidget {
   const InputFormContent({
@@ -23,9 +21,9 @@ class InputFormContent extends StatefulWidget {
 
   final TextEditingController nicknameController;
   final TextEditingController contentController;
-  final String imageUrl;
+  final String? imageUrl;
   final File? uploadImage;
-  final void Function(File) setImage;
+  final void Function(File?) setImage;
   final bool nicknameChecked;
   final void Function(bool) setNicknameChecked;
 
@@ -67,8 +65,7 @@ class _InputFormContentState extends State<InputFormContent> {
             width: 100,
             height: 100,
             onChanged: widget.setImage,
-            image: widget.uploadImage ??
-                BlocProvider.of<UserCubit>(context).state!.profileUrl,
+            image: widget.uploadImage ?? widget.imageUrl,
           ),
           const SizedBox(height: 35),
           TextInput(

@@ -53,7 +53,7 @@ class SignInScreen extends StatelessWidget {
               email: res.email!,
               nickname: res.nickname!,
               content: res.content!,
-              profileUrl: res.profileUrl!,
+              profileUrl: res.profileUrl,
               registerAt: res.registerAt!,
               socialType: res.socialType!,
               tagList: res.tagList!,
@@ -120,7 +120,7 @@ class SignInScreen extends StatelessWidget {
                   const SizedBox(height: 8),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.bgColor2,
+                      backgroundColor: AppColors.bgColor3,
                       minimumSize: const Size(double.infinity, 64),
                       foregroundColor: AppColors.systemBlack,
                       textStyle: Typo(context)
