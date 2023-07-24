@@ -22,7 +22,8 @@ class ChallengeTagScreen extends StatefulWidget {
 
 class _ChallengeTagScreenState extends State<ChallengeTagScreen> {
   ScrollController scrollController = ScrollController();
-  final Future<List<Category>> _categories = CategoryService.getAllCategories();
+  final Future<List<Category>?> _categories =
+      CategoryService.getAllCategories();
   List<String> _itemList = [];
 
   _handleSelect(value) {

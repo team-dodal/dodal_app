@@ -51,11 +51,13 @@ class SystemDialog extends StatelessWidget {
               if (children == null) {
                 return Row(
                   children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text('확인'),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('확인'),
+                      ),
                     )
                   ],
                 );

@@ -28,7 +28,7 @@ class _ChallengeContentScreenState extends State<ChallengeContentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(title: const Text('도전 만들기')),
       body: SingleChildScrollView(
         controller: scrollController,
         child: const Padding(

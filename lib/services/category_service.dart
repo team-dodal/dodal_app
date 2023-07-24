@@ -1,3 +1,6 @@
+import 'package:dio/dio.dart';
+import 'package:dodal_app/services/common/error_dialog.dart';
+
 import '../model/category_model.dart';
 import '../model/tag_model.dart';
 import 'common/main.dart';
@@ -26,7 +29,7 @@ List<Category> parseCategories(Map<String, dynamic> data) {
 }
 
 class CategoryService {
-  static Future<List<Category>> getAllCategories() async {
+  static Future<List<Category>?> getAllCategories() async {
     try {
       final service = await dio();
       final res = await service.get('/api/v1/categories/tags');
@@ -35,8 +38,9 @@ class CategoryService {
       final List<Category> categories = parseCategories(responseData);
 
       return categories;
-    } catch (err) {
-      throw Exception(err);
+    } on DioException catch (err) {
+      ResponseErrorDialog(err);
+      return null;
     }
   }
 }
