@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:dodal_app/model/user_model.dart';
-import 'package:dodal_app/providers/sign_up_cubit.dart';
+import 'package:dodal_app/providers/sign_up_form_cubit.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/screens/main_route/main.dart';
 import 'package:dodal_app/theme/color.dart';
@@ -67,7 +67,7 @@ class SignInScreen extends StatelessWidget {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (ctx) => BlocProvider(
-              create: (context) => SignUpCubit(
+              create: (context) => SignUpFormCubit(
                 socialId: id!,
                 email: email!,
                 socialType: type,

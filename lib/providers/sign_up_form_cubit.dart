@@ -3,14 +3,14 @@ import 'dart:io';
 import 'package:dodal_app/utilities/social_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SignUpFormData {
+class SignUpForm {
   final SocialType socialType;
   final String socialId, email;
   late String? nickname, content;
   late File? image;
   late List<String>? category;
 
-  SignUpFormData({
+  SignUpForm({
     required this.socialId,
     required this.email,
     required this.socialType,
@@ -26,7 +26,7 @@ class SignUpFormData {
     File? image,
     List<String>? category,
   }) {
-    return SignUpFormData(
+    return SignUpForm(
       socialId: socialId,
       email: email,
       socialType: socialType,
@@ -38,16 +38,16 @@ class SignUpFormData {
   }
 }
 
-class SignUpCubit extends Cubit<SignUpFormData> {
+class SignUpFormCubit extends Cubit<SignUpForm> {
   final SocialType socialType;
   final String socialId, email;
 
-  SignUpCubit({
+  SignUpFormCubit({
     required this.socialId,
     required this.email,
     required this.socialType,
   }) : super(
-          SignUpFormData(
+          SignUpForm(
             socialId: socialId,
             email: email,
             nickname: null,
