@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/image_bottom_sheet.dart';
+import 'package:dodal_app/widgets/common/input_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -33,12 +34,7 @@ class ThumbnailImageInput extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          '도전 썸네일',
-          style: Typo(context).body1()!.copyWith(fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 4),
-        Text('도전을 대표할 사진을 선택해주세요.', style: Typo(context).body2()),
+        const InputTitle(title: '도전 썸네일', subTitle: '도전을 대표할 사진을 선택해주세요.'),
         const SizedBox(height: 10),
         GestureDetector(
           onTap: () {

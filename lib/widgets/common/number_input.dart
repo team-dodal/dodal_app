@@ -1,5 +1,6 @@
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
+import 'package:dodal_app/widgets/common/input_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -19,7 +20,7 @@ class NumberInput extends StatefulWidget {
   final TextEditingController controller;
   final bool required;
   final String? title;
-  final void Function(int)? onChanged;
+  final void Function(String)? onChanged;
   final String placeholder;
   final Widget? child;
   final TextInputAction textInputAction;
@@ -56,26 +57,7 @@ class _NumberInputState extends State<NumberInput> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(children: [
-              Text(
-                widget.title!,
-                style: Typo(context)
-                    .body1()!
-                    .copyWith(fontWeight: FontWeight.bold),
-              ),
-              if (widget.required)
-                Text(
-                  '*',
-                  style: Typo(context)
-                      .body1()!
-                      .copyWith(fontWeight: FontWeight.bold, color: Colors.red),
-                )
-            ]),
-          ],
-        ),
+        InputTitle(title: widget.title!, required: widget.required),
         const SizedBox(height: 10),
         Container(
           decoration: BoxDecoration(
@@ -104,7 +86,7 @@ class _NumberInputState extends State<NumberInput> {
                 Typo(context).body2()!.copyWith(fontWeight: FontWeight.normal),
             onChanged: (value) {
               if (widget.onChanged == null) return;
-              widget.onChanged!(int.parse(value));
+              widget.onChanged!(value);
             },
             textInputAction: widget.textInputAction,
             onSubmitted: (value) =>

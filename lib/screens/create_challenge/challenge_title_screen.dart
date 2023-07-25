@@ -43,7 +43,8 @@ class _ChallengeTitleScreenState extends State<ChallengeTitleScreen> {
   _isSubmitAble() {
     if (titleController.text.isEmpty) return false;
     if (contentController.text.isEmpty) return false;
-    if (headCountController.text.isEmpty) return false;
+    if (headCountController.text.isEmpty ||
+        int.parse(headCountController.text) == 0) return false;
     return true;
   }
 
@@ -133,6 +134,9 @@ class _ChallengeTitleScreenState extends State<ChallengeTitleScreen> {
                 title: '모집 인원',
                 required: true,
                 placeholder: '모집 인원을 설정해주세요.',
+                onChanged: (value) {
+                  setState(() {});
+                },
               ),
             ],
           ),

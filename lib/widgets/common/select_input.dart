@@ -4,19 +4,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math' as math;
 
+import 'input_title.dart';
+
+class Select {
+  String label;
+  dynamic value;
+  Select({required this.label, required this.value});
+}
+
 class SelectInput extends StatefulWidget {
   const SelectInput({
     super.key,
-    this.onChanged,
+    required this.onChanged,
     this.title = '',
     this.required = false,
     this.placeholder = '',
+    required this.list,
+    required this.value,
   });
 
   final bool required;
   final String? title;
-  final void Function(String)? onChanged;
+  final void Function(Select) onChanged;
+  final Select? value;
   final String placeholder;
+  final List<Select> list;
 
   @override
   State<SelectInput> createState() => _SelectInputState();
@@ -28,8 +40,6 @@ class _SelectInputState extends State<SelectInput> {
   final LayerLink _layerLink = LayerLink();
   OverlayEntry? _overlayEntry;
   bool _isFocused = false;
-
-  final List<int> _arr = [1, 2, 3, 4];
   int? _selectedIdx;
 
   void _onTextFieldFocusChange() {
@@ -38,15 +48,10 @@ class _SelectInputState extends State<SelectInput> {
     });
   }
 
-  @override
-  void initState() {
-    _focusNode.addListener(_onTextFieldFocusChange);
-    super.initState();
-  }
-
   _createOverlay() {
     if (_overlayEntry == null) {
-      _overlayEntry = _buildSelectMenu(_selectBoxKey, _arr, _selectedIdx);
+      _overlayEntry =
+          _buildSelectMenu(_selectBoxKey, widget.list, _selectedIdx);
       Overlay.of(context).insert(_overlayEntry!);
     }
   }
@@ -54,6 +59,23 @@ class _SelectInputState extends State<SelectInput> {
   _removeOverlay() {
     _overlayEntry?.remove();
     _overlayEntry = null;
+  }
+
+  @override
+  void initState() {
+    _focusNode.addListener(_onTextFieldFocusChange);
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant SelectInput oldWidget) {
+    if (widget.value != null && widget.value != null) {
+      setState(() {
+        _selectedIdx = widget.list.indexOf(widget.value!);
+      });
+    }
+
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -68,26 +90,7 @@ class _SelectInputState extends State<SelectInput> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(children: [
-              Text(
-                widget.title!,
-                style: Typo(context)
-                    .body1()!
-                    .copyWith(fontWeight: FontWeight.bold),
-              ),
-              if (widget.required)
-                Text(
-                  '*',
-                  style: Typo(context)
-                      .body1()!
-                      .copyWith(fontWeight: FontWeight.bold, color: Colors.red),
-                )
-            ]),
-          ],
-        ),
+        InputTitle(title: widget.title!, required: widget.required),
         const SizedBox(height: 10),
         Container(
           decoration: BoxDecoration(
@@ -146,9 +149,9 @@ class _SelectInputState extends State<SelectInput> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                  _selectedIdx != null
-                                      ? '${_arr[_selectedIdx!]}'
-                                      : '빈도수를 선택해주세요.',
+                                  widget.value != null
+                                      ? widget.value!.label
+                                      : widget.placeholder,
                                   style: Typo(context).body2()),
                               Transform.rotate(
                                 angle: _isFocused ? 0 : math.pi,
@@ -172,7 +175,7 @@ class _SelectInputState extends State<SelectInput> {
   }
 
   OverlayEntry _buildSelectMenu(
-      GlobalKey selectBoxKey, List<dynamic> list, int? selected) {
+      GlobalKey selectBoxKey, List<Select> list, int? selected) {
     final RenderBox renderBox =
         selectBoxKey.currentContext?.findRenderObject() as RenderBox;
 
@@ -182,7 +185,7 @@ class _SelectInputState extends State<SelectInput> {
         width: renderBox.size.width,
         child: CompositedTransformFollower(
           link: _layerLink,
-          offset: const Offset(0, 8),
+          offset: Offset(0, renderBox.size.height),
           child: SafeArea(
             child: Material(
               color: Colors.white,
@@ -204,23 +207,23 @@ class _SelectInputState extends State<SelectInput> {
                     itemBuilder: (context, idx) => ListTile(
                       onTap: () {
                         setState(() {
-                          _selectedIdx = idx;
                           _isFocused = false;
                         });
+                        widget.onChanged(list[idx]);
                         _removeOverlay();
                       },
                       title: Text(
-                        '${list[idx]}',
+                        list[idx].label,
                         style: Typo(context).body2()!.copyWith(
-                              fontWeight: _selectedIdx == idx
+                              fontWeight: widget.value == list[idx]
                                   ? FontWeight.bold
                                   : FontWeight.normal,
-                              color: _selectedIdx == idx
+                              color: widget.value == list[idx]
                                   ? AppColors.orange
                                   : AppColors.systemBlack,
                             ),
                       ),
-                      trailing: _selectedIdx == idx
+                      trailing: widget.value == list[idx]
                           ? SvgPicture.asset(
                               'assets/icons/check_icon.svg',
                               colorFilter: const ColorFilter.mode(

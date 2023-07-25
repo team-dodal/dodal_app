@@ -11,10 +11,12 @@ class ChallengeTagScreen extends StatefulWidget {
     required this.steps,
     required this.step,
     required this.nextStep,
+    required this.tagValue,
   });
 
   final int steps, step;
   final void Function(String) nextStep;
+  final String? tagValue;
 
   @override
   State<ChallengeTagScreen> createState() => _ChallengeTagScreenState();
@@ -30,6 +32,16 @@ class _ChallengeTagScreenState extends State<ChallengeTagScreen> {
     setState(() {
       _itemList = [value];
     });
+  }
+
+  @override
+  void initState() {
+    if (widget.tagValue != null) {
+      setState(() {
+        _itemList = [widget.tagValue!];
+      });
+    }
+    super.initState();
   }
 
   @override

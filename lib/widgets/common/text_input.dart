@@ -1,5 +1,6 @@
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
+import 'package:dodal_app/widgets/common/input_title.dart';
 import 'package:flutter/material.dart';
 
 class TextInput extends StatefulWidget {
@@ -59,34 +60,11 @@ class _TextInputState extends State<TextInput> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(children: [
-              Text(
-                widget.title!,
-                style: Typo(context)
-                    .body1()!
-                    .copyWith(fontWeight: FontWeight.bold),
-              ),
-              if (widget.required)
-                Text(
-                  '*',
-                  style: Typo(context)
-                      .body1()!
-                      .copyWith(fontWeight: FontWeight.bold, color: Colors.red),
-                )
-            ]),
-            if (widget.wordLength != null)
-              Text(
-                widget.wordLength!,
-                style: Typo(context).body2()!.copyWith(
-                      color: _isFocused
-                          ? AppColors.systemBlack
-                          : AppColors.systemGrey2,
-                    ),
-              ),
-          ],
+        InputTitle(
+          title: widget.title!,
+          required: widget.required,
+          wordLength: widget.wordLength,
+          isFocused: _isFocused,
         ),
         const SizedBox(height: 10),
         Container(
