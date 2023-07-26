@@ -7,8 +7,6 @@ import 'package:dodal_app/screens/notification/main.dart';
 import 'package:dodal_app/screens/settings_menu/main.dart';
 import 'package:flutter/material.dart';
 import '../../model/navigation_route.dart';
-import '../../services/user_service.dart';
-import '../../utilities/fcm.dart';
 import 'challenge_screen.dart';
 
 final List<NavigationRoute> _routes = [
@@ -51,7 +49,7 @@ class _MainRouteState extends State<MainRoute> {
 
   @override
   void initState() {
-    UserService.updateFcmToken(Fcm.token!);
+    // UserService.updateFcmToken(Fcm.token!);
     super.initState();
   }
 

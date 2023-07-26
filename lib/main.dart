@@ -4,7 +4,6 @@ import 'package:dodal_app/screens/main_route/main.dart';
 import 'package:dodal_app/screens/sign_in/main.dart';
 import 'package:dodal_app/services/user_service.dart';
 import 'package:dodal_app/theme/theme_data.dart';
-import 'package:dodal_app/utilities/fcm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -16,7 +15,7 @@ final navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await Fcm.init();
+  // await Fcm.init();
   await initializeDateFormatting();
 
   runApp(const App());

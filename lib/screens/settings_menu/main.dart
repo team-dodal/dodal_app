@@ -2,7 +2,6 @@ import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/screens/sign_in/main.dart';
 import 'package:dodal_app/services/user_service.dart';
 import 'package:dodal_app/theme/color.dart';
-import 'package:dodal_app/utilities/fcm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -47,15 +46,15 @@ class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
       ),
       body: Column(
         children: [
-          SwitchListTile(
-            title: const Text('알림'),
-            value: Fcm.isAllow,
-            onChanged: (value) {
-              setState(() {
-                value ? Fcm.requestPermission() : Fcm.isAllow = false;
-              });
-            },
-          ),
+          // SwitchListTile(
+          //   title: const Text('알림'),
+          //   value: Fcm.isAllow,
+          //   onChanged: (value) {
+          //     setState(() {
+          //       value ? Fcm.requestPermission() : Fcm.isAllow = false;
+          //     });
+          //   },
+          // ),
           ListTile(
             title: const Text('로그아웃'),
             onTap: _signOut,
