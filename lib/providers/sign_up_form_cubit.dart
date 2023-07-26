@@ -58,12 +58,12 @@ class SignUpFormCubit extends Cubit<SignUpForm> {
           ),
         );
 
-  updateData(
+  updateData({
     String? nickname,
     String? content,
     File? image,
     List<String>? category,
-  ) {
+  }) {
     final updatedState = state.copyWith(
       nickname: nickname,
       image: image,

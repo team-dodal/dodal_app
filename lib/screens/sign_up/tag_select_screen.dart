@@ -1,10 +1,12 @@
+import 'package:dodal_app/model/category_model.dart';
+import 'package:dodal_app/providers/sign_up_form_cubit.dart';
+import 'package:dodal_app/services/category_service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/common/create_form_title.dart';
 import 'package:dodal_app/widgets/common/category_content.dart';
 import 'package:dodal_app/widgets/common/submit_button.dart';
 import 'package:flutter/material.dart';
-import '../../model/category_model.dart';
-import '../../services/category_service.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TagSelectScreen extends StatefulWidget {
   const TagSelectScreen({
@@ -28,6 +30,7 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
   List<String> itemList = [];
 
   _handleNextStep() async {
+    context.read<SignUpFormCubit>().updateData(category: itemList);
     widget.nextStep({"category": itemList});
   }
 

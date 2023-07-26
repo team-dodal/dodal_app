@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:dodal_app/providers/sign_up_form_cubit.dart';
 import 'package:dodal_app/services/user_service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
@@ -7,6 +8,7 @@ import 'package:dodal_app/widgets/common/avatar_image.dart';
 import 'package:dodal_app/widgets/common/submit_button.dart';
 import 'package:dodal_app/widgets/common/text_input.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class InputFormScreen extends StatefulWidget {
   const InputFormScreen({
@@ -60,6 +62,11 @@ class _InputFormScreenState extends State<InputFormScreen> {
   }
 
   _handleNextStep() async {
+    context.read<SignUpFormCubit>().updateData(
+          nickname: nicknameController.text,
+          content: contentController.text,
+          image: _image,
+        );
     widget.nextStep({
       'nickname': nicknameController.text,
       'content': contentController.text,

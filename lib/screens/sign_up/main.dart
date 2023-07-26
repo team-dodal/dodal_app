@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dodal_app/providers/sign_up_form_cubit.dart';
 import 'package:dodal_app/screens/sign_up/agreement_screen.dart';
 import 'package:dodal_app/screens/sign_up/input_form_screen.dart';
 import 'package:dodal_app/screens/sign_up/tag_select_screen.dart';
@@ -8,6 +9,7 @@ import 'package:dodal_app/services/user_service.dart';
 import 'package:dodal_app/utilities/social_auth.dart';
 import 'package:dodal_app/widgets/common/create_screen_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -36,14 +38,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
   List<String> category = [];
 
   _submit() async {
+    final signUpData = BlocProvider.of<SignUpFormCubit>(context).state;
     SignUpResponse? res = await UserService.signUp(
-      widget.socialType,
-      widget.socialId,
-      widget.email,
-      nickname,
-      image,
-      content,
-      category,
+      signUpData.socialType,
+      signUpData.socialId,
+      signUpData.email,
+      signUpData.nickname!,
+      signUpData.image,
+      signUpData.content!,
+      signUpData.category!,
     );
     if (res == null) return;
     if (res.accessToken != null && res.refreshToken != null) {
