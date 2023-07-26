@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -178,6 +180,15 @@ class _SelectInputState extends State<SelectInput> {
       GlobalKey selectBoxKey, List<Select> list, int? selected) {
     final RenderBox renderBox =
         selectBoxKey.currentContext?.findRenderObject() as RenderBox;
+    const double listTileHeight = 58;
+    final ScrollController scrollController = ScrollController();
+
+    void scrollToIndex(int index) {
+      if (scrollController.hasClients) {
+        // 해당 인덱스의 위치로 스크롤
+        scrollController.jumpTo(index * listTileHeight);
+      }
+    }
 
     return OverlayEntry(
       maintainState: true,
@@ -185,7 +196,7 @@ class _SelectInputState extends State<SelectInput> {
         width: renderBox.size.width,
         child: CompositedTransformFollower(
           link: _layerLink,
-          offset: const Offset(0, 8),
+          offset: Offset(0, Platform.isIOS ? 8 : renderBox.size.height - 20),
           child: SafeArea(
             child: Material(
               color: Colors.white,
@@ -203,37 +214,50 @@ class _SelectInputState extends State<SelectInput> {
                     ]),
                 child: Scrollbar(
                   child: ListView.builder(
-                    itemCount: list.length,
-                    itemBuilder: (context, idx) => ListTile(
-                      onTap: () {
-                        setState(() {
-                          _isFocused = false;
-                        });
-                        widget.onChanged(list[idx]);
-                        _removeOverlay();
-                      },
-                      title: Text(
-                        list[idx].label,
-                        style: Typo(context).body2()!.copyWith(
-                              fontWeight: widget.value == list[idx]
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
-                              color: widget.value == list[idx]
-                                  ? AppColors.orange
-                                  : AppColors.systemBlack,
+                      controller: scrollController,
+                      itemCount: list.length,
+                      itemBuilder: (context, idx) {
+                        bool isSelected = widget.value == list[idx];
+                        if (isSelected) {
+                          // 스크롤 시 해당 항목으로 포커싱
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            scrollToIndex(idx);
+                          });
+                        }
+                        return SizedBox(
+                          height: listTileHeight,
+                          child: ListTile(
+                            selected: isSelected,
+                            onTap: () {
+                              setState(() {
+                                _isFocused = false;
+                              });
+                              widget.onChanged(list[idx]);
+                              _removeOverlay();
+                            },
+                            title: Text(
+                              list[idx].label,
+                              style: Typo(context).body2()!.copyWith(
+                                    fontWeight: isSelected
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
+                                    color: isSelected
+                                        ? AppColors.orange
+                                        : AppColors.systemBlack,
+                                  ),
                             ),
-                      ),
-                      trailing: widget.value == list[idx]
-                          ? SvgPicture.asset(
-                              'assets/icons/check_icon.svg',
-                              colorFilter: const ColorFilter.mode(
-                                AppColors.orange,
-                                BlendMode.srcIn,
-                              ),
-                            )
-                          : null,
-                    ),
-                  ),
+                            trailing: widget.value == list[idx]
+                                ? SvgPicture.asset(
+                                    'assets/icons/check_icon.svg',
+                                    colorFilter: const ColorFilter.mode(
+                                      AppColors.orange,
+                                      BlendMode.srcIn,
+                                    ),
+                                  )
+                                : null,
+                          ),
+                        );
+                      }),
                 ),
               ),
             ),

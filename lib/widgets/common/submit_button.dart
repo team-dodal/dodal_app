@@ -18,19 +18,19 @@ class SubmitButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: SizedBox(
-        height: 80,
         width: MediaQuery.of(context).size.width,
         child: ElevatedButton(
           onPressed: onPress,
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.orange,
-            padding: EdgeInsets.only(bottom: Platform.isIOS ? 20 : 0),
+            padding: EdgeInsets.only(top: 20, bottom: Platform.isIOS ? 40 : 20),
           ),
           child: Text(
             title,
             style: Typo(context).body1()!.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppColors.systemWhite,
+                  color: onPress != null
+                      ? AppColors.systemWhite
+                      : AppColors.systemGrey2,
                 ),
           ),
         ),

@@ -1,4 +1,5 @@
 import 'package:dodal_app/providers/create_challenge_cubit.dart';
+import 'package:dodal_app/widgets/common/create_form_title.dart';
 import 'package:dodal_app/widgets/common/input_title.dart';
 import 'package:dodal_app/widgets/common/select_input.dart';
 import 'package:dodal_app/widgets/common/submit_button.dart';
@@ -73,6 +74,12 @@ class _ChallengeContentScreenState extends State<ChallengeContentScreen> {
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 100),
             child: Column(
               children: [
+                CreateFormTitle(
+                  title: '인증 방법을 설정해주세요!',
+                  steps: widget.steps,
+                  currentStep: widget.step,
+                ),
+                const SizedBox(height: 40),
                 SelectInput(
                   title: '인증 빈도수',
                   required: true,

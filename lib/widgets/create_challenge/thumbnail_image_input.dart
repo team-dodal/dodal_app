@@ -102,6 +102,11 @@ class ThumbnailImageInput extends StatelessWidget {
             ),
           ),
         ),
+        const SizedBox(height: 8),
+        Text('* 사진 미선택시 기본 썸네일로 설정됩니다.',
+            style: Typo(context).caption()!.copyWith(
+                  color: AppColors.systemGrey1,
+                )),
       ],
     );
   }
