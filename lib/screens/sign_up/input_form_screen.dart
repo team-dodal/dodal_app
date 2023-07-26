@@ -1,4 +1,4 @@
-import 'package:dodal_app/providers/sign_up_form_cubit.dart';
+import 'package:dodal_app/providers/create_user_cubit.dart';
 import 'package:dodal_app/services/user_service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';

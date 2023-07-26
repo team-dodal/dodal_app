@@ -1,10 +1,10 @@
-import 'dart:io';
-
+import 'package:dodal_app/providers/create_challenge_cubit.dart';
 import 'package:dodal_app/screens/create_challenge/challenge_content_screen.dart';
 import 'package:dodal_app/screens/create_challenge/challenge_tag_screen.dart';
 import 'package:dodal_app/screens/create_challenge/challenge_title_screen.dart';
 import 'package:dodal_app/widgets/common/create_screen_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CreateChallengeScreen extends StatefulWidget {
   const CreateChallengeScreen({super.key});
@@ -16,18 +16,19 @@ class CreateChallengeScreen extends StatefulWidget {
 class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
   int _currentIndex = 0;
   int steps = 3;
-  String? _tagValue;
-  String _title = '';
-  String _content = '';
-  File? _thumbnailImg;
-  int? _recruitCnt;
-  int _certCnt = 1;
-  String _certContent = '';
-  String _warnContent = '';
-  File? _certCorrectImg;
-  File? _certWrongImg;
 
   _submit() {
+    final state = BlocProvider.of<CreateChallengeCubit>(context).state;
+    print(state.title);
+    print(state.content);
+    print(state.thumbnailImg);
+    print(state.tagValue);
+    print(state.recruitCnt);
+    print(state.certCnt);
+    print(state.certContent);
+    print(state.warnContent);
+    print(state.certCorrectImg);
+    print(state.certWrongImg);
     // ChallengeService.createChallenge(
     //   title: _title,
     //   content: _content,
@@ -55,55 +56,27 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
         ChallengeTagScreen(
           step: _currentIndex + 1,
           steps: steps,
-          nextStep: (tag) {
+          nextStep: () {
             setState(() {
               _currentIndex += 1;
-              _tagValue = tag;
             });
           },
-          tagValue: _tagValue,
         ),
         ChallengeTitleScreen(
           step: _currentIndex + 1,
           steps: steps,
-          nextStep: ({content = '', recruitCnt = 0, thumbnailImg, title = ''}) {
+          nextStep: () {
             setState(() {
               _currentIndex += 1;
-              _title = title;
-              _content = content;
-              _recruitCnt = recruitCnt;
-              _thumbnailImg = thumbnailImg;
             });
           },
-          title: _title,
-          content: _content,
-          thumbnailImg: _thumbnailImg,
-          recruitCnt: _recruitCnt,
         ),
         ChallengeContentScreen(
           step: _currentIndex + 1,
           steps: steps,
-          nextStep: ({
-            certCnt = 1,
-            certContent = '',
-            correctImg,
-            warnContent = '',
-            wrongImg,
-          }) {
-            setState(() {
-              _currentIndex + 1;
-              _certCnt = certCnt;
-              _certContent = certContent;
-              _warnContent = warnContent;
-              _certCorrectImg = correctImg;
-              _certWrongImg = wrongImg;
-            });
+          nextStep: () {
+            _submit();
           },
-          certCnt: _certCnt,
-          certContent: _certContent,
-          warnContent: _warnContent,
-          correctImg: _certCorrectImg,
-          wrongImg: _certWrongImg,
         ),
       ],
     );

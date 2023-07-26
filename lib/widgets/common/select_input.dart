@@ -185,7 +185,7 @@ class _SelectInputState extends State<SelectInput> {
         width: renderBox.size.width,
         child: CompositedTransformFollower(
           link: _layerLink,
-          offset: Offset(0, renderBox.size.height),
+          offset: const Offset(0, 8),
           child: SafeArea(
             child: Material(
               color: Colors.white,

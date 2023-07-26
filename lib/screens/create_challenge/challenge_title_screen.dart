@@ -1,10 +1,11 @@
-import 'dart:io';
+import 'package:dodal_app/providers/create_challenge_cubit.dart';
 import 'package:dodal_app/widgets/common/create_form_title.dart';
 import 'package:dodal_app/widgets/common/number_input.dart';
 import 'package:dodal_app/widgets/common/submit_button.dart';
 import 'package:dodal_app/widgets/common/text_input.dart';
 import 'package:dodal_app/widgets/create_challenge/thumbnail_image_input.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChallengeTitleScreen extends StatefulWidget {
   const ChallengeTitleScreen({
@@ -12,22 +13,10 @@ class ChallengeTitleScreen extends StatefulWidget {
     required this.steps,
     required this.step,
     required this.nextStep,
-    required this.title,
-    required this.content,
-    required this.thumbnailImg,
-    required this.recruitCnt,
   });
 
   final int steps, step;
-  final void Function({
-    String title,
-    String content,
-    int recruitCnt,
-    File? thumbnailImg,
-  }) nextStep;
-  final String title, content;
-  final File? thumbnailImg;
-  final int? recruitCnt;
+  final void Function() nextStep;
 
   @override
   State<ChallengeTitleScreen> createState() => _ChallengeTitleScreenState();
@@ -38,33 +27,22 @@ class _ChallengeTitleScreenState extends State<ChallengeTitleScreen> {
   TextEditingController titleController = TextEditingController();
   TextEditingController contentController = TextEditingController();
   TextEditingController headCountController = TextEditingController();
-  File? _thumbnail;
 
   _isSubmitAble() {
-    if (titleController.text.isEmpty) return false;
-    if (contentController.text.isEmpty) return false;
-    if (headCountController.text.isEmpty ||
-        int.parse(headCountController.text) == 0) return false;
+    final state = BlocProvider.of<CreateChallengeCubit>(context).state;
+    if (state.title == null || state.title == '') return false;
+    if (state.content == null || state.content == '') return false;
+    if (state.recruitCnt == null || state.recruitCnt! < 1) return false;
     return true;
-  }
-
-  _submit() {
-    widget.nextStep(
-      title: titleController.text,
-      content: contentController.text,
-      thumbnailImg: _thumbnail,
-      recruitCnt: int.parse(headCountController.text),
-    );
   }
 
   @override
   void initState() {
-    setState(() {
-      titleController.text = widget.title;
-      contentController.text = widget.content;
-      headCountController.text = (widget.recruitCnt ?? '').toString();
-      _thumbnail = widget.thumbnailImg;
-    });
+    final state = BlocProvider.of<CreateChallengeCubit>(context).state;
+    titleController.text = state.title ?? '';
+    contentController.text = state.content ?? '';
+    headCountController.text =
+        state.recruitCnt != null ? '${state.recruitCnt}' : '';
     super.initState();
   }
 
@@ -78,74 +56,85 @@ class _ChallengeTitleScreenState extends State<ChallengeTitleScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('도전 만들기')),
-      body: SingleChildScrollView(
-        controller: scrollController,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 100),
-          child: Column(
-            children: [
-              CreateFormTitle(
-                title: '어떤 도전을 만들고 싶나요?',
-                steps: widget.steps,
-                currentStep: widget.step,
-              ),
-              const SizedBox(height: 40),
-              TextInput(
-                controller: titleController,
-                title: '도전 제목',
-                required: true,
-                maxLength: 30,
-                wordLength: '${titleController.text.length}/30',
-                placeholder: '도전 제목을 입력해주세요.',
-                textInputAction: TextInputAction.next,
-                onChanged: (value) {
-                  setState(() {});
-                },
-              ),
-              const SizedBox(height: 32),
-              ThumbnailImageInput(
-                image: _thumbnail,
-                onChange: (image) {
-                  setState(() {
-                    _thumbnail = image;
-                  });
-                },
-              ),
-              const SizedBox(height: 32),
-              TextInput(
-                controller: contentController,
-                title: '도전 소개',
-                required: true,
-                maxLength: 500,
-                wordLength: '${contentController.text.length}/500',
-                multiLine: true,
-                placeholder: '참여자들의 이해를 위해 설명할 내용이나\n참여 방법 등을 세부적으로 알려주세요.',
-                textInputAction: TextInputAction.next,
-                onChanged: (value) {
-                  setState(() {});
-                },
-              ),
-              const SizedBox(height: 32),
-              NumberInput(
-                controller: headCountController,
-                maxNumber: 20,
-                title: '모집 인원',
-                required: true,
-                placeholder: '모집 인원을 설정해주세요.',
-                onChanged: (value) {
-                  setState(() {});
-                },
-              ),
-            ],
+    return BlocBuilder<CreateChallengeCubit, CreateChallenge>(
+        builder: (context, state) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('도전 만들기')),
+        body: SingleChildScrollView(
+          controller: scrollController,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 100),
+            child: Column(
+              children: [
+                CreateFormTitle(
+                  title: '어떤 도전을 만들고 싶나요?',
+                  steps: widget.steps,
+                  currentStep: widget.step,
+                ),
+                const SizedBox(height: 40),
+                TextInput(
+                  controller: titleController,
+                  title: '도전 제목',
+                  required: true,
+                  maxLength: 30,
+                  wordLength: '${titleController.text.length}/30',
+                  placeholder: '도전 제목을 입력해주세요.',
+                  textInputAction: TextInputAction.next,
+                  onChanged: (value) {
+                    context
+                        .read<CreateChallengeCubit>()
+                        .updateData(title: value);
+                  },
+                ),
+                const SizedBox(height: 32),
+                ThumbnailImageInput(
+                  image: state.thumbnailImg,
+                  onChange: (image) {
+                    context
+                        .read<CreateChallengeCubit>()
+                        .updateData(thumbnailImg: image);
+                  },
+                ),
+                const SizedBox(height: 32),
+                TextInput(
+                  controller: contentController,
+                  title: '도전 소개',
+                  required: true,
+                  maxLength: 500,
+                  wordLength: '${contentController.text.length}/500',
+                  multiLine: true,
+                  placeholder: '참여자들의 이해를 위해 설명할 내용이나\n참여 방법 등을 세부적으로 알려주세요.',
+                  textInputAction: TextInputAction.next,
+                  onChanged: (value) {
+                    context
+                        .read<CreateChallengeCubit>()
+                        .updateData(content: value);
+                  },
+                ),
+                const SizedBox(height: 32),
+                NumberInput(
+                  controller: headCountController,
+                  maxNumber: 20,
+                  title: '모집 인원',
+                  required: true,
+                  placeholder: '모집 인원을 설정해주세요.',
+                  onChanged: (value) {
+                    try {
+                      context
+                          .read<CreateChallengeCubit>()
+                          .updateData(recruitCnt: int.parse(value));
+                    } catch (err) {}
+                  },
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-      bottomSheet: SubmitButton(
-        onPress: _isSubmitAble() ? _submit : null,
-        title: '다음',
-      ),
-    );
+        bottomSheet: SubmitButton(
+          onPress: _isSubmitAble() ? widget.nextStep : null,
+          title: '다음',
+        ),
+      );
+    });
   }
 }

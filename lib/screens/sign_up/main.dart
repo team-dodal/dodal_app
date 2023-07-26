@@ -1,6 +1,5 @@
 import 'dart:io';
-
-import 'package:dodal_app/providers/sign_up_form_cubit.dart';
+import 'package:dodal_app/providers/create_user_cubit.dart';
 import 'package:dodal_app/screens/sign_up/agreement_screen.dart';
 import 'package:dodal_app/screens/sign_up/input_form_screen.dart';
 import 'package:dodal_app/screens/sign_up/tag_select_screen.dart';
