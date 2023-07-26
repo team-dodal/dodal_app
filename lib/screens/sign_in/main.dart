@@ -67,16 +67,12 @@ class SignInScreen extends StatelessWidget {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (ctx) => BlocProvider(
-              create: (context) => SignUpFormCubit(
+              create: (context) => CreateUserCubit(
                 socialId: id!,
                 email: email!,
                 socialType: type,
               ),
-              child: SignUpScreen(
-                socialType: type,
-                socialId: id!,
-                email: email!,
-              ),
+              child: const SignUpScreen(),
             ),
           ),
         );

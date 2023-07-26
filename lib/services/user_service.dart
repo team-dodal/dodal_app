@@ -69,7 +69,7 @@ class UserService {
     String nickname,
     File? profile,
     String content,
-    List<String> category,
+    List<String?> category,
   ) async {
     try {
       final service = await dio();
