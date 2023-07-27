@@ -1,4 +1,5 @@
 import 'package:dodal_app/model/category_model.dart';
+import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/providers/create_user_cubit.dart';
 import 'package:dodal_app/services/category_service.dart';
 import 'package:dodal_app/theme/color.dart';
@@ -27,8 +28,8 @@ class TagSelectScreen extends StatefulWidget {
 class _TagSelectScreenState extends State<TagSelectScreen> {
   final Future<dynamic> _categories = CategoryService.getAllCategories();
 
-  handleSelect(String value) {
-    List<String?> categoryList =
+  handleSelect(Tag value) {
+    List<Tag?> categoryList =
         BlocProvider.of<CreateUserCubit>(context).state.category;
     final copy = categoryList;
     bool isSelected = categoryList.contains(value);

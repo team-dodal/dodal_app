@@ -1,4 +1,5 @@
 import 'package:dodal_app/model/category_model.dart';
+import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/services/category_service.dart';
 import 'package:dodal_app/widgets/common/category_content.dart';
 import 'package:dodal_app/widgets/common/create_form_title.dart';
@@ -11,8 +12,8 @@ class TagSelectContent extends StatefulWidget {
     required this.setItemList,
   });
 
-  final List<String> itemList;
-  final void Function(List<String>) setItemList;
+  final List<Tag> itemList;
+  final void Function(List<Tag>) setItemList;
 
   @override
   State<TagSelectContent> createState() => _TagSelectContentState();
@@ -21,7 +22,7 @@ class TagSelectContent extends StatefulWidget {
 class _TagSelectContentState extends State<TagSelectContent> {
   final Future<dynamic> _categories = CategoryService.getAllCategories();
 
-  _handleSelect(String value) {
+  _handleSelect(Tag value) {
     bool isSelected = widget.itemList.contains(value);
     if (isSelected) {
       final copy = widget.itemList;

@@ -11,20 +11,21 @@ class CertificateImageInput extends StatelessWidget {
   const CertificateImageInput({
     super.key,
     required this.image,
-    required this.onChange,
+    this.onChange,
     required this.certOption,
   });
 
   final File? image;
-  final Function onChange;
+  final void Function(File?)? onChange;
   final CertOption certOption;
 
   _showBottomSheet(BuildContext context) {
+    if (onChange == null) return;
     showModalBottomSheet(
       context: context,
       builder: (context) => ImageBottomSheet(
         setImage: (image) {
-          onChange(image);
+          onChange!(image);
         },
       ),
     );

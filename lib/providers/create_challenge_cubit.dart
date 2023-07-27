@@ -1,10 +1,12 @@
 import 'dart:io';
+import 'package:dodal_app/model/tag_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CreateChallenge {
-  String? title, content, certContent, warnContent, tagValue;
+  String? title, content, certContent, warnContent;
   File? thumbnailImg, certCorrectImg, certWrongImg;
   int? recruitCnt, certCnt;
+  Tag? tagValue;
 
   CreateChallenge({
     required this.title,
@@ -24,7 +26,7 @@ class CreateChallenge {
     String? content,
     String? certContent,
     String? warnContent,
-    String? tagValue,
+    Tag? tagValue,
     File? thumbnailImg,
     File? certCorrectImg,
     File? certWrongImg,
@@ -68,7 +70,7 @@ class CreateChallengeCubit extends Cubit<CreateChallenge> {
     String? content,
     String? certContent,
     String? warnContent,
-    String? tagValue,
+    Tag? tagValue,
     File? thumbnailImg,
     File? certCorrectImg,
     File? certWrongImg,

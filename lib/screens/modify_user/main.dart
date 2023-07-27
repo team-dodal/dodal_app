@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/services/user_service.dart';
@@ -23,7 +24,7 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
   String? _imageUrl;
   File? _uploadImage;
   bool nicknameChecked = true;
-  List<String> _category = [];
+  List<Tag> _category = [];
 
   _dismissKeyboard(context) {
     FocusScopeNode currentFocus = FocusScope.of(context);
@@ -38,7 +39,7 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
       profileUrl: _imageUrl,
       profile: _uploadImage,
       content: contentController.text,
-      category: _category,
+      category: _category.map((e) => e.value as String).toList(),
     );
     if (res == null) return;
     if (!mounted) return;
@@ -61,7 +62,7 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
     nicknameController.text = user.nickname;
     contentController.text = user.content;
     setState(() {
-      _category = user.tagList.map((tag) => '${tag.value}').toList();
+      _category = user.tagList;
       _imageUrl = user.profileUrl;
     });
     super.initState();

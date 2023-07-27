@@ -13,8 +13,13 @@ class CategoryContent extends StatelessWidget {
   });
 
   final Category category;
-  final void Function(String) handleSelect;
-  final List<String?> itemList;
+  final void Function(Tag) handleSelect;
+  final List<Tag?> itemList;
+
+  bool isSelected(Tag tag) {
+    if (itemList.isEmpty) return false;
+    return itemList.map((e) => e!.value).toList().contains(tag.value);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +42,6 @@ class CategoryContent extends StatelessWidget {
           children: [
             for (Tag tag in category.tags)
               Builder(builder: (ctx) {
-                final isSelected = itemList.contains(tag.value);
                 return Padding(
                   padding: const EdgeInsets.only(right: 4),
                   child: OutlinedButton(
@@ -51,19 +55,19 @@ class CategoryContent extends StatelessWidget {
                           Radius.circular(100),
                         ),
                       ),
-                      side: isSelected
+                      side: isSelected(tag)
                           ? const BorderSide(color: AppColors.lightOrange)
                           : const BorderSide(color: AppColors.systemGrey3),
-                      backgroundColor: isSelected
+                      backgroundColor: isSelected(tag)
                           ? AppColors.lightOrange
                           : AppColors.bgColor1,
                     ),
                     onPressed: () {
-                      handleSelect(tag.value);
+                      handleSelect(tag);
                     },
                     child: Text(
                       '${tag.name}',
-                      style: isSelected
+                      style: isSelected(tag)
                           ? Typo(context).body4()!.copyWith(
                                 color: AppColors.orange,
                                 fontWeight: FontWeight.bold,

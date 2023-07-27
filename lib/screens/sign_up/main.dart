@@ -32,7 +32,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       signUpData.nickname,
       signUpData.image,
       signUpData.content,
-      signUpData.category,
+      signUpData.category.map((e) => e!.value as String).toList(),
     );
     if (res == null) return;
     if (res.accessToken != null && res.refreshToken != null) {

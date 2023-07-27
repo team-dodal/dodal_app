@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/utilities/social_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -7,7 +8,7 @@ class CreateUser {
   final String socialId, email;
   late String nickname, content;
   late File? image;
-  late List<String?> category;
+  late List<Tag?> category;
 
   CreateUser({
     required this.socialId,
@@ -23,7 +24,7 @@ class CreateUser {
     String? nickname,
     String? content,
     File? image,
-    List<String?>? category,
+    List<Tag?>? category,
   }) {
     return CreateUser(
       socialId: socialId,
@@ -61,7 +62,7 @@ class CreateUserCubit extends Cubit<CreateUser> {
     String? nickname,
     String? content,
     File? image,
-    List<String?>? category,
+    List<Tag?>? category,
   }) {
     final updatedState = state.copyWith(
       nickname: nickname,

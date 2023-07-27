@@ -67,7 +67,9 @@ class _ChallengeTagScreenState extends State<ChallengeTagScreen> {
                             CategoryContent(
                               category: category,
                               handleSelect: _handleSelect,
-                              itemList: [state.tagValue],
+                              itemList: state.tagValue != null
+                                  ? [state.tagValue]
+                                  : [],
                             )
                         ],
                       );

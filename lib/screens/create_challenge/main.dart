@@ -1,5 +1,6 @@
 import 'package:dodal_app/providers/create_challenge_cubit.dart';
 import 'package:dodal_app/screens/create_challenge/challenge_content_screen.dart';
+import 'package:dodal_app/screens/create_challenge/challenge_preview_screen.dart';
 import 'package:dodal_app/screens/create_challenge/challenge_tag_screen.dart';
 import 'package:dodal_app/screens/create_challenge/challenge_title_screen.dart';
 import 'package:dodal_app/widgets/common/create_screen_layout.dart';
@@ -15,7 +16,7 @@ class CreateChallengeScreen extends StatefulWidget {
 
 class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
   int _currentIndex = 0;
-  int steps = 3;
+  int steps = 4;
 
   _submit() {
     final state = BlocProvider.of<CreateChallengeCubit>(context).state;
@@ -75,9 +76,16 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
           step: _currentIndex + 1,
           steps: steps,
           nextStep: () {
-            _submit();
+            setState(() {
+              _currentIndex += 1;
+            });
           },
         ),
+        ChallengePreviewScreen(
+          step: _currentIndex + 1,
+          steps: steps,
+          nextStep: _submit,
+        )
       ],
     );
   }
