@@ -26,13 +26,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   _submit() async {
     final signUpData = BlocProvider.of<CreateUserCubit>(context).state;
     SignUpResponse? res = await UserService.signUp(
-      signUpData.socialType,
-      signUpData.socialId,
-      signUpData.email,
-      signUpData.nickname,
-      signUpData.image,
-      signUpData.content,
-      signUpData.category.map((e) => e!.value as String).toList(),
+      socialType: signUpData.socialType,
+      socialId: signUpData.socialId,
+      email: signUpData.email,
+      nickname: signUpData.nickname,
+      profile: signUpData.image,
+      content: signUpData.content,
+      category: signUpData.category.map((e) => e!.value as String).toList(),
     );
     if (res == null) return;
     if (res.accessToken != null && res.refreshToken != null) {

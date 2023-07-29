@@ -62,15 +62,15 @@ class UserService {
     }
   }
 
-  static signUp(
-    SocialType socialType,
-    String socialId,
-    String email,
-    String nickname,
-    File? profile,
-    String content,
-    List<String?> category,
-  ) async {
+  static signUp({
+    required SocialType socialType,
+    required String socialId,
+    required String email,
+    required String nickname,
+    required File? profile,
+    required String content,
+    required List<String?> category,
+  }) async {
     try {
       final service = await dio();
       final formData = FormData.fromMap({
