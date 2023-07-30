@@ -2,6 +2,7 @@ import 'package:dodal_app/providers/create_challenge_cubit.dart';
 import 'package:dodal_app/widgets/common/create_form_title.dart';
 import 'package:dodal_app/widgets/common/number_input.dart';
 import 'package:dodal_app/widgets/common/submit_button.dart';
+import 'package:dodal_app/widgets/common/system_dialog.dart';
 import 'package:dodal_app/widgets/common/text_input.dart';
 import 'package:dodal_app/widgets/create_challenge/thumbnail_image_input.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,18 @@ class _ChallengeTitleScreenState extends State<ChallengeTitleScreen> {
     if (state.content == null || state.content == '') return false;
     if (state.recruitCnt == null || state.recruitCnt! < 1) return false;
     return true;
+  }
+
+  _submit() {
+    final state = BlocProvider.of<CreateChallengeCubit>(context).state;
+    if (state.recruitCnt! < 5) {
+      showDialog(
+        context: context,
+        builder: (ctx) => const SystemDialog(subTitle: '모집 인원은 5명 이상으로 해주세요'),
+      );
+      return;
+    }
+    widget.nextStep();
   }
 
   @override
@@ -131,7 +144,7 @@ class _ChallengeTitleScreenState extends State<ChallengeTitleScreen> {
           ),
         ),
         bottomSheet: SubmitButton(
-          onPress: _isSubmitAble() ? widget.nextStep : null,
+          onPress: _isSubmitAble() ? _submit : null,
           title: '다음',
         ),
       );

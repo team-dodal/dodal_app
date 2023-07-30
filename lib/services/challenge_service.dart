@@ -11,7 +11,6 @@ class ChallengeService {
     required int recruitCnt,
     required int certCnt,
     required String certContent,
-    required String warnContent,
     File? thumbnailImg,
     required File? certCorrectImg,
     required File? certWrongImg,
@@ -26,10 +25,10 @@ class ChallengeService {
         'recruit_cnt': recruitCnt,
         'cert_cnt': certCnt,
         'cert_content': certContent,
-        'warn_content': warnContent,
         'cert_correct_img': await MultipartFile.fromFile(certCorrectImg!.path),
         'cert_wrong_img': await MultipartFile.fromFile(certWrongImg!.path)
       });
+
       if (thumbnailImg != null) {
         formData.files.add(MapEntry(
           'thumbnail_img',

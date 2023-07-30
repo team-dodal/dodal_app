@@ -26,7 +26,6 @@ class ChallengeContentScreen extends StatefulWidget {
 class _ChallengeContentScreenState extends State<ChallengeContentScreen> {
   ScrollController scrollController = ScrollController();
   TextEditingController certContentController = TextEditingController();
-  TextEditingController warnContentController = TextEditingController();
 
   final List<Select> _selectList = [
     Select(label: '주 1회', value: 1),
@@ -42,7 +41,8 @@ class _ChallengeContentScreenState extends State<ChallengeContentScreen> {
     final state = BlocProvider.of<CreateChallengeCubit>(context).state;
     if (state.certCnt == null) return false;
     if (state.certContent == null || state.certContent == '') return false;
-    if (state.warnContent == null || state.warnContent == '') return false;
+    if (state.certCorrectImg == null) return false;
+    if (state.certWrongImg == null) return false;
     return true;
   }
 
@@ -50,7 +50,6 @@ class _ChallengeContentScreenState extends State<ChallengeContentScreen> {
   void initState() {
     final state = BlocProvider.of<CreateChallengeCubit>(context).state;
     certContentController.text = state.certContent ?? '';
-    warnContentController.text = state.warnContent ?? '';
     super.initState();
   }
 
@@ -58,7 +57,6 @@ class _ChallengeContentScreenState extends State<ChallengeContentScreen> {
   void dispose() {
     scrollController.dispose();
     certContentController.dispose();
-    warnContentController.dispose();
     super.dispose();
   }
 
@@ -141,22 +139,6 @@ class _ChallengeContentScreenState extends State<ChallengeContentScreen> {
                       ),
                     )
                   ],
-                ),
-                const SizedBox(height: 32),
-                TextInput(
-                  controller: warnContentController,
-                  title: '주의사항',
-                  required: true,
-                  maxLength: 500,
-                  wordLength: '${warnContentController.text.length}/500',
-                  multiLine: true,
-                  placeholder:
-                      '참여자에게 도전 참가 주의사항에 대해 알려주세요.\nex) 10번 이상 인증 실패시 강퇴 처리 됩니다.',
-                  onChanged: (value) {
-                    context
-                        .read<CreateChallengeCubit>()
-                        .updateData(warnContent: value);
-                  },
                 ),
               ],
             ),

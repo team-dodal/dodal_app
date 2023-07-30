@@ -1,8 +1,10 @@
 import 'package:dodal_app/providers/create_challenge_cubit.dart';
+import 'package:dodal_app/screens/create_challenge/complete_screen.dart';
 import 'package:dodal_app/screens/create_challenge/challenge_content_screen.dart';
 import 'package:dodal_app/screens/create_challenge/challenge_preview_screen.dart';
 import 'package:dodal_app/screens/create_challenge/challenge_tag_screen.dart';
 import 'package:dodal_app/screens/create_challenge/challenge_title_screen.dart';
+import 'package:dodal_app/services/challenge_service.dart';
 import 'package:dodal_app/widgets/common/create_screen_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,28 +22,22 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
 
   _submit() {
     final state = BlocProvider.of<CreateChallengeCubit>(context).state;
-    print(state.title);
-    print(state.content);
-    print(state.thumbnailImg);
-    print(state.tagValue);
-    print(state.recruitCnt);
-    print(state.certCnt);
-    print(state.certContent);
-    print(state.warnContent);
-    print(state.certCorrectImg);
-    print(state.certWrongImg);
-    // ChallengeService.createChallenge(
-    //   title: _title,
-    //   content: _content,
-    //   thumbnailImg: _thumbnailImg,
-    //   tagValue: _tagValue!,
-    //   recruitCnt: _recruitCnt!,
-    //   certCnt: _certCnt,
-    //   certContent: _certContent,
-    //   warnContent: _warnContent,
-    //   certCorrectImg: _certCorrectImg,
-    //   certWrongImg: _certWrongImg,
-    // );
+    final res = ChallengeService.createChallenge(
+      title: state.title!,
+      content: state.content!,
+      thumbnailImg: state.thumbnailImg,
+      tagValue: state.tagValue!.value,
+      recruitCnt: state.recruitCnt!,
+      certCnt: state.certCnt!,
+      certContent: state.certContent!,
+      certCorrectImg: state.certCorrectImg,
+      certWrongImg: state.certWrongImg,
+    );
+    if (res == null) return;
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (ctx) => const CompleteCreateChallenge()),
+      (route) => false,
+    );
   }
 
   @override

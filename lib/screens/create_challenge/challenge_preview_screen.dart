@@ -4,6 +4,7 @@ import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/avatar_image.dart';
+import 'package:dodal_app/widgets/common/input_title.dart';
 import 'package:dodal_app/widgets/common/submit_button.dart';
 import 'package:dodal_app/widgets/create_challenge/certificate_image_input.dart';
 import 'package:flutter/material.dart';
@@ -99,12 +100,14 @@ class ChallengePreviewScreen extends StatelessWidget {
                           ),
                         ),
                       ]),
+                      const SizedBox(height: 12),
                       Text(
                         challenge.title!,
                         style: Typo(context)
                             .headline2()!
                             .copyWith(fontWeight: FontWeight.bold),
                       ),
+                      const SizedBox(height: 12),
                       Row(children: [
                         AvatarImage(
                           image: user!.profileUrl,
@@ -169,42 +172,55 @@ class ChallengePreviewScreen extends StatelessWidget {
                   decoration: const BoxDecoration(color: AppColors.systemGrey4),
                 ),
                 Container(
+                  width: double.infinity,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,
                     vertical: 32,
                   ),
-                  child: Row(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: CertificateImageInput(
-                          image: challenge.certCorrectImg,
-                          certOption: CertOption.correct,
+                      Text('인증 방법',
+                          style: Typo(context)
+                              .body1()!
+                              .copyWith(fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 8),
+                      if (challenge.content != null)
+                        Text(
+                          challenge.certContent!,
+                          style: Typo(context).body2()!,
                         ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: CertificateImageInput(
-                          image: challenge.certWrongImg,
-                          certOption: CertOption.wrong,
-                        ),
-                      )
                     ],
                   ),
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  width: double.infinity,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('이런 점을 주의해야 해요',
-                          style: Typo(context)
-                              .body1()!
-                              .copyWith(fontWeight: FontWeight.bold)),
-                      const SizedBox(height: 8),
-                      if (challenge.warnContent != null)
-                        Text(challenge.warnContent!,
-                            style: Typo(context).body2()!),
+                      const InputTitle(
+                        title: '인증 예시',
+                        required: true,
+                        subTitle: '사진을 통해 인증 성공과 실패 예시를 추가해주세요.',
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: CertificateImageInput(
+                              image: challenge.certCorrectImg,
+                              certOption: CertOption.correct,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: CertificateImageInput(
+                              image: challenge.certWrongImg,
+                              certOption: CertOption.wrong,
+                            ),
+                          )
+                        ],
+                      ),
                     ],
                   ),
                 ),

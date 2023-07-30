@@ -3,7 +3,7 @@ import 'package:dodal_app/model/tag_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CreateChallenge {
-  String? title, content, certContent, warnContent;
+  String? title, content, certContent;
   File? thumbnailImg, certCorrectImg, certWrongImg;
   int? recruitCnt, certCnt;
   Tag? tagValue;
@@ -12,7 +12,6 @@ class CreateChallenge {
     required this.title,
     required this.content,
     required this.certContent,
-    required this.warnContent,
     required this.tagValue,
     required this.thumbnailImg,
     required this.certCorrectImg,
@@ -25,7 +24,6 @@ class CreateChallenge {
     String? title,
     String? content,
     String? certContent,
-    String? warnContent,
     Tag? tagValue,
     File? thumbnailImg,
     File? certCorrectImg,
@@ -37,7 +35,6 @@ class CreateChallenge {
       title: title ?? this.title,
       content: content ?? this.content,
       certContent: certContent ?? this.certContent,
-      warnContent: warnContent ?? this.warnContent,
       tagValue: tagValue ?? this.tagValue,
       thumbnailImg: thumbnailImg ?? this.thumbnailImg,
       certCorrectImg: certCorrectImg ?? this.certCorrectImg,
@@ -55,7 +52,6 @@ class CreateChallengeCubit extends Cubit<CreateChallenge> {
             title: '',
             content: '',
             certContent: '',
-            warnContent: '',
             tagValue: null,
             thumbnailImg: null,
             certCorrectImg: null,
@@ -69,7 +65,6 @@ class CreateChallengeCubit extends Cubit<CreateChallenge> {
     String? title,
     String? content,
     String? certContent,
-    String? warnContent,
     Tag? tagValue,
     File? thumbnailImg,
     File? certCorrectImg,
@@ -81,7 +76,6 @@ class CreateChallengeCubit extends Cubit<CreateChallenge> {
       title: title,
       content: content,
       certContent: certContent,
-      warnContent: warnContent,
       tagValue: tagValue,
       thumbnailImg: thumbnailImg,
       certCorrectImg: certCorrectImg,

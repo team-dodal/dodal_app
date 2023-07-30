@@ -7,8 +7,8 @@ import 'package:dodal_app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class WelcomeScreen extends StatelessWidget {
-  const WelcomeScreen({super.key});
+class CompleteSignUpScreen extends StatelessWidget {
+  const CompleteSignUpScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,6 @@ class WelcomeScreen extends StatelessWidget {
               ],
             );
           }
-
           return Center(
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [

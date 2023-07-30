@@ -3,7 +3,7 @@ import 'package:dodal_app/providers/create_user_cubit.dart';
 import 'package:dodal_app/screens/sign_up/agreement_screen.dart';
 import 'package:dodal_app/screens/sign_up/input_form_screen.dart';
 import 'package:dodal_app/screens/sign_up/tag_select_screen.dart';
-import 'package:dodal_app/screens/welcome/main.dart';
+import 'package:dodal_app/screens/sign_up/complete_screen.dart';
 import 'package:dodal_app/services/user_service.dart';
 import 'package:dodal_app/widgets/common/create_screen_layout.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +42,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       if (!mounted) return;
 
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (ctx) => const WelcomeScreen()),
+        MaterialPageRoute(builder: (ctx) => const CompleteSignUpScreen()),
         (route) => false,
       );
     }
