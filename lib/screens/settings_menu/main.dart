@@ -15,6 +15,7 @@ class SettingsMenuScreen extends StatefulWidget {
 
 class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
   FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+  bool _notification = true;
 
   _signOut() async {
     secureStorage.deleteAll();
@@ -46,15 +47,15 @@ class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
       ),
       body: Column(
         children: [
-          // SwitchListTile(
-          //   title: const Text('알림'),
-          //   value: Fcm.isAllow,
-          //   onChanged: (value) {
-          //     setState(() {
-          //       value ? Fcm.requestPermission() : Fcm.isAllow = false;
-          //     });
-          //   },
-          // ),
+          SwitchListTile(
+            title: const Text('알림'),
+            value: _notification,
+            onChanged: (value) {
+              setState(() {
+                _notification = value;
+              });
+            },
+          ),
           ListTile(
             title: const Text('로그아웃'),
             onTap: _signOut,
