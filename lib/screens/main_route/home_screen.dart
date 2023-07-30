@@ -1,18 +1,27 @@
-import 'package:dodal_app/widgets/common/team_card.dart';
+import 'package:dodal_app/services/category_service.dart';
+import 'package:dodal_app/widgets/home/category_select.dart';
 import 'package:flutter/material.dart';
 
-final _list = List.filled(20, 0);
-
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final Future<dynamic> _categories = CategoryService.getAllCategories();
+
+  @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: _list.length,
-      itemBuilder: (context, index) {
-        return const TeamCard();
-      },
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          CategorySelect(),
+          const SizedBox(height: 32),
+          // const InterestList(),
+        ],
+      ),
     );
   }
 }

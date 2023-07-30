@@ -5,6 +5,7 @@ import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/avatar_image.dart';
 import 'package:dodal_app/widgets/common/input_title.dart';
+import 'package:dodal_app/widgets/common/small_tag.dart';
 import 'package:dodal_app/widgets/common/submit_button.dart';
 import 'package:dodal_app/widgets/create_challenge/certificate_image_input.dart';
 import 'package:flutter/material.dart';
@@ -64,40 +65,12 @@ class ChallengePreviewScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 2,
-                            horizontal: 6,
-                          ),
-                          decoration: const BoxDecoration(
-                            color: AppColors.lightOrange,
-                            borderRadius: BorderRadius.all(Radius.circular(4)),
-                          ),
-                          child: Text(
-                            challenge.tagValue!.name,
-                            style: Typo(context).caption()!.copyWith(
-                                  color: AppColors.orange,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                        ),
+                        SmallTag(text: challenge.tagValue!.name),
                         const SizedBox(width: 4),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 2,
-                            horizontal: 6,
-                          ),
-                          decoration: const BoxDecoration(
-                            color: AppColors.systemGrey4,
-                            borderRadius: BorderRadius.all(Radius.circular(4)),
-                          ),
-                          child: Text(
-                            '인증횟수',
-                            style: Typo(context).caption()!.copyWith(
-                                  color: AppColors.systemGrey1,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                          ),
+                        const SmallTag(
+                          text: '인증횟수',
+                          foregroundColor: AppColors.systemGrey1,
+                          backgroundColor: AppColors.systemGrey4,
                         ),
                       ]),
                       const SizedBox(height: 12),
