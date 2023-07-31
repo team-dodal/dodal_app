@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
+import 'package:dodal_app/utilities/image_compress.dart';
 import 'package:dodal_app/widgets/common/system_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -27,17 +28,11 @@ class _ImageBottomSheetState extends State<ImageBottomSheet> {
     }
 
     try {
-      pickedImage = await imagePicker.pickImage(source: type, imageQuality: 0);
+      pickedImage = await imagePicker.pickImage(source: type);
       if (pickedImage == null) return;
-      final fileSize = await pickedImage.length();
+      final compressedImage = await testCompressAndGetFile(pickedImage);
       if (!mounted) return;
-      if (fileSize > 1000000) {
-        // 1MB
-        showDialog(
-            context: context,
-            builder: (ctx) => const SystemDialog(subTitle: '이미지의 용량이 너무 큽니다.'));
-      }
-      widget.setImage(File(pickedImage.path));
+      widget.setImage(File(compressedImage.path));
     } catch (err) {
       showDialog(
           context: context,
