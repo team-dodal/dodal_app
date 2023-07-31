@@ -24,41 +24,15 @@ Future<Dio> dio() async {
       onError: (DioException e, ErrorInterceptorHandler handler) async {
         // 엑세스 토큰이 만료되었을때
         if (e.response?.statusCode == 401) {
-          try {
-            var service = await refreshDio();
-            final res = await service.post('/api/v1/users/access-token');
-            final newAccessToken = res.data['result']['access_token'];
-            await secureStorage.write(
-              key: 'accessToken',
-              value: newAccessToken,
-            );
-            e.requestOptions.headers['Authorization'] =
-                'Bearer $newAccessToken';
-            late dynamic requestData;
-            if (e.requestOptions.data is FormData) {
-              FormData requestData = FormData();
-              requestData.fields.addAll(e.requestOptions.data.fields);
-
-              for (final entry in e.requestOptions.data.files) {
-                requestData.files.add(MapEntry(
-                  entry.key,
-                  MultipartFile.fromBytes(entry.value, filename: entry.key),
-                ));
-              }
-            } else {
-              requestData = e.requestOptions.data;
-            }
-            final clonedRequest = await dio.request(
-              e.requestOptions.path,
-              options: Options(
-                method: e.requestOptions.method,
-                headers: e.requestOptions.headers,
-              ),
-              data: requestData,
-              queryParameters: e.requestOptions.queryParameters,
-            );
-            return handler.resolve(clonedRequest);
-          } catch (err) {}
+          final newAccessToken = await requestNewAccessToken();
+          await secureStorage.write(
+            key: 'accessToken',
+            value: newAccessToken,
+          );
+          e.requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
+          dynamic requestData = createRequestData(e);
+          final clonedRequest = await createCloneRequest(dio, e, requestData);
+          return handler.resolve(clonedRequest);
         }
         return handler.next(e);
       },
@@ -66,4 +40,45 @@ Future<Dio> dio() async {
   );
 
   return dio;
+}
+
+requestNewAccessToken() async {
+  try {
+    var service = await refreshDio();
+    final res = await service.post('/api/v1/users/access-token');
+    return res.data['result']['access_token'];
+  } catch (err) {
+    return Exception(err);
+  }
+}
+
+createRequestData(DioException e) {
+  late dynamic requestData;
+  if (e.requestOptions.data is FormData) {
+    FormData requestData = FormData();
+    requestData.fields.addAll(e.requestOptions.data.fields);
+
+    for (final entry in e.requestOptions.data.files) {
+      requestData.files.add(MapEntry(
+        entry.key,
+        MultipartFile.fromBytes(entry.value, filename: entry.key),
+      ));
+    }
+  } else {
+    requestData = e.requestOptions.data;
+  }
+
+  return requestData;
+}
+
+createCloneRequest(Dio dio, DioException e, requestData) async {
+  return await dio.request(
+    e.requestOptions.path,
+    options: Options(
+      method: e.requestOptions.method,
+      headers: e.requestOptions.headers,
+    ),
+    data: requestData,
+    queryParameters: e.requestOptions.queryParameters,
+  );
 }

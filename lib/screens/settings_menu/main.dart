@@ -5,6 +5,7 @@ import 'package:dodal_app/theme/color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsMenuScreen extends StatefulWidget {
   const SettingsMenuScreen({super.key});
@@ -15,6 +16,7 @@ class SettingsMenuScreen extends StatefulWidget {
 
 class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
   FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+  late SharedPreferences pref;
   bool _notification = true;
 
   _signOut() async {
@@ -39,6 +41,27 @@ class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
         (route) => false);
   }
 
+  _getNotificationValue() async {
+    pref = await SharedPreferences.getInstance();
+    setState(() {
+      _notification = pref.getBool('notification_allow')!;
+    });
+  }
+
+  _handleNotification(value) async {
+    pref = await SharedPreferences.getInstance();
+    pref.setBool('notification_allow', value);
+    setState(() {
+      _notification = value;
+    });
+  }
+
+  @override
+  void initState() {
+    _getNotificationValue();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,11 +73,7 @@ class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
           SwitchListTile(
             title: const Text('알림'),
             value: _notification,
-            onChanged: (value) {
-              setState(() {
-                _notification = value;
-              });
-            },
+            onChanged: _handleNotification,
           ),
           ListTile(
             title: const Text('로그아웃'),
