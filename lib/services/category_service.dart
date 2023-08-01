@@ -31,7 +31,7 @@ List<Category> parseCategories(Map<String, dynamic> data) {
 class CategoryService {
   static Future<List<Category>?> getAllCategories() async {
     try {
-      final service = await dio();
+      final service = dio();
       final res = await service.get('/api/v1/categories/tags');
 
       final responseData = res.data['result'];

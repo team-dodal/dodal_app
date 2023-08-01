@@ -16,7 +16,7 @@ class ChallengeService {
     required File? certWrongImg,
   }) async {
     try {
-      final service = await dio();
+      final service = dio();
       service.options.contentType = 'multipart/form-data';
       FormData formData = FormData.fromMap({
         'title': title,

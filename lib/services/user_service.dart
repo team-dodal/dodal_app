@@ -53,7 +53,7 @@ class ModifyUserResponse extends UserResponse {
 class UserService {
   static signIn(SocialType socialType, String socialId) async {
     try {
-      final service = await dio();
+      final service = dio();
       final res = await service.post('/api/v1/users/sign-in',
           data: {"social_type": socialType.name, "social_id": socialId});
       return SignInResponse.fromJson(res.data['result']);
@@ -72,7 +72,7 @@ class UserService {
     required List<String?> category,
   }) async {
     try {
-      final service = await dio();
+      final service = dio();
       final formData = FormData.fromMap({
         "social_type": socialType.name,
         "social_id": socialId,
@@ -97,7 +97,7 @@ class UserService {
 
   static Future<UserResponse?> user() async {
     try {
-      final service = await dio();
+      final service = dio();
       final res = await service.get('/api/v1/users/me');
       return UserResponse.formJson(res.data['result']);
     } on DioException catch (err) {
@@ -129,7 +129,7 @@ class UserService {
     }
 
     try {
-      final service = await dio();
+      final service = dio();
       service.options.contentType = 'multipart/form-data';
       final res = await service.patch('/api/v1/users/me', data: formData);
       return ModifyUserResponse.fromJson(res.data['result']);
@@ -141,7 +141,7 @@ class UserService {
 
   static updateFcmToken(String token) async {
     try {
-      final service = await dio();
+      final service = dio();
       await service.post('/api/v1/users/fcm-token', data: {'fcm_token': token});
     } on DioException catch (err) {
       ResponseErrorDialog(err);
@@ -150,7 +150,7 @@ class UserService {
 
   static checkNickName(String nickname) async {
     try {
-      final service = await dio();
+      final service = dio();
       await service.get('/api/v1/users/nickname/$nickname');
       return true;
     } on DioException catch (err) {
@@ -160,7 +160,7 @@ class UserService {
 
   static removeUser() async {
     try {
-      final service = await dio();
+      final service = dio();
       await service.delete('/api/v1/users/me');
     } on DioException catch (err) {
       ResponseErrorDialog(err);

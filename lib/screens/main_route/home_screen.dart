@@ -1,4 +1,3 @@
-import 'package:dodal_app/services/category_service.dart';
 import 'package:dodal_app/widgets/home/category_select.dart';
 import 'package:flutter/material.dart';
 
@@ -10,8 +9,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final Future<dynamic> _categories = CategoryService.getAllCategories();
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
