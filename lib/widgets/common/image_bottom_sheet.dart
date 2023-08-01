@@ -8,9 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImageBottomSheet extends StatefulWidget {
-  const ImageBottomSheet({super.key, required this.setImage});
+  const ImageBottomSheet({
+    super.key,
+    required this.setImage,
+    this.imageDefaultOption = true,
+  });
 
   final Function setImage;
+  final bool imageDefaultOption;
 
   @override
   State<ImageBottomSheet> createState() => _ImageBottomSheetState();
@@ -81,12 +86,13 @@ class _ImageBottomSheetState extends State<ImageBottomSheet> {
                     _pickImage(ImageSource.gallery);
                   },
                 ),
-                ListTile(
-                  title: Text('기본 이미지로 변경', style: Typo(context).body2()),
-                  onTap: () {
-                    _pickImage(null);
-                  },
-                ),
+                if (widget.imageDefaultOption)
+                  ListTile(
+                    title: Text('기본 이미지로 변경', style: Typo(context).body2()),
+                    onTap: () {
+                      _pickImage(null);
+                    },
+                  ),
               ],
             ),
           ],

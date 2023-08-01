@@ -60,7 +60,22 @@ class CertificateImageInput extends StatelessWidget {
                         height: double.infinity,
                       );
                     }
-                    return const SizedBox();
+                    return Column(
+                      children: [
+                        const SizedBox(height: 45),
+                        const Icon(
+                          Icons.add,
+                          size: 26,
+                          color: AppColors.systemGrey2,
+                        ),
+                        Text(
+                          '인증 예시 넣기',
+                          style: Typo(context)
+                              .body4()!
+                              .copyWith(color: AppColors.systemGrey2),
+                        ),
+                      ],
+                    );
                   },
                 ),
               ),

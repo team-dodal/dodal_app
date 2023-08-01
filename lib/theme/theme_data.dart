@@ -120,6 +120,18 @@ ThemeData lightTheme = ThemeData(
       disabledForegroundColor: AppColors.systemGrey2,
     ),
   ),
+  tabBarTheme: const TabBarTheme(
+    indicatorSize: TabBarIndicatorSize.tab,
+    indicatorColor: AppColors.systemBlack,
+    labelStyle: TextStyle(fontWeight: FontWeight.bold),
+    unselectedLabelColor: AppColors.systemGrey2,
+    unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal),
+    labelColor: AppColors.systemBlack,
+    indicator: UnderlineTabIndicator(
+      borderRadius: BorderRadius.zero,
+      borderSide: BorderSide(width: 2),
+    ),
+  ),
   colorScheme: ColorScheme.fromSeed(seedColor: AppColors.orange)
       .copyWith(background: AppColors.bgColor1, primary: AppColors.orange),
 );

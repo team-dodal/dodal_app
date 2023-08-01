@@ -1,4 +1,5 @@
 import 'package:dodal_app/model/category_model.dart';
+import 'package:dodal_app/screens/challenge_list/main.dart';
 import 'package:dodal_app/services/category_service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
@@ -8,7 +9,14 @@ import 'dart:math' as math;
 
 class CategorySelect extends StatelessWidget {
   CategorySelect({super.key});
-  final Future<dynamic> _categories = CategoryService.getAllCategories();
+  final Future<List<Category>?> _categories =
+      CategoryService.getAllCategories();
+
+  _goListPage(context, Category category) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => ChallengeListScreen(selectedCategory: category),
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +65,7 @@ class CategorySelect extends StatelessWidget {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const SizedBox();
               }
-              final List<Category> categories = snapshot.data;
+              final List<Category> categories = snapshot.data!;
               return SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -67,7 +75,9 @@ class CategorySelect extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 6),
                         child: Material(
                           child: InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              _goListPage(context, category);
+                            },
                             child: Column(
                               children: [
                                 Container(
