@@ -8,15 +8,17 @@ class CategoryTabBar extends StatelessWidget implements PreferredSizeWidget {
   const CategoryTabBar({
     super.key,
     required this.tabController,
-    required this.categoryTabs,
+    required this.categories,
     required this.onCategoryTab,
     required this.categoryIndex,
+    required this.tagIndex,
   });
 
   final TabController tabController;
-  final List<Category> categoryTabs;
+  final List<Category> categories;
   final void Function(int) onCategoryTab;
   final int categoryIndex;
+  final int tagIndex;
 
   @override
   Size get preferredSize => const Size.fromHeight(CATEGORY_BAR_HEIGHT);
@@ -29,9 +31,8 @@ class CategoryTabBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           TabBar(
             controller: tabController,
-            tabs: categoryTabs
-                .map((category) => Tab(text: category.name))
-                .toList(),
+            tabs:
+                categories.map((category) => Tab(text: category.name)).toList(),
             onTap: (value) {
               onCategoryTab(value);
             },
@@ -42,7 +43,7 @@ class CategoryTabBar extends StatelessWidget implements PreferredSizeWidget {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  for (final tag in categoryTabs[categoryIndex].tags)
+                  for (final tag in categories[categoryIndex].tags)
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         vertical: 16,

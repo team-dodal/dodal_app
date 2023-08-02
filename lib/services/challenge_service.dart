@@ -43,4 +43,28 @@ class ChallengeService {
       return null;
     }
   }
+
+  static getChallengesByCategory({
+    required String categoryValue,
+    required String tagValue,
+    required int conditionCode,
+    required List<int> certCntList,
+    required int page,
+  }) async {
+    try {
+      final service = dio();
+      String requestUrl = '/api/v1/challenge/rooms/category?';
+      requestUrl +=
+          'category_value=$categoryValue&tag_value=$tagValue&condition_code=$conditionCode&';
+      for (final certCnt in certCntList) {
+        requestUrl += 'cert_cnt_list=$certCnt&';
+      }
+      requestUrl += 'page=$page&page_size=20;';
+      final res = await service.get(requestUrl);
+      return res.data['result'];
+    } on DioException catch (error) {
+      ResponseErrorDialog(error);
+      return null;
+    }
+  }
 }
