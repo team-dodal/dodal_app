@@ -1,9 +1,11 @@
 import 'package:dodal_app/model/category_model.dart';
+import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/screens/challenge_list/main.dart';
 import 'package:dodal_app/services/category_service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math' as math;
 
@@ -13,9 +15,14 @@ class CategorySelect extends StatelessWidget {
       CategoryService.getAllCategories();
 
   _goListPage(context, Category category) {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => ChallengeListScreen(selectedCategory: category),
-    ));
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => BlocProvider(
+          create: (ctx) => ChallengeListFilterCubit(category: category),
+          child: const ChallengeListScreen(),
+        ),
+      ),
+    );
   }
 
   @override

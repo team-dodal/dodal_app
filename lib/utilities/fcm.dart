@@ -87,16 +87,7 @@ class Fcm {
   }
 
   static Future<String?> getToken() async {
-    // ios
-    String? token;
-    if (defaultTargetPlatform == TargetPlatform.iOS ||
-        defaultTargetPlatform == TargetPlatform.macOS) {
-      token = await FirebaseMessaging.instance.getAPNSToken();
-    }
-    // aos
-    else {
-      token = await FirebaseMessaging.instance.getToken();
-    }
+    String? token = await FirebaseMessaging.instance.getToken();
     Fcm.token = token!;
     return token;
   }

@@ -18,6 +18,7 @@ Dio dio() {
       onRequest:
           (RequestOptions options, RequestInterceptorHandler handler) async {
         final accessToken = await secureStorage.read(key: 'accessToken');
+        print(accessToken);
         options.headers['Authorization'] = 'Bearer $accessToken';
         return handler.next(options);
       },

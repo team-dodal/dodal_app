@@ -59,7 +59,8 @@ class ChallengeService {
       for (final certCnt in certCntList) {
         requestUrl += 'cert_cnt_list=$certCnt&';
       }
-      requestUrl += 'page=$page&page_size=20;';
+      requestUrl += 'page=$page&page_size=20';
+      print(requestUrl);
       final res = await service.get(requestUrl);
       return res.data['result'];
     } on DioException catch (error) {
