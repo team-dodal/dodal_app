@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:dodal_app/model/tag_model.dart';
+import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/services/common/error_dialog.dart';
 import 'package:dodal_app/utilities/social_auth.dart';
 import 'common/main.dart';
@@ -13,29 +13,7 @@ class SignUpResponse {
         refreshToken = data['refresh_token'];
 }
 
-class UserResponse {
-  final int? id;
-  final String? email, nickname, content, profileUrl, socialType;
-  final DateTime? registerAt;
-  final List<Tag>? tagList;
-
-  UserResponse.formJson(Map<String, dynamic> data)
-      : id = data['user_id'],
-        email = data['email'],
-        nickname = data['nickname'],
-        content = data['content'],
-        profileUrl = data['profile_url'],
-        registerAt = data['register_at'] != null
-            ? DateTime.parse(data['register_at'])
-            : null,
-        socialType = data['social_type'],
-        tagList = (data['tag_list'] as List<dynamic>?)
-                ?.map((e) => Tag(name: e['name'], value: e['value']))
-                .toList() ??
-            [];
-}
-
-class SignInResponse extends UserResponse {
+class SignInResponse extends User {
   final String? accessToken, refreshToken;
   final bool isSigned;
 
@@ -44,10 +22,6 @@ class SignInResponse extends UserResponse {
         refreshToken = data['refresh_token'],
         isSigned = data['is_signed']!.toLowerCase() == 'true',
         super.formJson(data);
-}
-
-class ModifyUserResponse extends UserResponse {
-  ModifyUserResponse.fromJson(Map<String, dynamic> data) : super.formJson(data);
 }
 
 class UserService {
@@ -95,11 +69,11 @@ class UserService {
     }
   }
 
-  static Future<UserResponse?> user() async {
+  static Future<User?> user() async {
     try {
       final service = dio();
       final res = await service.get('/api/v1/users/me');
-      return UserResponse.formJson(res.data['result']);
+      return User.formJson(res.data['result']);
     } on DioException catch (err) {
       ResponseErrorDialog(err);
       return null;
@@ -132,7 +106,7 @@ class UserService {
       final service = dio();
       service.options.contentType = 'multipart/form-data';
       final res = await service.patch('/api/v1/users/me', data: formData);
-      return ModifyUserResponse.fromJson(res.data['result']);
+      return User.formJson(res.data['result']);
     } on DioException catch (err) {
       ResponseErrorDialog(err);
       return null;

@@ -34,7 +34,7 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
   }
 
   _submit() async {
-    ModifyUserResponse? res = await UserService.updateUser(
+    User? res = await UserService.updateUser(
       nickname: nicknameController.text,
       profileUrl: _imageUrl,
       profile: _uploadImage,
@@ -44,14 +44,14 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
     if (res == null) return;
     if (!mounted) return;
     context.read<UserCubit>().set(User(
-          id: res.id!,
-          email: res.email!,
-          nickname: res.nickname!,
-          content: res.content!,
+          id: res.id,
+          email: res.email,
+          nickname: res.nickname,
+          content: res.content,
           profileUrl: res.profileUrl,
-          registerAt: res.registerAt!,
-          socialType: res.socialType!,
-          tagList: res.tagList!,
+          registerAt: res.registerAt,
+          socialType: res.socialType,
+          tagList: res.tagList,
         ));
     Navigator.of(context).pop();
   }

@@ -1,3 +1,4 @@
+import 'package:dodal_app/model/challenge_model.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/services/challenge_service.dart';
 import 'package:dodal_app/widgets/challenge_list/tab_bar.dart';
@@ -56,13 +57,17 @@ class _ChallengeListScreenState extends State<ChallengeListScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(bottom: const ListTabBar()),
-      body: PagedListView<int, Challenge>(
-        pagingController: pagingController,
-        builderDelegate: PagedChildBuilderDelegate<Challenge>(
-          itemBuilder: (context, item, index) {
-            return Text(item.title);
-          },
-        ),
+      body: BlocBuilder<ChallengeListFilterCubit, ChallengeListFilter>(
+        builder: (context, state) {
+          return PagedListView<int, Challenge>(
+            pagingController: pagingController,
+            builderDelegate: PagedChildBuilderDelegate<Challenge>(
+              itemBuilder: (context, item, index) {
+                return Text(item.title);
+              },
+            ),
+          );
+        },
       ),
     );
   }

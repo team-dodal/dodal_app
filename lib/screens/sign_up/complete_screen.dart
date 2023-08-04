@@ -12,7 +12,7 @@ class CompleteSignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Future<UserResponse?> user = UserService.user();
+    final Future<User?> user = UserService.user();
     return Scaffold(
       body: FutureBuilder(
         future: user,
@@ -21,16 +21,16 @@ class CompleteSignUpScreen extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.done) {
             var user = snapshot.data!;
             context.read<UserCubit>().set(User(
-                  id: user.id!,
-                  email: user.email!,
-                  nickname: user.nickname!,
-                  content: user.content!,
+                  id: user.id,
+                  email: user.email,
+                  nickname: user.nickname,
+                  content: user.content,
                   profileUrl: user.profileUrl,
-                  registerAt: user.registerAt!,
-                  socialType: user.socialType!,
-                  tagList: user.tagList!,
+                  registerAt: user.registerAt,
+                  socialType: user.socialType,
+                  tagList: user.tagList,
                 ));
-            final String? nickname = snapshot.data!.nickname;
+            final String nickname = snapshot.data!.nickname;
             child = Column(
               children: [
                 Image.asset('assets/images/welcome_image.png'),

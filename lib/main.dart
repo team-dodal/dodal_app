@@ -38,18 +38,18 @@ class _AppState extends State<App> {
 
   checkingLoginStatus() async {
     try {
-      UserResponse? user = await UserService.user();
+      User? user = await UserService.user();
       if (user == null) return;
       if (!mounted) return;
       context.read<UserCubit>().set(User(
-            id: user.id!,
-            email: user.email!,
-            nickname: user.nickname!,
-            content: user.content!,
+            id: user.id,
+            email: user.email,
+            nickname: user.nickname,
+            content: user.content,
             profileUrl: user.profileUrl!,
-            registerAt: user.registerAt!,
-            socialType: user.socialType!,
-            tagList: user.tagList!,
+            registerAt: user.registerAt,
+            socialType: user.socialType,
+            tagList: user.tagList,
           ));
       setState(() {
         _isLogin = true;

@@ -19,6 +19,19 @@ class User extends Equatable {
     required this.tagList,
   });
 
+  User.formJson(Map<String, dynamic> data)
+      : id = data['user_id'],
+        email = data['email'],
+        nickname = data['nickname'],
+        content = data['content'],
+        profileUrl = data['profile_url'],
+        registerAt = DateTime.parse(data['register_at']),
+        socialType = data['social_type'],
+        tagList = (data['tag_list'] as List<dynamic>?)
+                ?.map((e) => Tag(name: e['name'], value: e['value']))
+                .toList() ??
+            [];
+
   @override
   bool get stringify => true;
 
