@@ -51,6 +51,7 @@ class ChallengeService {
     required int conditionCode,
     required List<int> certCntList,
     required int page,
+    required int pageSize,
   }) async {
     try {
       final service = dio();
@@ -60,7 +61,7 @@ class ChallengeService {
       for (final certCnt in certCntList) {
         requestUrl += 'cert_cnt_list=$certCnt&';
       }
-      requestUrl += 'page=$page&page_size=20';
+      requestUrl += 'page=$page&page_size=$pageSize';
       final res = await service.get(requestUrl);
       List<dynamic> contents = res.data['result']['content'];
       List<Challenge> result =

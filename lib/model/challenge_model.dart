@@ -1,6 +1,7 @@
 import 'package:dodal_app/model/tag_model.dart';
+import 'package:equatable/equatable.dart';
 
-class Challenge {
+class Challenge extends Equatable {
   final int id;
   final int adminId;
   final String adminNickname;
@@ -33,4 +34,26 @@ class Challenge {
         categoryName = data['category_name'],
         categoryValue = data['category_value'],
         tag = Tag(name: data['tag_name'], value: data['tag_value']);
+
+  @override
+  bool get stringify => true;
+
+  @override
+  List<Object> get props => [
+        id,
+        adminId,
+        adminNickname,
+        adminProfile.toString(),
+        title,
+        certCnt,
+        thumbnailImg.toString(),
+        recruitCnt,
+        userCnt,
+        bookmarkCnt,
+        bookmarkStatus,
+        registeredAt,
+        categoryName,
+        categoryValue,
+        tag,
+      ];
 }

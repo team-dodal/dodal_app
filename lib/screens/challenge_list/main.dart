@@ -1,7 +1,9 @@
 import 'package:dodal_app/model/challenge_model.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/services/challenge_service.dart';
-import 'package:dodal_app/widgets/challenge_list/tab_bar.dart';
+import 'package:dodal_app/theme/color.dart';
+import 'package:dodal_app/widgets/challenge_list/challenge_box.dart';
+import 'package:dodal_app/widgets/challenge_list/list_tab_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -13,8 +15,7 @@ class ChallengeListScreen extends StatefulWidget {
   State<ChallengeListScreen> createState() => _ChallengeListScreenState();
 }
 
-class _ChallengeListScreenState extends State<ChallengeListScreen>
-    with TickerProviderStateMixin {
+class _ChallengeListScreenState extends State<ChallengeListScreen> {
   static const pageSize = 20;
   final PagingController<int, Challenge> pagingController =
       PagingController(firstPageKey: 0);
@@ -27,6 +28,7 @@ class _ChallengeListScreenState extends State<ChallengeListScreen>
       conditionCode: state.conditionCode,
       certCntList: state.certCntList,
       page: pageKey,
+      pageSize: pageSize,
     );
     if (res == null) return;
     final isLastPage = res.length < pageSize;
@@ -57,18 +59,43 @@ class _ChallengeListScreenState extends State<ChallengeListScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(bottom: const ListTabBar()),
-      body: BlocBuilder<ChallengeListFilterCubit, ChallengeListFilter>(
-        builder: (context, state) {
-          return PagedListView<int, Challenge>(
+      body: BlocListener<ChallengeListFilterCubit, ChallengeListFilter>(
+          listener: (context, state) {
+            pagingController.refresh();
+          },
+          child: PagedListView<int, Challenge>(
             pagingController: pagingController,
             builderDelegate: PagedChildBuilderDelegate<Challenge>(
+              noItemsFoundIndicatorBuilder: (context) {
+                return Column(
+                  children: [
+                    Container(height: 8, color: AppColors.basicColor2),
+                  ],
+                );
+              },
               itemBuilder: (context, item, index) {
-                return Text(item.title);
+                return Column(
+                  children: [
+                    if (index == 0)
+                      Container(height: 8, color: AppColors.basicColor2),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: ChallengeBox(
+                        title: item.title,
+                        tag: item.tag,
+                        thumbnailImg: item.thumbnailImg,
+                        adminProfile: item.adminProfile,
+                        adminNickname: item.adminNickname,
+                        userCnt: item.userCnt,
+                        certCnt: item.certCnt,
+                        recruitCnt: item.recruitCnt,
+                      ),
+                    )
+                  ],
+                );
               },
             ),
-          );
-        },
-      ),
+          )),
     );
   }
 }

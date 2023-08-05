@@ -29,7 +29,6 @@ class ChallengePreviewScreen extends StatelessWidget {
       appBar: AppBar(),
       body: BlocBuilder<CreateChallengeCubit, CreateChallenge>(
           builder: (context, challenge) {
-        // print(challenge.tagValue!);
         return BlocBuilder<UserCubit, User?>(builder: (context, user) {
           return SingleChildScrollView(
             padding: const EdgeInsets.only(bottom: 100),

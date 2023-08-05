@@ -50,14 +50,14 @@ class SignInScreen extends StatelessWidget {
     if (context.mounted) {
       if (res.isSigned) {
         context.read<UserCubit>().set(User(
-              id: res.id!,
-              email: res.email!,
-              nickname: res.nickname!,
-              content: res.content!,
+              id: res.id,
+              email: res.email,
+              nickname: res.nickname,
+              content: res.content,
               profileUrl: res.profileUrl,
-              registerAt: res.registerAt!,
-              socialType: res.socialType!,
-              tagList: res.tagList!,
+              registerAt: res.registerAt,
+              socialType: res.socialType,
+              tagList: res.tagList,
             ));
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (ctx) => const MainRoute()),
