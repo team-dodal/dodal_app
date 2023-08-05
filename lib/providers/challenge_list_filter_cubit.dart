@@ -2,6 +2,8 @@ import 'package:dodal_app/model/category_model.dart';
 import 'package:dodal_app/model/tag_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+const CONDITION_LIST = ['인기순', '최신순', '인원 많은 순', '인원 작은 순'];
+
 class ChallengeListFilter {
   Category category;
   Tag tag;

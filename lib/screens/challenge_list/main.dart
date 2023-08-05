@@ -2,10 +2,13 @@ import 'package:dodal_app/model/challenge_model.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/services/challenge_service.dart';
 import 'package:dodal_app/theme/color.dart';
+import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/challenge_list/challenge_box.dart';
 import 'package:dodal_app/widgets/challenge_list/list_tab_bar.dart';
+import 'package:dodal_app/widgets/challenge_list/sort_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class ChallengeListScreen extends StatefulWidget {
@@ -40,6 +43,24 @@ class _ChallengeListScreenState extends State<ChallengeListScreen> {
     }
   }
 
+  _showBottomSheet() {
+    ChallengeListFilter cubit =
+        BlocProvider.of<ChallengeListFilterCubit>(context).state;
+
+    onChanged(value) {
+      context.read<ChallengeListFilterCubit>().updateData(conditionCode: value);
+      Navigator.pop(context);
+    }
+
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => SortBottomSheet(
+        cubit: cubit,
+        onChanged: onChanged,
+      ),
+    );
+  }
+
   @override
   void initState() {
     pagingController.addPageRequestListener((pageKey) {
@@ -61,41 +82,67 @@ class _ChallengeListScreenState extends State<ChallengeListScreen> {
       appBar: AppBar(bottom: const ListTabBar()),
       body: BlocListener<ChallengeListFilterCubit, ChallengeListFilter>(
           listener: (context, state) {
-            pagingController.refresh();
-          },
-          child: PagedListView<int, Challenge>(
-            pagingController: pagingController,
-            builderDelegate: PagedChildBuilderDelegate<Challenge>(
-              noItemsFoundIndicatorBuilder: (context) {
-                return Column(
-                  children: [
-                    Container(height: 8, color: AppColors.basicColor2),
-                  ],
-                );
-              },
-              itemBuilder: (context, item, index) {
-                return Column(
-                  children: [
-                    if (index == 0)
-                      Container(height: 8, color: AppColors.basicColor2),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: ChallengeBox(
-                        title: item.title,
-                        tag: item.tag,
-                        thumbnailImg: item.thumbnailImg,
-                        adminProfile: item.adminProfile,
-                        adminNickname: item.adminNickname,
-                        userCnt: item.userCnt,
-                        certCnt: item.certCnt,
-                        recruitCnt: item.recruitCnt,
-                      ),
-                    )
-                  ],
-                );
-              },
-            ),
-          )),
+        pagingController.refresh();
+      }, child: BlocBuilder<ChallengeListFilterCubit, ChallengeListFilter>(
+              builder: (context, state) {
+        return PagedListView<int, Challenge>(
+          pagingController: pagingController,
+          builderDelegate: PagedChildBuilderDelegate<Challenge>(
+            noItemsFoundIndicatorBuilder: (context) {
+              return Column(
+                children: [
+                  Container(height: 8, color: AppColors.basicColor2),
+                ],
+              );
+            },
+            itemBuilder: (context, item, index) {
+              return Column(
+                children: [
+                  if (index == 0)
+                    Column(
+                      children: [
+                        Container(height: 8, color: AppColors.basicColor2),
+                        Row(
+                          children: [
+                            TextButton(
+                              onPressed: _showBottomSheet,
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset(
+                                      'assets/icons/swap_icon.svg'),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    CONDITION_LIST[state.conditionCode],
+                                    style: Typo(context)
+                                        .body4()!
+                                        .copyWith(color: AppColors.systemGrey1),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: ChallengeBox(
+                      title: item.title,
+                      tag: item.tag,
+                      thumbnailImg: item.thumbnailImg,
+                      adminProfile: item.adminProfile,
+                      adminNickname: item.adminNickname,
+                      userCnt: item.userCnt,
+                      certCnt: item.certCnt,
+                      recruitCnt: item.recruitCnt,
+                    ),
+                  )
+                ],
+              );
+            },
+          ),
+        );
+      })),
     );
   }
 }
