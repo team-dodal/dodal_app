@@ -67,8 +67,8 @@ class ChallengeBox extends StatelessWidget {
                 children: [
                   SmallTag(text: tag.name),
                   const SizedBox(width: 4),
-                  const SmallTag(
-                    text: '인증 횟수',
+                  SmallTag(
+                    text: '주 $certCnt회',
                     backgroundColor: AppColors.systemGrey4,
                     foregroundColor: AppColors.systemGrey1,
                   ),

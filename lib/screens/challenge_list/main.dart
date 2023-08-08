@@ -1,14 +1,13 @@
 import 'package:dodal_app/model/challenge_model.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/services/challenge_service.dart';
-import 'package:dodal_app/theme/color.dart';
-import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/challenge_list/challenge_box.dart';
+import 'package:dodal_app/widgets/challenge_list/filter_top_bar.dart';
 import 'package:dodal_app/widgets/challenge_list/list_tab_bar.dart';
 import 'package:dodal_app/widgets/challenge_list/sort_bottom_sheet.dart';
+import 'package:dodal_app/widgets/common/no_list_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class ChallengeListScreen extends StatefulWidget {
@@ -89,41 +88,22 @@ class _ChallengeListScreenState extends State<ChallengeListScreen> {
           pagingController: pagingController,
           builderDelegate: PagedChildBuilderDelegate<Challenge>(
             noItemsFoundIndicatorBuilder: (context) {
-              return Column(
+              return const Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(height: 8, color: AppColors.basicColor2),
+                  FilterTopBar(),
+                  SizedBox(height: 130),
+                  NoListContext(
+                    title: '카테고리 관련 도전이 없습니다.',
+                    subTitle: '도전 그룹을 운영해 보는 건 어떠세요?',
+                  ),
                 ],
               );
             },
             itemBuilder: (context, item, index) {
               return Column(
                 children: [
-                  if (index == 0)
-                    Column(
-                      children: [
-                        Container(height: 8, color: AppColors.basicColor2),
-                        Row(
-                          children: [
-                            TextButton(
-                              onPressed: _showBottomSheet,
-                              child: Row(
-                                children: [
-                                  SvgPicture.asset(
-                                      'assets/icons/swap_icon.svg'),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    CONDITION_LIST[state.conditionCode],
-                                    style: Typo(context)
-                                        .body4()!
-                                        .copyWith(color: AppColors.systemGrey1),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
+                  if (index == 0) const FilterTopBar(),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: ChallengeBox(

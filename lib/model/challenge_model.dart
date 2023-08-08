@@ -20,9 +20,9 @@ class Challenge extends Equatable {
 
   Challenge.fromJson(Map<String, dynamic> data)
       : id = data['challenge_room_id'],
-        adminId = data['user_id'],
-        adminNickname = data['nickname'],
-        adminProfile = data['profile_url'],
+        adminId = data['host_id'],
+        adminNickname = data['host_nickname'],
+        adminProfile = data['host_profile_url'],
         title = data['title'],
         certCnt = data['cert_cnt'],
         thumbnailImg = data['thumbnail_img_url'],
