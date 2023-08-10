@@ -28,10 +28,8 @@ Dio dio() {
         // 엑세스 토큰이 만료되었을때
         if (e.response?.statusCode == 401) {
           final newAccessToken = await requestNewAccessToken();
-          await secureStorage.write(
-            key: 'accessToken',
-            value: newAccessToken,
-          );
+          if (newAccessToken == null) return;
+          await secureStorage.write(key: 'accessToken', value: newAccessToken);
           e.requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
           dynamic requestData = createRequestData(e);
           final clonedRequest = await createCloneRequest(dio, e, requestData);
@@ -49,9 +47,10 @@ requestNewAccessToken() async {
   try {
     var service = await refreshDio();
     final res = await service.post('/api/v1/users/access-token');
+
     return res.data['result']['access_token'];
   } catch (err) {
-    return Exception(err);
+    return null;
   }
 }
 

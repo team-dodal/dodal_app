@@ -4,7 +4,7 @@ import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
-class CountBottomSheet extends StatelessWidget {
+class CountBottomSheet extends StatefulWidget {
   const CountBottomSheet({
     super.key,
     required this.cubit,
@@ -12,7 +12,23 @@ class CountBottomSheet extends StatelessWidget {
   });
 
   final ChallengeListFilter cubit;
-  final void Function(int) onChanged;
+  final void Function(List<int>) onChanged;
+
+  @override
+  State<CountBottomSheet> createState() => _CountBottomSheetState();
+}
+
+class _CountBottomSheetState extends State<CountBottomSheet> {
+  _selectIndex(int i) {
+    if (widget.cubit.certCntList.contains(i)) {
+      final clone = widget.cubit.certCntList;
+      clone.remove(i);
+      widget.onChanged(clone);
+    } else {
+      widget.onChanged([...widget.cubit.certCntList, i]);
+    }
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,10 +70,21 @@ class CountBottomSheet extends StatelessWidget {
                   crossAxisCount: 4,
                   childAspectRatio: 82 / 46,
                   children: [
-                    const CountButton(text: '전체'),
-                    for (final i in [1, 2, 3, 4, 5, 6])
-                      CountButton(text: '주 $i회'),
-                    const CountButton(text: '매일')
+                    CountButton(
+                      text: '전체',
+                      selected: widget.cubit.certCntList.length == 7,
+                      onPressed: () {
+                        widget.onChanged([1, 2, 3, 4, 5, 6, 7]);
+                      },
+                    ),
+                    for (final i in [1, 2, 3, 4, 5, 6, 7])
+                      CountButton(
+                        text: i != 7 ? '주 $i회' : '매일',
+                        selected: widget.cubit.certCntList.contains(i),
+                        onPressed: () {
+                          _selectIndex(i);
+                        },
+                      ),
                   ],
                 ),
               ),
