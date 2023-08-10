@@ -4,7 +4,6 @@ import 'package:dodal_app/services/challenge_service.dart';
 import 'package:dodal_app/widgets/challenge_list/challenge_box.dart';
 import 'package:dodal_app/widgets/challenge_list/filter_top_bar.dart';
 import 'package:dodal_app/widgets/challenge_list/list_tab_bar.dart';
-import 'package:dodal_app/widgets/challenge_list/sort_bottom_sheet.dart';
 import 'package:dodal_app/widgets/common/no_list_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,24 +39,6 @@ class _ChallengeListScreenState extends State<ChallengeListScreen> {
       final nextPageKey = pageKey + res.length;
       pagingController.appendPage(res, nextPageKey);
     }
-  }
-
-  _showBottomSheet() {
-    ChallengeListFilter cubit =
-        BlocProvider.of<ChallengeListFilterCubit>(context).state;
-
-    onChanged(value) {
-      context.read<ChallengeListFilterCubit>().updateData(conditionCode: value);
-      Navigator.pop(context);
-    }
-
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => SortBottomSheet(
-        cubit: cubit,
-        onChanged: onChanged,
-      ),
-    );
   }
 
   @override

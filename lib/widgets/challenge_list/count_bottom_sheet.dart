@@ -3,31 +3,28 @@ import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CountBottomSheet extends StatefulWidget {
-  const CountBottomSheet({
-    super.key,
-    required this.cubit,
-    required this.onChanged,
-  });
+class CountBottomSheet extends StatelessWidget {
+  const CountBottomSheet({super.key});
 
-  final ChallengeListFilter cubit;
-  final void Function(List<int>) onChanged;
-
-  @override
-  State<CountBottomSheet> createState() => _CountBottomSheetState();
-}
-
-class _CountBottomSheetState extends State<CountBottomSheet> {
-  _selectIndex(int i) {
-    if (widget.cubit.certCntList.contains(i)) {
-      final clone = widget.cubit.certCntList;
+  _onChanged(BuildContext context, List<int> certCntList, int i) {
+    if (certCntList.contains(i)) {
+      if (certCntList.length <= 1) return;
+      final clone = certCntList;
       clone.remove(i);
-      widget.onChanged(clone);
+      context.read<ChallengeListFilterCubit>().updateData(certCntList: clone);
     } else {
-      widget.onChanged([...widget.cubit.certCntList, i]);
+      context
+          .read<ChallengeListFilterCubit>()
+          .updateData(certCntList: [...certCntList, i]);
     }
-    setState(() {});
+  }
+
+  _changeAll(BuildContext context) {
+    context
+        .read<ChallengeListFilterCubit>()
+        .updateData(certCntList: [1, 2, 3, 4, 5, 6, 7]);
   }
 
   @override
@@ -64,29 +61,34 @@ class _CountBottomSheetState extends State<CountBottomSheet> {
             ),
             Padding(
               padding: const EdgeInsets.all(20),
-              child: SizedBox(
-                height: 120,
-                child: GridView.count(
-                  crossAxisCount: 4,
-                  childAspectRatio: 82 / 46,
-                  children: [
-                    CountButton(
-                      text: '전체',
-                      selected: widget.cubit.certCntList.length == 7,
-                      onPressed: () {
-                        widget.onChanged([1, 2, 3, 4, 5, 6, 7]);
-                      },
+              child: BlocBuilder<ChallengeListFilterCubit, ChallengeListFilter>(
+                builder: (context, state) {
+                  final certCntList = state.certCntList;
+                  return SizedBox(
+                    height: 120,
+                    child: GridView.count(
+                      crossAxisCount: 4,
+                      childAspectRatio: 82 / 46,
+                      children: [
+                        CountButton(
+                          text: '전체',
+                          selected: certCntList.length == 7,
+                          onPressed: () {
+                            _changeAll(context);
+                          },
+                        ),
+                        for (final i in [1, 2, 3, 4, 5, 6, 7])
+                          CountButton(
+                            text: i != 7 ? '주 $i회' : '매일',
+                            selected: certCntList.contains(i),
+                            onPressed: () {
+                              _onChanged(context, certCntList, i);
+                            },
+                          ),
+                      ],
                     ),
-                    for (final i in [1, 2, 3, 4, 5, 6, 7])
-                      CountButton(
-                        text: i != 7 ? '주 $i회' : '매일',
-                        selected: widget.cubit.certCntList.contains(i),
-                        onPressed: () {
-                          _selectIndex(i);
-                        },
-                      ),
-                  ],
-                ),
+                  );
+                },
               ),
             ),
           ],

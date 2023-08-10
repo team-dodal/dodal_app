@@ -3,17 +3,18 @@ import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class SortBottomSheet extends StatelessWidget {
-  const SortBottomSheet({
-    super.key,
-    required this.cubit,
-    required this.onChanged,
-  });
+  const SortBottomSheet({super.key});
 
-  final ChallengeListFilter cubit;
-  final void Function(int) onChanged;
+  _onTap(BuildContext context, String condition) {
+    context
+        .read<ChallengeListFilterCubit>()
+        .updateData(conditionCode: CONDITION_LIST.indexOf(condition));
+    Navigator.pop(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,25 +43,29 @@ class SortBottomSheet extends StatelessWidget {
                 ),
               ),
             ),
-            Column(
-              children: [
-                for (final condition in CONDITION_LIST)
-                  ListTile(
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(condition, style: Typo(context).body2()),
-                        if (CONDITION_LIST.indexOf(condition) ==
-                            cubit.conditionCode)
-                          SvgPicture.asset('assets/icons/check_icon.svg')
-                      ],
+            BlocBuilder<ChallengeListFilterCubit, ChallengeListFilter>(
+                builder: (context, state) {
+              final conditionCode = state.conditionCode;
+              return Column(
+                children: [
+                  for (final condition in CONDITION_LIST)
+                    ListTile(
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(condition, style: Typo(context).body2()),
+                          if (CONDITION_LIST.indexOf(condition) ==
+                              conditionCode)
+                            SvgPicture.asset('assets/icons/check_icon.svg')
+                        ],
+                      ),
+                      onTap: () {
+                        _onTap(context, condition);
+                      },
                     ),
-                    onTap: () {
-                      onChanged(CONDITION_LIST.indexOf(condition));
-                    },
-                  ),
-              ],
-            ),
+                ],
+              );
+            }),
           ],
         ),
       ),

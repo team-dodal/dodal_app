@@ -10,40 +10,23 @@ import 'dart:math' as math;
 
 class FilterTopBar extends StatelessWidget {
   const FilterTopBar({super.key});
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
 
   _showCountBottomSheet(BuildContext context) {
-    ChallengeListFilter cubit =
-        BlocProvider.of<ChallengeListFilterCubit>(context).state;
-
-    onChanged(List<int> value) {
-      context.read<ChallengeListFilterCubit>().updateData(certCntList: value);
-    }
-
     showModalBottomSheet(
       context: context,
-      builder: (context) => CountBottomSheet(
-        cubit: cubit,
-        onChanged: onChanged,
+      builder: (_) => BlocProvider.value(
+        value: BlocProvider.of<ChallengeListFilterCubit>(context),
+        child: const CountBottomSheet(),
       ),
     );
   }
 
   _showSortBottomSheet(BuildContext context) {
-    ChallengeListFilter cubit =
-        BlocProvider.of<ChallengeListFilterCubit>(context).state;
-
-    onChanged(value) {
-      context.read<ChallengeListFilterCubit>().updateData(conditionCode: value);
-      Navigator.pop(context);
-    }
-
     showModalBottomSheet(
       context: context,
-      builder: (context) => SortBottomSheet(
-        cubit: cubit,
-        onChanged: onChanged,
+      builder: (_) => BlocProvider.value(
+        value: BlocProvider.of<ChallengeListFilterCubit>(context),
+        child: const SortBottomSheet(),
       ),
     );
   }
@@ -53,7 +36,6 @@ class FilterTopBar extends StatelessWidget {
     return BlocBuilder<ChallengeListFilterCubit, ChallengeListFilter>(
         builder: (context, state) {
       return Column(
-        key: ,
         children: [
           Container(height: 8, color: AppColors.basicColor2),
           Padding(
