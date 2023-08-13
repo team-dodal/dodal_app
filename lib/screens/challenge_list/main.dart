@@ -87,15 +87,18 @@ class _ChallengeListScreenState extends State<ChallengeListScreen> {
                   if (index == 0) const FilterTopBar(),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: ChallengeBox(
-                      title: item.title,
-                      tag: item.tag,
-                      thumbnailImg: item.thumbnailImg,
-                      adminProfile: item.adminProfile,
-                      adminNickname: item.adminNickname,
-                      userCnt: item.userCnt,
-                      certCnt: item.certCnt,
-                      recruitCnt: item.recruitCnt,
+                    child: InkWell(
+                      onTap: () {},
+                      child: ChallengeBox(
+                        title: item.title,
+                        tag: item.tag,
+                        thumbnailImg: item.thumbnailImg,
+                        adminProfile: item.adminProfile,
+                        adminNickname: item.adminNickname,
+                        userCnt: item.userCnt,
+                        certCnt: item.certCnt,
+                        recruitCnt: item.recruitCnt,
+                      ),
                     ),
                   )
                 ],

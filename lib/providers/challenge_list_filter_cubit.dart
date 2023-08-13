@@ -51,6 +51,9 @@ class ChallengeListFilterCubit extends Cubit<ChallengeListFilter> {
     int? conditionCode,
     List<int>? certCntList,
   }) {
+    if (certCntList != null) {
+      certCntList.sort();
+    }
     final updatedState = state.copyWith(
       category: category,
       tag: tag,

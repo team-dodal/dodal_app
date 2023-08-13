@@ -1,6 +1,9 @@
+import 'package:dodal_app/providers/create_challenge_cubit.dart';
+import 'package:dodal_app/screens/create_challenge/main.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class NoListContext extends StatelessWidget {
@@ -31,13 +34,19 @@ class NoListContext extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         TextButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (ctx) => BlocProvider(
+                  create: (context) => CreateChallengeCubit(),
+                  child: const CreateChallengeScreen(),
+                ),
+              ),
+            );
+          },
           style: TextButton.styleFrom(
             side: const BorderSide(color: AppColors.systemGrey3),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 12,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           ),
           child: Text(
             '도전 생성하기',

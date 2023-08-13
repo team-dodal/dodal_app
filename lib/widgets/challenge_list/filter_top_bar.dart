@@ -1,12 +1,12 @@
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
+import 'package:dodal_app/widgets/challenge_list/cert_cnt_button.dart';
 import 'package:dodal_app/widgets/challenge_list/count_bottom_sheet.dart';
 import 'package:dodal_app/widgets/challenge_list/sort_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'dart:math' as math;
 
 class FilterTopBar extends StatelessWidget {
   const FilterTopBar({super.key});
@@ -43,34 +43,7 @@ class FilterTopBar extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TextButton(
-                  onPressed: () {
-                    _showCountBottomSheet(context);
-                  },
-                  style: TextButton.styleFrom(
-                    side: const BorderSide(color: AppColors.systemGrey3),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 8,
-                    ),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        '주 3회',
-                        style: Typo(context)
-                            .body4()!
-                            .copyWith(color: AppColors.systemGrey1),
-                      ),
-                      const SizedBox(width: 4),
-                      Transform.rotate(
-                        angle: math.pi,
-                        child: SvgPicture.asset('assets/icons/arrow_icon.svg'),
-                      ),
-                    ],
-                  ),
-                ),
+                CertCountButton(onPress: _showCountBottomSheet),
                 TextButton(
                   onPressed: () {
                     _showSortBottomSheet(context);
