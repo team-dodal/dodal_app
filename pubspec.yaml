@@ -58,6 +58,7 @@ dependencies:
   flutter_image_compress: ^2.0.4
   dio_cache_interceptor: ^3.4.2
   infinite_scroll_pagination: ^3.2.0
+  openapi_generator_annotations: ^4.11.0
 
 dev_dependencies:
   flutter_test:
@@ -69,6 +70,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  openapi_generator: ^4.11.0
+  build_runner: ^2.4.6
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -31,10 +31,7 @@ class _ChallengeScreenState extends State<ChallengeScreen>
       children: [
         TabBar(
           controller: _tabController,
-          tabs: const [
-            Tab(text: '진행 중인 도전'),
-            Tab(text: '운영 중인 도전'),
-          ],
+          tabs: const [Tab(text: '진행 중인 도전'), Tab(text: '운영 중인 도전')],
           indicatorSize: TabBarIndicatorSize.tab,
           onTap: (value) {
             setState(() {

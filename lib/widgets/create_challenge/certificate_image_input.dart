@@ -61,8 +61,8 @@ class CertificateImageInput extends StatelessWidget {
                       );
                     }
                     return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const SizedBox(height: 45),
                         const Icon(
                           Icons.add,
                           size: 26,

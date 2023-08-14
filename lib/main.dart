@@ -64,10 +64,10 @@ class _AppState extends State<App> {
   @override
   void initState() {
     checkingLoginStatus();
-    FirebaseMessaging.onMessage.listen(Fcm.foregroundNotification);
-    FirebaseMessaging.onBackgroundMessage(Fcm.backgroundNotification);
     FlutterNativeSplash.remove();
     super.initState();
+    FirebaseMessaging.onMessage.listen(Fcm.foregroundNotification);
+    FirebaseMessaging.onBackgroundMessage(Fcm.backgroundNotification);
   }
 
   @override

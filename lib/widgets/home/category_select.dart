@@ -57,7 +57,6 @@ class CategorySelect extends StatelessWidget {
                         child: SvgPicture.asset(
                           'assets/icons/arrow_icon.svg',
                           width: 12,
-                          // height: 10,
                         ),
                       ),
                     ],
@@ -93,6 +92,12 @@ class CategorySelect extends StatelessWidget {
                                   decoration: const BoxDecoration(
                                     color: AppColors.lightYellow,
                                     shape: BoxShape.circle,
+                                  ),
+                                  child: SvgPicture.asset(
+                                    category.iconPath,
+                                    width: 12,
+                                    height: 12,
+                                    fit: BoxFit.scaleDown,
                                   ),
                                 ),
                                 const SizedBox(height: 4),

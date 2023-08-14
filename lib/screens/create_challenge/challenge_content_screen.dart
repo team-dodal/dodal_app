@@ -41,8 +41,6 @@ class _ChallengeContentScreenState extends State<ChallengeContentScreen> {
     final state = BlocProvider.of<CreateChallengeCubit>(context).state;
     if (state.certCnt == null) return false;
     if (state.certContent == null || state.certContent == '') return false;
-    if (state.certCorrectImg == null) return false;
-    if (state.certWrongImg == null) return false;
     return true;
   }
 
@@ -111,7 +109,6 @@ class _ChallengeContentScreenState extends State<ChallengeContentScreen> {
                 const InputTitle(
                   title: '인증 예시',
                   subTitle: '사진을 통해 인증 성공과 실패 예시를 추가해주세요.',
-                  required: true,
                 ),
                 const SizedBox(height: 10),
                 Row(

@@ -7,10 +7,28 @@ class Category {
     required this.value,
     required this.emoji,
     required this.tags,
-  });
+  }) {
+    iconPath = getIconPath(value);
+  }
 
   final String name, subName, value, emoji;
   final List<Tag> tags;
+  late String iconPath;
+
+  getIconPath(value) {
+    switch (value) {
+      case '001':
+        return 'assets/icons/health_category_icon.svg';
+      case '002':
+        return 'assets/icons/book_category_icon.svg';
+      case '003':
+        return 'assets/icons/clock_category_icon.svg';
+      case '004':
+        return 'assets/icons/pen_category_icon.svg';
+      case '005':
+        return 'assets/icons/light_category_icon.svg';
+    }
+  }
 }
 
 List<Category> parseCategoriesByJson(Map<String, dynamic> data) {

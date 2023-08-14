@@ -72,4 +72,15 @@ class ChallengeService {
       return null;
     }
   }
+
+  static Future<Challenge?> getChallengeOne({required int challengeId}) async {
+    try {
+      final service = dio();
+      final res = await service.get('/api/v1/challenge/rooms/$challengeId');
+      return null;
+    } on DioException catch (error) {
+      ResponseErrorDialog(error);
+      return null;
+    }
+  }
 }

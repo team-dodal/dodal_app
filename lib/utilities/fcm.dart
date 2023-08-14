@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dodal_app/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -18,20 +16,18 @@ class Fcm {
     if (isFlutterLocalNotificationsInitialized) {
       return;
     }
-    if (Platform.isAndroid) {
-      channel = const AndroidNotificationChannel(
-        'high_importance_channel',
-        'High Importance Channel',
-        description: 'notification',
-        importance: Importance.high,
-      );
+    channel = const AndroidNotificationChannel(
+      'high_importance_channel',
+      'High Importance Channel',
+      description: 'notification',
+      importance: Importance.high,
+    );
 
-      flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-      await flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>()
-          ?.createNotificationChannel(channel);
-    }
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
 
     await Fcm.requestPermission();
     // 토큰 요청
@@ -59,12 +55,12 @@ class Fcm {
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
     if (notification != null && android != null && !kIsWeb) {
-      // 웹이 아니면서 안드로이드이고, 알림이 있는경우
       flutterLocalNotificationsPlugin.show(
         notification.hashCode,
         notification.title,
         notification.body,
         NotificationDetails(
+          iOS: const DarwinNotificationDetails(),
           android: AndroidNotificationDetails(
             channel.id,
             channel.name,
@@ -83,7 +79,6 @@ class Fcm {
       options: DefaultFirebaseOptions.currentPlatform,
     );
     await Fcm.setupNotifications(); // 셋팅 메소드
-    //showFlutterNotification(message);  // 로컬노티
   }
 
   static Future<String?> getToken() async {

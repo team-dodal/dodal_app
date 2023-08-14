@@ -3,9 +3,8 @@ import 'package:dodal_app/providers/create_challenge_cubit.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
-import 'package:dodal_app/widgets/common/avatar_image.dart';
 import 'package:dodal_app/widgets/common/input_title.dart';
-import 'package:dodal_app/widgets/common/small_tag.dart';
+import 'package:dodal_app/widgets/common/room_info_box.dart';
 import 'package:dodal_app/widgets/common/submit_button.dart';
 import 'package:dodal_app/widgets/create_challenge/certificate_image_input.dart';
 import 'package:flutter/material.dart';
@@ -54,65 +53,13 @@ class ChallengePreviewScreen extends StatelessWidget {
                     },
                   ),
                 ),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 24,
-                    horizontal: 20,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(children: [
-                        SmallTag(text: challenge.tagValue!.name),
-                        const SizedBox(width: 4),
-                        const SmallTag(
-                          text: '인증횟수',
-                          foregroundColor: AppColors.systemGrey1,
-                          backgroundColor: AppColors.systemGrey4,
-                        ),
-                      ]),
-                      const SizedBox(height: 12),
-                      Text(
-                        challenge.title!,
-                        style: Typo(context)
-                            .headline2()!
-                            .copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 12),
-                      Row(children: [
-                        AvatarImage(
-                          image: user!.profileUrl,
-                          width: 24,
-                          height: 24,
-                        ),
-                        const SizedBox(width: 6),
-                        Text(
-                          '${user.nickname} · ',
-                          style: Typo(context)
-                              .body4()!
-                              .copyWith(color: AppColors.systemGrey2),
-                        ),
-                        const Icon(
-                          Icons.person,
-                          color: AppColors.systemGrey2,
-                          size: 20,
-                        ),
-                        Text(
-                          '멤버 1',
-                          style: Typo(context)
-                              .body4()!
-                              .copyWith(color: AppColors.systemBlack),
-                        ),
-                        Text(
-                          '/${challenge.recruitCnt}',
-                          style: Typo(context)
-                              .body4()!
-                              .copyWith(color: AppColors.systemGrey2),
-                        ),
-                      ]),
-                    ],
-                  ),
+                RoomInfoBox(
+                  title: challenge.title!,
+                  tagName: challenge.tagValue!.name,
+                  adminProfile: user!.profileUrl,
+                  adminNickname: user.nickname,
+                  maxMember: 1,
+                  curMember: challenge.recruitCnt!,
                 ),
                 Container(
                   width: double.infinity,
@@ -172,24 +119,27 @@ class ChallengePreviewScreen extends StatelessWidget {
                     children: [
                       const InputTitle(
                         title: '인증 예시',
-                        required: true,
                         subTitle: '사진을 통해 인증 성공과 실패 예시를 추가해주세요.',
                       ),
                       const SizedBox(height: 16),
                       Row(
                         children: [
                           Expanded(
-                            child: CertificateImageInput(
-                              image: challenge.certCorrectImg,
-                              certOption: CertOption.correct,
-                            ),
+                            child: challenge.certCorrectImg != null
+                                ? CertificateImageInput(
+                                    image: challenge.certCorrectImg,
+                                    certOption: CertOption.correct,
+                                  )
+                                : const SizedBox(),
                           ),
                           const SizedBox(width: 8),
                           Expanded(
-                            child: CertificateImageInput(
-                              image: challenge.certWrongImg,
-                              certOption: CertOption.wrong,
-                            ),
+                            child: challenge.certWrongImg != null
+                                ? CertificateImageInput(
+                                    image: challenge.certWrongImg,
+                                    certOption: CertOption.wrong,
+                                  )
+                                : const SizedBox(),
                           )
                         ],
                       ),

@@ -1,5 +1,7 @@
+import 'package:animations/animations.dart';
 import 'package:dodal_app/model/challenge_model.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
+import 'package:dodal_app/screens/challenge_preview/main.dart';
 import 'package:dodal_app/services/challenge_service.dart';
 import 'package:dodal_app/widgets/challenge_list/challenge_box.dart';
 import 'package:dodal_app/widgets/challenge_list/filter_top_bar.dart';
@@ -87,18 +89,25 @@ class _ChallengeListScreenState extends State<ChallengeListScreen> {
                   if (index == 0) const FilterTopBar(),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: InkWell(
-                      onTap: () {},
-                      child: ChallengeBox(
-                        title: item.title,
-                        tag: item.tag,
-                        thumbnailImg: item.thumbnailImg,
-                        adminProfile: item.adminProfile,
-                        adminNickname: item.adminNickname,
-                        userCnt: item.userCnt,
-                        certCnt: item.certCnt,
-                        recruitCnt: item.recruitCnt,
-                      ),
+                    child: OpenContainer(
+                      transitionType: ContainerTransitionType.fadeThrough,
+                      closedBuilder: (context, action) {
+                        return InkWell(
+                          onTap: action,
+                          child: ChallengeBox(
+                            title: item.title,
+                            tag: item.tag,
+                            thumbnailImg: item.thumbnailImg,
+                            adminProfile: item.adminProfile,
+                            adminNickname: item.adminNickname,
+                            userCnt: item.userCnt,
+                            certCnt: item.certCnt,
+                            recruitCnt: item.recruitCnt,
+                          ),
+                        );
+                      },
+                      openBuilder: (context, action) =>
+                          ChallengePreviewScreen(id: item.id),
                     ),
                   )
                 ],
