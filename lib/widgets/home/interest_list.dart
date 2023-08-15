@@ -3,6 +3,8 @@ import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
+import 'package:dodal_app/widgets/challenge_list/challenge_box.dart';
+import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,7 +20,7 @@ class InterestList extends StatelessWidget {
           height: 202,
           decoration: const BoxDecoration(color: AppColors.lightYellow),
         ),
-        Container(
+        SizedBox(
           child: Column(
             children: [
               Padding(
@@ -53,68 +55,85 @@ class InterestList extends StatelessWidget {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 414,
-                  child: BlocBuilder<UserCubit, User?>(
-                    builder: (context, state) {
-                      List<Tag> tagList = state!.tagList;
-                      return PageView.builder(
-                        itemCount: tagList.length,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Container(
-                              height: double.infinity,
-                              decoration: const BoxDecoration(
-                                color: AppColors.systemWhite,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(16)),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: AppColors.systemGrey3,
-                                    offset: Offset(0, 0),
-                                    blurRadius: 4,
-                                    blurStyle: BlurStyle.outer,
-                                  )
-                                ],
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 24,
-                                  horizontal: 20,
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '불끈불끈 건강 💪',
-                                      style: Typo(context).body1()!.copyWith(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      '#체력 키우기 #살기 위해 한다',
-                                      style: Typo(context).body4()!.copyWith(
-                                          color: AppColors.systemGrey1),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ),
+              BlocBuilder<UserCubit, User?>(
+                builder: (context, state) {
+                  List<Tag> tagList = state!.tagList;
+                  return ExpandablePageView.builder(
+                    itemCount: tagList.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) =>
+                        InterestCategoryCard(tagList: tagList),
+                  );
+                },
               )
             ],
           ),
         ),
       ],
+    );
+  }
+}
+
+class InterestCategoryCard extends StatelessWidget {
+  const InterestCategoryCard({super.key, required this.tagList});
+
+  final List<Tag> tagList;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+        decoration: const BoxDecoration(
+          color: AppColors.systemWhite,
+          borderRadius: BorderRadius.all(Radius.circular(16)),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.systemGrey3,
+              offset: Offset(0, 0),
+              blurRadius: 4,
+              blurStyle: BlurStyle.outer,
+            )
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '불끈불끈 건강 💪',
+              style:
+                  Typo(context).body1()!.copyWith(fontWeight: FontWeight.bold),
+            ),
+            Text(
+              '#체력 키우기 #살기 위해 한다',
+              style:
+                  Typo(context).body4()!.copyWith(color: AppColors.systemGrey1),
+            ),
+            Column(
+              children: [
+                for (final i in [1, 2, 3])
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 20,
+                    ),
+                    child: ChallengeBox(
+                      title: '타이틀',
+                      thumbnailImg: null,
+                      tag: tagList[0],
+                      adminProfile: '',
+                      adminNickname: '어드민',
+                      recruitCnt: 20,
+                      userCnt: 4,
+                      certCnt: 5,
+                    ),
+                  )
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
