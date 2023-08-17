@@ -1,8 +1,9 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dodal_app/model/challenge_model.dart';
+import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/services/common/error_dialog.dart';
-import 'common/main.dart';
+import 'package:dodal_app/services/common/main.dart';
 
 class ChallengeService {
   static createChallenge({
@@ -73,11 +74,12 @@ class ChallengeService {
     }
   }
 
-  static Future<Challenge?> getChallengeOne({required int challengeId}) async {
+  static Future<OneChallengeResponse?> getChallengeOne(
+      {required int challengeId}) async {
     try {
       final service = dio();
       final res = await service.get('/api/v1/challenge/rooms/$challengeId');
-      return null;
+      return OneChallengeResponse.fromJson(res.data['result']);
     } on DioException catch (error) {
       ResponseErrorDialog(error);
       return null;

@@ -15,7 +15,7 @@ class CertificateImageInput extends StatelessWidget {
     required this.certOption,
   });
 
-  final File? image;
+  final dynamic image;
   final void Function(File?)? onChange;
   final CertOption certOption;
 
@@ -51,14 +51,27 @@ class CertificateImageInput extends StatelessWidget {
                 decoration: const BoxDecoration(color: AppColors.systemGrey4),
                 child: Builder(
                   builder: (context) {
-                    if (image != null) {
-                      return FadeInImage(
-                        placeholder: MemoryImage(kTransparentImage),
-                        image: FileImage(image!),
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        height: double.infinity,
-                      );
+                    if (image != null && image != null) {
+                      if (image is File) {
+                        return FadeInImage(
+                          placeholder: MemoryImage(kTransparentImage),
+                          image: FileImage(image!),
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
+                        );
+                      } else {
+                        return FadeInImage.memoryNetwork(
+                          placeholder: kTransparentImage,
+                          image: image,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
+                          imageErrorBuilder: (context, error, stackTrace) {
+                            return const SizedBox();
+                          },
+                        );
+                      }
                     }
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.center,

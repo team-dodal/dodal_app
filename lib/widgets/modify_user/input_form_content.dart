@@ -1,6 +1,5 @@
 import 'dart:io';
-
-import 'package:dodal_app/services/user_service.dart';
+import 'package:dodal_app/services/user/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/text_input.dart';

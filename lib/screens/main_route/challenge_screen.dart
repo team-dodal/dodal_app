@@ -1,3 +1,5 @@
+import 'package:dodal_app/services/manage_challenge/response.dart';
+import 'package:dodal_app/services/manage_challenge/service.dart';
 import 'package:dodal_app/widgets/common/no_list_context.dart';
 import 'package:flutter/material.dart';
 
@@ -39,17 +41,34 @@ class _ChallengeScreenState extends State<ChallengeScreen>
             });
           },
         ),
-        const Padding(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            children: [
-              SizedBox(height: 130),
-              NoListContext(
-                title: '운영 중인 도전이 없습니다.',
-                subTitle: '도전 그룹을 운영해 보는 건 어떠세요?',
-              ),
-            ],
-          ),
+        FutureBuilder(
+          future: ManageChallengeService.myChallenges(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState != ConnectionState.done) {
+              return const SizedBox();
+            }
+            List<MyChallengesResponse> list = snapshot.data!;
+            if (list.isEmpty) {
+              return const Padding(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    SizedBox(height: 130),
+                    NoListContext(
+                      title: '운영 중인 도전이 없습니다.',
+                      subTitle: '도전 그룹을 운영해 보는 건 어떠세요?',
+                    ),
+                  ],
+                ),
+              );
+            } else {
+              return Column(
+                children: [
+                  for (final myChallenge in list) Text(myChallenge.title)
+                ],
+              );
+            }
+          },
         ),
       ],
     );

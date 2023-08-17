@@ -13,7 +13,7 @@ class Challenge extends Equatable {
   final int userCnt;
   final int bookmarkCnt;
   final bool bookmarkStatus;
-  final DateTime registeredAt;
+  final DateTime? registeredAt;
   final String categoryName;
   final String categoryValue;
   final Tag tag;
@@ -30,7 +30,9 @@ class Challenge extends Equatable {
         userCnt = data['user_cnt'],
         bookmarkCnt = data['bookmark_cnt'],
         bookmarkStatus = data['bookmark_yn'] == 'Y' ? true : false,
-        registeredAt = DateTime.parse(data['registered_at']),
+        registeredAt = data['registered_at']
+            ? DateTime.parse(data['registered_at'])
+            : null,
         categoryName = data['category_name'],
         categoryValue = data['category_value'],
         tag = Tag(name: data['tag_name'], value: data['tag_value']);
@@ -51,7 +53,7 @@ class Challenge extends Equatable {
         userCnt,
         bookmarkCnt,
         bookmarkStatus,
-        registeredAt,
+        registeredAt.toString(),
         categoryName,
         categoryValue,
         tag,

@@ -1,9 +1,8 @@
 import 'dart:io';
-
 import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
-import 'package:dodal_app/services/user_service.dart';
+import 'package:dodal_app/services/user/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/modify_user/input_form_content.dart';
 import 'package:dodal_app/widgets/modify_user/tag_select_content.dart';

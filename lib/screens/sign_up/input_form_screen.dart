@@ -1,5 +1,5 @@
 import 'package:dodal_app/providers/create_user_cubit.dart';
-import 'package:dodal_app/services/user_service.dart';
+import 'package:dodal_app/services/user/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/create_form_title.dart';

@@ -2,7 +2,7 @@ import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/screens/main_route/main.dart';
 import 'package:dodal_app/screens/sign_in/main.dart';
-import 'package:dodal_app/services/user_service.dart';
+import 'package:dodal_app/services/user/service.dart';
 import 'package:dodal_app/theme/theme_data.dart';
 import 'package:dodal_app/utilities/fcm.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';

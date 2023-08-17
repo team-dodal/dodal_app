@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:dodal_app/model/category_model.dart';
 import 'package:dodal_app/services/common/error_dialog.dart';
 
-import 'common/main.dart';
+import '../common/main.dart';
 
 class CategoryService {
   static Future<List<Category>?> getAllCategories() async {

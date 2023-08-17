@@ -3,14 +3,15 @@ import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/providers/create_user_cubit.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/screens/main_route/main.dart';
+import 'package:dodal_app/screens/sign_up/main.dart';
+import 'package:dodal_app/services/user/response.dart';
+import 'package:dodal_app/services/user/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
+import 'package:dodal_app/utilities/social_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import '../../services/user_service.dart';
-import '../../utilities/social_auth.dart';
-import '../sign_up/main.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class SignInScreen extends StatelessWidget {

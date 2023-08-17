@@ -5,7 +5,7 @@ import 'package:dodal_app/screens/main_route/home_screen.dart';
 import 'package:dodal_app/screens/main_route/mypage_screen.dart';
 import 'package:dodal_app/screens/notification/main.dart';
 import 'package:dodal_app/screens/settings_menu/main.dart';
-import 'package:dodal_app/services/user_service.dart';
+import 'package:dodal_app/services/user/service.dart';
 import 'package:dodal_app/utilities/fcm.dart';
 import 'package:flutter/material.dart';
 import '../../model/navigation_route.dart';

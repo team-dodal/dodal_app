@@ -1,6 +1,6 @@
 import 'package:dodal_app/model/category_model.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
-import 'package:dodal_app/services/category_service.dart';
+import 'package:dodal_app/services/category/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:flutter/material.dart';

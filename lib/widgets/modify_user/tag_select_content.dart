@@ -1,6 +1,6 @@
 import 'package:dodal_app/model/category_model.dart';
 import 'package:dodal_app/model/tag_model.dart';
-import 'package:dodal_app/services/category_service.dart';
+import 'package:dodal_app/services/category/service.dart';
 import 'package:dodal_app/widgets/common/category_content.dart';
 import 'package:dodal_app/widgets/common/create_form_title.dart';
 import 'package:flutter/material.dart';

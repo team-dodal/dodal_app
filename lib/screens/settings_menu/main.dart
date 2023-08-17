@@ -1,6 +1,6 @@
 import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/screens/sign_in/main.dart';
-import 'package:dodal_app/services/user_service.dart';
+import 'package:dodal_app/services/user/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

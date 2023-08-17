@@ -2,7 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:dodal_app/model/challenge_model.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/screens/challenge_preview/main.dart';
-import 'package:dodal_app/services/challenge_service.dart';
+import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/widgets/challenge_list/challenge_box.dart';
 import 'package:dodal_app/widgets/challenge_list/filter_top_bar.dart';
 import 'package:dodal_app/widgets/challenge_list/list_tab_bar.dart';

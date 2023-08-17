@@ -2,27 +2,9 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/services/common/error_dialog.dart';
+import 'package:dodal_app/services/common/main.dart';
+import 'package:dodal_app/services/user/response.dart';
 import 'package:dodal_app/utilities/social_auth.dart';
-import 'common/main.dart';
-
-class SignUpResponse {
-  String? accessToken, refreshToken;
-
-  SignUpResponse.fromJson(Map<String, dynamic> data)
-      : accessToken = data['access_token'],
-        refreshToken = data['refresh_token'];
-}
-
-class SignInResponse extends User {
-  final String? accessToken, refreshToken;
-  final bool isSigned;
-
-  SignInResponse.fromJson(Map<String, dynamic> data)
-      : accessToken = data['access_token'],
-        refreshToken = data['refresh_token'],
-        isSigned = data['is_signed']!.toLowerCase() == 'true',
-        super.formJson(data);
-}
 
 class UserService {
   static signIn(SocialType socialType, String socialId) async {
