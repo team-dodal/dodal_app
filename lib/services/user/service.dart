@@ -13,8 +13,10 @@ class UserService {
       final res = await service.post('/api/v1/users/sign-in',
           data: {"social_type": socialType.name, "social_id": socialId});
       return SignInResponse.fromJson(res.data['result']);
-    } on DioException catch (err) {
-      throw Exception(err);
+    } on DioException catch (error) {
+      ResponseErrorDialog(error);
+    } catch (error) {
+      return null;
     }
   }
 

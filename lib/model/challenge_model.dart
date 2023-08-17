@@ -12,7 +12,8 @@ class Challenge extends Equatable {
   final int recruitCnt;
   final int userCnt;
   final int bookmarkCnt;
-  final bool bookmarkStatus;
+  final bool isBookmarked;
+  final bool isJoined;
   final DateTime? registeredAt;
   final String categoryName;
   final String categoryValue;
@@ -29,8 +30,9 @@ class Challenge extends Equatable {
         recruitCnt = data['recruit_cnt'],
         userCnt = data['user_cnt'],
         bookmarkCnt = data['bookmark_cnt'],
-        bookmarkStatus = data['bookmark_yn'] == 'Y' ? true : false,
-        registeredAt = data['registered_at']
+        isBookmarked = data['bookmark_yn'] == 'Y',
+        isJoined = data['join_yn'] == 'Y',
+        registeredAt = data['registered_at'] != null
             ? DateTime.parse(data['registered_at'])
             : null,
         categoryName = data['category_name'],
@@ -52,7 +54,8 @@ class Challenge extends Equatable {
         recruitCnt,
         userCnt,
         bookmarkCnt,
-        bookmarkStatus,
+        isBookmarked,
+        isJoined,
         registeredAt.toString(),
         categoryName,
         categoryValue,

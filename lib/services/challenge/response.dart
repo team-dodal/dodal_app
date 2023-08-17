@@ -8,11 +8,11 @@ class OneChallengeResponse {
   final String title;
   final int hostId;
   final String hostNickname;
-  final String hostProfileUrl;
+  final String? hostProfileUrl;
   final int userCnt;
   final int recruitCnt;
   final String content;
-  final List<String?> feedUrlList;
+  final List<dynamic> feedUrlList;
   final String certContent;
   final String? certCorrectImgUrl;
   final String? certWrongImgUrl;
@@ -48,7 +48,7 @@ class OneChallengeResponse {
         accuseCnt = data['accuse_cnt'],
         noticeTitle = data['notice_title'],
         noticeContent = data['notice_content'],
-        registeredAt = data['registered_at']
+        registeredAt = data['registered_at'] != null
             ? DateTime.parse(data['registered_at'])
             : null;
 }

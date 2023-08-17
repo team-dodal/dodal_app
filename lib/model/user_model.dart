@@ -5,7 +5,7 @@ class User extends Equatable {
   final int id;
   final String email, nickname, content, socialType;
   final String? profileUrl;
-  final DateTime registerAt;
+  final DateTime? registerAt;
   final List<Tag> tagList;
 
   const User({
@@ -25,7 +25,9 @@ class User extends Equatable {
         nickname = data['nickname'],
         content = data['content'],
         profileUrl = data['profile_url'],
-        registerAt = DateTime.parse(data['register_at']),
+        registerAt = data['register_at'] != null
+            ? DateTime.parse(data['register_at'])
+            : null,
         socialType = data['social_type'],
         tagList = (data['tag_list'] as List<dynamic>?)
                 ?.map((e) => Tag(name: e['name'], value: e['value']))
@@ -42,7 +44,7 @@ class User extends Equatable {
         nickname,
         content,
         profileUrl.toString(),
-        registerAt,
+        registerAt.toString(),
         socialType,
         tagList.toString(),
       ];

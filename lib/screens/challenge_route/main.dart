@@ -1,13 +1,12 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/helper/slide_page_route.dart';
+import 'package:dodal_app/model/navigation_route.dart';
 import 'package:dodal_app/screens/create_feed/main.dart';
 import 'package:dodal_app/screens/group_settings_menu/main.dart';
-import 'package:dodal_app/screens/group_route/chat_screen.dart';
-import 'package:dodal_app/screens/group_route/home_feed_screen.dart';
-import 'package:dodal_app/screens/group_route/ranking_screen.dart';
+import 'package:dodal_app/screens/challenge_route/chat_screen.dart';
+import 'package:dodal_app/screens/challenge_route/home_feed_screen.dart';
+import 'package:dodal_app/screens/challenge_route/ranking_screen.dart';
 import 'package:flutter/material.dart';
-
-import '../../model/navigation_route.dart';
 
 final List<NavigationRoute> tabRoute = [
   NavigationRoute(name: '홈', screen: const HomeFeedScreen()),
@@ -15,14 +14,15 @@ final List<NavigationRoute> tabRoute = [
   NavigationRoute(name: '랭킹', screen: const RankingScreen()),
 ];
 
-class GroupRoute extends StatefulWidget {
-  const GroupRoute({super.key});
+class ChallengeRoute extends StatefulWidget {
+  const ChallengeRoute({super.key});
 
   @override
-  State<GroupRoute> createState() => _GroupRouteState();
+  State<ChallengeRoute> createState() => _ChallengeRouteState();
 }
 
-class _GroupRouteState extends State<GroupRoute> with TickerProviderStateMixin {
+class _ChallengeRouteState extends State<ChallengeRoute>
+    with TickerProviderStateMixin {
   int _currentIndex = 0;
   late TabController _tabController;
 

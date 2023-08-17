@@ -43,13 +43,13 @@ class SignInScreen extends StatelessWidget {
     }
     if (id == null && email == null) return;
 
-    SignInResponse res = await UserService.signIn(type, id as String);
+    SignInResponse? res = await UserService.signIn(type, id as String);
 
-    secureStorage.write(key: 'accessToken', value: res.accessToken);
-    secureStorage.write(key: 'refreshToken', value: res.refreshToken);
+    if (res != null && res.isSigned) {
+      secureStorage.write(key: 'accessToken', value: res.accessToken);
+      secureStorage.write(key: 'refreshToken', value: res.refreshToken);
 
-    if (context.mounted) {
-      if (res.isSigned) {
+      if (context.mounted) {
         context.read<UserCubit>().set(User(
               id: res.id,
               email: res.email,
@@ -64,7 +64,9 @@ class SignInScreen extends StatelessWidget {
           MaterialPageRoute(builder: (ctx) => const MainRoute()),
           (route) => false,
         );
-      } else {
+      }
+    } else {
+      if (context.mounted) {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (ctx) => BlocProvider(

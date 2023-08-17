@@ -85,4 +85,15 @@ class ChallengeService {
       return null;
     }
   }
+
+  static join({required int challengeId}) async {
+    try {
+      final service = dio();
+      await service.post('/api/v1/challenge/rooms/$challengeId/join');
+      return true;
+    } on DioException catch (error) {
+      ResponseErrorDialog(error);
+      return false;
+    }
+  }
 }

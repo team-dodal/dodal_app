@@ -4,7 +4,7 @@ class MyChallengesResponse {
   final int id;
   final int adminId;
   final String adminNickname;
-  final String adminProfileUrl;
+  final String? adminProfileUrl;
   final String title;
   final int certCnt;
   final String? thumbnailImg;
@@ -31,7 +31,7 @@ class MyChallengesResponse {
         userCnt = data['user_cnt'],
         bookmarkCnt = data['bookmark_cnt'],
         bookmarkYn = data['bookmark_yn'] == 'Y',
-        registeredAt = data['registered_at']
+        registeredAt = data['registered_at'] != null
             ? DateTime.parse(data['registered_at'])
             : null,
         categoryName = data['category_name'],
