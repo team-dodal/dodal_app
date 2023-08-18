@@ -80,7 +80,8 @@ class CountBottomSheet extends StatelessWidget {
                         for (final i in [1, 2, 3, 4, 5, 6, 7])
                           CountButton(
                             text: i != 7 ? '주 $i회' : '매일',
-                            selected: certCntList.contains(i),
+                            selected: certCntList.length != 7 &&
+                                certCntList.contains(i),
                             onPressed: () {
                               _onChanged(context, certCntList, i);
                             },
@@ -132,7 +133,7 @@ class CountButton extends StatelessWidget {
           child: Text(
             text,
             style: Typo(context).body2()!.copyWith(
-                fontWeight: FontWeight.w500,
+                fontWeight: selected ? FontWeight.bold : FontWeight.w500,
                 color:
                     selected ? AppColors.systemWhite : AppColors.systemBlack),
           ),

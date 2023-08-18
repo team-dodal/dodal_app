@@ -63,12 +63,12 @@ class JoinedList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: ManageChallengeService.myChallenges(),
+      future: ManageChallengeService.joinedChallenges(),
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return const SizedBox();
         }
-        List<MyChallengesResponse> list = snapshot.data!;
+        List<JoinedChallengesResponse> list = snapshot.data!;
         if (list.isEmpty) {
           return const Padding(
             padding: EdgeInsets.all(16),
@@ -98,19 +98,30 @@ class AdminList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
+      future: ManageChallengeService.hostChallenges(),
       builder: (context, snapshot) {
-        return const Padding(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            children: [
-              SizedBox(height: 130),
-              NoListContext(
-                title: '운영 중인 도전이 없습니다.',
-                subTitle: '도전 그룹을 운영해 보는 건 어떠세요?',
-              ),
-            ],
-          ),
-        );
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const SizedBox();
+        }
+        List<HostChallengesResponse> list = snapshot.data!;
+        if (list.isEmpty) {
+          return const Padding(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              children: [
+                SizedBox(height: 130),
+                NoListContext(
+                  title: '운영 중인 도전이 없습니다.',
+                  subTitle: '도전 그룹을 운영해 보는 건 어떠세요?',
+                ),
+              ],
+            ),
+          );
+        } else {
+          return Column(
+            children: [for (final challenge in list) Text(challenge.title)],
+          );
+        }
       },
     );
   }
