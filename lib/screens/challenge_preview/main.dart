@@ -3,7 +3,7 @@ import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
-import 'package:dodal_app/widgets/common/input_title.dart';
+import 'package:dodal_app/widgets/challenge_preview/feed_img_content.dart';
 import 'package:dodal_app/widgets/common/room_info_box.dart';
 import 'package:dodal_app/widgets/common/room_thumbnail_image.dart';
 import 'package:dodal_app/widgets/common/submit_button.dart';
@@ -75,9 +75,10 @@ class PreviewScreen extends StatelessWidget {
             title: challenge.title,
             tagName: challenge.tag.name,
             adminProfile: challenge.hostProfileUrl,
+            certCnt: challenge.certCnt,
             adminNickname: challenge.hostNickname,
-            maxMember: challenge.userCnt,
-            curMember: challenge.recruitCnt,
+            maxMember: challenge.recruitCnt,
+            curMember: challenge.userCnt,
           ),
           Container(
             width: double.infinity,
@@ -93,26 +94,53 @@ class PreviewScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('인증 방법',
-                    style: Typo(context)
-                        .body1()!
-                        .copyWith(fontWeight: FontWeight.bold)),
+                Text(
+                  '저희의 도전을 소개해요',
+                  style: Typo(context)
+                      .body1()!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
                 const SizedBox(height: 8),
                 Text(
-                  challenge.certContent,
-                  style: Typo(context).body2(),
+                  challenge.content,
+                  style: Typo(context)
+                      .body2()!
+                      .copyWith(color: AppColors.systemGrey1),
+                ),
+                const SizedBox(height: 32),
+                Text(
+                  '저희의 도전을 모아봐요',
+                  style: Typo(context)
+                      .body1()!
+                      .copyWith(fontWeight: FontWeight.bold),
                 ),
               ],
             ),
           ),
+          FeedImgContent(feedList: challenge.feedUrlList),
+          Container(
+            width: double.infinity,
+            height: 8,
+            decoration: const BoxDecoration(color: AppColors.systemGrey4),
+          ),
+          const SizedBox(height: 32),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                InputTitle(
-                  title: '이렇게 인증해요',
-                  subTitle: challenge.certContent,
+                Text(
+                  '이렇게 인증해요',
+                  style: Typo(context)
+                      .body1()!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  challenge.certContent,
+                  style: Typo(context)
+                      .body2()!
+                      .copyWith(color: AppColors.systemGrey1),
                 ),
                 const SizedBox(height: 16),
                 Row(

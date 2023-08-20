@@ -47,6 +47,7 @@ class NoListContext extends StatelessWidget {
           style: TextButton.styleFrom(
             side: const BorderSide(color: AppColors.systemGrey3),
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            backgroundColor: AppColors.systemWhite,
           ),
           child: Text(
             '도전 생성하기',

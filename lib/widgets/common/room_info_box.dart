@@ -13,11 +13,12 @@ class RoomInfoBox extends StatelessWidget {
     required this.adminNickname,
     required this.maxMember,
     required this.curMember,
+    required this.certCnt,
   });
 
   final String title, tagName, adminNickname;
   final String? adminProfile;
-  final int maxMember, curMember;
+  final int maxMember, curMember, certCnt;
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +34,8 @@ class RoomInfoBox extends StatelessWidget {
           Row(children: [
             SmallTag(text: tagName),
             const SizedBox(width: 4),
-            const SmallTag(
-              text: '인증횟수',
+            SmallTag(
+              text: '주 $certCnt회',
               foregroundColor: AppColors.systemGrey1,
               backgroundColor: AppColors.systemGrey4,
             ),
@@ -57,7 +58,7 @@ class RoomInfoBox extends StatelessWidget {
             Text(
               '$adminNickname · ',
               style:
-                  Typo(context).body4()!.copyWith(color: AppColors.systemGrey2),
+                  Typo(context).body4()!.copyWith(color: AppColors.systemGrey1),
             ),
             const Icon(
               Icons.person,

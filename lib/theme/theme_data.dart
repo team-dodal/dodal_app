@@ -123,6 +123,7 @@ ThemeData lightTheme = ThemeData(
   tabBarTheme: const TabBarTheme(
     indicatorSize: TabBarIndicatorSize.tab,
     indicatorColor: AppColors.systemBlack,
+    dividerColor: AppColors.bgColor2,
     labelStyle: TextStyle(fontWeight: FontWeight.bold),
     unselectedLabelColor: AppColors.systemGrey2,
     unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal),

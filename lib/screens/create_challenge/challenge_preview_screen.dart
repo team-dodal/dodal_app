@@ -40,6 +40,7 @@ class ChallengePreviewScreen extends StatelessWidget {
                     tagName: challenge.tagValue!.name,
                     adminProfile: user!.profileUrl,
                     adminNickname: user.nickname,
+                    certCnt: challenge.certCnt!,
                     curMember: 1,
                     maxMember: challenge.recruitCnt!,
                   ),
@@ -84,7 +85,7 @@ class ChallengePreviewScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('인증 방법',
+                        Text('이렇게 인증해요',
                             style: Typo(context)
                                 .body1()!
                                 .copyWith(fontWeight: FontWeight.bold)),

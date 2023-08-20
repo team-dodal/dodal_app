@@ -27,9 +27,20 @@ class ChallengeService {
         'recruit_cnt': recruitCnt,
         'cert_cnt': certCnt,
         'cert_content': certContent,
-        'cert_correct_img': await MultipartFile.fromFile(certCorrectImg!.path),
-        'cert_wrong_img': await MultipartFile.fromFile(certWrongImg!.path)
       });
+
+      if (certCorrectImg != null) {
+        formData.files.add(MapEntry(
+          'cert_correct_img',
+          await MultipartFile.fromFile(certCorrectImg.path),
+        ));
+      }
+      if (certWrongImg != null) {
+        formData.files.add(MapEntry(
+          'cert_wrong_img',
+          await MultipartFile.fromFile(certWrongImg.path),
+        ));
+      }
 
       if (thumbnailImg != null) {
         formData.files.add(MapEntry(

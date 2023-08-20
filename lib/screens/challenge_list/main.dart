@@ -2,6 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:dodal_app/model/challenge_model.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/screens/challenge_preview/main.dart';
+import 'package:dodal_app/screens/challenge_route/main.dart';
 import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/widgets/challenge_list/challenge_box.dart';
 import 'package:dodal_app/widgets/challenge_list/filter_top_bar.dart';
@@ -88,9 +89,11 @@ class _ChallengeListScreenState extends State<ChallengeListScreen> {
                 children: [
                   if (index == 0) const FilterTopBar(),
                   Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: OpenContainer(
                       transitionType: ContainerTransitionType.fadeThrough,
+                      closedElevation: 0,
                       closedBuilder: (context, action) {
                         return InkWell(
                           onTap: action,
@@ -106,8 +109,9 @@ class _ChallengeListScreenState extends State<ChallengeListScreen> {
                           ),
                         );
                       },
-                      openBuilder: (context, action) =>
-                          ChallengePreviewScreen(id: item.id),
+                      openBuilder: (context, action) => item.isJoined
+                          ? const ChallengeRoute()
+                          : ChallengePreviewScreen(id: item.id),
                     ),
                   )
                 ],

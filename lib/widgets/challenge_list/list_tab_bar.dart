@@ -60,6 +60,8 @@ class _ListTabBarState extends State<ListTabBar> with TickerProviderStateMixin {
         child: Column(
           children: [
             TabBar(
+              labelStyle:
+                  Typo(context).body2()!.copyWith(fontWeight: FontWeight.bold),
               controller: tabController,
               tabs: _categories
                   .map((category) => Tab(text: category.name))
@@ -112,6 +114,9 @@ class _ListTabBarState extends State<ListTabBar> with TickerProviderStateMixin {
                             child: Text(
                               tag.name,
                               style: Typo(context).body4()!.copyWith(
+                                    fontWeight: tag == state.tag
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
                                     color: tag == state.tag
                                         ? AppColors.systemWhite
                                         : AppColors.systemGrey1,

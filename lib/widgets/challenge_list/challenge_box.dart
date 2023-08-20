@@ -30,7 +30,8 @@ class ChallengeBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      color: AppColors.systemWhite,
       height: 90,
       child: Row(
         children: [
