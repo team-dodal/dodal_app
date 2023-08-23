@@ -26,79 +26,14 @@ class FeedImgContent extends StatelessWidget {
       );
     }
 
-    return Column(
+    return GridView.count(
+      crossAxisCount: 3,
+      crossAxisSpacing: 3,
+      mainAxisSpacing: 3,
+      childAspectRatio: 1,
+      shrinkWrap: true,
       children: [
-        Row(
-          children: [
-            Flexible(
-              flex: 1,
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: Container(
-                  color: Colors.red,
-                  height: 100,
-                ),
-              ),
-            ),
-            const SizedBox(width: 3),
-            Flexible(
-              flex: 1,
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: Container(
-                  color: Colors.blue,
-                  height: 100,
-                ),
-              ),
-            ),
-            const SizedBox(width: 3),
-            Flexible(
-              flex: 1,
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: Container(
-                  color: Colors.red,
-                ),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 3),
-        Row(
-          children: [
-            Flexible(
-              flex: 1,
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: Container(
-                  color: Colors.red,
-                  height: 100,
-                ),
-              ),
-            ),
-            const SizedBox(width: 3),
-            Flexible(
-              flex: 1,
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: Container(
-                  color: Colors.blue,
-                  height: 100,
-                ),
-              ),
-            ),
-            const SizedBox(width: 3),
-            Flexible(
-              flex: 1,
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: Container(
-                  color: Colors.red,
-                ),
-              ),
-            ),
-          ],
-        ),
+        for (final i in [1, 2, 3, 4, 5, 6]) Container(color: Colors.blue)
       ],
     );
   }

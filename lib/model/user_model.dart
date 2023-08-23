@@ -1,3 +1,4 @@
+import 'package:dodal_app/model/category_model.dart';
 import 'package:dodal_app/model/tag_model.dart';
 import 'package:equatable/equatable.dart';
 
@@ -6,6 +7,7 @@ class User extends Equatable {
   final String email, nickname, content, socialType;
   final String? profileUrl;
   final DateTime? registerAt;
+  final List<MyCategory> categoryList;
   final List<Tag> tagList;
 
   const User({
@@ -16,6 +18,7 @@ class User extends Equatable {
     required this.profileUrl,
     required this.registerAt,
     required this.socialType,
+    required this.categoryList,
     required this.tagList,
   });
 
@@ -29,6 +32,16 @@ class User extends Equatable {
             ? DateTime.parse(data['register_at'])
             : null,
         socialType = data['social_type'],
+        categoryList = (data['category_list'] as List<dynamic>?)
+                ?.map((e) => MyCategory(
+                      name: e['name'],
+                      subName: e['sub_name'],
+                      value: e['value'],
+                      emoji: e['emoji'],
+                      hashTags: e['hash_tags'],
+                    ))
+                .toList() ??
+            [],
         tagList = (data['tag_list'] as List<dynamic>?)
                 ?.map((e) => Tag(name: e['name'], value: e['value']))
                 .toList() ??

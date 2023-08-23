@@ -118,6 +118,7 @@ class PreviewScreen extends StatelessWidget {
             ),
           ),
           FeedImgContent(feedList: challenge.feedUrlList),
+          const SizedBox(height: 32),
           Container(
             width: double.infinity,
             height: 8,

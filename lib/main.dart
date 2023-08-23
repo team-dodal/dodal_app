@@ -49,6 +49,7 @@ class _AppState extends State<App> {
             profileUrl: user.profileUrl!,
             registerAt: user.registerAt,
             socialType: user.socialType,
+            categoryList: user.categoryList,
             tagList: user.tagList,
           ));
       setState(() {

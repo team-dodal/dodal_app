@@ -28,6 +28,7 @@ class CompleteSignUpScreen extends StatelessWidget {
                   profileUrl: user.profileUrl,
                   registerAt: user.registerAt,
                   socialType: user.socialType,
+                  categoryList: user.categoryList,
                   tagList: user.tagList,
                 ));
             final String nickname = snapshot.data!.nickname;

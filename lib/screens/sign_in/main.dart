@@ -58,6 +58,7 @@ class SignInScreen extends StatelessWidget {
               profileUrl: res.profileUrl,
               registerAt: res.registerAt,
               socialType: res.socialType,
+              categoryList: res.categoryList,
               tagList: res.tagList,
             ));
         Navigator.of(context).pushAndRemoveUntil(

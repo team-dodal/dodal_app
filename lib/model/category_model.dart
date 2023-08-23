@@ -31,6 +31,18 @@ class Category {
   }
 }
 
+class MyCategory {
+  final String name, subName, value, emoji, hashTags;
+
+  MyCategory({
+    required this.name,
+    required this.subName,
+    required this.value,
+    required this.emoji,
+    required this.hashTags,
+  });
+}
+
 List<Category> parseCategoriesByJson(Map<String, dynamic> data) {
   final List<dynamic> categoryList = data['categories'];
   final List<Category> categories = categoryList.map((categoryData) {
