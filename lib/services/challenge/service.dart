@@ -107,4 +107,102 @@ class ChallengeService {
       return false;
     }
   }
+
+  static out({required int challengeId}) async {
+    try {
+      final service = dio();
+      await service.delete('/api/v1/challenge/rooms/$challengeId/join');
+      return true;
+    } on DioException catch (error) {
+      ResponseErrorDialog(error);
+      return false;
+    }
+  }
+
+  static createNoti({
+    required int roomId,
+    required String title,
+    required String content,
+  }) async {
+    try {
+      final service = dio();
+      await service.post(
+        '/api/v1/challenge/rooms/$roomId/noti',
+        data: {title: title, content: content},
+      );
+      return true;
+    } on DioException catch (error) {
+      ResponseErrorDialog(error);
+      return false;
+    }
+  }
+
+  static getNotiList({required int roomId}) async {
+    try {
+      final service = dio();
+      final res = await service.get('/api/v1/challenge/rooms/$roomId/noti');
+      final List<dynamic> result = res.data['result'];
+      return result
+          .map((noti) => ChallengeRoomNotiResponse.fromJson(noti))
+          .toList();
+    } on DioException catch (error) {
+      ResponseErrorDialog(error);
+      return false;
+    }
+  }
+
+  static updateNoti({
+    required int roomId,
+    required int notiId,
+    required String title,
+    required String content,
+  }) async {
+    try {
+      final service = dio();
+      await service.patch(
+        '/api/v1/challenge/rooms/$roomId/noti/$notiId',
+        data: {title: title, content: content},
+      );
+      return true;
+    } on DioException catch (error) {
+      ResponseErrorDialog(error);
+      return false;
+    }
+  }
+
+  static deleteNoti({required int roomId, required int notiId}) async {
+    try {
+      final service = dio();
+      await service.delete('/api/v1/challenge/rooms/$roomId/noti/$notiId');
+      return true;
+    } on DioException catch (error) {
+      ResponseErrorDialog(error);
+      return false;
+    }
+  }
+
+  static createFeed({
+    required int challengeId,
+    required String content,
+    required File image,
+  }) async {
+    try {
+      final service = dio();
+      service.options.contentType = 'multipart/form-data';
+      FormData formData = FormData.fromMap({'content': content});
+      formData.files.add(MapEntry(
+        'certification_img',
+        await MultipartFile.fromFile(image.path),
+      ));
+      await service.post(
+        '/api/v1/challenge/rooms/$challengeId/certification',
+        data: formData,
+      );
+
+      return true;
+    } on DioException catch (error) {
+      ResponseErrorDialog(error);
+      return null;
+    }
+  }
 }

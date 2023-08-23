@@ -52,3 +52,27 @@ class OneChallengeResponse {
             ? DateTime.parse(data['registered_at'])
             : null;
 }
+
+class ChallengeRoomNotiResponse {
+  final int notiId;
+  final int roomId;
+  final String title;
+  final String content;
+  final DateTime? date;
+
+  ChallengeRoomNotiResponse({
+    required this.notiId,
+    required this.roomId,
+    required this.title,
+    required this.content,
+    required this.date,
+  });
+
+  ChallengeRoomNotiResponse.fromJson(Map<String, dynamic> data)
+      : notiId = data['noti_id'],
+        roomId = data['room_id'],
+        title = data['title'],
+        content = data['content'],
+        date =
+            data['date'] != null ? DateTime.parse(data['registered_at']) : null;
+}
