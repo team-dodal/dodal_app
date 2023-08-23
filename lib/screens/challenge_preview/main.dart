@@ -28,7 +28,7 @@ class _ChallengePreviewScreenState extends State<ChallengePreviewScreen> {
     if (res) {
       if (!mounted) return;
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => const ChallengeRoute()),
+        MaterialPageRoute(builder: (context) => ChallengeRoute(id: widget.id)),
         (route) => route.isFirst,
       );
     }

@@ -110,7 +110,7 @@ class _ChallengeListScreenState extends State<ChallengeListScreen> {
                         );
                       },
                       openBuilder: (context, action) => item.isJoined
-                          ? const ChallengeRoute()
+                          ? ChallengeRoute(id: item.id)
                           : ChallengePreviewScreen(id: item.id),
                     ),
                   )

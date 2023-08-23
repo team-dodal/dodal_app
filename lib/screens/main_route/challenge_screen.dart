@@ -105,7 +105,8 @@ class JoinedList extends StatelessWidget {
                         return InkWell(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const ChallengeRoute(),
+                              builder: (context) =>
+                                  ChallengeRoute(id: list[index].id),
                             ));
                           },
                           child: JoinedChallengeBox(
@@ -174,7 +175,9 @@ class AdminList extends StatelessWidget {
                         return InkWell(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const ChallengeRoute(),
+                              builder: (context) => ChallengeRoute(
+                                id: list[index].challengeRoomId,
+                              ),
                             ));
                           },
                           child: AdminChallengeBox(
