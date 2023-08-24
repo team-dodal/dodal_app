@@ -119,7 +119,7 @@ class ChallengeService {
     }
   }
 
-  static createNoti({
+  static createNotice({
     required int roomId,
     required String title,
     required String content,
@@ -137,21 +137,22 @@ class ChallengeService {
     }
   }
 
-  static getNotiList({required int roomId}) async {
+  static Future<List<ChallengeRoomNoticeResponse>?> getNoticeList(
+      {required int roomId}) async {
     try {
       final service = dio();
-      final res = await service.get('/api/v1/challenge/rooms/$roomId/noti');
+      final res = await service.get('/api/v1/challenge/room/$roomId/noti');
       final List<dynamic> result = res.data['result'];
       return result
-          .map((noti) => ChallengeRoomNotiResponse.fromJson(noti))
+          .map((notice) => ChallengeRoomNoticeResponse.fromJson(notice))
           .toList();
     } on DioException catch (error) {
       ResponseErrorDialog(error);
-      return false;
+      return null;
     }
   }
 
-  static updateNoti({
+  static updateNotice({
     required int roomId,
     required int notiId,
     required String title,
@@ -170,7 +171,7 @@ class ChallengeService {
     }
   }
 
-  static deleteNoti({required int roomId, required int notiId}) async {
+  static deleteNotice({required int roomId, required int notiId}) async {
     try {
       final service = dio();
       await service.delete('/api/v1/challenge/rooms/$roomId/noti/$notiId');

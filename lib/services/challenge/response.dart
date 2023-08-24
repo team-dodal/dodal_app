@@ -53,14 +53,14 @@ class OneChallengeResponse {
             : null;
 }
 
-class ChallengeRoomNotiResponse {
+class ChallengeRoomNoticeResponse {
   final int notiId;
   final int roomId;
   final String title;
   final String content;
-  final DateTime? date;
+  final DateTime date;
 
-  ChallengeRoomNotiResponse({
+  ChallengeRoomNoticeResponse({
     required this.notiId,
     required this.roomId,
     required this.title,
@@ -68,11 +68,10 @@ class ChallengeRoomNotiResponse {
     required this.date,
   });
 
-  ChallengeRoomNotiResponse.fromJson(Map<String, dynamic> data)
+  ChallengeRoomNoticeResponse.fromJson(Map<String, dynamic> data)
       : notiId = data['noti_id'],
         roomId = data['room_id'],
         title = data['title'],
         content = data['content'],
-        date =
-            data['date'] != null ? DateTime.parse(data['registered_at']) : null;
+        date = DateTime.parse(data['registered_at']);
 }

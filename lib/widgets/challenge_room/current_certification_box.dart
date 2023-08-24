@@ -9,6 +9,7 @@ class CurrentCertificationBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
+    List<int> dayList = List.generate(7, (index) => index + 1);
     int currentDayOfWeek = now.weekday;
 
     return Padding(
@@ -31,16 +32,16 @@ class CurrentCertificationBox extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: GridView.count(
-              crossAxisCount: 7,
+              crossAxisCount: dayList.length,
               crossAxisSpacing: 6,
               childAspectRatio: 1,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               children: [
-                for (final i in [1, 2, 3, 4, 5, 6, 7])
+                for (final day in dayList)
                   DayCircle(
-                    dayNum: i,
-                    isToday: i == currentDayOfWeek,
+                    dayNum: day,
+                    isToday: day == currentDayOfWeek,
                   )
               ],
             ),
@@ -67,44 +68,26 @@ class DayCircle extends StatelessWidget {
         Positioned(
           bottom: 0,
           right: 0,
-          child: isToday
-              ? Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
-                  decoration: const BoxDecoration(
-                    color: AppColors.yellow,
-                    borderRadius: BorderRadius.all(Radius.circular(22)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.systemGrey3,
-                        offset: Offset(0, 0),
-                        blurRadius: 8,
-                        blurStyle: BlurStyle.outer,
-                      ),
-                    ],
-                  ),
-                  child: Text('Today', style: Typo(context).caption()),
-                )
-              : Container(
-                  width: 22,
-                  height: 22,
-                  decoration: const BoxDecoration(
-                    color: AppColors.systemWhite,
-                    borderRadius: BorderRadius.all(Radius.circular(22)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.systemGrey3,
-                        offset: Offset(0, 0),
-                        blurRadius: 8,
-                        blurStyle: BlurStyle.outer,
-                      ),
-                    ],
-                  ),
-                  child: Center(
-                    child: Text(daysOfWeek[dayNum - 1],
-                        style: Typo(context).caption()),
-                  ),
+          child: Container(
+            width: 22,
+            height: 22,
+            decoration: BoxDecoration(
+              color: isToday ? AppColors.yellow : AppColors.systemWhite,
+              borderRadius: const BorderRadius.all(Radius.circular(22)),
+              boxShadow: const [
+                BoxShadow(
+                  color: AppColors.systemGrey3,
+                  offset: Offset(0, 0),
+                  blurRadius: 8,
+                  blurStyle: BlurStyle.outer,
                 ),
+              ],
+            ),
+            child: Center(
+              child:
+                  Text(daysOfWeek[dayNum - 1], style: Typo(context).caption()),
+            ),
+          ),
         )
       ],
     );

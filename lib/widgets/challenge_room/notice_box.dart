@@ -1,3 +1,5 @@
+import 'package:dodal_app/screens/challenge_route/room_notice_list_screen.dart';
+import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +7,9 @@ import 'dart:math' as math;
 import 'package:flutter_svg/flutter_svg.dart';
 
 class NoticeBox extends StatelessWidget {
-  const NoticeBox({super.key});
+  const NoticeBox({super.key, required this.challenge});
+
+  final OneChallengeResponse challenge;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +28,14 @@ class NoticeBox extends StatelessWidget {
               ),
               Material(
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            RoomNoticeListScreen(id: challenge.id),
+                      ),
+                    );
+                  },
                   child: Row(
                     children: [
                       const Padding(
@@ -54,7 +65,7 @@ class NoticeBox extends StatelessWidget {
                 SvgPicture.asset('assets/icons/speaker_icon.svg'),
                 const SizedBox(width: 10),
                 Text(
-                  '인증 방법에 대한 변경 사항',
+                  challenge.noticeTitle ?? '',
                   style: Typo(context)
                       .body2()!
                       .copyWith(color: AppColors.systemGrey1),

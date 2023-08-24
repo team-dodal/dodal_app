@@ -27,7 +27,7 @@ class HomeFeedScreen extends StatelessWidget {
             maxMember: challenge.recruitCnt,
             curMember: challenge.userCnt,
           ),
-          const NoticeBox(),
+          NoticeBox(challenge: challenge),
           const SizedBox(height: 32),
           Container(
             width: double.infinity,
