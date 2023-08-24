@@ -25,6 +25,7 @@ class RoomThumbnailImage extends StatelessWidget {
               return FadeInImage(
                 placeholder: MemoryImage(kTransparentImage),
                 image: FileImage(image),
+                alignment: Alignment.topCenter,
                 fit: BoxFit.cover,
                 width: double.infinity,
                 height: double.infinity,
@@ -33,6 +34,7 @@ class RoomThumbnailImage extends StatelessWidget {
               return FadeInImage(
                 placeholder: MemoryImage(kTransparentImage),
                 image: NetworkImage(image),
+                alignment: Alignment.topCenter,
                 fit: BoxFit.cover,
                 width: double.infinity,
                 height: double.infinity,

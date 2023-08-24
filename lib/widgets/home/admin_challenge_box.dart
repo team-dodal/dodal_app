@@ -18,8 +18,10 @@ class AdminChallengeBox extends StatelessWidget {
     required this.userCnt,
     required this.certCnt,
     required this.certRequestCnt,
+    required this.id,
   });
 
+  final int id;
   final String title;
   final String? thumbnailImg;
   final Tag tag;
@@ -48,6 +50,7 @@ class AdminChallengeBox extends StatelessWidget {
       child: Column(
         children: [
           ChallengeBox(
+            id: id,
             title: title,
             thumbnailImg: thumbnailImg,
             tag: tag,

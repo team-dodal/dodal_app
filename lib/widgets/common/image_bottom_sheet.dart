@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/utilities/image_compress.dart';

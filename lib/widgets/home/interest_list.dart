@@ -119,6 +119,7 @@ class InterestCategoryCard extends StatelessWidget {
                       top: 20,
                     ),
                     child: ChallengeBox(
+                      id: i,
                       title: '타이틀',
                       thumbnailImg: null,
                       tag: tagList[0],
@@ -127,6 +128,7 @@ class InterestCategoryCard extends StatelessWidget {
                       recruitCnt: 20,
                       userCnt: 4,
                       certCnt: 5,
+                      // isBookmarked: true,
                     ),
                   )
               ],

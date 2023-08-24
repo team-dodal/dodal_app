@@ -97,6 +97,22 @@ class ChallengeService {
     }
   }
 
+  static bookmark({required int roomId, required bool value}) async {
+    try {
+      final service = dio();
+      if (value) {
+        await service.post('/api/v1/challenge/room/$roomId/bookmark');
+        return true;
+      } else {
+        await service.delete('/api/v1/challenge/room/$roomId/bookmark');
+        return false;
+      }
+    } on DioException catch (error) {
+      ResponseErrorDialog(error);
+      return null;
+    }
+  }
+
   static join({required int challengeId}) async {
     try {
       final service = dio();

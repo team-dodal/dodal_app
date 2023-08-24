@@ -9,6 +9,7 @@ import 'dart:math' as math;
 class JoinedChallengeBox extends StatelessWidget {
   const JoinedChallengeBox({
     super.key,
+    required this.id,
     required this.title,
     required this.thumbnailImg,
     required this.tag,
@@ -20,6 +21,7 @@ class JoinedChallengeBox extends StatelessWidget {
     required this.weekUserCertCnt,
   });
 
+  final int id;
   final String title;
   final String? thumbnailImg;
   final Tag tag;
@@ -48,6 +50,7 @@ class JoinedChallengeBox extends StatelessWidget {
       child: Column(
         children: [
           ChallengeBox(
+            id: id,
             title: title,
             thumbnailImg: thumbnailImg,
             tag: tag,

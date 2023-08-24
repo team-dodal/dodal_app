@@ -110,6 +110,7 @@ class JoinedList extends StatelessWidget {
                             ));
                           },
                           child: JoinedChallengeBox(
+                            id: list[index].id,
                             title: list[index].title,
                             thumbnailImg: list[index].thumbnailImg,
                             tag: list[index].tag,
@@ -181,6 +182,7 @@ class AdminList extends StatelessWidget {
                             ));
                           },
                           child: AdminChallengeBox(
+                            id: list[index].challengeRoomId,
                             title: list[index].title,
                             thumbnailImg: list[index].thumbnailImgUrl,
                             tag: list[index].tag,

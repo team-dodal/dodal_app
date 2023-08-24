@@ -98,6 +98,7 @@ class _ChallengeListScreenState extends State<ChallengeListScreen> {
                         return InkWell(
                           onTap: action,
                           child: ChallengeBox(
+                            id: item.id,
                             title: item.title,
                             tag: item.tag,
                             thumbnailImg: item.thumbnailImg,
@@ -106,6 +107,7 @@ class _ChallengeListScreenState extends State<ChallengeListScreen> {
                             userCnt: item.userCnt,
                             certCnt: item.certCnt,
                             recruitCnt: item.recruitCnt,
+                            isBookmarked: item.isBookmarked,
                           ),
                         );
                       },

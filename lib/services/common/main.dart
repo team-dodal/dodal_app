@@ -1,9 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dodal_app/services/common/refresh.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'cache_option.dart';
 
 Dio dio() {
   FlutterSecureStorage secureStorage = const FlutterSecureStorage();
@@ -13,7 +11,7 @@ Dio dio() {
   ));
 
   dio.interceptors.addAll([
-    DioCacheInterceptor(options: cacheOptions),
+    // DioCacheInterceptor(options: cacheOptions),
     InterceptorsWrapper(
       onRequest:
           (RequestOptions options, RequestInterceptorHandler handler) async {
