@@ -35,9 +35,7 @@ class UserInfoBox extends StatelessWidget {
                       const SizedBox(width: 10),
                       Text(
                         user.nickname,
-                        style: Typo(context)
-                            .body2()!
-                            .copyWith(fontWeight: FontWeight.bold),
+                        style: context.body2(fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -50,7 +48,7 @@ class UserInfoBox extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 10),
-              Text(user.content, style: Typo(context).body4()),
+              Text(user.content, style: context.body4()),
               const SizedBox(height: 16),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
@@ -70,9 +68,7 @@ class UserInfoBox extends StatelessWidget {
                                   BorderRadius.all(Radius.circular(100))),
                           child: Text(
                             tag.name,
-                            style: Typo(context)
-                                .caption()!
-                                .copyWith(color: AppColors.orange),
+                            style: context.caption(color: AppColors.orange),
                           ),
                         ),
                       )
@@ -97,16 +93,15 @@ class UserInfoBox extends StatelessWidget {
                         children: [
                           Text(
                             '최장 인증 연속 달성',
-                            style: Typo(context)
-                                .caption()!
-                                .copyWith(color: AppColors.systemGrey1),
+                            style:
+                                context.caption(color: AppColors.systemGrey1),
                           ),
                           Text(
                             '0일',
-                            style: Typo(context).body2()!.copyWith(
-                                  color: AppColors.systemGrey1,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            style: context.body2(
+                              color: AppColors.systemGrey1,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ],
                       )),
@@ -123,16 +118,15 @@ class UserInfoBox extends StatelessWidget {
                         children: [
                           Text(
                             '현재 연속 달성',
-                            style: Typo(context)
-                                .caption()!
-                                .copyWith(color: AppColors.systemGrey1),
+                            style:
+                                context.caption(color: AppColors.systemGrey1),
                           ),
                           Text(
                             '0일',
-                            style: Typo(context).body2()!.copyWith(
-                                  color: AppColors.systemGrey1,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            style: context.body2(
+                              color: AppColors.systemGrey1,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ],
                       ))

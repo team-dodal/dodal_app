@@ -17,19 +17,19 @@ class CompleteCreateChallenge extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               '도전 생성 완료',
-              style: Typo(context).body1()!.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.orange,
-                  ),
+              style: context.body1(
+                fontWeight: FontWeight.bold,
+                color: AppColors.orange,
+              ),
             ),
             const SizedBox(height: 8),
             Text(
               '멤버들과 함께\n도전을 달성해보세요!',
               textAlign: TextAlign.center,
-              style: Typo(context).headline2()!.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.systemBlack,
-                  ),
+              style: context.headline2(
+                fontWeight: FontWeight.bold,
+                color: AppColors.systemBlack,
+              ),
             )
           ],
         );
@@ -62,10 +62,10 @@ class CompleteCreateChallenge extends StatelessWidget {
           },
           child: Text(
             '내가 만든 도전 둘러보기',
-            style: Typo(context).body1()!.copyWith(
-                  color: AppColors.systemWhite,
-                  fontWeight: FontWeight.bold,
-                ),
+            style: context.body1(
+              color: AppColors.systemWhite,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),

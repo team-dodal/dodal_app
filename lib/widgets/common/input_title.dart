@@ -30,14 +30,12 @@ class InputTitle extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: Typo(context)
-                      .body1()!
-                      .copyWith(fontWeight: FontWeight.bold),
+                  style: context.body1(fontWeight: FontWeight.bold),
                 ),
                 if (required == true)
                   Text(
                     '*',
-                    style: Typo(context).body1()!.copyWith(
+                    style: context.body1(
                         fontWeight: FontWeight.bold, color: Colors.red),
                   )
               ],
@@ -45,15 +43,14 @@ class InputTitle extends StatelessWidget {
             if (wordLength != null)
               Text(
                 wordLength!,
-                style: Typo(context).body2()!.copyWith(
-                      color: isFocused
-                          ? AppColors.systemBlack
-                          : AppColors.systemGrey2,
-                    ),
+                style: context.body2(
+                  color:
+                      isFocused ? AppColors.systemBlack : AppColors.systemGrey2,
+                ),
               ),
           ],
         ),
-        if (subTitle != null) Text(subTitle!, style: Typo(context).body4()),
+        if (subTitle != null) Text(subTitle!, style: context.body4()),
       ],
     );
   }

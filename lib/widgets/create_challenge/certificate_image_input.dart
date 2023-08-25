@@ -83,9 +83,7 @@ class CertificateImageInput extends StatelessWidget {
                         ),
                         Text(
                           '인증 예시 넣기',
-                          style: Typo(context)
-                              .body4()!
-                              .copyWith(color: AppColors.systemGrey2),
+                          style: context.body4(color: AppColors.systemGrey2),
                         ),
                       ],
                     );
@@ -106,10 +104,10 @@ class CertificateImageInput extends StatelessWidget {
                 height: 28,
                 child: Text(
                   certOption == CertOption.correct ? '성공' : '실패',
-                  style: Typo(context).body4()!.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.systemWhite,
-                      ),
+                  style: context.body4(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.systemWhite,
+                  ),
                 ),
               ),
             )

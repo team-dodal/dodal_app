@@ -22,9 +22,7 @@ class NoticeBox extends StatelessWidget {
             children: [
               Text(
                 '공지사항',
-                style: Typo(context)
-                    .body1()!
-                    .copyWith(fontWeight: FontWeight.bold),
+                style: context.body1(fontWeight: FontWeight.bold),
               ),
               Material(
                 child: InkWell(
@@ -66,9 +64,7 @@ class NoticeBox extends StatelessWidget {
                 const SizedBox(width: 10),
                 Text(
                   challenge.noticeTitle ?? '',
-                  style: Typo(context)
-                      .body2()!
-                      .copyWith(color: AppColors.systemGrey1),
+                  style: context.body2(color: AppColors.systemGrey1),
                 )
               ],
             ),

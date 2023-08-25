@@ -74,20 +74,20 @@ class _ImageBottomSheetState extends State<ImageBottomSheet> {
             Column(
               children: [
                 ListTile(
-                  title: Text('직접 촬영', style: Typo(context).body2()),
+                  title: Text('직접 촬영', style: context.body2()),
                   onTap: () {
                     _pickImage(ImageSource.camera);
                   },
                 ),
                 ListTile(
-                  title: Text('엘범에서 사진 선택', style: Typo(context).body2()),
+                  title: Text('엘범에서 사진 선택', style: context.body2()),
                   onTap: () {
                     _pickImage(ImageSource.gallery);
                   },
                 ),
                 if (widget.imageDefaultOption)
                   ListTile(
-                    title: Text('기본 이미지로 변경', style: Typo(context).body2()),
+                    title: Text('기본 이미지로 변경', style: context.body2()),
                     onTap: () {
                       _pickImage(null);
                     },

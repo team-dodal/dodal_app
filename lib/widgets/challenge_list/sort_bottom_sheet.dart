@@ -53,7 +53,7 @@ class SortBottomSheet extends StatelessWidget {
                       title: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(condition, style: Typo(context).body2()),
+                          Text(condition, style: context.body2()),
                           if (CONDITION_LIST.indexOf(condition) ==
                               conditionCode)
                             SvgPicture.asset('assets/icons/check_icon.svg')

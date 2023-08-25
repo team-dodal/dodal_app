@@ -66,10 +66,10 @@ class AgreeButton extends StatelessWidget {
                   child: Ink(
                     child: Text(
                       '[필수] 제공동의 내용내용내용내용내용',
-                      style: Typo(context).body3()!.copyWith(
-                            fontWeight: FontWeight.w400,
-                            color: AppColors.systemGrey1,
-                          ),
+                      style: context.body3(
+                        fontWeight: FontWeight.w400,
+                        color: AppColors.systemGrey1,
+                      ),
                     ),
                   ),
                 ),
@@ -80,13 +80,13 @@ class AgreeButton extends StatelessWidget {
             onTap: () {},
             child: Text(
               '보기',
-              style: Typo(context).body3()!.copyWith(
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.systemGrey2,
-                    decoration: TextDecoration.underline,
-                    decorationStyle: TextDecorationStyle.solid,
-                    decorationColor: AppColors.systemGrey2,
-                  ),
+              style: context.body3(
+                fontWeight: FontWeight.w400,
+                color: AppColors.systemGrey2,
+                decoration: TextDecoration.underline,
+                decorationStyle: TextDecorationStyle.solid,
+                decorationColor: AppColors.systemGrey2,
+              ),
             ),
           ),
         ],

@@ -4,9 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class RoomNoticeListScreen extends StatefulWidget {
-  const RoomNoticeListScreen({super.key, required this.id});
+  const RoomNoticeListScreen({
+    super.key,
+    required this.id,
+    this.openFirstNotice = false,
+  });
 
   final int id;
+  final bool openFirstNotice;
 
   @override
   State<RoomNoticeListScreen> createState() => _RoomNoticeListScreenState();
@@ -54,8 +59,11 @@ class _RoomNoticeListScreenState extends State<RoomNoticeListScreen> {
             return ListView.builder(
               itemCount: noticeList.length,
               itemBuilder: (context, index) {
+                final firstNoticeOpen =
+                    widget.openFirstNotice == true && index == 0;
                 return ExpansionTile(
                   title: Text(noticeList[index].title),
+                  initiallyExpanded: firstNoticeOpen,
                   children: [
                     Column(
                       children: [

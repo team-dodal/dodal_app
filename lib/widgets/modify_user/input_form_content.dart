@@ -96,16 +96,12 @@ class _InputFormContentState extends State<InputFormContent> {
               if (widget.nicknameChecked)
                 Text(
                   '중복 확인 완료되었습니다.',
-                  style: Typo(context)
-                      .caption()!
-                      .copyWith(color: AppColors.success),
+                  style: context.caption(color: AppColors.success),
                 ),
               if (_nicknameError != null)
                 Text(
                   _nicknameError!,
-                  style: Typo(context)
-                      .caption()!
-                      .copyWith(color: AppColors.danger),
+                  style: context.caption(color: AppColors.danger),
                 ),
             ],
           ),

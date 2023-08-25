@@ -54,9 +54,7 @@ class FilterTopBar extends StatelessWidget {
                       const SizedBox(width: 4),
                       Text(
                         CONDITION_LIST[state.conditionCode],
-                        style: Typo(context)
-                            .body4()!
-                            .copyWith(color: AppColors.systemGrey1),
+                        style: context.body4(color: AppColors.systemGrey1),
                       ),
                     ],
                   ),

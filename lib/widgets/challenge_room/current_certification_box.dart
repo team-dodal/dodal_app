@@ -20,9 +20,7 @@ class CurrentCertificationBox extends StatelessWidget {
             children: [
               Text(
                 '내 인증 현황',
-                style: Typo(context)
-                    .body1()!
-                    .copyWith(fontWeight: FontWeight.bold),
+                style: context.body1(fontWeight: FontWeight.bold),
               ),
               const SizedBox(width: 5),
               const Text('+23일 째 도전중!'),
@@ -84,8 +82,7 @@ class DayCircle extends StatelessWidget {
               ],
             ),
             child: Center(
-              child:
-                  Text(daysOfWeek[dayNum - 1], style: Typo(context).caption()),
+              child: Text(daysOfWeek[dayNum - 1], style: context.caption()),
             ),
           ),
         )

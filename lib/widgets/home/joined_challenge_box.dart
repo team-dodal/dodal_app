@@ -74,9 +74,7 @@ class JoinedChallengeBox extends StatelessWidget {
                   const Text('이번 주에 '),
                   Text(
                     '$weekUserCertCnt번 ',
-                    style: Typo(context)
-                        .body4()!
-                        .copyWith(fontWeight: FontWeight.bold),
+                    style: context.body4(fontWeight: FontWeight.bold),
                   ),
                   const Text('인증하셨어요!'),
                 ],

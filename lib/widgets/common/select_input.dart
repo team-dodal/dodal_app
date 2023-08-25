@@ -154,7 +154,7 @@ class _SelectInputState extends State<SelectInput> {
                                   widget.value != null
                                       ? widget.value!.label
                                       : widget.placeholder,
-                                  style: Typo(context).body2()),
+                                  style: context.body2()),
                               Transform.rotate(
                                 angle: _isFocused ? 0 : math.pi,
                                 child: SvgPicture.asset(
@@ -237,14 +237,14 @@ class _SelectInputState extends State<SelectInput> {
                             },
                             title: Text(
                               list[idx].label,
-                              style: Typo(context).body2()!.copyWith(
-                                    fontWeight: isSelected
-                                        ? FontWeight.bold
-                                        : FontWeight.normal,
-                                    color: isSelected
-                                        ? AppColors.orange
-                                        : AppColors.systemBlack,
-                                  ),
+                              style: context.body2(
+                                fontWeight: isSelected
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
+                                color: isSelected
+                                    ? AppColors.orange
+                                    : AppColors.systemBlack,
+                              ),
                             ),
                             trailing: widget.value == list[idx]
                                 ? SvgPicture.asset(

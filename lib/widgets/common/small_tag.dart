@@ -26,10 +26,10 @@ class SmallTag extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: Typo(context).caption()!.copyWith(
-              color: foregroundColor ?? AppColors.orange,
-              fontWeight: FontWeight.bold,
-            ),
+        style: context.caption(
+          color: foregroundColor ?? AppColors.orange,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

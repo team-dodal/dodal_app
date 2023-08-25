@@ -66,12 +66,11 @@ class AllAgreeButton extends StatelessWidget {
                 const SizedBox(width: 9),
                 Text(
                   '모두 동의해요',
-                  style: Typo(context).body1()!.copyWith(
-                        color: value
-                            ? AppColors.systemBlack
-                            : AppColors.systemGrey2,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: context.body1(
+                    color:
+                        value ? AppColors.systemBlack : AppColors.systemGrey2,
+                    fontWeight: FontWeight.bold,
+                  ),
                 )
               ],
             ),

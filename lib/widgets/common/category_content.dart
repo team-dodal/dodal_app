@@ -30,11 +30,10 @@ class CategoryContent extends StatelessWidget {
           children: [
             Text(
               category.name,
-              style:
-                  Typo(context).body1()!.copyWith(fontWeight: FontWeight.bold),
+              style: context.body1(fontWeight: FontWeight.bold),
             ),
             const SizedBox(width: 2),
-            Text(category.emoji, style: Typo(context).body1()),
+            Text(category.emoji, style: context.body1()),
           ],
         ),
         const SizedBox(height: 5),
@@ -68,13 +67,11 @@ class CategoryContent extends StatelessWidget {
                     child: Text(
                       '${tag.name}',
                       style: isSelected(tag)
-                          ? Typo(context).body4()!.copyWith(
-                                color: AppColors.orange,
-                                fontWeight: FontWeight.bold,
-                              )
-                          : Typo(context)
-                              .body4()!
-                              .copyWith(color: AppColors.systemGrey1),
+                          ? context.body4(
+                              color: AppColors.orange,
+                              fontWeight: FontWeight.bold,
+                            )
+                          : context.body4(color: AppColors.systemGrey1),
                     ),
                   ),
                 );

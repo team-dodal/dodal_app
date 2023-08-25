@@ -37,9 +37,7 @@ class CategorySelect extends StatelessWidget {
               children: [
                 Text(
                   '카테고리',
-                  style: Typo(context)
-                      .body1()!
-                      .copyWith(fontWeight: FontWeight.bold),
+                  style: context.body1(fontWeight: FontWeight.bold),
                 ),
                 // OutlinedButton(onPressed: () {}, child: const Text('전체보기'))
                 IconButton(
@@ -51,7 +49,7 @@ class CategorySelect extends StatelessWidget {
                   ),
                   icon: Row(
                     children: [
-                      Text('전체보기', style: Typo(context).body4()),
+                      Text('전체보기', style: context.body4()),
                       Transform.rotate(
                         angle: math.pi / 2,
                         child: SvgPicture.asset(

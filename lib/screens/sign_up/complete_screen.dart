@@ -38,18 +38,18 @@ class CompleteSignUpScreen extends StatelessWidget {
                 const SizedBox(height: 16),
                 Text(
                   '가입 완료!',
-                  style: Typo(context).body1()!.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.orange,
-                      ),
+                  style: context.body1(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.orange,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   '$nickname님, 환영해요',
-                  style: Typo(context).headline2()!.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.systemBlack,
-                      ),
+                  style: context.headline2(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.systemBlack,
+                  ),
                 )
               ],
             );
@@ -82,10 +82,10 @@ class CompleteSignUpScreen extends StatelessWidget {
           },
           child: Text(
             '도전하러 가기',
-            style: Typo(context).body1()!.copyWith(
-                  color: AppColors.systemWhite,
-                  fontWeight: FontWeight.bold,
-                ),
+            style: context.body1(
+              color: AppColors.systemWhite,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),

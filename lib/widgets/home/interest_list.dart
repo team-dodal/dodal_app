@@ -36,9 +36,7 @@ class InterestList extends StatelessWidget {
                   children: [
                     Text(
                       '관심있는\n도전을 추천드려요 🧡',
-                      style: Typo(context)
-                          .headline4()!
-                          .copyWith(fontWeight: FontWeight.bold),
+                      style: context.headline4(fontWeight: FontWeight.bold),
                     ),
                     Material(
                       color: AppColors.lightYellow,
@@ -103,13 +101,11 @@ class InterestCategoryCard extends StatelessWidget {
           children: [
             Text(
               '불끈불끈 건강 💪',
-              style:
-                  Typo(context).body1()!.copyWith(fontWeight: FontWeight.bold),
+              style: context.body1(fontWeight: FontWeight.bold),
             ),
             Text(
               '#체력 키우기 #살기 위해 한다',
-              style:
-                  Typo(context).body4()!.copyWith(color: AppColors.systemGrey1),
+              style: context.body4(color: AppColors.systemGrey1),
             ),
             Column(
               children: [

@@ -19,8 +19,7 @@ class FeedImgContent extends StatelessWidget {
         child: Center(
           child: Text(
             '아직 인증 게시물이 없습니다.',
-            style:
-                Typo(context).body2()!.copyWith(color: AppColors.systemGrey1),
+            style: context.body2(color: AppColors.systemGrey1),
           ),
         ),
       );

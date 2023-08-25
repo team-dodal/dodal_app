@@ -108,9 +108,7 @@ class SignInScreen extends StatelessWidget {
                       backgroundColor: const Color(0xffFFE659),
                       minimumSize: const Size(double.infinity, 64),
                       foregroundColor: AppColors.systemBlack,
-                      textStyle: Typo(context)
-                          .body2()!
-                          .copyWith(fontWeight: FontWeight.bold),
+                      textStyle: context.body2(fontWeight: FontWeight.bold),
                     ),
                     onPressed: () {
                       _socialSignIn(context, SocialType.KAKAO);
@@ -134,9 +132,7 @@ class SignInScreen extends StatelessWidget {
                       backgroundColor: AppColors.bgColor3,
                       minimumSize: const Size(double.infinity, 64),
                       foregroundColor: AppColors.systemBlack,
-                      textStyle: Typo(context)
-                          .body2()!
-                          .copyWith(fontWeight: FontWeight.bold),
+                      textStyle: context.body2(fontWeight: FontWeight.bold),
                     ),
                     onPressed: () {
                       _socialSignIn(context, SocialType.GOOGLE);
@@ -161,9 +157,7 @@ class SignInScreen extends StatelessWidget {
                         backgroundColor: const Color(0xff000000),
                         minimumSize: const Size(double.infinity, 64),
                         foregroundColor: AppColors.bgColor1,
-                        textStyle: Typo(context)
-                            .body2()!
-                            .copyWith(fontWeight: FontWeight.bold),
+                        textStyle: context.body2(fontWeight: FontWeight.bold),
                       ),
                       onPressed: () {
                         _socialSignIn(context, SocialType.APPLE);

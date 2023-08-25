@@ -136,9 +136,7 @@ class _ChallengeBoxState extends State<ChallengeBox> {
                 const SizedBox(height: 4),
                 Text(
                   widget.title,
-                  style: Typo(context)
-                      .body2()!
-                      .copyWith(fontWeight: FontWeight.bold),
+                  style: context.body2(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 6),
                 Row(children: [
@@ -150,9 +148,7 @@ class _ChallengeBoxState extends State<ChallengeBox> {
                   const SizedBox(width: 6),
                   Text(
                     '${widget.adminNickname} · ',
-                    style: Typo(context)
-                        .body4()!
-                        .copyWith(color: AppColors.systemGrey1),
+                    style: context.body4(color: AppColors.systemGrey1),
                   ),
                   const Icon(
                     Icons.person,
@@ -161,9 +157,7 @@ class _ChallengeBoxState extends State<ChallengeBox> {
                   ),
                   Text(
                     '${widget.userCnt}/${widget.recruitCnt}',
-                    style: Typo(context)
-                        .body4()!
-                        .copyWith(color: AppColors.systemGrey1),
+                    style: context.body4(color: AppColors.systemGrey1),
                   ),
                 ]),
               ],

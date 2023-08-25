@@ -73,9 +73,7 @@ class AdminChallengeBox extends StatelessWidget {
                 children: [
                   Text(
                     '$certRequestCnt장',
-                    style: Typo(context)
-                        .body4()!
-                        .copyWith(fontWeight: FontWeight.bold),
+                    style: context.body4(fontWeight: FontWeight.bold),
                   ),
                   const Text('의 인증이 업로드 되었어요!!'),
                 ],

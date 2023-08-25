@@ -33,15 +33,13 @@ class SystemDialog extends StatelessWidget {
               children: [
                 Text(
                   title ?? '알림',
-                  style: Typo(context)
-                      .headline4()!
-                      .copyWith(fontWeight: FontWeight.bold),
+                  style: context.headline4(fontWeight: FontWeight.bold),
                 ),
                 if (subTitle!.isNotEmpty)
                   Column(
                     children: [
                       const SizedBox(height: 4),
-                      Text(subTitle!, style: Typo(context).body4()),
+                      Text(subTitle!, style: context.body4()),
                     ],
                   ),
               ],

@@ -96,23 +96,17 @@ class PreviewScreen extends StatelessWidget {
               children: [
                 Text(
                   '저희의 도전을 소개해요',
-                  style: Typo(context)
-                      .body1()!
-                      .copyWith(fontWeight: FontWeight.bold),
+                  style: context.body1(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   challenge.content,
-                  style: Typo(context)
-                      .body2()!
-                      .copyWith(color: AppColors.systemGrey1),
+                  style: context.body2(color: AppColors.systemGrey1),
                 ),
                 const SizedBox(height: 32),
                 Text(
                   '저희의 도전을 모아봐요',
-                  style: Typo(context)
-                      .body1()!
-                      .copyWith(fontWeight: FontWeight.bold),
+                  style: context.body1(fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -132,16 +126,12 @@ class PreviewScreen extends StatelessWidget {
               children: [
                 Text(
                   '이렇게 인증해요',
-                  style: Typo(context)
-                      .body1()!
-                      .copyWith(fontWeight: FontWeight.bold),
+                  style: context.body1(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   challenge.certContent,
-                  style: Typo(context)
-                      .body2()!
-                      .copyWith(color: AppColors.systemGrey1),
+                  style: context.body2(color: AppColors.systemGrey1),
                 ),
                 const SizedBox(height: 16),
                 Row(

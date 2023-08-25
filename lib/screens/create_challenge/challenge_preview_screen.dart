@@ -60,13 +60,10 @@ class ChallengePreviewScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('저희의 도전을 소개해요',
-                            style: Typo(context)
-                                .body1()!
-                                .copyWith(fontWeight: FontWeight.bold)),
+                            style: context.body1(fontWeight: FontWeight.bold)),
                         const SizedBox(height: 8),
                         if (challenge.content != null)
-                          Text(challenge.content!,
-                              style: Typo(context).body2()!),
+                          Text(challenge.content!, style: context.body2()),
                       ],
                     ),
                   ),
@@ -86,14 +83,12 @@ class ChallengePreviewScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('이렇게 인증해요',
-                            style: Typo(context)
-                                .body1()!
-                                .copyWith(fontWeight: FontWeight.bold)),
+                            style: context.body1(fontWeight: FontWeight.bold)),
                         const SizedBox(height: 8),
                         if (challenge.content != null)
                           Text(
                             challenge.certContent!,
-                            style: Typo(context).body2()!,
+                            style: context.body2(),
                           ),
                       ],
                     ),

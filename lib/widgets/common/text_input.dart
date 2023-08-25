@@ -96,8 +96,7 @@ class _TextInputState extends State<TextInput> {
               suffixIconConstraints:
                   const BoxConstraints(minWidth: 24, minHeight: 24),
             ),
-            style:
-                Typo(context).body2()!.copyWith(fontWeight: FontWeight.normal),
+            style: context.body2(fontWeight: FontWeight.normal),
             onChanged: (value) {
               if (widget.onChanged == null) return;
               widget.onChanged!(value);

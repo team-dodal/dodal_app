@@ -56,8 +56,7 @@ class CountBottomSheet extends StatelessWidget {
             ),
             Text(
               '도전 빈도 선택',
-              style:
-                  Typo(context).body1()!.copyWith(fontWeight: FontWeight.bold),
+              style: context.body1(fontWeight: FontWeight.bold),
             ),
             Padding(
               padding: const EdgeInsets.all(20),
@@ -132,7 +131,7 @@ class CountButton extends StatelessWidget {
           ),
           child: Text(
             text,
-            style: Typo(context).body2()!.copyWith(
+            style: context.body2(
                 fontWeight: selected ? FontWeight.bold : FontWeight.w500,
                 color:
                     selected ? AppColors.systemWhite : AppColors.systemBlack),

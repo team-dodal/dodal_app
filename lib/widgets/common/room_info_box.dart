@@ -43,9 +43,7 @@ class RoomInfoBox extends StatelessWidget {
           const SizedBox(height: 12),
           Text(
             title,
-            style: Typo(context)
-                .headline2()!
-                .copyWith(fontWeight: FontWeight.bold),
+            style: context.headline2(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 12),
           Row(children: [
@@ -57,8 +55,7 @@ class RoomInfoBox extends StatelessWidget {
             const SizedBox(width: 6),
             Text(
               '$adminNickname · ',
-              style:
-                  Typo(context).body4()!.copyWith(color: AppColors.systemGrey1),
+              style: context.body4(color: AppColors.systemGrey1),
             ),
             const Icon(
               Icons.person,
@@ -67,13 +64,11 @@ class RoomInfoBox extends StatelessWidget {
             ),
             Text(
               '멤버 $curMember',
-              style:
-                  Typo(context).body4()!.copyWith(color: AppColors.systemBlack),
+              style: context.body4(color: AppColors.systemBlack),
             ),
             Text(
               '/$maxMember',
-              style:
-                  Typo(context).body4()!.copyWith(color: AppColors.systemGrey2),
+              style: context.body4(color: AppColors.systemGrey2),
             ),
           ]),
         ],

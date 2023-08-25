@@ -45,10 +45,10 @@ class CertCountButton extends StatelessWidget {
               Flexible(
                 child: Text(
                   text,
-                  style: Typo(context).body4()!.copyWith(
-                        color: AppColors.systemGrey1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                  style: context.body4(
+                    color: AppColors.systemGrey1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ),
               const SizedBox(width: 4),

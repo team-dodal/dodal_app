@@ -43,12 +43,12 @@ class CreateFormTitle extends StatelessWidget {
                             child: Center(
                               child: Text(
                                 '$step',
-                                style: Typo(context).body4()!.copyWith(
-                                      color: step == currentStep
-                                          ? AppColors.systemWhite
-                                          : AppColors.systemGrey2,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                style: context.body4(
+                                  color: step == currentStep
+                                      ? AppColors.systemWhite
+                                      : AppColors.systemGrey2,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
@@ -69,15 +69,12 @@ class CreateFormTitle extends StatelessWidget {
             ),
           Text(
             title,
-            style: Typo(context)
-                .headline2()!
-                .copyWith(fontWeight: FontWeight.bold),
+            style: context.headline2(fontWeight: FontWeight.bold),
           ),
           if (subTitle != null)
             Text(
               subTitle!,
-              style:
-                  Typo(context).body4()!.copyWith(color: AppColors.systemGrey1),
+              style: context.body4(color: AppColors.systemGrey1),
             ),
         ],
       ),

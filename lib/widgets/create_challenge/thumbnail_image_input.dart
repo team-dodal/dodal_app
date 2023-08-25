@@ -89,10 +89,10 @@ class ThumbnailImageInput extends StatelessWidget {
                         const SizedBox(width: 6),
                         Text(
                           '사진 선택',
-                          style: Typo(context).body4()!.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.systemWhite,
-                              ),
+                          style: context.body4(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.systemWhite,
+                          ),
                         ),
                       ],
                     ),
@@ -104,9 +104,9 @@ class ThumbnailImageInput extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text('* 사진 미선택시 기본 썸네일로 설정됩니다.',
-            style: Typo(context).caption()!.copyWith(
-                  color: AppColors.systemGrey1,
-                )),
+            style: context.caption(
+              color: AppColors.systemGrey1,
+            )),
       ],
     );
   }

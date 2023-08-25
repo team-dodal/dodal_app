@@ -26,11 +26,11 @@ class NoListContext extends StatelessWidget {
         const SizedBox(height: 16),
         Text(
           title,
-          style: Typo(context).body1()!.copyWith(fontWeight: FontWeight.bold),
+          style: context.body1(fontWeight: FontWeight.bold),
         ),
         Text(
           subTitle,
-          style: Typo(context).body4()!.copyWith(color: AppColors.systemGrey2),
+          style: context.body4(color: AppColors.systemGrey2),
         ),
         const SizedBox(height: 16),
         TextButton(
@@ -51,8 +51,7 @@ class NoListContext extends StatelessWidget {
           ),
           child: Text(
             '도전 생성하기',
-            style:
-                Typo(context).body4()!.copyWith(color: AppColors.systemGrey1),
+            style: context.body4(color: AppColors.systemGrey1),
           ),
         ),
       ],
