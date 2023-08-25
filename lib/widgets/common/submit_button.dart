@@ -16,6 +16,10 @@ class SubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (MediaQuery.of(context).viewInsets.bottom != 0) {
+      return const SizedBox();
+    }
+
     return SafeArea(
       child: SizedBox(
         width: MediaQuery.of(context).size.width,

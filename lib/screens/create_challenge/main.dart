@@ -5,7 +5,7 @@ import 'package:dodal_app/screens/create_challenge/challenge_preview_screen.dart
 import 'package:dodal_app/screens/create_challenge/challenge_tag_screen.dart';
 import 'package:dodal_app/screens/create_challenge/challenge_title_screen.dart';
 import 'package:dodal_app/services/challenge/service.dart';
-import 'package:dodal_app/widgets/common/create_screen_layout.dart';
+import 'package:dodal_app/layout/create_screen_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

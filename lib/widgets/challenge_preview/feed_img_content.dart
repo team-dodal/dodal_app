@@ -1,6 +1,7 @@
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class FeedImgContent extends StatelessWidget {
   const FeedImgContent({
@@ -32,7 +33,18 @@ class FeedImgContent extends StatelessWidget {
       childAspectRatio: 1,
       shrinkWrap: true,
       children: [
-        for (final i in [1, 2, 3, 4, 5, 6]) Container(color: Colors.blue)
+        for (final feed in feedList)
+          Container(
+            color: AppColors.systemGrey4,
+            child: FadeInImage(
+              placeholder: MemoryImage(kTransparentImage),
+              image: NetworkImage(feed),
+              alignment: Alignment.topCenter,
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
+            ),
+          )
       ],
     );
   }

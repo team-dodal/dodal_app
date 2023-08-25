@@ -166,12 +166,10 @@ class _InputFormScreenState extends State<InputFormScreen> {
           );
         }),
       ),
-      bottomSheet: MediaQuery.of(context).viewInsets.bottom != 0
-          ? null
-          : SubmitButton(
-              title: '다음',
-              onPress: _nicknameChecked ? widget.nextStep : null,
-            ),
+      bottomSheet: SubmitButton(
+        title: '다음',
+        onPress: _nicknameChecked ? widget.nextStep : null,
+      ),
     );
   }
 }
