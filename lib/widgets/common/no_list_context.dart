@@ -17,7 +17,7 @@ class NoListContext extends StatelessWidget {
     return Column(
       children: [
         SvgPicture.asset(
-          'assets/icons/challenge_icon.svg',
+          'assets/icons/flag_icon.svg',
           colorFilter: const ColorFilter.mode(
             AppColors.systemGrey2,
             BlendMode.srcIn,

@@ -117,7 +117,7 @@ class SignInScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SvgPicture.asset(
-                          'assets/icons/kakao_icon.svg',
+                          'assets/icons/social/kakao_icon.svg',
                           width: 18,
                           height: 18,
                         ),
@@ -141,7 +141,7 @@ class SignInScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SvgPicture.asset(
-                          'assets/icons/google_icon.svg',
+                          'assets/icons/social/google_icon.svg',
                           width: 18,
                           height: 18,
                         ),
@@ -166,7 +166,7 @@ class SignInScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SvgPicture.asset(
-                            'assets/icons/apple_icon.svg',
+                            'assets/icons/social/apple_icon.svg',
                             width: 18,
                             height: 18,
                           ),

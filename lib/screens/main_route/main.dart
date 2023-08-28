@@ -1,35 +1,37 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/helper/slide_page_route.dart';
+import 'package:dodal_app/model/navigation_route.dart';
 import 'package:dodal_app/screens/main_route/feed_screen.dart';
 import 'package:dodal_app/screens/main_route/home_screen.dart';
 import 'package:dodal_app/screens/main_route/mypage_screen.dart';
 import 'package:dodal_app/screens/notification/main.dart';
 import 'package:dodal_app/screens/settings_menu/main.dart';
 import 'package:dodal_app/services/user/service.dart';
+import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/utilities/fcm.dart';
 import 'package:flutter/material.dart';
-import '../../model/navigation_route.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'challenge_screen.dart';
 
 final List<NavigationRoute> _routes = [
   NavigationRoute(
     name: '홈',
-    icon: const Icon(Icons.home),
+    icon: 'assets/icons/home_icon.svg',
     screen: const HomeScreen(),
   ),
   NavigationRoute(
-    icon: const Icon(Icons.feed),
     name: '피드',
+    icon: 'assets/icons/feed_icon.svg',
     screen: const FeedScreen(),
   ),
   NavigationRoute(
-    name: '그룹',
+    name: '도전',
+    icon: 'assets/icons/flag_icon.svg',
     screen: const ChallengeScreen(),
-    icon: const Icon(Icons.group),
   ),
   NavigationRoute(
-    name: '마이페이지',
-    icon: const Icon(Icons.person),
+    name: '마이',
+    icon: 'assets/icons/my_icon.svg',
     screen: const MyPageScreen(),
   ),
 ];
@@ -95,10 +97,21 @@ class _MainRouteState extends State<MainRoute> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        items: _routes
-            .map((route) =>
-                BottomNavigationBarItem(icon: route.icon!, label: route.name))
-            .toList(),
+        items: [
+          for (var i = 0; i < _routes.length; i++)
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                _routes[i].icon!,
+                colorFilter: ColorFilter.mode(
+                  _currentIndex == i
+                      ? AppColors.systemGrey1
+                      : AppColors.systemGrey2,
+                  BlendMode.srcIn,
+                ),
+              ),
+              label: _routes[i].name,
+            )
+        ],
         onTap: (value) {
           setState(() {
             _currentIndex = value;

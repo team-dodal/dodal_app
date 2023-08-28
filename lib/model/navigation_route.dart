@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class NavigationRoute {
   final String name;
-  final Icon? icon;
+  final dynamic icon;
   final Widget screen;
   NavigationRoute({
     required this.name,

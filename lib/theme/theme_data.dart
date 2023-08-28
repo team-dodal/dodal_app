@@ -120,6 +120,22 @@ ThemeData lightTheme = ThemeData(
       disabledForegroundColor: AppColors.systemGrey2,
     ),
   ),
+  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+    selectedItemColor: AppColors.systemGrey1,
+    unselectedItemColor: AppColors.systemGrey2,
+    selectedLabelStyle: TextStyle(
+      fontSize: 12,
+      letterSpacing: 0.5,
+      fontWeight: FontWeight.bold,
+      color: AppColors.systemGrey1,
+    ),
+    unselectedLabelStyle: TextStyle(
+      fontSize: 12,
+      letterSpacing: 0.5,
+      fontWeight: FontWeight.bold,
+      color: AppColors.systemGrey2,
+    ),
+  ),
   tabBarTheme: const TabBarTheme(
     indicatorSize: TabBarIndicatorSize.tab,
     indicatorColor: AppColors.systemBlack,
