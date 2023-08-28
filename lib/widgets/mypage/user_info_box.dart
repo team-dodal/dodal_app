@@ -4,6 +4,7 @@ import 'package:dodal_app/screens/modify_user/main.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/avatar_image.dart';
+import 'package:dodal_app/widgets/common/small_tag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,6 +17,7 @@ class UserInfoBox extends StatelessWidget {
     return BlocBuilder<UserCubit, User?>(builder: (context, user) {
       if (user == null) return const SizedBox();
       return Card(
+        color: AppColors.bgColor2,
         elevation: 0,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
@@ -57,19 +59,11 @@ class UserInfoBox extends StatelessWidget {
                     for (final tag in user.tagList)
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 2),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 4,
-                            horizontal: 10,
-                          ),
-                          decoration: const BoxDecoration(
-                              color: AppColors.lightOrange,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(100))),
-                          child: Text(
-                            tag.name,
-                            style: context.caption(color: AppColors.orange),
-                          ),
+                        child: SmallTag(
+                          text: tag.name,
+                          backgroundColor: AppColors.orange,
+                          foregroundColor: AppColors.systemWhite,
+                          fontWeight: FontWeight.normal,
                         ),
                       )
                   ],
@@ -80,9 +74,16 @@ class UserInfoBox extends StatelessWidget {
                 width: double.infinity,
                 height: 78,
                 decoration: const BoxDecoration(
-                  color: AppColors.bgColor3,
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
-                ),
+                    color: AppColors.systemWhite,
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.systemGrey3,
+                        offset: Offset(0, 0),
+                        blurRadius: 2,
+                        blurStyle: BlurStyle.outer,
+                      ),
+                    ]),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   child: Row(
@@ -93,46 +94,36 @@ class UserInfoBox extends StatelessWidget {
                         children: [
                           Text(
                             '최장 인증 연속 달성',
-                            style:
-                                context.caption(color: AppColors.systemGrey1),
+                            style: context.caption(),
                           ),
                           Text(
                             '0일',
-                            style: context.body2(
-                              color: AppColors.systemGrey1,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: context.body2(fontWeight: FontWeight.bold),
                           ),
                         ],
                       )),
                       Container(
                         height: double.infinity,
                         width: 1,
-                        decoration: const BoxDecoration(
-                          color: AppColors.orange,
-                        ),
+                        decoration:
+                            const BoxDecoration(color: AppColors.systemGrey3),
                       ),
                       Expanded(
-                          child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '현재 연속 달성',
-                            style:
-                                context.caption(color: AppColors.systemGrey1),
-                          ),
-                          Text(
-                            '0일',
-                            style: context.body2(
-                              color: AppColors.systemGrey1,
-                              fontWeight: FontWeight.bold,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '현재 연속 달성',
+                              style:
+                                  context.caption(color: AppColors.systemGrey1),
                             ),
-                          ),
-                        ],
-                      ))
-                      // 최장 인증 연속 달성
-                      // 선
-                      // 현재 연속 달성
+                            Text(
+                              '0일',
+                              style: context.body2(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 ),

@@ -45,9 +45,17 @@ class _ChallengeBoxState extends State<ChallengeBox> {
       roomId: widget.id,
       value: !_bookmarkStatus,
     );
-    setState(() {
-      _bookmarkStatus = !_bookmarkStatus;
-    });
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('북마크가 ${_bookmarkStatus ? '삭제' : '추가'}되었습니다.'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+      setState(() {
+        _bookmarkStatus = !_bookmarkStatus;
+      });
+    }
   }
 
   @override

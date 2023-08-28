@@ -8,10 +8,12 @@ class SmallTag extends StatelessWidget {
     required this.text,
     this.backgroundColor,
     this.foregroundColor,
+    this.fontWeight = FontWeight.bold,
   });
 
   final String text;
   final Color? backgroundColor, foregroundColor;
+  final FontWeight fontWeight;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class SmallTag extends StatelessWidget {
         text,
         style: context.caption(
           color: foregroundColor ?? AppColors.orange,
-          fontWeight: FontWeight.bold,
+          fontWeight: fontWeight,
         ),
       ),
     );
