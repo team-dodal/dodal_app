@@ -32,7 +32,8 @@ class Category {
 }
 
 class MyCategory {
-  final String name, subName, value, emoji, hashTags;
+  final String name, subName, value, emoji;
+  final List<dynamic> hashTags;
 
   MyCategory({
     required this.name,

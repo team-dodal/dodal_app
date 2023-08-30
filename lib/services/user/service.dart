@@ -15,8 +15,6 @@ class UserService {
       return SignInResponse.fromJson(res.data['result']);
     } on DioException catch (error) {
       ResponseErrorDialog(error);
-    } catch (error) {
-      return null;
     }
   }
 
@@ -48,7 +46,7 @@ class UserService {
       final res = await service.post('/api/v1/users/sign-up', data: formData);
       return SignUpResponse.fromJson(res.data['result']);
     } on DioException catch (err) {
-      ResponseErrorDialog(err);
+      ResponseErrorDialog(err, err.response!.data['result']);
       return null;
     }
   }
@@ -112,7 +110,8 @@ class UserService {
       await service.get('/api/v1/users/nickname/$nickname');
       return true;
     } on DioException catch (err) {
-      ResponseErrorDialog(err);
+      ResponseErrorDialog(err, '사용할 수 없는 닉네임 입니다.');
+      return false;
     }
   }
 

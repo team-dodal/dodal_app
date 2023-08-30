@@ -16,11 +16,10 @@ class UserInfoBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<UserCubit, User?>(builder: (context, user) {
       if (user == null) return const SizedBox();
-      return Card(
+      return Container(
         color: AppColors.bgColor2,
-        elevation: 0,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
+          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

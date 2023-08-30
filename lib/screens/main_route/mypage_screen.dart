@@ -14,11 +14,6 @@ class MyPageScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const UserInfoBox(),
-          Container(
-            width: double.infinity,
-            height: 8,
-            decoration: const BoxDecoration(color: AppColors.systemGrey4),
-          ),
           TableCalendar(
             firstDay: DateTime.utc(2023, 1, 1),
             lastDay: DateTime.utc(2033, 3, 14),

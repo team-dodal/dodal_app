@@ -89,18 +89,14 @@ class SignInScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('도달')),
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Container(
-                width: 100,
-                height: 100,
-                decoration: const BoxDecoration(color: AppColors.basicColor1),
-              ),
-              Column(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Image.asset('assets/images/login_image.png'),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
@@ -177,8 +173,8 @@ class SignInScreen extends StatelessWidget {
                     ),
                 ],
               ),
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
