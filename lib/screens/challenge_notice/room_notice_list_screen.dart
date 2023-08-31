@@ -4,7 +4,6 @@ import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class RoomNoticeListScreen extends StatefulWidget {
   const RoomNoticeListScreen({
@@ -57,10 +56,11 @@ class _RoomNoticeListScreenState extends State<RoomNoticeListScreen> {
         actions: [
           if (widget.isAdmin)
             IconButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
+              onPressed: () async {
+                await Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => CreateNoticeScreen(roomId: widget.id),
                 ));
+                setState(() {});
               },
               icon: const Icon(Icons.add),
             )
@@ -78,7 +78,6 @@ class _RoomNoticeListScreenState extends State<RoomNoticeListScreen> {
             itemCount: noticeList.length,
             itemBuilder: (context, index) {
               final isOpen = _openNoticeIndexList.contains(index);
-              final timeStamp = DateFormat('yyyy.MM.dd a hh:mm', 'ko_KR');
 
               return ExpansionTile(
                 title: Text(
@@ -87,7 +86,7 @@ class _RoomNoticeListScreenState extends State<RoomNoticeListScreen> {
                 ),
                 subtitle: !isOpen
                     ? Text(
-                        timeStamp.format(noticeList[index].date),
+                        noticeList[index].date,
                         style: context.caption(color: AppColors.systemGrey2),
                       )
                     : null,
@@ -113,7 +112,7 @@ class _RoomNoticeListScreenState extends State<RoomNoticeListScreen> {
                           const SizedBox(height: 10),
                           if (isOpen)
                             Text(
-                              timeStamp.format(noticeList[index].date),
+                              noticeList[index].date,
                               style:
                                   context.caption(color: AppColors.systemGrey2),
                             )

@@ -143,8 +143,8 @@ class ChallengeService {
     try {
       final service = dio();
       await service.post(
-        '/api/v1/challenge/rooms/$roomId/noti',
-        data: {title: title, content: content},
+        '/api/v1/challenge/room/$roomId/noti',
+        data: {"title": title, "content": content},
       );
       return true;
     } on DioException catch (error) {

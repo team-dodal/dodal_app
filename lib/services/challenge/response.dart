@@ -58,7 +58,7 @@ class ChallengeRoomNoticeResponse {
   final int roomId;
   final String title;
   final String content;
-  final DateTime date;
+  final String date;
 
   ChallengeRoomNoticeResponse({
     required this.notiId,
@@ -73,5 +73,5 @@ class ChallengeRoomNoticeResponse {
         roomId = data['room_id'],
         title = data['title'],
         content = data['content'],
-        date = DateTime.parse(data['registered_at']);
+        date = data['date'];
 }

@@ -1,5 +1,4 @@
 import 'package:dodal_app/services/challenge/service.dart';
-import 'package:dodal_app/widgets/common/submit_button.dart';
 import 'package:dodal_app/widgets/common/text_input.dart';
 import 'package:flutter/material.dart';
 
@@ -30,51 +29,60 @@ class _CreateNoticeScreenState extends State<CreateNoticeScreen> {
       content: contentController.text,
     );
     if (mounted) {
-      Navigator.of(context).pop();
+      Navigator.pop(context);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text('글 작성하기'),
+        actions: [
+          TextButton(
+            onPressed: titleController.text.isNotEmpty &&
+                    contentController.text.isNotEmpty
+                ? _createNotice
+                : null,
+            child: const Text('완료'),
+          )
+        ],
+      ),
       body: GestureDetector(
         onTap: _dismissKeyboard,
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: SingleChildScrollView(
             child: Column(
               children: [
                 TextInput(
                   controller: titleController,
-                  title: '제목',
-                  placeholder: '제목을 입력해주세요.',
-                  required: true,
-                  wordLength: '${titleController.text.length}/16',
-                  maxLength: 16,
+                  title: '공지 제목',
+                  placeholder: '공지사항의 제목을 입력해 주세요.',
+                  wordLength: '${titleController.text.length}/40',
+                  maxLength: 40,
                   textInputAction: TextInputAction.next,
+                  onChanged: (value) {
+                    setState(() {});
+                  },
                 ),
                 const SizedBox(height: 40),
                 TextInput(
                   controller: contentController,
-                  title: '본문',
-                  placeholder: '본문을 입력해주세요.',
-                  required: true,
-                  wordLength: '${contentController.text.length}/50',
-                  maxLength: 50,
+                  title: '공지 내용',
+                  placeholder: '멤버들에게 공지할 내용을 작성해 주세요.',
+                  wordLength: '${contentController.text.length}/500',
+                  maxLength: 500,
                   multiLine: true,
+                  onChanged: (value) {
+                    setState(() {});
+                  },
                 ),
               ],
             ),
           ),
         ),
       ),
-      bottomSheet: SubmitButton(
-          onPress: titleController.text.isNotEmpty &&
-                  contentController.text.isNotEmpty
-              ? _createNotice
-              : null,
-          title: '생성'),
     );
   }
 }

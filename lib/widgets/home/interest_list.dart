@@ -1,6 +1,11 @@
-import 'package:dodal_app/model/tag_model.dart';
+import 'package:animations/animations.dart';
+import 'package:dodal_app/model/category_model.dart';
+import 'package:dodal_app/model/challenge_model.dart';
 import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
+import 'package:dodal_app/screens/challenge_preview/main.dart';
+import 'package:dodal_app/screens/challenge_route/main.dart';
+import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/challenge_list/challenge_box.dart';
@@ -55,12 +60,12 @@ class InterestList extends StatelessWidget {
               ),
               BlocBuilder<UserCubit, User?>(
                 builder: (context, state) {
-                  List<Tag> tagList = state!.tagList;
+                  List<MyCategory> categoryList = state!.categoryList;
                   return ExpandablePageView.builder(
-                    itemCount: tagList.length,
+                    itemCount: categoryList.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) =>
-                        InterestCategoryCard(tagList: tagList),
+                        InterestCategoryCard(category: categoryList[index]),
                   );
                 },
               )
@@ -72,10 +77,37 @@ class InterestList extends StatelessWidget {
   }
 }
 
-class InterestCategoryCard extends StatelessWidget {
-  const InterestCategoryCard({super.key, required this.tagList});
+class InterestCategoryCard extends StatefulWidget {
+  const InterestCategoryCard({super.key, required this.category});
 
-  final List<Tag> tagList;
+  final MyCategory category;
+
+  @override
+  State<InterestCategoryCard> createState() => _InterestCategoryCardState();
+}
+
+class _InterestCategoryCardState extends State<InterestCategoryCard> {
+  List<Challenge> _challenges = [];
+
+  _getChallenges() async {
+    final res = await ChallengeService.getChallengesByCategory(
+      categoryValue: widget.category.value,
+      tagValue: '',
+      conditionCode: 0,
+      certCntList: [1, 2, 3, 4, 5, 6, 7],
+      page: 0,
+      pageSize: 3,
+    );
+    setState(() {
+      _challenges = res!;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getChallenges();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,32 +132,40 @@ class InterestCategoryCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '불끈불끈 건강 💪',
+              '${widget.category.subName} ${widget.category.name} ${widget.category.emoji}',
               style: context.body1(fontWeight: FontWeight.bold),
             ),
             Text(
-              '#체력 키우기 #살기 위해 한다',
+              '${widget.category.hashTags[0]} ${widget.category.hashTags[1]}',
               style: context.body4(color: AppColors.systemGrey1),
             ),
             Column(
               children: [
-                for (final i in [1, 2, 3])
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 20,
-                    ),
-                    child: ChallengeBox(
-                      id: i,
-                      title: '타이틀',
-                      thumbnailImg: null,
-                      tag: tagList[0],
-                      adminProfile: '',
-                      adminNickname: '어드민',
-                      recruitCnt: 20,
-                      userCnt: 4,
-                      certCnt: 5,
-                      // isBookmarked: true,
-                    ),
+                for (final challenge in _challenges)
+                  OpenContainer(
+                    transitionType: ContainerTransitionType.fadeThrough,
+                    closedElevation: 0,
+                    closedBuilder: (context, action) {
+                      return Container(
+                        padding: const EdgeInsets.only(top: 20),
+                        constraints: const BoxConstraints(minHeight: 80),
+                        child: ChallengeBox(
+                          id: challenge.id,
+                          title: challenge.title,
+                          thumbnailImg: challenge.thumbnailImg,
+                          tag: challenge.tag,
+                          adminProfile: challenge.adminProfile,
+                          adminNickname: challenge.adminNickname,
+                          recruitCnt: challenge.recruitCnt,
+                          userCnt: challenge.userCnt,
+                          certCnt: challenge.certCnt,
+                          isBookmarked: challenge.isBookmarked,
+                        ),
+                      );
+                    },
+                    openBuilder: (context, action) => challenge.isJoined
+                        ? ChallengeRoute(id: challenge.id)
+                        : ChallengePreviewScreen(id: challenge.id),
                   )
               ],
             ),

@@ -41,10 +41,6 @@ class _ChallengeBoxState extends State<ChallengeBox> {
   late bool _bookmarkStatus;
 
   _handleBookmark() async {
-    await ChallengeService.bookmark(
-      roomId: widget.id,
-      value: !_bookmarkStatus,
-    );
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -52,6 +48,15 @@ class _ChallengeBoxState extends State<ChallengeBox> {
           duration: const Duration(seconds: 2),
         ),
       );
+      setState(() {
+        _bookmarkStatus = !_bookmarkStatus;
+      });
+    }
+    final res = await ChallengeService.bookmark(
+      roomId: widget.id,
+      value: !_bookmarkStatus,
+    );
+    if (res == null) {
       setState(() {
         _bookmarkStatus = !_bookmarkStatus;
       });
