@@ -1,11 +1,13 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/helper/slide_page_route.dart';
+import 'package:dodal_app/screens/create_feed/main.dart';
 import 'package:dodal_app/screens/group_settings_menu/main.dart';
 import 'package:dodal_app/screens/challenge_route/chat_screen.dart';
 import 'package:dodal_app/screens/challenge_route/home_feed_screen.dart';
 import 'package:dodal_app/screens/challenge_route/ranking_screen.dart';
 import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/services/challenge/service.dart';
+import 'package:dodal_app/widgets/challenge_room/challenge_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
 const routeNameList = ['홈', '채팅', '랭킹'];
@@ -80,19 +82,35 @@ class _ChallengeRouteState extends State<ChallengeRoute>
               ),
               title: const Text('그룹'),
             ),
-            body: PageTransitionSwitcher(
-              transitionBuilder: (child, animation, secondaryAnimation) {
-                return FadeThroughTransition(
-                  animation: animation,
-                  secondaryAnimation: secondaryAnimation,
-                  child: child,
+            body: Padding(
+              padding: const EdgeInsets.only(bottom: 100),
+              child: PageTransitionSwitcher(
+                transitionBuilder: (child, animation, secondaryAnimation) {
+                  return FadeThroughTransition(
+                    animation: animation,
+                    secondaryAnimation: secondaryAnimation,
+                    child: child,
+                  );
+                },
+                child: [
+                  HomeFeedScreen(challenge: challenge),
+                  const RankingScreen(),
+                  const ChatScreen(),
+                ][_currentIndex],
+              ),
+            ),
+            bottomSheet: ChallengeBottomSheet(
+              buttonText: '인증하기',
+              roomId: challenge.id,
+              bookmarked: challenge.isBookmarked,
+              mainButtonPress: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CreateFeedScreen(),
+                  ),
                 );
               },
-              child: [
-                HomeFeedScreen(challenge: challenge),
-                const RankingScreen(),
-                const ChatScreen(),
-              ][_currentIndex],
             ),
           );
         });

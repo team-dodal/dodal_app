@@ -3,8 +3,10 @@ import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/avatar_image.dart';
+import 'package:dodal_app/widgets/common/bookmark_snack_bar.dart';
 import 'package:dodal_app/widgets/common/small_tag.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class ChallengeBox extends StatefulWidget {
@@ -42,11 +44,9 @@ class _ChallengeBoxState extends State<ChallengeBox> {
 
   _handleBookmark() async {
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('북마크가 ${_bookmarkStatus ? '삭제' : '추가'}되었습니다.'),
-          duration: const Duration(seconds: 2),
-        ),
+      showBookmarkSnackBar(
+        context,
+        '북마크가 ${_bookmarkStatus ? '해제' : '추가'}되었어요.',
       );
       setState(() {
         _bookmarkStatus = !_bookmarkStatus;
@@ -54,7 +54,7 @@ class _ChallengeBoxState extends State<ChallengeBox> {
     }
     final res = await ChallengeService.bookmark(
       roomId: widget.id,
-      value: !_bookmarkStatus,
+      value: _bookmarkStatus,
     );
     if (res == null) {
       setState(() {
@@ -132,16 +132,19 @@ class _ChallengeBoxState extends State<ChallengeBox> {
                         child: IconButton(
                           padding: EdgeInsets.zero,
                           onPressed: _handleBookmark,
-                          isSelected: _bookmarkStatus,
-                          selectedIcon: const Icon(
-                            Icons.bookmark_rounded,
-                            color: AppColors.systemBlack,
+                          icon: SvgPicture.asset(
+                            _bookmarkStatus
+                                ? 'assets/icons/bookmark_active_icon.svg'
+                                : 'assets/icons/bookmark_icon.svg',
+                            // width: 25,
+                            // height: 25,
+                            colorFilter: ColorFilter.mode(
+                              _bookmarkStatus
+                                  ? AppColors.systemBlack
+                                  : AppColors.systemGrey1,
+                              BlendMode.srcIn,
+                            ),
                           ),
-                          icon: const Icon(
-                            Icons.bookmark_border_rounded,
-                            color: AppColors.systemGrey1,
-                          ),
-                          iconSize: 20,
                         ),
                       ),
                   ],

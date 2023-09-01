@@ -4,9 +4,9 @@ import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/challenge_preview/feed_img_content.dart';
+import 'package:dodal_app/widgets/challenge_room/challenge_bottom_sheet.dart';
 import 'package:dodal_app/widgets/common/room_info_box.dart';
 import 'package:dodal_app/widgets/common/room_thumbnail_image.dart';
-import 'package:dodal_app/widgets/common/submit_button.dart';
 import 'package:dodal_app/widgets/create_challenge/certificate_image_input.dart';
 import 'package:flutter/material.dart';
 
@@ -20,8 +20,7 @@ class ChallengePreviewScreen extends StatefulWidget {
 }
 
 class _ChallengePreviewScreenState extends State<ChallengePreviewScreen> {
-  Future<OneChallengeResponse?> getOneChallenge() async =>
-      ChallengeService.getChallengeOne(challengeId: widget.id);
+  OneChallengeResponse? _challenge;
 
   _join() async {
     final res = await ChallengeService.join(challengeId: widget.id);
@@ -34,24 +33,36 @@ class _ChallengePreviewScreenState extends State<ChallengePreviewScreen> {
     }
   }
 
+  _getChallenge() async {
+    final res = await ChallengeService.getChallengeOne(challengeId: widget.id);
+    setState(() {
+      _challenge = res;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getChallenge();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: getOneChallenge(),
-      builder: (context, snapshot) {
-        if (snapshot.data == null) {
-          return Scaffold(
-            appBar: AppBar(),
-            body: const Center(child: CircularProgressIndicator()),
-          );
-        }
-        final OneChallengeResponse challenge = snapshot.data!;
-        return Scaffold(
-          appBar: AppBar(),
-          body: PreviewScreen(challenge: challenge),
-          bottomSheet: SubmitButton(onPress: _join, title: '도전 참여하기'),
-        );
-      },
+    if (_challenge == null) {
+      return Scaffold(
+        appBar: AppBar(),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
+    return Scaffold(
+      appBar: AppBar(),
+      body: PreviewScreen(challenge: _challenge!),
+      bottomSheet: ChallengeBottomSheet(
+        roomId: _challenge!.id,
+        buttonText: '도전 참여하기',
+        bookmarked: _challenge!.isBookmarked,
+        mainButtonPress: _join,
+      ),
     );
   }
 }
