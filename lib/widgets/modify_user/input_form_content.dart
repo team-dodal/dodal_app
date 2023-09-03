@@ -113,6 +113,9 @@ class _InputFormContentState extends State<InputFormContent> {
             wordLength: '${widget.contentController.text.length}/50',
             maxLength: 50,
             multiLine: true,
+            onChanged: (value) {
+              setState(() {});
+            },
           ),
         ],
       ),

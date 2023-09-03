@@ -34,7 +34,7 @@ class CompleteSignUpScreen extends StatelessWidget {
             final String nickname = snapshot.data!.nickname;
             child = Column(
               children: [
-                Image.asset('assets/images/welcome_image.png'),
+                Image.asset('assets/images/character/welcome.png'),
                 const SizedBox(height: 16),
                 Text(
                   '가입 완료!',

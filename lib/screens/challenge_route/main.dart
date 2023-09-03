@@ -10,7 +10,7 @@ import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/widgets/challenge_room/challenge_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
-const routeNameList = ['홈', '채팅', '랭킹'];
+const routeNameList = ['홈', '랭킹', '채팅'];
 
 class ChallengeRoute extends StatefulWidget {
   const ChallengeRoute({super.key, required this.id});
@@ -29,9 +29,9 @@ class _ChallengeRouteState extends State<ChallengeRoute>
   Future<OneChallengeResponse?> getOneChallenge() async =>
       ChallengeService.getChallengeOne(challengeId: widget.id);
 
-  void _routeMenuScreen() {
-    Navigator.of(context)
-        .push(SlidePageRoute(screen: const GroupSettingsMenuScreen()));
+  void _routeMenuScreen(OneChallengeResponse challenge) {
+    Navigator.of(context).push(
+        SlidePageRoute(screen: GroupSettingsMenuScreen(challenge: challenge)));
   }
 
   @override
@@ -66,8 +66,10 @@ class _ChallengeRouteState extends State<ChallengeRoute>
                   icon: const Icon(Icons.share),
                 ),
                 IconButton(
-                  onPressed: _routeMenuScreen,
-                  icon: const Icon(Icons.menu),
+                  onPressed: () {
+                    _routeMenuScreen(challenge);
+                  },
+                  icon: const Icon(Icons.more_vert),
                 )
               ],
               bottom: TabBar(
@@ -103,11 +105,12 @@ class _ChallengeRouteState extends State<ChallengeRoute>
               buttonText: '인증하기',
               roomId: challenge.id,
               bookmarked: challenge.isBookmarked,
-              mainButtonPress: () {
+              onPress: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const CreateFeedScreen(),
+                    builder: (context) =>
+                        CreateFeedScreen(challenge: challenge),
                   ),
                 );
               },

@@ -61,7 +61,7 @@ class _ChallengePreviewScreenState extends State<ChallengePreviewScreen> {
         roomId: _challenge!.id,
         buttonText: '도전 참여하기',
         bookmarked: _challenge!.isBookmarked,
-        mainButtonPress: _join,
+        onPress: _join,
       ),
     );
   }

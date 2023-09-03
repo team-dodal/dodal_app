@@ -13,7 +13,7 @@ class CompleteCreateChallenge extends StatelessWidget {
         Widget? child;
         child = Column(
           children: [
-            Image.asset('assets/images/welcome_image.png'),
+            Image.asset('assets/images/character/welcome.png'),
             const SizedBox(height: 16),
             Text(
               '도전 생성 완료',

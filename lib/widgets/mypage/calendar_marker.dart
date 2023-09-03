@@ -1,36 +1,46 @@
 import 'package:dodal_app/theme/color.dart';
+import 'package:dodal_app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
-class CalendarMarker extends StatefulWidget {
-  const CalendarMarker({super.key, required this.text});
+class CalendarCell extends StatefulWidget {
+  const CalendarCell({
+    super.key,
+    required this.text,
+    this.backgroundColor,
+  });
 
   final String text;
+  final Color? backgroundColor;
 
   @override
-  State<CalendarMarker> createState() => _CalendarMarkerState();
+  State<CalendarCell> createState() => _CalendarCellState();
 }
 
-class _CalendarMarkerState extends State<CalendarMarker> {
+class _CalendarCellState extends State<CalendarCell> {
   @override
   Widget build(BuildContext context) {
     return Material(
       child: InkWell(
         onTap: () {},
-        borderRadius: BorderRadius.circular(40),
         child: Ink(
-          width: 40,
-          height: 40,
+            child: Container(
+          width: double.infinity,
+          height: double.infinity,
           decoration: BoxDecoration(
-            color: AppColors.orange,
-            borderRadius: BorderRadius.circular(40),
+            shape: BoxShape.rectangle,
+            border: Border.all(color: AppColors.systemGrey3, width: 1),
+            borderRadius: BorderRadius.circular(4),
           ),
           child: Center(
             child: Text(
               widget.text,
-              style: const TextStyle(color: Colors.black),
+              style: context.body1(
+                fontWeight: FontWeight.bold,
+                color: AppColors.systemGrey2,
+              ),
             ),
           ),
-        ),
+        )),
       ),
     );
   }

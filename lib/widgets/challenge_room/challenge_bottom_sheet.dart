@@ -10,13 +10,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 class ChallengeBottomSheet extends StatefulWidget {
   const ChallengeBottomSheet({
     super.key,
-    this.mainButtonPress,
+    this.onPress,
     required this.buttonText,
     required this.bookmarked,
     required this.roomId,
   });
 
-  final void Function()? mainButtonPress;
+  final void Function()? onPress;
   final bool bookmarked;
   final String buttonText;
   final int roomId;
@@ -103,7 +103,7 @@ class _ChallengeBottomSheetState extends State<ChallengeBottomSheet> {
               const SizedBox(width: 6),
               Expanded(
                 child: ElevatedButton(
-                  onPressed: widget.mainButtonPress,
+                  onPressed: widget.onPress,
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
@@ -114,7 +114,7 @@ class _ChallengeBottomSheetState extends State<ChallengeBottomSheet> {
                     widget.buttonText,
                     style: context.body1(
                       fontWeight: FontWeight.bold,
-                      color: widget.mainButtonPress != null
+                      color: widget.onPress != null
                           ? AppColors.systemWhite
                           : AppColors.systemGrey2,
                     ),

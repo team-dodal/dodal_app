@@ -34,6 +34,13 @@ class _CreateNoticeScreenState extends State<CreateNoticeScreen> {
   }
 
   @override
+  void dispose() {
+    titleController.dispose();
+    contentController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

@@ -20,10 +20,11 @@ class SystemDialog extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 24),
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(4)),
+          borderRadius: BorderRadius.all(Radius.circular(8)),
           color: AppColors.bgColor1,
         ),
         child: Column(
@@ -34,12 +35,17 @@ class SystemDialog extends StatelessWidget {
                 Text(
                   title ?? '알림',
                   style: context.headline4(fontWeight: FontWeight.bold),
+                  softWrap: false,
                 ),
                 if (subTitle!.isNotEmpty)
                   Column(
                     children: [
                       const SizedBox(height: 4),
-                      Text(subTitle!, style: context.body4()),
+                      Text(
+                        subTitle!,
+                        style: context.body4(color: AppColors.systemGrey1),
+                        softWrap: false,
+                      ),
                     ],
                   ),
               ],
