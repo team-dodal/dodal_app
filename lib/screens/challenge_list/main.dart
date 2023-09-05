@@ -46,10 +46,7 @@ class _ChallengeListScreenState extends State<ChallengeListScreen> {
 
   @override
   void initState() {
-    pagingController.addPageRequestListener((pageKey) {
-      _request(pageKey);
-    });
-
+    pagingController.addPageRequestListener(_request);
     super.initState();
   }
 
@@ -64,64 +61,67 @@ class _ChallengeListScreenState extends State<ChallengeListScreen> {
     return Scaffold(
       appBar: AppBar(bottom: const ListTabBar()),
       body: BlocListener<ChallengeListFilterCubit, ChallengeListFilter>(
-          listener: (context, state) {
-        pagingController.refresh();
-      }, child: BlocBuilder<ChallengeListFilterCubit, ChallengeListFilter>(
-              builder: (context, state) {
-        return PagedListView<int, Challenge>(
-          pagingController: pagingController,
-          builderDelegate: PagedChildBuilderDelegate<Challenge>(
-            noItemsFoundIndicatorBuilder: (context) {
-              return const Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  FilterTopBar(),
-                  SizedBox(height: 130),
-                  NoListContext(
-                    title: '카테고리 관련 도전이 없습니다.',
-                    subTitle: '도전 그룹을 운영해 보는 건 어떠세요?',
-                  ),
-                ],
-              );
-            },
-            itemBuilder: (context, item, index) {
-              return Column(
-                children: [
-                  if (index == 0) const FilterTopBar(),
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: OpenContainer(
-                      transitionType: ContainerTransitionType.fadeThrough,
-                      closedElevation: 0,
-                      closedBuilder: (context, action) {
-                        return InkWell(
-                          onTap: action,
-                          child: ChallengeBox(
-                            id: item.id,
-                            title: item.title,
-                            tag: item.tag,
-                            thumbnailImg: item.thumbnailImg,
-                            adminProfile: item.adminProfile,
-                            adminNickname: item.adminNickname,
-                            userCnt: item.userCnt,
-                            certCnt: item.certCnt,
-                            recruitCnt: item.recruitCnt,
-                            isBookmarked: item.isBookmarked,
-                          ),
-                        );
-                      },
-                      openBuilder: (context, action) => item.isJoined
-                          ? ChallengeRoute(id: item.id)
-                          : ChallengePreviewScreen(id: item.id),
-                    ),
-                  )
-                ],
-              );
-            },
-          ),
-        );
-      })),
+        listener: (context, state) {
+          pagingController.refresh();
+        },
+        child: BlocBuilder<ChallengeListFilterCubit, ChallengeListFilter>(
+          builder: (context, state) {
+            return PagedListView<int, Challenge>(
+              pagingController: pagingController,
+              builderDelegate: PagedChildBuilderDelegate<Challenge>(
+                noItemsFoundIndicatorBuilder: (context) {
+                  return const Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      FilterTopBar(),
+                      SizedBox(height: 130),
+                      NoListContext(
+                        title: '카테고리 관련 도전이 없습니다.',
+                        subTitle: '도전 그룹을 운영해 보는 건 어떠세요?',
+                      ),
+                    ],
+                  );
+                },
+                itemBuilder: (context, item, index) {
+                  return Column(
+                    children: [
+                      if (index == 0) const FilterTopBar(),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        child: OpenContainer(
+                          transitionType: ContainerTransitionType.fadeThrough,
+                          closedElevation: 0,
+                          closedBuilder: (context, action) {
+                            return InkWell(
+                              onTap: action,
+                              child: ChallengeBox(
+                                id: item.id,
+                                title: item.title,
+                                tag: item.tag,
+                                thumbnailImg: item.thumbnailImg,
+                                adminProfile: item.adminProfile,
+                                adminNickname: item.adminNickname,
+                                userCnt: item.userCnt,
+                                certCnt: item.certCnt,
+                                recruitCnt: item.recruitCnt,
+                                isBookmarked: item.isBookmarked,
+                              ),
+                            );
+                          },
+                          openBuilder: (context, action) => item.isJoined
+                              ? ChallengeRoute(id: item.id)
+                              : ChallengePreviewScreen(id: item.id),
+                        ),
+                      )
+                    ],
+                  );
+                },
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 }

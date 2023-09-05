@@ -7,7 +7,6 @@ import 'package:dodal_app/screens/main_route/mypage_screen.dart';
 import 'package:dodal_app/screens/notification/main.dart';
 import 'package:dodal_app/screens/settings_menu/main.dart';
 import 'package:dodal_app/services/user/service.dart';
-import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/utilities/fcm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -17,21 +16,25 @@ final List<NavigationRoute> _routes = [
   NavigationRoute(
     name: '홈',
     icon: 'assets/icons/home_icon.svg',
+    activeIcon: 'assets/icons/home_active_icon.svg',
     screen: const HomeScreen(),
   ),
   NavigationRoute(
     name: '피드',
     icon: 'assets/icons/feed_icon.svg',
+    activeIcon: 'assets/icons/feed_active_icon.svg',
     screen: const FeedScreen(),
   ),
   NavigationRoute(
     name: '도전',
     icon: 'assets/icons/flag_icon.svg',
+    activeIcon: 'assets/icons/flag_active_icon.svg',
     screen: const ChallengeScreen(),
   ),
   NavigationRoute(
     name: '마이',
     icon: 'assets/icons/my_icon.svg',
+    activeIcon: 'assets/icons/my_active_icon.svg',
     screen: const MyPageScreen(),
   ),
 ];
@@ -101,13 +104,7 @@ class _MainRouteState extends State<MainRoute> {
           for (var i = 0; i < _routes.length; i++)
             BottomNavigationBarItem(
               icon: SvgPicture.asset(
-                _routes[i].icon!,
-                colorFilter: ColorFilter.mode(
-                  _currentIndex == i
-                      ? AppColors.systemGrey1
-                      : AppColors.systemGrey2,
-                  BlendMode.srcIn,
-                ),
+                _currentIndex == i ? _routes[i].activeIcon : _routes[i].icon,
               ),
               label: _routes[i].name,
             )

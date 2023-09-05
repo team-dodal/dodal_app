@@ -1,7 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/helper/slide_page_route.dart';
 import 'package:dodal_app/screens/create_feed/main.dart';
-import 'package:dodal_app/screens/group_settings_menu/main.dart';
+import 'package:dodal_app/screens/challenge_settings_menu/main.dart';
 import 'package:dodal_app/screens/challenge_route/chat_screen.dart';
 import 'package:dodal_app/screens/challenge_route/home_feed_screen.dart';
 import 'package:dodal_app/screens/challenge_route/ranking_screen.dart';

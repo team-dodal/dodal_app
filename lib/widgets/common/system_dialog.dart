@@ -6,7 +6,7 @@ class SystemDialog extends StatelessWidget {
   const SystemDialog({
     super.key,
     this.title,
-    required this.subTitle,
+    this.subTitle,
     this.children,
   });
 
@@ -37,17 +37,16 @@ class SystemDialog extends StatelessWidget {
                   style: context.headline4(fontWeight: FontWeight.bold),
                   softWrap: false,
                 ),
-                if (subTitle!.isNotEmpty)
-                  Column(
-                    children: [
-                      const SizedBox(height: 4),
-                      Text(
-                        subTitle!,
-                        style: context.body4(color: AppColors.systemGrey1),
-                        softWrap: false,
-                      ),
-                    ],
-                  ),
+                Column(
+                  children: [
+                    const SizedBox(height: 4),
+                    Text(
+                      subTitle ?? '',
+                      style: context.body4(color: AppColors.systemGrey1),
+                      softWrap: false,
+                    ),
+                  ],
+                ),
               ],
             ),
             const SizedBox(height: 24),
@@ -56,11 +55,11 @@ class SystemDialog extends StatelessWidget {
                 return Row(
                   children: [
                     Expanded(
-                      child: ElevatedButton(
+                      child: SystemDialogButton(
+                        text: '확인',
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: const Text('확인'),
                       ),
                     )
                   ],
@@ -86,5 +85,53 @@ class SystemDialog extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class SystemDialogButton extends StatelessWidget {
+  const SystemDialogButton({
+    super.key,
+    required this.text,
+    this.primary = true,
+    required this.onPressed,
+  });
+
+  final String text;
+  final bool primary;
+  final void Function() onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    if (primary) {
+      return ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.all(16),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+          ),
+        ),
+        child: Text(
+          text,
+          style: context.body2(color: AppColors.systemWhite),
+        ),
+      );
+    } else {
+      return ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.systemWhite,
+          padding: const EdgeInsets.all(16),
+          shape: const RoundedRectangleBorder(
+            side: BorderSide(color: AppColors.systemGrey3),
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+          ),
+        ),
+        child: Text(
+          text,
+          style: context.body2(color: AppColors.systemBlack),
+        ),
+      );
+    }
   }
 }

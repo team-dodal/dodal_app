@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/theme/color.dart';
-import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/image_bottom_sheet.dart';
 import 'package:dodal_app/widgets/common/system_dialog.dart';
 import 'package:dodal_app/widgets/common/text_input.dart';
@@ -50,35 +49,16 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
         title: '인증 게시물을 업로드 하시겠어요?',
         subTitle: '업로드 후에 삭제는 가능하지만, 수정은 불가능합니다.',
         children: [
-          ElevatedButton(
+          SystemDialogButton(
+            text: '취소',
+            primary: false,
             onPressed: () {
               Navigator.pop(context);
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.systemWhite,
-              padding: const EdgeInsets.all(16),
-              shape: const RoundedRectangleBorder(
-                side: BorderSide(color: AppColors.systemGrey3),
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-              ),
-            ),
-            child: Text(
-              '취소',
-              style: context.body2(color: AppColors.systemBlack),
-            ),
           ),
-          ElevatedButton(
+          SystemDialogButton(
+            text: '업로드하기',
             onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.all(16),
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-              ),
-            ),
-            child: Text(
-              '업로드하기',
-              style: context.body2(color: AppColors.systemWhite),
-            ),
           ),
         ],
       ),
