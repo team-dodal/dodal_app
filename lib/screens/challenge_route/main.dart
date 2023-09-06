@@ -101,20 +101,22 @@ class _ChallengeRouteState extends State<ChallengeRoute>
                 ][_currentIndex],
               ),
             ),
-            bottomSheet: ChallengeBottomSheet(
-              buttonText: '인증하기',
-              roomId: challenge.id,
-              bookmarked: challenge.isBookmarked,
-              onPress: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        CreateFeedScreen(challenge: challenge),
-                  ),
-                );
-              },
-            ),
+            bottomSheet: _currentIndex == 0
+                ? ChallengeBottomSheet(
+                    buttonText: '인증하기',
+                    roomId: challenge.id,
+                    bookmarked: challenge.isBookmarked,
+                    onPress: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              CreateFeedScreen(challenge: challenge),
+                        ),
+                      );
+                    },
+                  )
+                : null,
           );
         });
   }

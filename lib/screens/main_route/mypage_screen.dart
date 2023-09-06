@@ -12,7 +12,9 @@ class MyPageScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           UserInfoBox(),
+          SizedBox(height: 20),
           Calendar(),
+          SizedBox(height: 20),
         ],
       ),
     );

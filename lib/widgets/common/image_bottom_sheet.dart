@@ -38,6 +38,7 @@ class _ImageBottomSheetState extends State<ImageBottomSheet> {
       if (!mounted) return;
       widget.setImage(File(compressedImage.path));
     } catch (err) {
+      print(err);
       showDialog(
           context: context,
           builder: (ctx) => const SystemDialog(subTitle: '이 이미지는 사용할 수 없습니다'));

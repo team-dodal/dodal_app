@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/theme/color.dart';
+import 'package:dodal_app/utilities/add_watermark.dart';
 import 'package:dodal_app/widgets/common/image_bottom_sheet.dart';
 import 'package:dodal_app/widgets/common/system_dialog.dart';
 import 'package:dodal_app/widgets/common/text_input.dart';
@@ -33,9 +34,10 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
     showModalBottomSheet(
       context: context,
       builder: (context) => ImageBottomSheet(
-        setImage: (image) {
+        setImage: (image) async {
+          final watermarkedImg = await addWatermark(image, text: 'text');
           setState(() {
-            _image = image;
+            _image = watermarkedImg;
           });
         },
       ),

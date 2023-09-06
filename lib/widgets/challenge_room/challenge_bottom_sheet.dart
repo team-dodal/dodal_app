@@ -70,7 +70,17 @@ class _ChallengeBottomSheetState extends State<ChallengeBottomSheet> {
     return SafeArea(
       child: Container(
         width: MediaQuery.of(context).size.width,
-        decoration: const BoxDecoration(color: AppColors.systemWhite),
+        decoration: const BoxDecoration(
+          color: AppColors.systemWhite,
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.systemGrey3,
+              offset: Offset(0, 0),
+              blurRadius: 8,
+              blurStyle: BlurStyle.outer,
+            ),
+          ],
+        ),
         child: Padding(
           padding: EdgeInsets.only(
             top: 8,
