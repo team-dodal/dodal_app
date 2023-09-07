@@ -19,7 +19,7 @@ class CompleteSignUpScreen extends StatelessWidget {
         builder: (context, snapshot) {
           Widget? child;
           if (snapshot.connectionState == ConnectionState.done) {
-            var user = snapshot.data!;
+            User user = snapshot.data!;
             context.read<UserCubit>().set(User(
                   id: user.id,
                   email: user.email,

@@ -1,14 +1,14 @@
 import 'dart:io';
-
+import 'package:dodal_app/screens/create_feed/test_result_screen.dart';
 import 'package:dodal_app/services/challenge/response.dart';
-import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/utilities/add_watermark.dart';
+import 'package:dodal_app/utilities/image_compress.dart';
 import 'package:dodal_app/widgets/common/image_bottom_sheet.dart';
 import 'package:dodal_app/widgets/common/system_dialog.dart';
 import 'package:dodal_app/widgets/common/text_input.dart';
 import 'package:dodal_app/widgets/create_feed/feed_bottom_sheet.dart';
+import 'package:dodal_app/widgets/create_feed/feed_image.dart';
 import 'package:flutter/material.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class CreateFeedScreen extends StatefulWidget {
   const CreateFeedScreen({super.key, required this.challenge});
@@ -21,6 +21,7 @@ class CreateFeedScreen extends StatefulWidget {
 
 class _CreateFeedScreenState extends State<CreateFeedScreen> {
   TextEditingController contentController = TextEditingController();
+  GlobalKey frameKey = GlobalKey();
   File? _image;
 
   _dismissKeyboard() {
@@ -34,10 +35,9 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
     showModalBottomSheet(
       context: context,
       builder: (context) => ImageBottomSheet(
-        setImage: (image) async {
-          final watermarkedImg = await addWatermark(image, text: 'text');
+        setImage: (image) {
           setState(() {
-            _image = watermarkedImg;
+            _image = image;
           });
         },
       ),
@@ -60,7 +60,20 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
           ),
           SystemDialogButton(
             text: '업로드하기',
-            onPressed: () {},
+            onPressed: () async {
+              final file = await captureCreateImage(frameKey);
+              if (file == null) return;
+              final compressedFile = await imageCompress(file);
+              if (mounted) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        TestResultScreen(image: compressedFile),
+                  ),
+                );
+              }
+            },
           ),
         ],
       ),
@@ -86,38 +99,9 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
                 onTap: () {
                   _showBottomSheet(context);
                 },
-                child: AspectRatio(
-                  aspectRatio: 1,
-                  child: Container(
-                    clipBehavior: Clip.hardEdge,
-                    width: double.infinity,
-                    decoration:
-                        const BoxDecoration(color: AppColors.systemGrey4),
-                    child: Builder(
-                      builder: (context) {
-                        if (_image != null) {
-                          return FadeInImage(
-                            placeholder: MemoryImage(kTransparentImage),
-                            image: FileImage(_image!),
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            height: double.infinity,
-                          );
-                        } else {
-                          return const Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.add,
-                                size: 50,
-                                color: AppColors.systemGrey2,
-                              ),
-                            ],
-                          );
-                        }
-                      },
-                    ),
-                  ),
+                child: RepaintBoundary(
+                  key: frameKey,
+                  child: FeedImage(image: _image),
                 ),
               ),
               Padding(

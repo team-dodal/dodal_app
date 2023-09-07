@@ -34,11 +34,10 @@ class _ImageBottomSheetState extends State<ImageBottomSheet> {
     try {
       pickedImage = await imagePicker.pickImage(source: type);
       if (pickedImage == null) return;
-      final compressedImage = await testCompressAndGetFile(pickedImage);
+      File compressedImage = await imageCompress(File(pickedImage.path));
       if (!mounted) return;
-      widget.setImage(File(compressedImage.path));
+      widget.setImage(compressedImage);
     } catch (err) {
-      print(err);
       showDialog(
           context: context,
           builder: (ctx) => const SystemDialog(subTitle: '이 이미지는 사용할 수 없습니다'));

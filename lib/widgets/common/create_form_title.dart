@@ -28,7 +28,7 @@ class CreateFormTitle extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    for (var step = 1; step <= steps!; step++)
+                    for (int step = 1; step <= steps!; step++)
                       Row(
                         children: [
                           Container(

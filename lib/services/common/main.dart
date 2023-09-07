@@ -43,7 +43,7 @@ Dio dio() {
 
 requestNewAccessToken() async {
   try {
-    var service = await refreshDio();
+    Dio service = await refreshDio();
     final res = await service.post('/api/v1/users/access-token');
 
     return res.data['result']['access_token'];

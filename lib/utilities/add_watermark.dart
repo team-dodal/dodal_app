@@ -1,18 +1,29 @@
-import 'package:path_provider/path_provider.dart';
-import 'package:image/image.dart';
 import 'dart:io';
+import 'dart:typed_data';
+import 'dart:ui';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:path_provider/path_provider.dart';
 
-addWatermark(File imgFile, {required String text}) async {
-  var tempDir = await getTemporaryDirectory();
-  DateTime now = DateTime.now();
+Future<File?> captureCreateImage(GlobalKey frameKey) async {
+  try {
+    Uint8List? uint8List = await getUint8List(frameKey);
+    Directory directory = await getTemporaryDirectory();
+    File file = File('${directory.path}/${DateTime.now()}.png');
+    await file.writeAsBytes(uint8List!);
+    return file;
+  } catch (e) {
+    print('Error capturing and saving image: $e');
+    return null;
+  }
+}
 
-  // draw image
-  Image? image = decodeImage(imgFile.readAsBytesSync());
-  // draw text
-  drawString(image!, text, font: arial48);
-  // create temporary image
-  File('${tempDir.path}/$now.png').writeAsBytesSync(encodePng(image));
-  // get temporary image
-  final watermarkedImg = File('${tempDir.path}/$now.png');
-  return watermarkedImg;
+Future<Uint8List?> getUint8List(GlobalKey frameKey) async {
+  RenderRepaintBoundary boundary =
+      frameKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+  final image = await boundary.toImage(pixelRatio: 5.0);
+  ByteData? byteData = await image.toByteData(format: ImageByteFormat.png);
+  Uint8List uint8List = byteData!.buffer.asUint8List();
+
+  return uint8List;
 }

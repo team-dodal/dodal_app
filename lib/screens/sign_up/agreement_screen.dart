@@ -24,7 +24,7 @@ class _AgreementScreenState extends State<AgreementScreen> {
   List<bool> _agreements = [false, false, false, false];
 
   _onChanged(int idx, bool? value) {
-    var copy = [..._agreements];
+    List<bool> copy = [..._agreements];
     if (value == null) return;
     copy[idx] = value;
     setState(() {

@@ -16,7 +16,8 @@ class _FeedScreenState extends State<FeedScreen> {
       PagingController(firstPageKey: 0);
 
   _request(int pageKey) async {
-    var res = await FeedService.getAllFeeds(page: pageKey, pageSize: pageSize);
+    List<FeedContentResponse>? res =
+        await FeedService.getAllFeeds(page: pageKey, pageSize: pageSize);
     if (res == null) return;
     final isLastPage = res.length < pageSize;
     if (isLastPage) {

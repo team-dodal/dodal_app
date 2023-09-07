@@ -101,7 +101,7 @@ class _MainRouteState extends State<MainRoute> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         items: [
-          for (var i = 0; i < _routes.length; i++)
+          for (int i = 0; i < _routes.length; i++)
             BottomNavigationBarItem(
               icon: SvgPicture.asset(
                 _currentIndex == i ? _routes[i].activeIcon : _routes[i].icon,
