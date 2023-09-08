@@ -1,10 +1,8 @@
-import 'dart:io';
-
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/common/image_bottom_sheet.dart';
+import 'package:dodal_app/widgets/common/image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class AvatarImage extends StatefulWidget {
   const AvatarImage({
@@ -41,41 +39,11 @@ class _AvatarImageState extends State<AvatarImage> {
       onTap: widget.onChanged != null ? _showBottomSheet : null,
       child: Stack(
         children: [
-          Container(
-            clipBehavior: Clip.hardEdge,
+          ImageWidget(
+            image: widget.image,
             width: widget.width,
             height: widget.height,
-            decoration: const BoxDecoration(
-              color: AppColors.systemGrey4,
-              shape: BoxShape.circle,
-            ),
-            child: Builder(
-              builder: (context) {
-                if (widget.image != null && widget.image != '') {
-                  if (widget.image is File) {
-                    return FadeInImage(
-                      placeholder: MemoryImage(kTransparentImage),
-                      image: FileImage(widget.image),
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: double.infinity,
-                    );
-                  } else {
-                    return FadeInImage.memoryNetwork(
-                      placeholder: kTransparentImage,
-                      image: widget.image,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: double.infinity,
-                      imageErrorBuilder: (context, error, stackTrace) {
-                        return const SizedBox();
-                      },
-                    );
-                  }
-                }
-                return const SizedBox();
-              },
-            ),
+            shape: BoxShape.circle,
           ),
           if (widget.onChanged != null)
             Positioned(

@@ -3,9 +3,9 @@ import 'package:dodal_app/providers/create_challenge_cubit.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
+import 'package:dodal_app/widgets/common/image_widget.dart';
 import 'package:dodal_app/widgets/common/input_title.dart';
 import 'package:dodal_app/widgets/common/room_info_box.dart';
-import 'package:dodal_app/widgets/common/room_thumbnail_image.dart';
 import 'package:dodal_app/widgets/common/submit_button.dart';
 import 'package:dodal_app/widgets/create_challenge/certificate_image_input.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +34,11 @@ class ChallengePreviewScreen extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 100),
               child: Column(
                 children: [
-                  RoomThumbnailImage(image: challenge.thumbnailImg),
+                  ImageWidget(
+                    image: challenge.thumbnailImg,
+                    width: double.infinity,
+                    height: 200,
+                  ),
                   RoomInfoBox(
                     title: challenge.title!,
                     tagName: challenge.tagValue!.name,

@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/image_bottom_sheet.dart';
+import 'package:dodal_app/widgets/common/image_widget.dart';
 import 'package:dodal_app/widgets/common/input_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class ThumbnailImageInput extends StatelessWidget {
   const ThumbnailImageInput({
@@ -47,25 +47,10 @@ class ThumbnailImageInput extends StatelessWidget {
             ),
             child: Stack(
               children: [
-                Container(
-                  clipBehavior: Clip.hardEdge,
+                ImageWidget(
+                  image: image,
                   width: double.infinity,
                   height: 184,
-                  decoration: const BoxDecoration(color: AppColors.systemGrey4),
-                  child: Builder(
-                    builder: (context) {
-                      if (image != null) {
-                        return FadeInImage(
-                          placeholder: MemoryImage(kTransparentImage),
-                          image: FileImage(image!),
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          height: double.infinity,
-                        );
-                      }
-                      return const SizedBox();
-                    },
-                  ),
                 ),
                 Positioned(
                   bottom: 0,

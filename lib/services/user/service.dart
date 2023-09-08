@@ -12,7 +12,13 @@ class UserService {
       final service = dio();
       final res = await service.post('/api/v1/users/sign-in',
           data: {"social_type": socialType.name, "social_id": socialId});
-      return SignInResponse.fromJson(res.data['result']);
+
+      final isSigned = res.data['result']['is_signed'] == 'true';
+      if (isSigned) {
+        return SignInResponse.fromJson(res.data['result']);
+      } else {
+        return null;
+      }
     } on DioException catch (error) {
       ResponseErrorDialog(error);
     }

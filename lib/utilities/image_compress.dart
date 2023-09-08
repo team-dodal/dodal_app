@@ -7,9 +7,9 @@ Future<File> imageCompress(File file) async {
   if (await file.length() < 1000000) return file;
   XFile? result = await FlutterImageCompress.compressAndGetFile(
     file.path,
-    '${file.path}_compress.png',
+    '${file.path}_compress.jpeg',
     quality: 80,
-    format: CompressFormat.png,
+    format: CompressFormat.jpeg,
   );
 
   int fileSize = await result!.length();

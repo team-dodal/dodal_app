@@ -18,6 +18,10 @@ class FeedBottomSheet extends StatefulWidget {
 class _FeedBottomSheetState extends State<FeedBottomSheet> {
   @override
   Widget build(BuildContext context) {
+    if (MediaQuery.of(context).viewInsets.bottom != 0) {
+      return const SizedBox();
+    }
+
     return SafeArea(
       child: Container(
         width: MediaQuery.of(context).size.width,
@@ -30,7 +34,7 @@ class _FeedBottomSheetState extends State<FeedBottomSheet> {
         child: Padding(
           padding: EdgeInsets.only(
             top: 8,
-            bottom: 8 + (Platform.isIOS ? 40 : 20),
+            bottom: 8 + (Platform.isIOS ? 20 : 0),
             left: 8,
             right: 8,
           ),

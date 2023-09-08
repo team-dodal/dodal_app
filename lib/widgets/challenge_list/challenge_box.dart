@@ -4,10 +4,10 @@ import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/avatar_image.dart';
 import 'package:dodal_app/widgets/common/bookmark_snack_bar.dart';
+import 'package:dodal_app/widgets/common/image_widget.dart';
 import 'package:dodal_app/widgets/common/small_tag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class ChallengeBox extends StatefulWidget {
   const ChallengeBox({
@@ -82,27 +82,11 @@ class _ChallengeBoxState extends State<ChallengeBox> {
         children: [
           AspectRatio(
             aspectRatio: 1,
-            child: Container(
-              clipBehavior: Clip.hardEdge,
+            child: ImageWidget(
+              image: widget.thumbnailImg,
+              width: double.infinity,
               height: double.infinity,
-              decoration: const BoxDecoration(
-                color: AppColors.systemGrey4,
-                borderRadius: BorderRadius.all(Radius.circular(4)),
-              ),
-              child: Builder(
-                builder: (context) {
-                  if (widget.thumbnailImg != null) {
-                    return FadeInImage(
-                      placeholder: MemoryImage(kTransparentImage),
-                      image: NetworkImage(widget.thumbnailImg!),
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: double.infinity,
-                    );
-                  }
-                  return const SizedBox();
-                },
-              ),
+              borderRadius: 4,
             ),
           ),
           const SizedBox(width: 12),

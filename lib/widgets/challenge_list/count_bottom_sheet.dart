@@ -9,15 +9,18 @@ class CountBottomSheet extends StatelessWidget {
   const CountBottomSheet({super.key});
 
   _onChanged(BuildContext context, List<int> certCntList, int i) {
-    if (certCntList.contains(i)) {
-      if (certCntList.length <= 1) return;
-      final clone = certCntList;
+    List<int> clone = certCntList;
+    if (clone.length == 7) {
+      clone = [];
+    }
+    if (clone.contains(i)) {
+      if (clone.length <= 1) return;
       clone.remove(i);
       context.read<ChallengeListFilterCubit>().updateData(certCntList: clone);
     } else {
       context
           .read<ChallengeListFilterCubit>()
-          .updateData(certCntList: [...certCntList, i]);
+          .updateData(certCntList: [...clone, i]);
     }
   }
 

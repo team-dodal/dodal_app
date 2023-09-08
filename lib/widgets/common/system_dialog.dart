@@ -43,7 +43,7 @@ class SystemDialog extends StatelessWidget {
                     Text(
                       subTitle ?? '',
                       style: context.body4(color: AppColors.systemGrey1),
-                      softWrap: false,
+                      softWrap: true,
                     ),
                   ],
                 ),

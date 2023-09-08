@@ -2,6 +2,7 @@ import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/screens/sign_in/main.dart';
 import 'package:dodal_app/services/user/service.dart';
 import 'package:dodal_app/theme/color.dart';
+import 'package:dodal_app/widgets/common/system_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -20,13 +21,32 @@ class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
   bool _notification = true;
 
   _signOut() async {
-    secureStorage.deleteAll();
-    if (!mounted) return;
-    context.read<UserCubit>().clear();
-
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (ctx) => const SignInScreen()),
-        (route) => false);
+    showDialog(
+      context: context,
+      builder: (context) => SystemDialog(
+        subTitle: '로그아웃 하시겠습니까?',
+        children: [
+          SystemDialogButton(
+            text: '취소',
+            primary: false,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          SystemDialogButton(
+            text: '확인',
+            onPressed: () {
+              secureStorage.deleteAll();
+              if (!mounted) return;
+              context.read<UserCubit>().clear();
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (ctx) => const SignInScreen()),
+                  (route) => false);
+            },
+          )
+        ],
+      ),
+    );
   }
 
   _removeMyAccount() async {

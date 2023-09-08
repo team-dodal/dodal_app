@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/image_bottom_sheet.dart';
+import 'package:dodal_app/widgets/common/image_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 enum CertOption { correct, wrong }
 
@@ -46,33 +46,15 @@ class CertificateImageInput extends StatelessWidget {
           children: [
             AspectRatio(
               aspectRatio: 1,
-              child: Container(
-                clipBehavior: Clip.hardEdge,
-                decoration: const BoxDecoration(color: AppColors.systemGrey4),
-                child: Builder(
-                  builder: (context) {
-                    if (image != null && image != null) {
-                      if (image is File) {
-                        return FadeInImage(
-                          placeholder: MemoryImage(kTransparentImage),
-                          image: FileImage(image!),
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          height: double.infinity,
-                        );
-                      } else {
-                        return FadeInImage.memoryNetwork(
-                          placeholder: kTransparentImage,
-                          image: image,
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          height: double.infinity,
-                          imageErrorBuilder: (context, error, stackTrace) {
-                            return const SizedBox();
-                          },
-                        );
-                      }
-                    }
+              child: Builder(
+                builder: (context) {
+                  if (image != null && image != null) {
+                    return ImageWidget(
+                      image: image,
+                      width: double.infinity,
+                      height: double.infinity,
+                    );
+                  } else {
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -87,8 +69,8 @@ class CertificateImageInput extends StatelessWidget {
                         ),
                       ],
                     );
-                  },
-                ),
+                  }
+                },
               ),
             ),
             Positioned(

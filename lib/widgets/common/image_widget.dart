@@ -3,21 +3,35 @@ import 'package:dodal_app/theme/color.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-class RoomThumbnailImage extends StatelessWidget {
-  const RoomThumbnailImage({
+class ImageWidget extends StatelessWidget {
+  const ImageWidget({
     super.key,
     required this.image,
+    required this.width,
+    required this.height,
+    this.shape = BoxShape.rectangle,
+    this.borderRadius = 0,
   });
 
   final dynamic image;
+  final double width;
+  final double height;
+  final BoxShape shape;
+  final double borderRadius;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       clipBehavior: Clip.hardEdge,
-      width: double.infinity,
-      height: 200,
-      decoration: const BoxDecoration(color: AppColors.systemGrey4),
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: AppColors.systemGrey4,
+        shape: shape,
+        borderRadius: borderRadius != 0
+            ? BorderRadius.all(Radius.circular(borderRadius))
+            : null,
+      ),
       child: Builder(
         builder: (context) {
           if (image != null) {

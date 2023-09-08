@@ -15,28 +15,17 @@ class CertCountButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ChallengeListFilterCubit, ChallengeListFilter>(
         builder: (context, state) {
-      String text = '';
-
-      if (state.certCntList.length == 7) {
-        text = '전체';
-      } else {
-        for (final i in state.certCntList) {
-          text += '주 $i회';
-          if (state.certCntList.length >= i) {
-            text += ', ';
-          }
-        }
-      }
+      bool isSelectedAll = state.certCntList.length == 7;
+      String text = isSelectedAll
+          ? '전체'
+          : state.certCntList.map((e) => '주 $e회').join(', ');
 
       return Flexible(
         child: TextButton(
           onPressed: () => onPress(context),
           style: TextButton.styleFrom(
             side: const BorderSide(color: AppColors.systemGrey3),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 8,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,

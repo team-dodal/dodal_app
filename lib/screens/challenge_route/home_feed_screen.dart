@@ -3,8 +3,8 @@ import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/challenge_preview/feed_img_content.dart';
 import 'package:dodal_app/widgets/challenge_room/current_certification_box.dart';
 import 'package:dodal_app/widgets/challenge_room/notice_box.dart';
+import 'package:dodal_app/widgets/common/image_widget.dart';
 import 'package:dodal_app/widgets/common/room_info_box.dart';
-import 'package:dodal_app/widgets/common/room_thumbnail_image.dart';
 import 'package:flutter/material.dart';
 
 class HomeFeedScreen extends StatelessWidget {
@@ -17,7 +17,11 @@ class HomeFeedScreen extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          RoomThumbnailImage(image: challenge.thumbnailImgUrl),
+          ImageWidget(
+            image: challenge.thumbnailImgUrl,
+            width: double.infinity,
+            height: 200,
+          ),
           RoomInfoBox(
             title: challenge.title,
             tagName: challenge.tag.name,

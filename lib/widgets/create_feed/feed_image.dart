@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
+import 'package:dodal_app/widgets/common/image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class FeedImage extends StatefulWidget {
   const FeedImage({super.key, required this.image});
@@ -32,10 +32,8 @@ class _FeedImageState extends State<FeedImage> {
             if (widget.image != null) {
               return Stack(
                 children: [
-                  FadeInImage(
-                    placeholder: MemoryImage(kTransparentImage),
-                    image: FileImage(widget.image!),
-                    fit: BoxFit.cover,
+                  ImageWidget(
+                    image: widget.image,
                     width: double.infinity,
                     height: double.infinity,
                   ),

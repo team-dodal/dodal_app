@@ -1,6 +1,8 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/helper/slide_page_route.dart';
 import 'package:dodal_app/model/navigation_route.dart';
+import 'package:dodal_app/providers/create_challenge_cubit.dart';
+import 'package:dodal_app/screens/create_challenge/main.dart';
 import 'package:dodal_app/screens/main_route/feed_screen.dart';
 import 'package:dodal_app/screens/main_route/home_screen.dart';
 import 'package:dodal_app/screens/main_route/mypage_screen.dart';
@@ -9,6 +11,7 @@ import 'package:dodal_app/screens/settings_menu/main.dart';
 import 'package:dodal_app/services/user/service.dart';
 import 'package:dodal_app/utilities/fcm.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'challenge_screen.dart';
 
@@ -78,6 +81,16 @@ class _MainRouteState extends State<MainRoute> {
                 _handleActionBtn(const NotiFicationScreen());
               },
               icon: const Icon(Icons.notifications_none),
+            ),
+          if (_currentIndex == 2)
+            IconButton(
+              onPressed: () {
+                _handleActionBtn(BlocProvider(
+                  create: (context) => CreateChallengeCubit(),
+                  child: const CreateChallengeScreen(),
+                ));
+              },
+              icon: const Icon(Icons.add_rounded),
             ),
           if (_currentIndex == 3)
             IconButton(

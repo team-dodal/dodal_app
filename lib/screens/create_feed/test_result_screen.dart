@@ -1,8 +1,7 @@
 import 'dart:io';
 
-import 'package:dodal_app/theme/color.dart';
+import 'package:dodal_app/widgets/common/image_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class TestResultScreen extends StatelessWidget {
   const TestResultScreen({super.key, required this.image});
@@ -14,17 +13,10 @@ class TestResultScreen extends StatelessWidget {
     return Scaffold(
       body: AspectRatio(
         aspectRatio: 1,
-        child: Container(
-          clipBehavior: Clip.hardEdge,
+        child: ImageWidget(
+          image: image,
           width: double.infinity,
-          decoration: const BoxDecoration(color: AppColors.systemGrey4),
-          child: FadeInImage(
-            placeholder: MemoryImage(kTransparentImage),
-            image: FileImage(image),
-            fit: BoxFit.cover,
-            width: double.infinity,
-            height: double.infinity,
-          ),
+          height: double.infinity,
         ),
       ),
     );

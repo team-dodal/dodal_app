@@ -93,30 +93,33 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
       body: GestureDetector(
         onTap: _dismissKeyboard,
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  _showBottomSheet(context);
-                },
-                child: RepaintBoundary(
-                  key: frameKey,
-                  child: FeedImage(image: _image),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: TextInput(
-                  controller: contentController,
-                  placeholder: '오늘의 인증에 대해 입력해주세요.',
-                  maxLength: 100,
-                  multiLine: true,
-                  onChanged: (value) {
-                    setState(() {});
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 100),
+            child: Column(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    _showBottomSheet(context);
                   },
+                  child: RepaintBoundary(
+                    key: frameKey,
+                    child: FeedImage(image: _image),
+                  ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: TextInput(
+                    controller: contentController,
+                    placeholder: '오늘의 인증에 대해 입력해주세요.',
+                    maxLength: 100,
+                    multiLine: true,
+                    onChanged: (value) {
+                      setState(() {});
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
