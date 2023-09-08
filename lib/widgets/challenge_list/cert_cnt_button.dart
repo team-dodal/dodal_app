@@ -25,7 +25,7 @@ class CertCountButton extends StatelessWidget {
           onPressed: () => onPress(context),
           style: TextButton.styleFrom(
             side: const BorderSide(color: AppColors.systemGrey3),
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,

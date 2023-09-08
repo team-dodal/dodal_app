@@ -34,7 +34,7 @@ class SystemDialog extends StatelessWidget {
               children: [
                 Text(
                   title ?? '알림',
-                  style: context.headline4(fontWeight: FontWeight.bold),
+                  style: context.body1(fontWeight: FontWeight.bold),
                   softWrap: false,
                 ),
                 Column(

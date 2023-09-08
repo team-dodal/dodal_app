@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:dodal_app/screens/create_feed/test_result_screen.dart';
 import 'package:dodal_app/services/challenge/response.dart';
+import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/utilities/add_watermark.dart';
 import 'package:dodal_app/utilities/image_compress.dart';
 import 'package:dodal_app/widgets/common/image_bottom_sheet.dart';
@@ -45,6 +45,27 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
   }
 
   _createFeed() async {
+    final file = await captureCreateImage(frameKey);
+    if (file == null) return;
+    final compressedFile = await imageCompress(file);
+
+    final res = await ChallengeService.createFeed(
+      challengeId: widget.challenge.id,
+      content: contentController.text,
+      image: compressedFile,
+    );
+    if (res && mounted) {
+      showDialog(
+        context: context,
+        builder: (ctx) => const SystemDialog(
+          subTitle: '피드가 성공적으로 업로드되었습니다.',
+        ),
+      );
+      Navigator.pop(context);
+    }
+  }
+
+  _handleSubmit() async {
     showDialog(
       context: context,
       builder: (context) => SystemDialog(
@@ -60,20 +81,7 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
           ),
           SystemDialogButton(
             text: '업로드하기',
-            onPressed: () async {
-              final file = await captureCreateImage(frameKey);
-              if (file == null) return;
-              final compressedFile = await imageCompress(file);
-              if (mounted) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        TestResultScreen(image: compressedFile),
-                  ),
-                );
-              }
-            },
+            onPressed: _createFeed,
           ),
         ],
       ),
@@ -126,7 +134,7 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
       bottomSheet: FeedBottomSheet(
         onPress: _image == null || contentController.text.isEmpty
             ? null
-            : _createFeed,
+            : _handleSubmit,
       ),
     );
   }

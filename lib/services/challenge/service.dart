@@ -198,7 +198,7 @@ class ChallengeService {
     }
   }
 
-  static createFeed({
+  static Future<bool> createFeed({
     required int challengeId,
     required String content,
     required File image,
@@ -211,15 +211,15 @@ class ChallengeService {
         'certification_img',
         await MultipartFile.fromFile(image.path),
       ));
+
       await service.post(
-        '/api/v1/challenge/rooms/$challengeId/certification',
+        '/api/v1/challenge/room/$challengeId/certification',
         data: formData,
       );
-
       return true;
     } on DioException catch (error) {
       ResponseErrorDialog(error);
-      return null;
+      return false;
     }
   }
 }
