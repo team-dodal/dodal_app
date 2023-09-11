@@ -1,6 +1,5 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/helper/slide_page_route.dart';
-import 'package:dodal_app/model/navigation_route.dart';
 import 'package:dodal_app/providers/create_challenge_cubit.dart';
 import 'package:dodal_app/screens/create_challenge/main.dart';
 import 'package:dodal_app/screens/main_route/feed_screen.dart';
@@ -15,31 +14,31 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'challenge_screen.dart';
 
-final List<NavigationRoute> _routes = [
-  NavigationRoute(
-    name: '홈',
-    icon: 'assets/icons/home_icon.svg',
-    activeIcon: 'assets/icons/home_active_icon.svg',
-    screen: const HomeScreen(),
-  ),
-  NavigationRoute(
-    name: '피드',
-    icon: 'assets/icons/feed_icon.svg',
-    activeIcon: 'assets/icons/feed_active_icon.svg',
-    screen: const FeedScreen(),
-  ),
-  NavigationRoute(
-    name: '도전',
-    icon: 'assets/icons/flag_icon.svg',
-    activeIcon: 'assets/icons/flag_active_icon.svg',
-    screen: const ChallengeScreen(),
-  ),
-  NavigationRoute(
-    name: '마이',
-    icon: 'assets/icons/my_icon.svg',
-    activeIcon: 'assets/icons/my_active_icon.svg',
-    screen: const MyPageScreen(),
-  ),
+const List<Map<String, dynamic>> routes = [
+  {
+    'name': '홈',
+    'icon': 'assets/icons/home_icon.svg',
+    'activeIcon': 'assets/icons/home_active_icon.svg',
+    'screen': HomeScreen(),
+  },
+  {
+    'name': '피드',
+    'icon': 'assets/icons/feed_icon.svg',
+    'activeIcon': 'assets/icons/feed_active_icon.svg',
+    'screen': FeedScreen(),
+  },
+  {
+    'name': '도전',
+    'icon': 'assets/icons/flag_icon.svg',
+    'activeIcon': 'assets/icons/flag_active_icon.svg',
+    'screen': ChallengeScreen(),
+  },
+  {
+    'name': '마이',
+    'icon': 'assets/icons/my_icon.svg',
+    'activeIcon': 'assets/icons/my_active_icon.svg',
+    'screen': MyPageScreen(),
+  },
 ];
 
 class MainRoute extends StatefulWidget {
@@ -73,7 +72,8 @@ class _MainRouteState extends State<MainRoute> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_routes.map((route) => route.name).toList()[_currentIndex]),
+        title:
+            Text(routes.map((route) => route['name']).toList()[_currentIndex]),
         actions: [
           if (_currentIndex == 0)
             IconButton(
@@ -109,17 +109,19 @@ class _MainRouteState extends State<MainRoute> {
             child: child,
           );
         },
-        child: _routes.map((route) => route.screen).toList()[_currentIndex],
+        child: routes.map((route) => route['screen']).toList()[_currentIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         items: [
-          for (int i = 0; i < _routes.length; i++)
+          for (int i = 0; i < routes.length; i++)
             BottomNavigationBarItem(
               icon: SvgPicture.asset(
-                _currentIndex == i ? _routes[i].activeIcon : _routes[i].icon,
+                _currentIndex == i
+                    ? routes[i]['activeIcon']
+                    : routes[i]['icon'],
               ),
-              label: _routes[i].name,
+              label: routes[i]['name'],
             )
         ],
         onTap: (value) {

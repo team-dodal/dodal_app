@@ -85,7 +85,7 @@ class _ChallengeRouteState extends State<ChallengeRoute>
               title: const Text('그룹'),
             ),
             body: Padding(
-              padding: const EdgeInsets.only(bottom: 100),
+              padding: EdgeInsets.only(bottom: _currentIndex == 0 ? 100 : 0),
               child: PageTransitionSwitcher(
                 transitionBuilder: (child, animation, secondaryAnimation) {
                   return FadeThroughTransition(
@@ -96,7 +96,7 @@ class _ChallengeRouteState extends State<ChallengeRoute>
                 },
                 child: [
                   HomeFeedScreen(challenge: challenge),
-                  const RankingScreen(),
+                  RankingScreen(challenge: challenge),
                   const ChatScreen(),
                 ][_currentIndex],
               ),

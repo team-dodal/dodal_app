@@ -19,4 +19,7 @@ class AppColors {
   static const basicColor2 = Color(0xffF2F2F2);
   static const danger = Color(0xffFF4D4F);
   static const success = Color(0xff52C41A);
+  static const gold = Color(0xffECB21E);
+  static const silver = Color(0xffBDBAB8);
+  static const bronze = Color(0xffCC8128);
 }

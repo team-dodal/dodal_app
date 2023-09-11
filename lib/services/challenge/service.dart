@@ -222,4 +222,23 @@ class ChallengeService {
       return false;
     }
   }
+
+  static Future<List<ChallengeRankResponse>?> getRanks({
+    required int id,
+    required int code,
+  }) async {
+    try {
+      final service = dio();
+      final res =
+          await service.get('/api/v1/challenge/room/$id/rank?code=$code');
+      List<dynamic> result = res.data['result'];
+      var test = List.filled(
+          30, {"nickname": "노래하는 어피치", "profile_url": null, "cert_cnt": 0});
+
+      return test.map((e) => ChallengeRankResponse.fromJson(e)).toList();
+    } on DioException catch (error) {
+      ResponseErrorDialog(error);
+      return null;
+    }
+  }
 }

@@ -35,40 +35,22 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   bool _isLogin = false;
+  User? _user;
 
   checkingLoginStatus() async {
-    try {
-      User? user = await UserService.user();
-      if (user == null) return;
-      if (!mounted) return;
-      context.read<UserCubit>().set(User(
-            id: user.id,
-            email: user.email,
-            nickname: user.nickname,
-            content: user.content,
-            profileUrl: user.profileUrl!,
-            registerAt: user.registerAt,
-            socialType: user.socialType,
-            categoryList: user.categoryList,
-            tagList: user.tagList,
-          ));
-      setState(() {
-        _isLogin = true;
-      });
-    } catch (err) {
-      setState(() {
-        _isLogin = false;
-      });
-    }
+    _user = await UserService.user();
+    setState(() {
+      _isLogin = _user != null;
+    });
   }
 
   @override
   void initState() {
     checkingLoginStatus();
     FlutterNativeSplash.remove();
-    super.initState();
     FirebaseMessaging.onMessage.listen(Fcm.foregroundNotification);
     FirebaseMessaging.onBackgroundMessage(Fcm.backgroundNotification);
+    super.initState();
   }
 
   @override
@@ -81,7 +63,24 @@ class _AppState extends State<App> {
         title: '도달',
         theme: lightTheme,
         navigatorKey: navigatorKey,
-        home: _isLogin ? const MainRoute() : const SignInScreen(),
+        home: Builder(builder: (context) {
+          if (_isLogin) {
+            context.read<UserCubit>().set(User(
+                  id: _user!.id,
+                  email: _user!.email,
+                  nickname: _user!.nickname,
+                  content: _user!.content,
+                  profileUrl: _user!.profileUrl,
+                  registerAt: _user!.registerAt,
+                  socialType: _user!.socialType,
+                  categoryList: _user!.categoryList,
+                  tagList: _user!.tagList,
+                ));
+            return const MainRoute();
+          } else {
+            return const SignInScreen();
+          }
+        }),
       ),
     );
   }
