@@ -1,4 +1,5 @@
 import 'package:dodal_app/theme/color.dart';
+import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/image_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +20,7 @@ class RankListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 64,
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
       decoration: const BoxDecoration(
         border: Border(
           top: BorderSide(color: AppColors.systemGrey4),
@@ -31,17 +32,22 @@ class RankListItem extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text('$rank'),
+              Text('$rank', style: context.body2(color: AppColors.systemGrey2)),
+              const SizedBox(width: 16),
               ImageWidget(
                 image: profileUrl,
                 width: 40,
                 height: 40,
                 shape: BoxShape.circle,
               ),
-              Text(nickname),
+              const SizedBox(width: 9),
+              Text(nickname, style: context.body2()),
             ],
           ),
-          Text('$certCnt'),
+          Text(
+            '인증 $certCnt회',
+            style: context.body4(color: AppColors.systemGrey1),
+          ),
         ],
       ),
     );

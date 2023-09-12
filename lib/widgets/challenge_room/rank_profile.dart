@@ -8,12 +8,14 @@ class RankProfile extends StatelessWidget {
     super.key,
     required this.imageUrl,
     required this.rank,
-    this.name,
+    required this.name,
+    required this.certCnt,
   });
 
   final String? imageUrl;
   final String? name;
   final int rank;
+  final int? certCnt;
 
   @override
   Widget build(BuildContext context) {
@@ -26,34 +28,58 @@ class RankProfile extends StatelessWidget {
       rankColor = AppColors.bronze;
     }
 
-    return Stack(
-      alignment: Alignment.bottomCenter,
+    double imageWidth = MediaQuery.of(context).size.width / 5;
+    double numberWidth = imageWidth / 4;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        ImageWidget(
-          image: imageUrl,
-          width: 90,
-          height: 90,
-          shape: BoxShape.circle,
-        ),
-        Positioned(
-          child: Container(
-            width: 22,
-            height: 22,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: rankColor,
+        Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: ImageWidget(
+                image: imageUrl,
+                width: imageWidth,
+                height: imageWidth,
+                shape: BoxShape.circle,
+              ),
             ),
-            child: Center(
-              child: Text(
-                '$rank',
-                style: context.body3(
-                  color: AppColors.systemWhite,
-                  fontWeight: FontWeight.bold,
+            Positioned(
+              child: Container(
+                width: numberWidth,
+                height: numberWidth,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: rankColor,
+                ),
+                child: Center(
+                  child: Text(
+                    '$rank',
+                    style: context.body3(
+                      color: AppColors.systemWhite,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
+          ],
         ),
+        const SizedBox(height: 6),
+        Text(name ?? '', style: context.body2(fontWeight: FontWeight.bold)),
+        const SizedBox(height: 4),
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+          decoration: const BoxDecoration(
+            color: AppColors.lightOrange,
+          ),
+          child: Text(
+            '인증 $certCnt회',
+            style: context.body4(color: AppColors.orange),
+          ),
+        )
       ],
     );
   }
