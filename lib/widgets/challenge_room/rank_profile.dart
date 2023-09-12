@@ -2,6 +2,7 @@ import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/image_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class RankProfile extends StatelessWidget {
   const RankProfile({
@@ -29,7 +30,6 @@ class RankProfile extends StatelessWidget {
     }
 
     double imageWidth = MediaQuery.of(context).size.width / 5;
-    double numberWidth = imageWidth / 4;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -38,7 +38,7 @@ class RankProfile extends StatelessWidget {
           alignment: Alignment.bottomCenter,
           children: [
             Padding(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.symmetric(vertical: 14),
               child: ImageWidget(
                 image: imageUrl,
                 width: imageWidth,
@@ -46,40 +46,51 @@ class RankProfile extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
             ),
+            if (rank == 1)
+              Positioned(
+                top: 0,
+                child: SvgPicture.asset('assets/icons/first_rank_crown.svg'),
+              ),
             Positioned(
               child: Container(
-                width: numberWidth,
-                height: numberWidth,
+                padding: const EdgeInsets.all(6),
+                alignment: Alignment.topCenter,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: rankColor,
-                ),
-                child: Center(
-                  child: Text(
-                    '$rank',
-                    style: context.body3(
-                      color: AppColors.systemWhite,
-                      fontWeight: FontWeight.bold,
+                  boxShadow: const [
+                    BoxShadow(
+                      color: AppColors.systemGrey3,
+                      offset: Offset(0, 0),
+                      blurRadius: 8,
+                      blurStyle: BlurStyle.outer,
                     ),
+                  ],
+                ),
+                child: Text(
+                  '$rank',
+                  style: context.body3(
+                    color: AppColors.systemWhite,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 6),
         Text(name ?? '', style: context.body2(fontWeight: FontWeight.bold)),
         const SizedBox(height: 4),
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
-          decoration: const BoxDecoration(
-            color: AppColors.lightOrange,
-          ),
-          child: Text(
-            '인증 $certCnt회',
-            style: context.body4(color: AppColors.orange),
-          ),
-        )
+        if (certCnt != null)
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+            decoration: const BoxDecoration(
+              color: AppColors.lightOrange,
+            ),
+            child: Text(
+              '인증 $certCnt회',
+              style: context.body4(color: AppColors.orange),
+            ),
+          )
       ],
     );
   }

@@ -1,8 +1,10 @@
 import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/theme/color.dart';
+import 'package:dodal_app/widgets/challenge_room/rank_filter_bottom_sheet.dart';
 import 'package:dodal_app/widgets/challenge_room/rank_list_item.dart';
 import 'package:dodal_app/widgets/challenge_room/rank_profile.dart';
+import 'package:dodal_app/widgets/common/filter_button.dart';
 import 'package:flutter/material.dart';
 
 class RankingScreen extends StatefulWidget {
@@ -15,14 +17,14 @@ class RankingScreen extends StatefulWidget {
 }
 
 class _RankingScreenState extends State<RankingScreen> {
-  final int _code = 0;
+  ChallengeRankFilterEnum _code = ChallengeRankFilterEnum.all;
   List<ChallengeRankResponse?> _topThreeList = [null, null, null];
   List<ChallengeRankResponse?> _list = [];
 
   _getRankList() async {
     final rankResult = await ChallengeService.getRanks(
       id: widget.challenge.id,
-      code: _code,
+      code: _code.index,
     );
     if (rankResult == null) return;
     _setRankList(rankResult);
@@ -45,6 +47,19 @@ class _RankingScreenState extends State<RankingScreen> {
     });
   }
 
+  _showSortBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (_) => RankFilterBottomSheet(
+        onChange: (value) {
+          setState(() {
+            _code = value;
+          });
+        },
+      ),
+    );
+  }
+
   @override
   void initState() {
     _getRankList();
@@ -56,50 +71,70 @@ class _RankingScreenState extends State<RankingScreen> {
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(
-          child: Column(
+          child: Stack(
             children: [
               Padding(
-                padding: const EdgeInsets.all(20),
-                child: SizedBox(
-                  height: 200,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: RankProfile(
-                          imageUrl: _topThreeList[1]?.profileUrl,
-                          name: _topThreeList[1]?.nickname,
-                          rank: 2,
-                          certCnt: _topThreeList[1]?.certCnt,
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.topCenter,
-                        child: RankProfile(
-                          imageUrl: _topThreeList[0]?.profileUrl,
-                          name: _topThreeList[0]?.nickname,
-                          rank: 1,
-                          certCnt: _topThreeList[0]?.certCnt,
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: RankProfile(
-                          imageUrl: _topThreeList[2]?.profileUrl,
-                          name: _topThreeList[2]?.nickname,
-                          rank: 3,
-                          certCnt: _topThreeList[2]?.certCnt,
-                        ),
-                      ),
-                    ],
-                  ),
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    FilterButton(
+                      onPressed: _showSortBottomSheet,
+                      text: challengeRankFilterEnumText(_code),
+                    ),
+                  ],
                 ),
               ),
-              Container(
-                width: double.infinity,
-                height: 8,
-                decoration: const BoxDecoration(color: AppColors.systemGrey4),
+              Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 24),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(
+                          children: [
+                            const SizedBox(height: 50),
+                            RankProfile(
+                              imageUrl: _topThreeList[1]?.profileUrl,
+                              name: _topThreeList[1]?.nickname,
+                              rank: 2,
+                              certCnt: _topThreeList[1]?.certCnt,
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            RankProfile(
+                              imageUrl: _topThreeList[0]?.profileUrl,
+                              name: _topThreeList[0]?.nickname,
+                              rank: 1,
+                              certCnt: _topThreeList[0]?.certCnt,
+                            ),
+                            const SizedBox(height: 50),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            const SizedBox(height: 50),
+                            RankProfile(
+                              imageUrl: _topThreeList[2]?.profileUrl,
+                              name: _topThreeList[2]?.nickname,
+                              rank: 3,
+                              certCnt: _topThreeList[2]?.certCnt,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    height: 8,
+                    decoration:
+                        const BoxDecoration(color: AppColors.systemGrey4),
+                  ),
+                ],
               ),
             ],
           ),
