@@ -57,6 +57,26 @@ class ChallengeService {
     }
   }
 
+  static updateChallenge({
+    required String title,
+    required String content,
+    required String tagValue,
+    required int recruitCnt,
+    required int certCnt,
+    required String certContent,
+    File? thumbnailImg,
+    required File? certCorrectImg,
+    required File? certWrongImg,
+  }) async {
+    try {
+      final service = dio();
+      return null;
+    } on DioException catch (err) {
+      ResponseErrorDialog(err);
+      return null;
+    }
+  }
+
   static Future<List<Challenge>?> getChallengesByCategory({
     required String categoryValue,
     required String tagValue,

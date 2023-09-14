@@ -77,12 +77,14 @@ class ChallengeRoomNoticeResponse {
 }
 
 class ChallengeRankResponse {
+  final int userId;
   final String nickname;
   final int certCnt;
   final String? profileUrl;
 
   ChallengeRankResponse.fromJson(Map<String, dynamic> data)
-      : nickname = data['nickname'],
+      : userId = data['user_id'],
+        nickname = data['nickname'],
         profileUrl = data['profile_url'],
         certCnt = data['cert_cnt'];
 }

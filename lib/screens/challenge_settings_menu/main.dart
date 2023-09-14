@@ -1,12 +1,12 @@
+import 'package:dodal_app/providers/create_challenge_cubit.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/screens/challenge_settings_menu/challenge_report_screen.dart';
 import 'package:dodal_app/screens/challenge_settings_menu/manage_feed_screen.dart';
 import 'package:dodal_app/screens/challenge_settings_menu/manage_member_screen.dart';
-import 'package:dodal_app/screens/challenge_settings_menu/modify_challenge_screen.dart';
+import 'package:dodal_app/screens/create_challenge/main.dart';
 import 'package:dodal_app/screens/main_route/main.dart';
 import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/services/challenge/service.dart';
-import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/common/system_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,50 +24,43 @@ class GroupSettingsMenuScreen extends StatelessWidget {
     final userId = BlocProvider.of<UserCubit>(context).state!.id;
     bool isHost = challenge.hostId == userId;
 
-    List<Widget> adminList = [
-      ListTile(
-        title: const Text('도전 상세 정보 편집'),
-        trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 16),
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const ModifyChallengeScreen(),
-          ));
-        },
-      ),
-      ListTile(
-        title: const Text('도전 인증 관리'),
-        trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 16),
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const ManageFeedScreen(),
-          ));
-        },
-      ),
-      ListTile(
-        title: const Text('도전 멤버 관리'),
-        trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 16),
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const ManageMemberScreen(),
-          ));
-        },
-      ),
-      Container(
-        height: 8,
-        decoration: const BoxDecoration(color: AppColors.bgColor2),
-      ),
-      ListTile(
-        title: const Text('도전 그룹 삭제하기'),
-        trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 16),
-        onTap: () {},
-      ),
+    List<Map<String, dynamic>> adminItemList = [
+      {
+        'name': '도전 상세 정보 편집',
+        'page': BlocProvider(
+          create: (context) => CreateChallengeCubit(
+            id: challenge.id,
+            title: challenge.title,
+            content: challenge.content,
+            certContent: challenge.certContent,
+            tagValue: challenge.tag,
+            thumbnailImg: challenge.thumbnailImgUrl,
+            certCorrectImg: challenge.certCorrectImgUrl,
+            certWrongImg: challenge.certWrongImgUrl,
+            recruitCnt: challenge.recruitCnt,
+            certCnt: challenge.certCnt,
+          ),
+          child: const CreateChallengeScreen(),
+        ),
+      },
+      {
+        'name': '도전 인증 관리',
+        'page': const ManageFeedScreen(),
+      },
+      {
+        'name': '도전 멤버 관리',
+        'page': const ManageMemberScreen(),
+      },
+      {
+        'name': '도전 그룹 삭제하기',
+        'action': () {},
+      },
     ];
 
-    List<Widget> userList = [
-      ListTile(
-        title: const Text('나가기'),
-        trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 16),
-        onTap: () async {
+    List<Map<String, dynamic>> userItemList = [
+      {
+        'name': '나가기',
+        'action': () async {
           showDialog(
             context: context,
             builder: (context) => SystemDialog(
@@ -98,23 +91,36 @@ class GroupSettingsMenuScreen extends StatelessWidget {
             ),
           );
         },
-      ),
-      ListTile(
-        title: const Text('신고하기'),
-        trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 16),
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (BuildContext ctx) => const ChallengeReportScreen(),
-          ));
-        },
-      ),
+      },
+      {
+        'name': '신고하기',
+        'page': const ChallengeReportScreen(),
+      },
     ];
 
+    List<Map<String, dynamic>> list = isHost ? adminItemList : userItemList;
     return Scaffold(
       appBar: AppBar(
         title: Text(challenge.title),
       ),
-      body: Column(children: isHost ? adminList : userList),
+      body: Column(
+        children: list
+            .map((item) => ListTile(
+                  title: Text(item['name']),
+                  trailing:
+                      const Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                  onTap: () {
+                    if (item['page'] != null) {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => item['page'],
+                      ));
+                    } else {
+                      item['action']();
+                    }
+                  },
+                ))
+            .toList(),
+      ),
     );
   }
 }

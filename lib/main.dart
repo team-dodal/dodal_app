@@ -34,19 +34,17 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  bool _isLogin = false;
   User? _user;
 
   checkingLoginStatus() async {
     _user = await UserService.user();
-    setState(() {
-      _isLogin = _user != null;
-    });
+    setState(() {});
   }
 
   @override
   void initState() {
     checkingLoginStatus();
+    UserService.updateFcmToken(Fcm.token);
     FlutterNativeSplash.remove();
     FirebaseMessaging.onMessage.listen(Fcm.foregroundNotification);
     FirebaseMessaging.onBackgroundMessage(Fcm.backgroundNotification);
@@ -64,7 +62,7 @@ class _AppState extends State<App> {
         theme: lightTheme,
         navigatorKey: navigatorKey,
         home: Builder(builder: (context) {
-          if (_isLogin) {
+          if (_user != null) {
             context.read<UserCubit>().set(User(
                   id: _user!.id,
                   email: _user!.email,

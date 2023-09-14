@@ -1,14 +1,15 @@
-import 'dart:io';
 import 'package:dodal_app/model/tag_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CreateChallenge {
+  int? id;
   String? title, content, certContent;
-  File? thumbnailImg, certCorrectImg, certWrongImg;
+  dynamic thumbnailImg, certCorrectImg, certWrongImg;
   int? recruitCnt, certCnt;
   Tag? tagValue;
 
   CreateChallenge({
+    this.id,
     required this.title,
     required this.content,
     required this.certContent,
@@ -25,9 +26,9 @@ class CreateChallenge {
     String? content,
     String? certContent,
     Tag? tagValue,
-    File? thumbnailImg,
-    File? certCorrectImg,
-    File? certWrongImg,
+    dynamic thumbnailImg,
+    dynamic certCorrectImg,
+    dynamic certWrongImg,
     int? recruitCnt,
     int? certCnt,
   }) {
@@ -46,18 +47,29 @@ class CreateChallenge {
 }
 
 class CreateChallengeCubit extends Cubit<CreateChallenge> {
-  CreateChallengeCubit()
-      : super(
+  CreateChallengeCubit({
+    int? id,
+    String? title,
+    String? content,
+    String? certContent,
+    Tag? tagValue,
+    String? thumbnailImg,
+    String? certCorrectImg,
+    String? certWrongImg,
+    int? recruitCnt,
+    int? certCnt,
+  }) : super(
           CreateChallenge(
-            title: '',
-            content: '',
-            certContent: '',
-            tagValue: null,
-            thumbnailImg: null,
-            certCorrectImg: null,
-            certWrongImg: null,
-            recruitCnt: null,
-            certCnt: 1,
+            id: id,
+            title: title ?? '',
+            content: content ?? '',
+            certContent: certContent ?? '',
+            tagValue: tagValue,
+            thumbnailImg: thumbnailImg,
+            certCorrectImg: certCorrectImg,
+            certWrongImg: certWrongImg,
+            recruitCnt: recruitCnt,
+            certCnt: certCnt ?? 1,
           ),
         );
 
@@ -66,9 +78,9 @@ class CreateChallengeCubit extends Cubit<CreateChallenge> {
     String? content,
     String? certContent,
     Tag? tagValue,
-    File? thumbnailImg,
-    File? certCorrectImg,
-    File? certWrongImg,
+    dynamic thumbnailImg,
+    dynamic certCorrectImg,
+    dynamic certWrongImg,
     int? recruitCnt,
     int? certCnt,
   }) {

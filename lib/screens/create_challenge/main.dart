@@ -20,24 +20,41 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
   int _currentIndex = 0;
   int steps = 4;
 
-  _submit() {
+  _submit() async {
     final state = BlocProvider.of<CreateChallengeCubit>(context).state;
-    final res = ChallengeService.createChallenge(
-      title: state.title!,
-      content: state.content!,
-      thumbnailImg: state.thumbnailImg,
-      tagValue: state.tagValue!.value,
-      recruitCnt: state.recruitCnt!,
-      certCnt: state.certCnt!,
-      certContent: state.certContent!,
-      certCorrectImg: state.certCorrectImg,
-      certWrongImg: state.certWrongImg,
-    );
+    var res;
+    if (state.id != null) {
+      res = await ChallengeService.updateChallenge(
+        title: state.title!,
+        content: state.content!,
+        thumbnailImg: state.thumbnailImg,
+        tagValue: state.tagValue!.value,
+        recruitCnt: state.recruitCnt!,
+        certCnt: state.certCnt!,
+        certContent: state.certContent!,
+        certCorrectImg: state.certCorrectImg,
+        certWrongImg: state.certWrongImg,
+      );
+    } else {
+      res = await ChallengeService.createChallenge(
+        title: state.title!,
+        content: state.content!,
+        thumbnailImg: state.thumbnailImg,
+        tagValue: state.tagValue!.value,
+        recruitCnt: state.recruitCnt!,
+        certCnt: state.certCnt!,
+        certContent: state.certContent!,
+        certCorrectImg: state.certCorrectImg,
+        certWrongImg: state.certWrongImg,
+      );
+    }
     if (res == null) return;
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (ctx) => const CompleteCreateChallenge()),
-      (route) => false,
-    );
+    if (mounted) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (ctx) => const CompleteCreateChallenge()),
+        (route) => false,
+      );
+    }
   }
 
   @override

@@ -114,6 +114,7 @@ class _ChallengeRouteState extends State<ChallengeRoute>
                               CreateFeedScreen(challenge: challenge),
                         ),
                       );
+                      setState(() {});
                     },
                   )
                 : null,

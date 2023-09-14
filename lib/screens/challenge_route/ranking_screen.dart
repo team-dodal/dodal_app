@@ -18,32 +18,20 @@ class RankingScreen extends StatefulWidget {
 
 class _RankingScreenState extends State<RankingScreen> {
   ChallengeRankFilterEnum _code = ChallengeRankFilterEnum.all;
-  List<ChallengeRankResponse?> _topThreeList = [null, null, null];
+  List<ChallengeRankResponse?>? _topThreeList;
   List<ChallengeRankResponse?> _list = [];
 
   _getRankList() async {
-    final rankResult = await ChallengeService.getRanks(
+    final rankList = await ChallengeService.getRanks(
       id: widget.challenge.id,
       code: _code.index,
     );
-    if (rankResult == null) return;
-    _setRankList(rankResult);
-  }
-
-  void _setRankList(List<ChallengeRankResponse?> list) {
-    List<ChallengeRankResponse?> topList;
-    List<ChallengeRankResponse?> restList;
-
-    if (list.length < 3) {
-      topList = List.from(list)..addAll(List.filled(3 - list.length, null));
-      restList = [];
-    } else {
-      topList = list.sublist(0, 3);
-      restList = list.sublist(3);
-    }
+    if (rankList == null) return;
     setState(() {
-      _topThreeList = topList;
-      _list = restList;
+      _list = rankList;
+      if (rankList.length >= 3) {
+        _topThreeList = rankList.sublist(0, 3);
+      }
     });
   }
 
@@ -73,78 +61,81 @@ class _RankingScreenState extends State<RankingScreen> {
         SliverToBoxAdapter(
           child: Stack(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    FilterButton(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FilterButton(
                       onPressed: _showSortBottomSheet,
                       text: challengeRankFilterEnumText(_code),
                     ),
-                  ],
-                ),
-              ),
-              Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 24),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Column(
-                          children: [
-                            const SizedBox(height: 50),
-                            RankProfile(
-                              imageUrl: _topThreeList[1]?.profileUrl,
-                              name: _topThreeList[1]?.nickname,
-                              rank: 2,
-                              certCnt: _topThreeList[1]?.certCnt,
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            RankProfile(
-                              imageUrl: _topThreeList[0]?.profileUrl,
-                              name: _topThreeList[0]?.nickname,
-                              rank: 1,
-                              certCnt: _topThreeList[0]?.certCnt,
-                            ),
-                            const SizedBox(height: 50),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            const SizedBox(height: 50),
-                            RankProfile(
-                              imageUrl: _topThreeList[2]?.profileUrl,
-                              name: _topThreeList[2]?.nickname,
-                              rank: 3,
-                              certCnt: _topThreeList[2]?.certCnt,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: 8,
-                    decoration:
-                        const BoxDecoration(color: AppColors.systemGrey4),
                   ),
                 ],
               ),
+              if (_topThreeList != null)
+                Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 24),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Column(
+                            children: [
+                              const SizedBox(height: 50),
+                              RankProfile(
+                                imageUrl: _topThreeList![1]?.profileUrl,
+                                name: _topThreeList![1]?.nickname,
+                                rank: 2,
+                                certCnt: _topThreeList![1]?.certCnt,
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              RankProfile(
+                                imageUrl: _topThreeList![0]?.profileUrl,
+                                name: _topThreeList![0]?.nickname,
+                                rank: 1,
+                                certCnt: _topThreeList![0]?.certCnt,
+                              ),
+                              const SizedBox(height: 50),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              const SizedBox(height: 50),
+                              RankProfile(
+                                imageUrl: _topThreeList![2]?.profileUrl,
+                                name: _topThreeList![2]?.nickname,
+                                rank: 3,
+                                certCnt: _topThreeList![2]?.certCnt,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
             ],
           ),
         ),
-        if (_list.isEmpty)
+        SliverToBoxAdapter(
+          child: Container(
+            width: double.infinity,
+            height: 8,
+            decoration: const BoxDecoration(color: AppColors.systemGrey4),
+          ),
+        ),
+        if (_list.isNotEmpty)
           SliverList.builder(
             itemCount: _list.length,
             itemBuilder: (context, index) {
               return RankListItem(
-                rank: index + 4,
+                rank: index + 1,
+                userId: _list[index]!.userId,
                 profileUrl: _list[index]!.profileUrl,
                 nickname: _list[index]!.nickname,
                 certCnt: _list[index]!.certCnt,

@@ -72,7 +72,7 @@ class _ChallengeTitleScreenState extends State<ChallengeTitleScreen> {
     return BlocBuilder<CreateChallengeCubit, CreateChallenge>(
         builder: (context, state) {
       return Scaffold(
-        appBar: AppBar(title: const Text('도전 만들기')),
+        appBar: AppBar(title: Text(state.id == null ? '도전 만들기' : '도전 수정하기')),
         body: SingleChildScrollView(
           controller: scrollController,
           child: Padding(

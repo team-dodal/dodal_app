@@ -7,8 +7,6 @@ import 'package:dodal_app/screens/main_route/home_screen.dart';
 import 'package:dodal_app/screens/main_route/mypage_screen.dart';
 import 'package:dodal_app/screens/notification/main.dart';
 import 'package:dodal_app/screens/settings_menu/main.dart';
-import 'package:dodal_app/services/user/service.dart';
-import 'package:dodal_app/utilities/fcm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -54,12 +52,6 @@ class _MainRouteState extends State<MainRoute> {
 
   void _handleActionBtn(Widget screen) {
     Navigator.of(context).push(SlidePageRoute(screen: screen));
-  }
-
-  @override
-  void initState() {
-    UserService.updateFcmToken(Fcm.token);
-    super.initState();
   }
 
   @override

@@ -65,7 +65,7 @@ class Fcm {
             channel.id,
             channel.name,
             channelDescription: channel.description,
-            icon: "@mipmap/ic_launcher",
+            icon: "@mipmap/launcher_icon",
           ),
         ),
       );
