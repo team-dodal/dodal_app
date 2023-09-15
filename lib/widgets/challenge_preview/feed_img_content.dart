@@ -32,12 +32,23 @@ class FeedImgContent extends StatelessWidget {
       mainAxisSpacing: 3,
       childAspectRatio: 1,
       shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       children: [
         for (final feed in feedList)
-          ImageWidget(
-            image: feed,
-            width: double.infinity,
-            height: double.infinity,
+          Stack(
+            children: [
+              ImageWidget(
+                image: feed,
+                width: double.infinity,
+                height: double.infinity,
+              ),
+              Positioned(
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(onTap: () {}),
+                ),
+              )
+            ],
           )
       ],
     );

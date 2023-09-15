@@ -98,7 +98,7 @@ class SystemDialogButton extends StatelessWidget {
 
   final String text;
   final bool primary;
-  final void Function() onPressed;
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {

@@ -3,6 +3,7 @@ import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/challenge_list/count_bottom_sheet.dart';
 import 'package:dodal_app/widgets/challenge_list/sort_bottom_sheet.dart';
+import 'package:dodal_app/widgets/common/cross_divider.dart';
 import 'package:dodal_app/widgets/common/filter_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,7 +43,7 @@ class FilterTopBar extends StatelessWidget {
 
       return Column(
         children: [
-          Container(height: 8, color: AppColors.basicColor2),
+          const CrossDivider(),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
             child: Row(
@@ -63,7 +64,7 @@ class FilterTopBar extends StatelessWidget {
                       SvgPicture.asset('assets/icons/swap_icon.svg'),
                       const SizedBox(width: 4),
                       Text(
-                        CONDITION_LIST[state.conditionCode],
+                        state.condition.displayName,
                         style: context.body4(color: AppColors.systemGrey1),
                       ),
                     ],

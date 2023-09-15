@@ -1,8 +1,8 @@
 import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/providers/create_challenge_cubit.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
-import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
+import 'package:dodal_app/widgets/common/cross_divider.dart';
 import 'package:dodal_app/widgets/common/image_widget.dart';
 import 'package:dodal_app/widgets/common/input_title.dart';
 import 'package:dodal_app/widgets/common/room_info_box.dart';
@@ -48,12 +48,7 @@ class ChallengePreviewScreen extends StatelessWidget {
                     curMember: 1,
                     maxMember: challenge.recruitCnt!,
                   ),
-                  Container(
-                    width: double.infinity,
-                    height: 8,
-                    decoration:
-                        const BoxDecoration(color: AppColors.systemGrey4),
-                  ),
+                  const CrossDivider(),
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(
@@ -71,12 +66,7 @@ class ChallengePreviewScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Container(
-                    width: double.infinity,
-                    height: 8,
-                    decoration:
-                        const BoxDecoration(color: AppColors.systemGrey4),
-                  ),
+                  const CrossDivider(),
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(

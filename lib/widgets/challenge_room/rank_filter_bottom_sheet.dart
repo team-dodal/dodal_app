@@ -1,20 +1,14 @@
-import 'dart:io';
-import 'package:dodal_app/theme/color.dart';
+import 'package:dodal_app/layout/filter_bottom_sheet_layout.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
-enum ChallengeRankFilterEnum { all, month, week }
+enum ChallengeRankFilterEnum {
+  all('전체'),
+  month('월간'),
+  week('주간');
 
-String challengeRankFilterEnumText(ChallengeRankFilterEnum value) {
-  if (value == ChallengeRankFilterEnum.all) {
-    return '전체';
-  } else if (value == ChallengeRankFilterEnum.month) {
-    return '월간';
-  } else if (value == ChallengeRankFilterEnum.week) {
-    return '주간';
-  } else {
-    return '';
-  }
+  const ChallengeRankFilterEnum(this.displayName);
+  final String displayName;
 }
 
 class RankFilterBottomSheet extends StatelessWidget {
@@ -24,49 +18,19 @@ class RankFilterBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.transparent,
-      child: Container(
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(16)),
-          color: AppColors.bgColor1,
-        ),
-        padding: EdgeInsets.only(bottom: Platform.isIOS ? 20 : 0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              height: 28,
-              child: Align(
-                alignment: Alignment.center,
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: AppColors.bgColor4,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
+    return FilterBottomSheetLayout(
+      child: Column(
+        children: ChallengeRankFilterEnum.values
+            .map(
+              (item) => ListTile(
+                title: Text(item.displayName, style: context.body2()),
+                onTap: () {
+                  onChange(item);
+                  Navigator.of(context).pop();
+                },
               ),
-            ),
-            Column(
-              children: ChallengeRankFilterEnum.values
-                  .map(
-                    (item) => ListTile(
-                      title: Text(
-                        challengeRankFilterEnumText(item),
-                        style: context.body2(),
-                      ),
-                      onTap: () {
-                        onChange(item);
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  )
-                  .toList(),
-            ),
-          ],
-        ),
+            )
+            .toList(),
       ),
     );
   }

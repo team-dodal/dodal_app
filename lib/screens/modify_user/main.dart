@@ -3,7 +3,7 @@ import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/services/user/service.dart';
-import 'package:dodal_app/theme/color.dart';
+import 'package:dodal_app/widgets/common/cross_divider.dart';
 import 'package:dodal_app/widgets/modify_user/input_form_content.dart';
 import 'package:dodal_app/widgets/modify_user/tag_select_content.dart';
 import 'package:flutter/material.dart';
@@ -114,11 +114,7 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
                   });
                 },
               ),
-              Container(
-                width: double.infinity,
-                height: 8,
-                decoration: const BoxDecoration(color: AppColors.systemGrey4),
-              ),
+              const CrossDivider(),
               TagSelectContent(
                 itemList: _category,
                 setItemList: (value) {

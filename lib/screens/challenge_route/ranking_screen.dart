@@ -1,9 +1,9 @@
 import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/services/challenge/service.dart';
-import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/challenge_room/rank_filter_bottom_sheet.dart';
 import 'package:dodal_app/widgets/challenge_room/rank_list_item.dart';
 import 'package:dodal_app/widgets/challenge_room/rank_profile.dart';
+import 'package:dodal_app/widgets/common/cross_divider.dart';
 import 'package:dodal_app/widgets/common/filter_button.dart';
 import 'package:flutter/material.dart';
 
@@ -29,7 +29,7 @@ class _RankingScreenState extends State<RankingScreen> {
     if (rankList == null) return;
     setState(() {
       _list = rankList;
-      if (rankList.length >= 3) {
+      if (rankList.length > 3) {
         _topThreeList = rankList.sublist(0, 3);
       }
     });
@@ -68,7 +68,7 @@ class _RankingScreenState extends State<RankingScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: FilterButton(
                       onPressed: _showSortBottomSheet,
-                      text: challengeRankFilterEnumText(_code),
+                      text: _code.displayName,
                     ),
                   ),
                 ],
@@ -114,19 +114,13 @@ class _RankingScreenState extends State<RankingScreen> {
                               ),
                             ],
                           ),
+                          const CrossDivider(),
                         ],
                       ),
                     ),
                   ],
                 ),
             ],
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: Container(
-            width: double.infinity,
-            height: 8,
-            decoration: const BoxDecoration(color: AppColors.systemGrey4),
           ),
         ),
         if (_list.isNotEmpty)

@@ -29,7 +29,7 @@ class _ChallengeListScreenState extends State<ChallengeListScreen> {
     List<Challenge>? res = await ChallengeService.getChallengesByCategory(
       categoryValue: state.category.value,
       tagValue: state.tag.value,
-      conditionCode: state.conditionCode,
+      conditionCode: state.condition.index,
       certCntList: state.certCntList,
       page: pageKey,
       pageSize: pageSize,

@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:dodal_app/theme/color.dart';
+import 'package:dodal_app/layout/filter_bottom_sheet_layout.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/utilities/image_compress.dart';
 import 'package:dodal_app/widgets/common/system_dialog.dart';
@@ -46,56 +46,29 @@ class _ImageBottomSheetState extends State<ImageBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.transparent,
-      child: Container(
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(16)),
-          color: AppColors.bgColor1,
-        ),
-        padding: EdgeInsets.only(bottom: Platform.isIOS ? 20 : 0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              height: 28,
-              child: Align(
-                alignment: Alignment.center,
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: AppColors.bgColor4,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
+    return FilterBottomSheetLayout(
+      child: Column(
+        children: [
+          ListTile(
+            title: Text('직접 촬영', style: context.body2()),
+            onTap: () {
+              _pickImage(ImageSource.camera);
+            },
+          ),
+          ListTile(
+            title: Text('엘범에서 사진 선택', style: context.body2()),
+            onTap: () {
+              _pickImage(ImageSource.gallery);
+            },
+          ),
+          if (widget.imageDefaultOption)
+            ListTile(
+              title: Text('기본 이미지로 변경', style: context.body2()),
+              onTap: () {
+                _pickImage(null);
+              },
             ),
-            Column(
-              children: [
-                ListTile(
-                  title: Text('직접 촬영', style: context.body2()),
-                  onTap: () {
-                    _pickImage(ImageSource.camera);
-                  },
-                ),
-                ListTile(
-                  title: Text('엘범에서 사진 선택', style: context.body2()),
-                  onTap: () {
-                    _pickImage(ImageSource.gallery);
-                  },
-                ),
-                if (widget.imageDefaultOption)
-                  ListTile(
-                    title: Text('기본 이미지로 변경', style: context.body2()),
-                    onTap: () {
-                      _pickImage(null);
-                    },
-                  ),
-              ],
-            ),
-          ],
-        ),
+        ],
       ),
     );
   }

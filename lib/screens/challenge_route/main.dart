@@ -1,16 +1,27 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/helper/slide_page_route.dart';
-import 'package:dodal_app/screens/create_feed/main.dart';
-import 'package:dodal_app/screens/challenge_settings_menu/main.dart';
 import 'package:dodal_app/screens/challenge_route/chat_screen.dart';
 import 'package:dodal_app/screens/challenge_route/home_feed_screen.dart';
 import 'package:dodal_app/screens/challenge_route/ranking_screen.dart';
+import 'package:dodal_app/screens/create_feed/main.dart';
+import 'package:dodal_app/screens/challenge_settings_menu/main.dart';
 import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/widgets/challenge_room/challenge_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
-const routeNameList = ['홈', '랭킹', '채팅'];
+class Route {
+  final String name;
+  final Widget Function(OneChallengeResponse challenge) screen;
+
+  Route({required this.name, required this.screen});
+}
+
+List<Route> routeList = [
+  Route(name: '홈', screen: (value) => HomeFeedScreen(challenge: value)),
+  Route(name: '랭킹', screen: (value) => RankingScreen(challenge: value)),
+  Route(name: '채팅', screen: (value) => const ChatScreen()),
+];
 
 class ChallengeRoute extends StatefulWidget {
   const ChallengeRoute({super.key, required this.id});
@@ -36,7 +47,7 @@ class _ChallengeRouteState extends State<ChallengeRoute>
 
   @override
   void initState() {
-    _tabController = TabController(length: routeNameList.length, vsync: this);
+    _tabController = TabController(length: routeList.length, vsync: this);
     super.initState();
   }
 
@@ -74,7 +85,7 @@ class _ChallengeRouteState extends State<ChallengeRoute>
               ],
               bottom: TabBar(
                 controller: _tabController,
-                tabs: routeNameList.map((name) => Tab(text: name)).toList(),
+                tabs: routeList.map((route) => Tab(text: route.name)).toList(),
                 indicatorSize: TabBarIndicatorSize.tab,
                 onTap: (value) {
                   setState(() {
@@ -84,22 +95,17 @@ class _ChallengeRouteState extends State<ChallengeRoute>
               ),
               title: const Text('그룹'),
             ),
-            body: Padding(
-              padding: EdgeInsets.only(bottom: _currentIndex == 0 ? 100 : 0),
-              child: PageTransitionSwitcher(
-                transitionBuilder: (child, animation, secondaryAnimation) {
-                  return FadeThroughTransition(
-                    animation: animation,
-                    secondaryAnimation: secondaryAnimation,
-                    child: child,
-                  );
-                },
-                child: [
-                  HomeFeedScreen(challenge: challenge),
-                  RankingScreen(challenge: challenge),
-                  const ChatScreen(),
-                ][_currentIndex],
-              ),
+            body: PageTransitionSwitcher(
+              transitionBuilder: (child, animation, secondaryAnimation) {
+                return FadeThroughTransition(
+                  animation: animation,
+                  secondaryAnimation: secondaryAnimation,
+                  child: child,
+                );
+              },
+              child: routeList
+                  .map((route) => route.screen(challenge))
+                  .toList()[_currentIndex],
             ),
             bottomSheet: _currentIndex == 0
                 ? ChallengeBottomSheet(

@@ -13,8 +13,9 @@ class FeedService {
       final res =
           await service.get('/api/v1/feeds?page=$page&page_size=$pageSize');
       List<dynamic> contents = res.data['result']['content'];
-      List<FeedContentResponse> result =
-          contents.map((e) => FeedContentResponse.fromJson(contents)).toList();
+      List<FeedContentResponse> result = contents
+          .map((content) => FeedContentResponse.fromJson(content))
+          .toList();
       return result;
     } on DioException catch (error) {
       ResponseErrorDialog(error);

@@ -1,8 +1,8 @@
 import 'package:dodal_app/services/challenge/response.dart';
-import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/challenge_preview/feed_img_content.dart';
 import 'package:dodal_app/widgets/challenge_room/current_certification_box.dart';
 import 'package:dodal_app/widgets/challenge_room/notice_box.dart';
+import 'package:dodal_app/widgets/common/cross_divider.dart';
 import 'package:dodal_app/widgets/common/image_widget.dart';
 import 'package:dodal_app/widgets/common/room_info_box.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +15,7 @@ class HomeFeedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      padding: const EdgeInsets.only(bottom: 100),
       child: Column(
         children: [
           ImageWidget(
@@ -33,19 +34,12 @@ class HomeFeedScreen extends StatelessWidget {
           ),
           NoticeBox(challenge: challenge),
           const SizedBox(height: 32),
-          Container(
-            width: double.infinity,
-            height: 8,
-            decoration: const BoxDecoration(color: AppColors.systemGrey4),
-          ),
+          const CrossDivider(),
           const SizedBox(height: 32),
           const CurrentCertificationBox(),
           const SizedBox(height: 32),
-          Container(
-            width: double.infinity,
-            height: 8,
-            decoration: const BoxDecoration(color: AppColors.systemGrey4),
-          ),
+          const CrossDivider(),
+          const SizedBox(height: 32),
           FeedImgContent(feedList: challenge.feedUrlList)
         ],
       ),

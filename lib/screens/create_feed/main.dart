@@ -23,6 +23,7 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
   TextEditingController contentController = TextEditingController();
   GlobalKey frameKey = GlobalKey();
   File? _image;
+  bool _isLoading = false;
 
   _dismissKeyboard() {
     FocusScopeNode currentFocus = FocusScope.of(context);
@@ -58,9 +59,7 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
       if (mounted) {
         showDialog(
           context: context,
-          builder: (ctx) => const SystemDialog(
-            subTitle: '피드가 성공적으로 업로드되었습니다.',
-          ),
+          builder: (ctx) => const SystemDialog(subTitle: '피드가 성공적으로 업로드되었습니다.'),
         );
         Navigator.pop(context);
       }
@@ -83,10 +82,17 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
           ),
           SystemDialogButton(
             text: '업로드하기',
-            onPressed: () async {
-              Navigator.pop(context);
-              await _createFeed();
-            },
+            onPressed: _isLoading
+                ? null
+                : () async {
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    await _createFeed();
+                    setState(() {
+                      _isLoading = false;
+                    });
+                  },
           ),
         ],
       ),

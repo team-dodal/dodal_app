@@ -1,5 +1,7 @@
 import 'package:dodal_app/services/feed/response.dart';
 import 'package:dodal_app/services/feed/service.dart';
+import 'package:dodal_app/widgets/common/cross_divider.dart';
+import 'package:dodal_app/widgets/common/feed_content_box.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -42,11 +44,14 @@ class _FeedScreenState extends State<FeedScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return PagedListView(
+    return PagedListView.separated(
       pagingController: pagingController,
+      separatorBuilder: (context, index) {
+        return const CrossDivider();
+      },
       builderDelegate: PagedChildBuilderDelegate(
-        itemBuilder: (context, item, index) {
-          return const SizedBox();
+        itemBuilder: (context, FeedContentResponse item, index) {
+          return FeedContentBox(feedContent: item);
         },
       ),
     );
