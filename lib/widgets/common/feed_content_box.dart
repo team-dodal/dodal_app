@@ -2,6 +2,7 @@ import 'package:dodal_app/services/feed/response.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/avatar_image.dart';
+import 'package:dodal_app/widgets/common/image_widget.dart';
 import 'package:dodal_app/widgets/common/small_tag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -16,10 +17,17 @@ class FeedContentBox extends StatelessWidget {
     return Container(
       child: Column(
         children: [
-          const FeedContentHeader(),
+          FeedContentHeader(feedContent: feedContent),
           Stack(
             children: [
-              const AspectRatio(aspectRatio: 1, child: Placeholder()),
+              AspectRatio(
+                aspectRatio: 1,
+                child: ImageWidget(
+                  image: feedContent.certImgUrl,
+                  width: double.infinity,
+                  height: double.infinity,
+                ),
+              ),
               Positioned(
                 top: 16,
                 right: 16,
@@ -41,7 +49,7 @@ class FeedContentBox extends StatelessWidget {
                     ],
                   ),
                   child: Text(
-                    '🔥 55회째 실천 중!',
+                    '🔥 ${feedContent.continueCertCnt}회째 실천 중!',
                     style: context.caption(
                       fontWeight: FontWeight.bold,
                       color: AppColors.systemGrey1,
@@ -51,7 +59,7 @@ class FeedContentBox extends StatelessWidget {
               ),
             ],
           ),
-          const FeedContentFooter(),
+          FeedContentFooter(feedContent: feedContent),
         ],
       ),
     );
@@ -59,7 +67,10 @@ class FeedContentBox extends StatelessWidget {
 }
 
 class FeedContentHeader extends StatelessWidget {
-  const FeedContentHeader({super.key});
+  const FeedContentHeader({super.key, required this.feedContent});
+
+  final FeedContentResponse feedContent;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -70,12 +81,12 @@ class FeedContentHeader extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Row(
+              Row(
                 children: [
-                  SmallTag(text: '카테고리'),
-                  SizedBox(width: 4),
+                  SmallTag(text: feedContent.categoryName),
+                  const SizedBox(width: 4),
                   SmallTag(
-                    text: '태그',
+                    text: '주 ${feedContent.certCnt}회',
                     backgroundColor: AppColors.systemGrey4,
                     foregroundColor: AppColors.systemGrey1,
                   ),
@@ -98,7 +109,9 @@ class FeedContentHeader extends StatelessWidget {
 }
 
 class FeedContentFooter extends StatelessWidget {
-  const FeedContentFooter({super.key});
+  const FeedContentFooter({super.key, required this.feedContent});
+
+  final FeedContentResponse feedContent;
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +128,7 @@ class FeedContentFooter extends StatelessWidget {
                   const AvatarImage(image: null, width: 24, height: 24),
                   const SizedBox(width: 8),
                   Text(
-                    '유저이름',
+                    feedContent.nickname,
                     style: context.body2(fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -130,7 +143,7 @@ class FeedContentFooter extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          const Text('콘텐츠콘텐츠콘텐츠콘텐츠콘텐츠콘텐츠콘텐츠콘텐츠콘텐츠콘텐츠콘텐츠콘텐츠콘텐츠'),
+          Text(feedContent.certContent),
           const SizedBox(height: 12),
           Container(
             width: double.infinity,
@@ -157,7 +170,7 @@ class FeedContentFooter extends StatelessWidget {
                         icon: const Icon(Icons.favorite_border_rounded),
                       ),
                       Text(
-                        '12',
+                        '${feedContent.likeCnt}',
                         style: context.body2(color: AppColors.systemGrey1),
                       ),
                     ],
@@ -182,7 +195,7 @@ class FeedContentFooter extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '12',
+                        '${feedContent.accuseCnt}',
                         style: context.body2(color: AppColors.systemGrey1),
                       ),
                     ],
@@ -190,7 +203,7 @@ class FeedContentFooter extends StatelessWidget {
                 ],
               ),
               Text(
-                '1시간전',
+                '${DateTime.now().difference(feedContent.registeredAt).inHours}시간 전',
                 style: context.body4(
                   fontWeight: FontWeight.w400,
                   color: AppColors.systemGrey1,

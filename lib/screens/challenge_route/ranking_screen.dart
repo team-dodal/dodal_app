@@ -61,17 +61,17 @@ class _RankingScreenState extends State<RankingScreen> {
         SliverToBoxAdapter(
           child: Stack(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: FilterButton(
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    FilterButton(
                       onPressed: _showSortBottomSheet,
                       text: _code.displayName,
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               if (_topThreeList != null)
                 Column(

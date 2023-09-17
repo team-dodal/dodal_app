@@ -1,8 +1,7 @@
 import 'package:dodal_app/providers/create_challenge_cubit.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/screens/challenge_settings_menu/challenge_report_screen.dart';
-import 'package:dodal_app/screens/challenge_settings_menu/manage_feed_screen.dart';
-import 'package:dodal_app/screens/challenge_settings_menu/manage_member_screen.dart';
+import 'package:dodal_app/screens/challenge_settings_menu/manage_route/manage_route.dart';
 import 'package:dodal_app/screens/create_challenge/main.dart';
 import 'package:dodal_app/screens/main_route/main.dart';
 import 'package:dodal_app/services/challenge/response.dart';
@@ -45,11 +44,11 @@ class GroupSettingsMenuScreen extends StatelessWidget {
       },
       {
         'name': '도전 인증 관리',
-        'page': const ManageFeedScreen(),
+        'page': const ManageRoute(index: 0),
       },
       {
         'name': '도전 멤버 관리',
-        'page': const ManageMemberScreen(),
+        'page': const ManageRoute(index: 1),
       },
       {
         'name': '도전 그룹 삭제하기',

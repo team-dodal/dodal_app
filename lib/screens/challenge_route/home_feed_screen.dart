@@ -1,4 +1,6 @@
 import 'package:dodal_app/services/challenge/response.dart';
+import 'package:dodal_app/theme/color.dart';
+import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/challenge_preview/feed_img_content.dart';
 import 'package:dodal_app/widgets/challenge_room/current_certification_box.dart';
 import 'package:dodal_app/widgets/challenge_room/notice_box.dart';
@@ -40,7 +42,29 @@ class HomeFeedScreen extends StatelessWidget {
           const SizedBox(height: 32),
           const CrossDivider(),
           const SizedBox(height: 32),
-          FeedImgContent(feedList: challenge.feedUrlList)
+          FeedImgContent(feedList: challenge.feedUrlList),
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: TextButton(
+              onPressed: () {},
+              style: TextButton.styleFrom(
+                minimumSize: const Size(double.infinity, 54),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                  side: BorderSide(color: AppColors.systemGrey3),
+                ),
+              ),
+              child: Text(
+                '더보기',
+                style: context.body2(
+                  color: AppColors.systemGrey1,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 32),
         ],
       ),
     );
