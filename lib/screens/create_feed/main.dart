@@ -33,6 +33,7 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
   }
 
   _showBottomSheet(BuildContext context) {
+    _dismissKeyboard();
     showModalBottomSheet(
       context: context,
       builder: (context) => ImageBottomSheet(

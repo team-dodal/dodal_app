@@ -79,3 +79,38 @@ class HostChallengesResponse {
         tag = Tag(name: data['tag_name'], value: data['tag_value']),
         certRequestCnt = data['cert_request_cnt'];
 }
+
+class FeedItem {
+  int? challengeRoomId;
+  int? challengeFeedId;
+  int? requestUserId;
+  String? requestUserNickname;
+  String? certImageUrl;
+  String? certContent;
+  String? certCode;
+  String? registeredAt;
+  String? registeredDate;
+
+  FeedItem(
+      {this.challengeRoomId,
+      this.challengeFeedId,
+      this.requestUserId,
+      this.requestUserNickname,
+      this.certImageUrl,
+      this.certContent,
+      this.certCode,
+      this.registeredAt,
+      this.registeredDate});
+
+  FeedItem.fromJson(Map<String, dynamic> json) {
+    challengeRoomId = json['challenge_room_id'];
+    challengeFeedId = json['challenge_feed_id'];
+    requestUserId = json['request_user_id'];
+    requestUserNickname = json['request_user_nickname'];
+    certImageUrl = json['cert_image_url'];
+    certContent = json['cert_content'];
+    certCode = json['cert_code'];
+    registeredAt = json['registered_at'];
+    registeredDate = json['registered_date'];
+  }
+}

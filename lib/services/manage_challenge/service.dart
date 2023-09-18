@@ -32,4 +32,30 @@ class ManageChallengeService {
       return null;
     }
   }
+
+  static Future<Map<String, List<FeedItem>>?> getCertificationList({
+    required int roomId,
+    required String dateYM,
+  }) async {
+    try {
+      final service = dio();
+      final res = await service.get(
+          '/api/v1/users/me/challenges/manage/$roomId/certifications?date_ym=$dateYM');
+
+      Map<String, dynamic> result = res.data['result'];
+      Map<String, List<FeedItem>> feedListByDateMap = {};
+
+      for (final dateString in result.keys) {
+        List<FeedItem> feedList = (result[dateString] as List<dynamic>)
+            .map((e) => FeedItem.fromJson(e))
+            .toList();
+        feedListByDateMap[dateString] = feedList;
+      }
+
+      return feedListByDateMap;
+    } on DioException catch (error) {
+      ResponseErrorDialog(error);
+      return null;
+    }
+  }
 }

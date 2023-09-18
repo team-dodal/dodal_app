@@ -77,13 +77,27 @@ ThemeData lightTheme = ThemeData(
     style: ElevatedButton.styleFrom(
       backgroundColor: AppColors.orange,
       foregroundColor: AppColors.bgColor1,
-      disabledBackgroundColor: AppColors.bgColor4,
-      disabledForegroundColor: AppColors.systemGrey2,
       textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(4),
       ),
+      disabledBackgroundColor: AppColors.bgColor4,
+      disabledForegroundColor: AppColors.systemGrey2,
+    ),
+  ),
+  outlinedButtonTheme: OutlinedButtonThemeData(
+    style: OutlinedButton.styleFrom(
+      backgroundColor: AppColors.bgColor1,
+      foregroundColor: AppColors.orange,
+      side: BorderSide.none,
+      textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(4),
+      ),
+      disabledBackgroundColor: AppColors.bgColor1,
+      disabledForegroundColor: AppColors.systemGrey2,
     ),
   ),
   inputDecorationTheme: InputDecorationTheme(
@@ -106,19 +120,6 @@ ThemeData lightTheme = ThemeData(
   ),
   bottomSheetTheme: const BottomSheetThemeData(
     backgroundColor: AppColors.bgColor1,
-  ),
-  outlinedButtonTheme: OutlinedButtonThemeData(
-    style: OutlinedButton.styleFrom(
-      backgroundColor: AppColors.bgColor1,
-      foregroundColor: AppColors.orange,
-      side: BorderSide.none,
-      textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4),
-      ),
-      disabledBackgroundColor: AppColors.bgColor1,
-      disabledForegroundColor: AppColors.systemGrey2,
-    ),
   ),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     selectedItemColor: AppColors.systemGrey1,

@@ -24,6 +24,7 @@ class CertificateImageInput extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       builder: (context) => ImageBottomSheet(
+        imageDefaultOption: false,
         setImage: (image) {
           onChange!(image);
         },

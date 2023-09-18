@@ -4,8 +4,8 @@ import 'package:dodal_app/widgets/challenge_settings/member_manage_bottom_sheet.
 import 'package:dodal_app/widgets/common/avatar_image.dart';
 import 'package:flutter/material.dart';
 
-class MemberBox extends StatelessWidget {
-  const MemberBox({super.key});
+class MemberCertificationBox extends StatelessWidget {
+  const MemberCertificationBox({super.key});
 
   _showCountBottomSheet(BuildContext context) {
     showModalBottomSheet(
@@ -36,9 +36,7 @@ class MemberBox extends StatelessWidget {
                       ),
                       Text(
                         '인증 4회 | 인증 실패 1회',
-                        style: context.caption(
-                          color: AppColors.systemGrey1,
-                        ),
+                        style: context.caption(color: AppColors.systemGrey1),
                       ),
                     ],
                   )
@@ -70,7 +68,6 @@ class MemberBox extends StatelessWidget {
               ],
             ),
           )
-          // 피드 리스트들
         ],
       ),
     );

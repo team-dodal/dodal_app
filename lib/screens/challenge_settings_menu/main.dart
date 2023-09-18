@@ -44,11 +44,11 @@ class GroupSettingsMenuScreen extends StatelessWidget {
       },
       {
         'name': '도전 인증 관리',
-        'page': const ManageRoute(index: 0),
+        'page': ManageRoute(index: 0, challenge: challenge),
       },
       {
         'name': '도전 멤버 관리',
-        'page': const ManageRoute(index: 1),
+        'page': ManageRoute(index: 1, challenge: challenge),
       },
       {
         'name': '도전 그룹 삭제하기',

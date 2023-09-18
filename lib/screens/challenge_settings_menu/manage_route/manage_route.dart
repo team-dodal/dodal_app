@@ -1,4 +1,5 @@
 import 'package:animations/animations.dart';
+import 'package:dodal_app/services/challenge/response.dart';
 import 'package:flutter/material.dart';
 
 import 'manage_feed_screen.dart';
@@ -6,19 +7,26 @@ import 'manage_member_screen.dart';
 
 class Route {
   final String name;
-  final Widget screen;
+  final Widget Function(OneChallengeResponse) screen;
 
   Route({required this.name, required this.screen});
 }
 
 List<Route> routeList = [
-  Route(name: '인증 관리', screen: const ManageFeedScreen()),
-  Route(name: '멤버 관리', screen: const ManageMemberScreen()),
+  Route(
+    name: '인증 관리',
+    screen: (challenge) => ManageFeedScreen(challenge: challenge),
+  ),
+  Route(
+    name: '멤버 관리',
+    screen: (challenge) => const ManageMemberScreen(),
+  ),
 ];
 
 class ManageRoute extends StatefulWidget {
-  const ManageRoute({super.key, required this.index});
+  const ManageRoute({super.key, required this.index, required this.challenge});
 
+  final OneChallengeResponse challenge;
   final int index;
 
   @override
@@ -70,7 +78,9 @@ class _ManageRouteState extends State<ManageRoute>
             child: child,
           );
         },
-        child: routeList.map((route) => route.screen).toList()[_currentIndex],
+        child: routeList
+            .map((route) => route.screen(widget.challenge))
+            .toList()[_currentIndex],
       ),
     );
   }

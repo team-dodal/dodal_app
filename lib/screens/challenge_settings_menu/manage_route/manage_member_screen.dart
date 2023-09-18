@@ -1,5 +1,5 @@
 import 'package:dodal_app/theme/color.dart';
-import 'package:dodal_app/widgets/challenge_settings/member_box.dart';
+import 'package:dodal_app/widgets/challenge_settings/member_certification_box.dart';
 import 'package:flutter/material.dart';
 
 class ManageMemberScreen extends StatelessWidget {
@@ -15,7 +15,7 @@ class ManageMemberScreen extends StatelessWidget {
       ),
       itemCount: 10,
       itemBuilder: (context, index) {
-        return const MemberBox();
+        return const MemberCertificationBox();
       },
     );
   }

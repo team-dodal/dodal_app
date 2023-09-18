@@ -50,13 +50,13 @@ class CategoryContent extends StatelessWidget {
                         vertical: 8,
                       ),
                       shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(100),
-                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(100)),
                       ),
-                      side: isSelected(tag)
-                          ? const BorderSide(color: AppColors.lightOrange)
-                          : const BorderSide(color: AppColors.systemGrey3),
+                      side: BorderSide(
+                        color: isSelected(tag)
+                            ? AppColors.lightOrange
+                            : AppColors.systemGrey3,
+                      ),
                       backgroundColor: isSelected(tag)
                           ? AppColors.lightOrange
                           : AppColors.bgColor1,
@@ -66,12 +66,13 @@ class CategoryContent extends StatelessWidget {
                     },
                     child: Text(
                       '${tag.name}',
-                      style: isSelected(tag)
-                          ? context.body4(
-                              color: AppColors.orange,
-                              fontWeight: FontWeight.bold,
-                            )
-                          : context.body4(color: AppColors.systemGrey1),
+                      style: context.body4(
+                        color: isSelected(tag)
+                            ? AppColors.orange
+                            : AppColors.systemGrey1,
+                        fontWeight:
+                            isSelected(tag) ? FontWeight.bold : FontWeight.w500,
+                      ),
                     ),
                   ),
                 );

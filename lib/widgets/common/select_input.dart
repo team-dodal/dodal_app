@@ -191,79 +191,95 @@ class _SelectInputState extends State<SelectInput> {
     }
 
     return OverlayEntry(
-      maintainState: true,
-      builder: (context) => Positioned(
-        width: renderBox.size.width,
-        child: CompositedTransformFollower(
-          link: _layerLink,
-          offset: Offset(0, Platform.isIOS ? 8 : renderBox.size.height - 20),
-          child: SafeArea(
-            child: Material(
-              color: Colors.white,
-              child: Container(
-                height: 150,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: AppColors.systemGrey3,
-                        offset: Offset(0, 0),
-                        blurRadius: 8,
-                        blurStyle: BlurStyle.outer,
-                      ),
-                    ]),
-                child: Scrollbar(
-                  child: ListView.builder(
-                      controller: scrollController,
-                      itemCount: list.length,
-                      itemBuilder: (context, idx) {
-                        bool isSelected = widget.value == list[idx];
-                        if (isSelected) {
-                          // 스크롤 시 해당 항목으로 포커싱
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            scrollToIndex(idx);
-                          });
-                        }
-                        return SizedBox(
-                          height: listTileHeight,
-                          child: ListTile(
-                            selected: isSelected,
-                            onTap: () {
-                              setState(() {
-                                _isFocused = false;
-                              });
-                              widget.onChanged(list[idx]);
-                              _removeOverlay();
-                            },
-                            title: Text(
-                              list[idx].label,
-                              style: context.body2(
-                                fontWeight: isSelected
-                                    ? FontWeight.bold
-                                    : FontWeight.normal,
-                                color: isSelected
-                                    ? AppColors.orange
-                                    : AppColors.systemBlack,
-                              ),
-                            ),
-                            trailing: widget.value == list[idx]
-                                ? SvgPicture.asset(
-                                    'assets/icons/check_icon.svg',
-                                    colorFilter: const ColorFilter.mode(
-                                      AppColors.orange,
-                                      BlendMode.srcIn,
-                                    ),
-                                  )
-                                : null,
-                          ),
-                        );
-                      }),
+        maintainState: true,
+        builder: (context) => Stack(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    _removeOverlay();
+                  },
+                  child: Container(
+                    color: Colors.transparent,
+                    width: double.infinity,
+                    height: double.infinity,
+                  ),
                 ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
+                Positioned(
+                  width: renderBox.size.width,
+                  child: CompositedTransformFollower(
+                    link: _layerLink,
+                    offset: Offset(
+                        0, Platform.isIOS ? 8 : renderBox.size.height - 20),
+                    child: SafeArea(
+                      child: Material(
+                        color: Colors.white,
+                        child: Container(
+                          height: 150,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: AppColors.systemGrey3,
+                                  offset: Offset(0, 0),
+                                  blurRadius: 8,
+                                  blurStyle: BlurStyle.outer,
+                                ),
+                              ]),
+                          child: Scrollbar(
+                            child: ListView.builder(
+                                controller: scrollController,
+                                itemCount: list.length,
+                                itemBuilder: (context, idx) {
+                                  bool isSelected = widget.value == list[idx];
+                                  if (isSelected) {
+                                    // 스크롤 시 해당 항목으로 포커싱
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback((_) {
+                                      scrollToIndex(idx);
+                                    });
+                                  }
+                                  return SizedBox(
+                                    height: listTileHeight,
+                                    child: ListTile(
+                                      selected: isSelected,
+                                      onTap: () {
+                                        setState(() {
+                                          _isFocused = false;
+                                        });
+                                        widget.onChanged(list[idx]);
+                                        _removeOverlay();
+                                      },
+                                      title: Text(
+                                        list[idx].label,
+                                        style: context.body2(
+                                          fontWeight: isSelected
+                                              ? FontWeight.bold
+                                              : FontWeight.normal,
+                                          color: isSelected
+                                              ? AppColors.orange
+                                              : AppColors.systemBlack,
+                                        ),
+                                      ),
+                                      trailing: widget.value == list[idx]
+                                          ? SvgPicture.asset(
+                                              'assets/icons/check_icon.svg',
+                                              colorFilter:
+                                                  const ColorFilter.mode(
+                                                AppColors.orange,
+                                                BlendMode.srcIn,
+                                              ),
+                                            )
+                                          : null,
+                                    ),
+                                  );
+                                }),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ));
   }
 }
