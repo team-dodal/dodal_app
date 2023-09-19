@@ -58,4 +58,22 @@ class ManageChallengeService {
       return null;
     }
   }
+
+  static approveOrRejectFeed({
+    required int roomId,
+    required int feedId,
+    required bool confirmValue,
+  }) async {
+    try {
+      final service = dio();
+
+      await service.patch(
+          '/api/v1/users/me/challenges/manage/$roomId/certifications/$feedId?confirm_yn=${confirmValue ? 'Y' : 'N'}');
+
+      return true;
+    } on DioException catch (error) {
+      ResponseErrorDialog(error);
+      return null;
+    }
+  }
 }

@@ -3,7 +3,7 @@ import 'package:dodal_app/services/manage_challenge/response.dart';
 import 'package:dodal_app/services/manage_challenge/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
-import 'package:dodal_app/widgets/common/image_widget.dart';
+import 'package:dodal_app/widgets/challenge_settings/certificate_feed_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -76,12 +76,7 @@ class _ManageFeedScreenState extends State<ManageFeedScreen> {
                 crossAxisSpacing: 3,
                 shrinkWrap: true,
                 children: [
-                  for (final feed in feedList!)
-                    ImageWidget(
-                      image: feed.certImageUrl,
-                      width: double.infinity,
-                      height: double.infinity,
-                    )
+                  for (final feed in feedList!) CertificateFeedImage(feed: feed)
                 ],
               ),
             ],
