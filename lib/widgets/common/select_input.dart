@@ -60,6 +60,9 @@ class _SelectInputState extends State<SelectInput> {
 
   _removeOverlay() {
     _overlayEntry?.remove();
+    setState(() {
+      _isFocused = false;
+    });
     _overlayEntry = null;
   }
 

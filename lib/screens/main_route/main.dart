@@ -62,17 +62,10 @@ class MainRoute extends StatefulWidget {
 }
 
 class _MainRouteState extends State<MainRoute> {
-  final PageController _pageController = PageController();
   int _currentIndex = 0;
 
   void _handleActionBtn(Widget screen) {
     Navigator.of(context).push(SlidePageRoute(screen: screen));
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
   }
 
   @override
@@ -110,7 +103,8 @@ class _MainRouteState extends State<MainRoute> {
       ),
       body: PageTransitionSwitcher(
         transitionBuilder: (child, animation, secondaryAnimation) {
-          return FadeThroughTransition(
+          return SharedAxisTransition(
+            transitionType: SharedAxisTransitionType.horizontal,
             animation: animation,
             secondaryAnimation: secondaryAnimation,
             child: child,

@@ -12,7 +12,7 @@ class Calendar extends StatelessWidget {
     return TableCalendar(
       availableGestures: AvailableGestures.none,
       firstDay: DateTime.utc(2023, 1, 1),
-      lastDay: DateTime.utc(2033, 3, 14),
+      lastDay: DateTime.now(),
       focusedDay: DateTime.now(),
       locale: 'ko-KR',
       headerStyle: HeaderStyle(
@@ -40,13 +40,22 @@ class Calendar extends StatelessWidget {
         defaultBuilder: (context, day, focusedDay) {
           return Padding(
             padding: const EdgeInsets.all(5),
-            child: CalendarCell(text: '${day.day}'),
+            child: CalendarCell(
+              text: '${day.day}',
+              onPressed: () {},
+            ),
           );
         },
         todayBuilder: (context, day, focusedDay) {
           return Padding(
             padding: const EdgeInsets.all(5),
-            child: CalendarCell(text: '${day.day}'),
+            child: CalendarCell(text: '${day.day}', onPressed: () {}),
+          );
+        },
+        disabledBuilder: (context, day, focusedDay) {
+          return Padding(
+            padding: const EdgeInsets.all(5),
+            child: CalendarCell(text: '${day.day}', disabled: true),
           );
         },
       ),

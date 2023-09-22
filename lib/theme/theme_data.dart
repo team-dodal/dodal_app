@@ -96,7 +96,7 @@ ThemeData lightTheme = ThemeData(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(4),
       ),
-      disabledBackgroundColor: AppColors.bgColor1,
+      disabledBackgroundColor: AppColors.bgColor4,
       disabledForegroundColor: AppColors.systemGrey2,
     ),
   ),

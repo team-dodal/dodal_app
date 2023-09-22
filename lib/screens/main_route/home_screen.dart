@@ -13,12 +13,17 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(
-        children: [
-          CategorySelect(),
-          const SizedBox(height: 32),
-          const InterestList(),
-        ],
+      child: Container(
+        constraints: BoxConstraints(
+          minHeight: MediaQuery.of(context).size.height,
+        ),
+        child: Column(
+          children: [
+            CategorySelect(),
+            const SizedBox(height: 32),
+            const InterestList(),
+          ],
+        ),
       ),
     );
   }

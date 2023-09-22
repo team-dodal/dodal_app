@@ -76,7 +76,13 @@ class _ManageFeedScreenState extends State<ManageFeedScreen> {
                 crossAxisSpacing: 3,
                 shrinkWrap: true,
                 children: [
-                  for (final feed in feedList!) CertificateFeedImage(feed: feed)
+                  for (final feed in feedList!)
+                    CertificateFeedImage(
+                      feed: feed,
+                      getFeeds: () async {
+                        await _request(_date);
+                      },
+                    )
                 ],
               ),
             ],

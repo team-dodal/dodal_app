@@ -1,3 +1,4 @@
+import 'package:dodal_app/model/certification_code_enum.dart';
 import 'package:dodal_app/services/manage_challenge/response.dart';
 import 'package:dodal_app/services/manage_challenge/service.dart';
 import 'package:dodal_app/theme/color.dart';
@@ -7,9 +8,14 @@ import 'package:dodal_app/widgets/common/image_widget.dart';
 import 'package:flutter/material.dart';
 
 class FeedCertificationModal extends StatelessWidget {
-  const FeedCertificationModal({super.key, required this.feed});
+  const FeedCertificationModal({
+    super.key,
+    required this.feed,
+    required this.getFeeds,
+  });
 
   final FeedItem feed;
+  final Future<void> Function() getFeeds;
 
   _request(BuildContext context, bool value) async {
     final res = await ManageChallengeService.approveOrRejectFeed(
@@ -20,6 +26,7 @@ class FeedCertificationModal extends StatelessWidget {
     if (res == null) return;
     if (context.mounted) {
       Navigator.pop(context);
+      await getFeeds();
     }
   }
 
@@ -76,12 +83,14 @@ class FeedCertificationModal extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: AppColors.systemGrey3),
-                      backgroundColor: AppColors.systemWhite,
+                      padding: const EdgeInsets.all(14),
                     ),
-                    onPressed: () {},
+                    onPressed: feed.certCode == CertCode.fail.index.toString()
+                        ? null
+                        : () => _request(context, false),
                     child: Text(
                       '거절',
                       style: context.body2(fontWeight: FontWeight.bold),
@@ -91,7 +100,13 @@ class FeedCertificationModal extends StatelessWidget {
                 const SizedBox(width: 6),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed:
+                        feed.certCode == CertCode.success.index.toString()
+                            ? null
+                            : () => _request(context, true),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.all(14),
+                    ),
                     child: Text(
                       '승인',
                       style: context.body2(
