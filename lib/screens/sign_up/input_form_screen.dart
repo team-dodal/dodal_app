@@ -5,7 +5,7 @@ import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/create_form_title.dart';
 import 'package:dodal_app/widgets/common/avatar_image.dart';
 import 'package:dodal_app/widgets/common/submit_button.dart';
-import 'package:dodal_app/widgets/common/text_input.dart';
+import 'package:dodal_app/widgets/common/input/text_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

@@ -1,4 +1,4 @@
-import 'package:dodal_app/widgets/common/select_input.dart';
+import 'package:dodal_app/widgets/common/input/select_input.dart';
 import 'package:dodal_app/widgets/mypage/calendar.dart';
 import 'package:dodal_app/widgets/mypage/user_info_box.dart';
 import 'package:flutter/material.dart';

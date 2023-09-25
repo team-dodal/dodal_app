@@ -1,5 +1,5 @@
 import 'package:dodal_app/services/challenge/service.dart';
-import 'package:dodal_app/widgets/common/text_input.dart';
+import 'package:dodal_app/widgets/common/input/text_input.dart';
 import 'package:flutter/material.dart';
 
 class CreateNoticeScreen extends StatefulWidget {

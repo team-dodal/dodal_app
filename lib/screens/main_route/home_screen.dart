@@ -1,5 +1,6 @@
 import 'package:dodal_app/widgets/home/category_select.dart';
 import 'package:dodal_app/widgets/home/interest_list.dart';
+import 'package:dodal_app/widgets/home/popular_list.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -22,6 +23,8 @@ class _HomeScreenState extends State<HomeScreen> {
             CategorySelect(),
             const SizedBox(height: 32),
             const InterestList(),
+            const SizedBox(height: 32),
+            const PopularList(),
           ],
         ),
       ),

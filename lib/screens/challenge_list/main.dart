@@ -4,7 +4,7 @@ import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/screens/challenge_preview/main.dart';
 import 'package:dodal_app/screens/challenge_route/main.dart';
 import 'package:dodal_app/services/challenge/service.dart';
-import 'package:dodal_app/widgets/challenge_list/challenge_box.dart';
+import 'package:dodal_app/widgets/common/challenge_box/list_challenge_box.dart';
 import 'package:dodal_app/widgets/challenge_list/filter_top_bar.dart';
 import 'package:dodal_app/widgets/challenge_list/list_tab_bar.dart';
 import 'package:dodal_app/widgets/common/no_list_context.dart';
@@ -95,7 +95,7 @@ class _ChallengeListScreenState extends State<ChallengeListScreen> {
                           closedBuilder: (context, action) {
                             return InkWell(
                               onTap: action,
-                              child: ChallengeBox(
+                              child: ListChallengeBox(
                                 id: item.id,
                                 title: item.title,
                                 tag: item.tag,

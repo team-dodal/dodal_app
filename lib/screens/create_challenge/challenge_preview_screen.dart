@@ -4,7 +4,7 @@ import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/cross_divider.dart';
 import 'package:dodal_app/widgets/common/image_widget.dart';
-import 'package:dodal_app/widgets/common/input_title.dart';
+import 'package:dodal_app/widgets/common/input/input_title.dart';
 import 'package:dodal_app/widgets/common/room_info_box.dart';
 import 'package:dodal_app/widgets/common/submit_button.dart';
 import 'package:dodal_app/widgets/create_challenge/certificate_image_input.dart';

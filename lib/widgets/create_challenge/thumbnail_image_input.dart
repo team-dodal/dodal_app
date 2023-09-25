@@ -2,7 +2,7 @@ import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/image_bottom_sheet.dart';
 import 'package:dodal_app/widgets/common/image_widget.dart';
-import 'package:dodal_app/widgets/common/input_title.dart';
+import 'package:dodal_app/widgets/common/input/input_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 

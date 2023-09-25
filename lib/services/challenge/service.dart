@@ -78,7 +78,7 @@ class ChallengeService {
   }
 
   static Future<List<Challenge>?> getChallengesByCategory({
-    required String categoryValue,
+    String? categoryValue,
     required String tagValue,
     required int conditionCode,
     required List<int> certCntList,
@@ -88,8 +88,10 @@ class ChallengeService {
     try {
       final service = dio();
       String requestUrl = '/api/v1/challenge/rooms/category?';
-      requestUrl +=
-          'category_value=$categoryValue&tag_value=$tagValue&condition_code=$conditionCode&';
+      if (categoryValue != null) {
+        requestUrl += 'category_value=$categoryValue&';
+      }
+      requestUrl += 'tag_value=$tagValue&condition_code=$conditionCode&';
       for (final certCnt in certCntList) {
         requestUrl += 'cert_cnt_list=$certCnt&';
       }

@@ -5,7 +5,7 @@ import 'package:dodal_app/utilities/add_watermark.dart';
 import 'package:dodal_app/utilities/image_compress.dart';
 import 'package:dodal_app/widgets/common/image_bottom_sheet.dart';
 import 'package:dodal_app/widgets/common/system_dialog.dart';
-import 'package:dodal_app/widgets/common/text_input.dart';
+import 'package:dodal_app/widgets/common/input/text_input.dart';
 import 'package:dodal_app/widgets/create_feed/feed_bottom_sheet.dart';
 import 'package:dodal_app/widgets/create_feed/feed_image.dart';
 import 'package:flutter/material.dart';

@@ -9,8 +9,8 @@ import 'package:dodal_app/widgets/common/small_tag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class ChallengeBox extends StatefulWidget {
-  const ChallengeBox({
+class ListChallengeBox extends StatefulWidget {
+  const ListChallengeBox({
     super.key,
     required this.id,
     required this.title,
@@ -36,10 +36,10 @@ class ChallengeBox extends StatefulWidget {
   final bool? isBookmarked;
 
   @override
-  State<ChallengeBox> createState() => _ChallengeBoxState();
+  State<ListChallengeBox> createState() => _ListChallengeBoxState();
 }
 
-class _ChallengeBoxState extends State<ChallengeBox> {
+class _ListChallengeBoxState extends State<ListChallengeBox> {
   late bool _bookmarkStatus;
 
   _handleBookmark() async {

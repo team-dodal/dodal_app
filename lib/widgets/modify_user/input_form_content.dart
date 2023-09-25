@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:dodal_app/services/user/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
-import 'package:dodal_app/widgets/common/text_input.dart';
+import 'package:dodal_app/widgets/common/input/text_input.dart';
 import 'package:dodal_app/widgets/common/avatar_image.dart';
 import 'package:flutter/material.dart';
 

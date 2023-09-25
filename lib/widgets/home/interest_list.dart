@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/model/category_model.dart';
+import 'package:dodal_app/model/challenge_code_enum.dart';
 import 'package:dodal_app/model/challenge_model.dart';
 import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
@@ -8,7 +9,7 @@ import 'package:dodal_app/screens/challenge_route/main.dart';
 import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
-import 'package:dodal_app/widgets/challenge_list/challenge_box.dart';
+import 'package:dodal_app/widgets/common/challenge_box/list_challenge_box.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -93,7 +94,7 @@ class _InterestCategoryCardState extends State<InterestCategoryCard> {
     final res = await ChallengeService.getChallengesByCategory(
       categoryValue: widget.category.value,
       tagValue: '',
-      conditionCode: 0,
+      conditionCode: ChallengeCodeEnum.interest.index,
       certCntList: [1, 2, 3, 4, 5, 6, 7],
       page: 0,
       pageSize: 3,
@@ -149,7 +150,7 @@ class _InterestCategoryCardState extends State<InterestCategoryCard> {
                       return Container(
                         padding: const EdgeInsets.only(top: 20),
                         constraints: const BoxConstraints(minHeight: 80),
-                        child: ChallengeBox(
+                        child: ListChallengeBox(
                           id: challenge.id,
                           title: challenge.title,
                           thumbnailImg: challenge.thumbnailImg,

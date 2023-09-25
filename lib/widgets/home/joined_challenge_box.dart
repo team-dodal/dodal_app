@@ -1,7 +1,7 @@
 import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
-import 'package:dodal_app/widgets/challenge_list/challenge_box.dart';
+import 'package:dodal_app/widgets/common/challenge_box/list_challenge_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math' as math;
@@ -49,7 +49,7 @@ class JoinedChallengeBox extends StatelessWidget {
           ]),
       child: Column(
         children: [
-          ChallengeBox(
+          ListChallengeBox(
             id: id,
             title: title,
             thumbnailImg: thumbnailImg,

@@ -1,9 +1,9 @@
 import 'package:dodal_app/providers/create_challenge_cubit.dart';
 import 'package:dodal_app/widgets/common/create_form_title.dart';
-import 'package:dodal_app/widgets/common/number_input.dart';
+import 'package:dodal_app/widgets/common/input/number_input.dart';
 import 'package:dodal_app/widgets/common/submit_button.dart';
 import 'package:dodal_app/widgets/common/system_dialog.dart';
-import 'package:dodal_app/widgets/common/text_input.dart';
+import 'package:dodal_app/widgets/common/input/text_input.dart';
 import 'package:dodal_app/widgets/create_challenge/thumbnail_image_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

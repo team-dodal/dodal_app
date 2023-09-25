@@ -1,7 +1,7 @@
 import 'package:dodal_app/services/feed/response.dart';
 import 'package:dodal_app/services/feed/service.dart';
 import 'package:dodal_app/widgets/common/cross_divider.dart';
-import 'package:dodal_app/widgets/common/feed_content_box.dart';
+import 'package:dodal_app/widgets/common/feed_content_box/main.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
