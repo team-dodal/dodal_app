@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
@@ -50,10 +49,6 @@ class GoogleAuthService {
 
 class KakaoAuthService {
   static signIn() async {
-    KakaoSdk.init(
-      nativeAppKey: dotenv.get('KAKAO_NATIVE_APP_KEY'),
-      javaScriptAppKey: dotenv.get('KAKAO_JAVASCRIPT_APP_KEY'),
-    );
     if (await isKakaoTalkInstalled()) {
       return await KakaoAuthService.signInWithApp();
     } else {
