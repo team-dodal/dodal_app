@@ -72,8 +72,11 @@ class _MainRouteState extends State<MainRoute> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:
-            Text(routeList.map((route) => route.name).toList()[_currentIndex]),
+        centerTitle: false,
+        title: _currentIndex == 0
+            ? Image.asset('assets/images/main_logo.png')
+            : Text(
+                routeList.map((route) => route.name).toList()[_currentIndex]),
         actions: [
           if (_currentIndex == 0)
             IconButton(

@@ -1,6 +1,10 @@
+import 'package:animations/animations.dart';
 import 'package:dodal_app/model/challenge_code_enum.dart';
 import 'package:dodal_app/model/challenge_model.dart';
+import 'package:dodal_app/screens/challenge_preview/main.dart';
+import 'package:dodal_app/screens/challenge_route/main.dart';
 import 'package:dodal_app/services/challenge/service.dart';
+import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/challenge_box/grid_challenge_box.dart';
 import 'package:flutter/material.dart';
@@ -57,9 +61,39 @@ class _PopularListState extends State<PopularList> {
               physics: const NeverScrollableScrollPhysics(),
               children: [
                 for (final challenge in _challenges)
-                  GridChallengeBox(challenge: challenge)
+                  OpenContainer(
+                    transitionType: ContainerTransitionType.fadeThrough,
+                    closedElevation: 0,
+                    closedBuilder: (context, action) {
+                      return Container(
+                          padding: const EdgeInsets.only(top: 20),
+                          constraints: const BoxConstraints(minHeight: 80),
+                          child: GridChallengeBox(challenge: challenge));
+                    },
+                    openBuilder: (context, action) => challenge.isJoined
+                        ? ChallengeRoute(id: challenge.id)
+                        : ChallengePreviewScreen(id: challenge.id),
+                  )
               ],
             ),
+            OutlinedButton(
+              onPressed: () {},
+              style: OutlinedButton.styleFrom(
+                minimumSize: const Size(double.infinity, 0),
+                padding: const EdgeInsets.all(16),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                ),
+                side: const BorderSide(color: AppColors.systemGrey3),
+              ),
+              child: Text(
+                '인기 도전 더보기',
+                style: context.body3(
+                  color: AppColors.systemGrey1,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            )
           ],
         ),
       ),

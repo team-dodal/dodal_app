@@ -2,6 +2,7 @@ import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/screens/sign_in/main.dart';
 import 'package:dodal_app/services/user/service.dart';
 import 'package:dodal_app/theme/color.dart';
+import 'package:dodal_app/utilities/fcm.dart';
 import 'package:dodal_app/widgets/common/system_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,24 +62,12 @@ class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
         (route) => false);
   }
 
-  _getNotificationValue() async {
-    pref = await SharedPreferences.getInstance();
-    setState(() {
-      _notification = pref.getBool('notification_allow')!;
-    });
-  }
-
-  _handleNotification(value) async {
-    pref = await SharedPreferences.getInstance();
-    pref.setBool('notification_allow', value);
-    setState(() {
-      _notification = value;
-    });
-  }
-
   @override
   void initState() {
-    _getNotificationValue();
+    () async {
+      _notification = await getNotificationValue();
+      setState(() {});
+    }();
     super.initState();
   }
 
@@ -93,7 +82,10 @@ class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
           SwitchListTile(
             title: const Text('알림'),
             value: _notification,
-            onChanged: _handleNotification,
+            onChanged: (value) async {
+              _notification = await setNotificationValue(value);
+              setState(() {});
+            },
           ),
           ListTile(
             title: const Text('로그아웃'),

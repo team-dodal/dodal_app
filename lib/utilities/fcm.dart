@@ -90,5 +90,17 @@ class Fcm {
 
 Future<bool> getNotificationValue() async {
   final pref = await SharedPreferences.getInstance();
-  return pref.getBool('notification_allow') ?? true;
+  bool? isAllow = pref.getBool('notification_allow');
+  if (isAllow == true) {
+    return true;
+  } else {
+    pref.setBool('notification_allow', false);
+    return false;
+  }
+}
+
+Future<bool> setNotificationValue(value) async {
+  final pref = await SharedPreferences.getInstance();
+  pref.setBool('notification_allow', value);
+  return await getNotificationValue();
 }
