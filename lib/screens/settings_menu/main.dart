@@ -51,15 +51,35 @@ class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
   }
 
   _removeMyAccount() async {
-    await UserService.removeUser();
-    await secureStorage.deleteAll();
-    if (!mounted) return;
-    context.read<UserCubit>().clear();
+    showDialog(
+      context: context,
+      builder: (context) => SystemDialog(
+        subTitle: '회원 탈퇴하시겠습니까?',
+        children: [
+          SystemDialogButton(
+            text: '취소',
+            primary: false,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          SystemDialogButton(
+            text: '확인',
+            onPressed: () async {
+              await UserService.removeUser();
+              await secureStorage.deleteAll();
+              if (!mounted) return;
+              context.read<UserCubit>().clear();
 
-    if (!mounted) return;
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (ctx) => const SignInScreen()),
-        (route) => false);
+              if (!mounted) return;
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (ctx) => const SignInScreen()),
+                  (route) => false);
+            },
+          )
+        ],
+      ),
+    );
   }
 
   @override

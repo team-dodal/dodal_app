@@ -13,5 +13,5 @@ class Tag extends Equatable {
   bool get stringify => true;
 
   @override
-  List<Object> get props => [name, value];
+  List<Object?> get props => [name, value];
 }

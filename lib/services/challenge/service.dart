@@ -79,7 +79,7 @@ class ChallengeService {
 
   static Future<List<Challenge>?> getChallengesByCategory({
     String? categoryValue,
-    required String tagValue,
+    String? tagValue,
     required int conditionCode,
     required List<int> certCntList,
     required int page,
@@ -91,7 +91,10 @@ class ChallengeService {
       if (categoryValue != null) {
         requestUrl += 'category_value=$categoryValue&';
       }
-      requestUrl += 'tag_value=$tagValue&condition_code=$conditionCode&';
+      if (tagValue != null) {
+        requestUrl += 'tag_value=$tagValue&';
+      }
+      requestUrl += 'condition_code=$conditionCode&';
       for (final certCnt in certCntList) {
         requestUrl += 'cert_cnt_list=$certCnt&';
       }

@@ -25,18 +25,15 @@ class SignInScreen extends StatelessWidget {
     switch (type) {
       case SocialType.GOOGLE:
         final res = await GoogleAuthService.signIn();
-        if (res == null) return;
-        id = res['id'];
+        id = res!['id'];
         email = res['email'];
       case SocialType.KAKAO:
         final res = await KakaoAuthService.signIn();
-        if (res == null) return;
         id = res!['id'];
         email = res['email'];
       case SocialType.APPLE:
         final res = await AppleAuthService.signIn();
-        if (res == null) return;
-        id = res['id'];
+        id = res!['id'];
         email = res['email'];
       default:
         return;
@@ -49,23 +46,21 @@ class SignInScreen extends StatelessWidget {
       secureStorage.write(key: 'accessToken', value: res.accessToken);
       secureStorage.write(key: 'refreshToken', value: res.refreshToken);
 
-      if (context.mounted) {
-        context.read<UserCubit>().set(User(
-              id: res.id,
-              email: res.email,
-              nickname: res.nickname,
-              content: res.content,
-              profileUrl: res.profileUrl,
-              registerAt: res.registerAt,
-              socialType: res.socialType,
-              categoryList: res.categoryList,
-              tagList: res.tagList,
-            ));
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (ctx) => const MainRoute()),
-          (route) => false,
-        );
-      }
+      context.read<UserCubit>().set(User(
+            id: res.id,
+            email: res.email,
+            nickname: res.nickname,
+            content: res.content,
+            profileUrl: res.profileUrl,
+            registerAt: res.registerAt,
+            socialType: res.socialType,
+            categoryList: res.categoryList,
+            tagList: res.tagList,
+          ));
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (ctx) => const MainRoute()),
+        (route) => false,
+      );
     } else {
       if (context.mounted) {
         Navigator.of(context).push(

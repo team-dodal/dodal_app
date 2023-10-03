@@ -50,7 +50,7 @@ List<Route> routeList = [
     name: '마이',
     iconPath: 'assets/icons/my_icon.svg',
     activeIconPath: 'assets/icons/my_active_icon.svg',
-    screen: const MyPageScreen(),
+    screen: MyPageScreen(),
   ),
 ];
 

@@ -49,12 +49,12 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
       );
     }
     if (res == null) return;
-    if (mounted) {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (ctx) => const CompleteCreateChallenge()),
-        (route) => false,
-      );
-    }
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+          builder: (ctx) =>
+              CompleteCreateChallenge(isUpdate: state.id != null)),
+      (route) => false,
+    );
   }
 
   @override

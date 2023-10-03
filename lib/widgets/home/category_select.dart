@@ -1,4 +1,5 @@
 import 'package:dodal_app/model/category_model.dart';
+import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/screens/challenge_list/main.dart';
 import 'package:dodal_app/services/category/service.dart';
@@ -39,9 +40,19 @@ class CategorySelect extends StatelessWidget {
                   '카테고리',
                   style: context.body1(fontWeight: FontWeight.bold),
                 ),
-                // OutlinedButton(onPressed: () {}, child: const Text('전체보기'))
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    _goListPage(
+                      context,
+                      Category(
+                        name: '전체',
+                        subName: '',
+                        value: null,
+                        emoji: '',
+                        tags: [const Tag(name: '전체', value: null)],
+                      ),
+                    );
+                  },
                   style: IconButton.styleFrom(
                     shape: const BeveledRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(4)),

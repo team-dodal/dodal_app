@@ -1,25 +1,24 @@
-import 'package:dodal_app/providers/create_challenge_cubit.dart';
 import 'package:dodal_app/screens/main_route/main.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CompleteCreateChallenge extends StatelessWidget {
-  const CompleteCreateChallenge({super.key});
+  const CompleteCreateChallenge({super.key, this.isUpdate = false});
+
+  final bool isUpdate;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<CreateChallengeCubit, CreateChallenge>(
-          builder: (context, state) {
+      body: Builder(builder: (context) {
         Widget? child;
         child = Column(
           children: [
             Image.asset('assets/images/character/welcome.png'),
             const SizedBox(height: 16),
             Text(
-              state.id == null ? '도전 생성 완료' : '도전 수정 완료',
+              isUpdate ? '도전 수정 완료' : '도전 생성 완료',
               style: context.body1(
                 fontWeight: FontWeight.bold,
                 color: AppColors.orange,

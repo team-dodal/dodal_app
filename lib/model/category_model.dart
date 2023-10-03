@@ -8,11 +8,14 @@ class Category {
     required this.emoji,
     required this.tags,
   }) {
-    iconPath = getIconPath(value);
+    if (value != null) {
+      iconPath = getIconPath(value);
+    }
   }
 
-  final String name, subName, value, emoji;
-  final List<Tag> tags;
+  final String name, subName, emoji;
+  final String? value;
+  List<Tag> tags;
   late String iconPath;
 
   getIconPath(value) {

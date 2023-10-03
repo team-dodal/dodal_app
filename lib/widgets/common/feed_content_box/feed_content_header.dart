@@ -31,7 +31,7 @@ class FeedContentHeader extends StatelessWidget {
                 ],
               ),
               Text(
-                '제목제목',
+                feedContent.title,
                 style: context.body1(fontWeight: FontWeight.bold),
               ),
             ],
