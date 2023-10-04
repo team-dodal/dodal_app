@@ -1,5 +1,8 @@
 import 'dart:developer';
 
+import 'package:dodal_app/main.dart';
+import 'package:dodal_app/widgets/common/system_dialog.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -42,6 +45,10 @@ class GoogleAuthService {
       return {'id': res!.id, 'email': res.email};
     } catch (err) {
       log('$err');
+      showDialog(
+        context: navigatorKey.currentContext!,
+        builder: (context) => SystemDialog(subTitle: '구글 로그인 실패 $err'),
+      );
       return null;
     }
   }
@@ -64,13 +71,17 @@ class KakaoAuthService {
         'id': user.id.toString(),
         'email': user.kakaoAccount!.email.toString()
       };
+    } on PlatformException catch (error) {
+      if (error.code == 'CANCELED') return null;
     } catch (error) {
       log('카카오계정으로 로그인 실패 $error');
-      if (error is PlatformException && error.code == 'CANCELED') {
-        return null;
-      }
+      showDialog(
+        context: navigatorKey.currentContext!,
+        builder: (context) => SystemDialog(subTitle: '카카오계정으로 로그인 실패 $error'),
+      );
       return await KakaoAuthService.signInWithWeb();
     }
+    return null;
   }
 
   static Future<Map<String, String>?> signInWithWeb() async {
@@ -83,6 +94,10 @@ class KakaoAuthService {
       };
     } catch (error) {
       log('카카오계정으로 로그인 실패 $error');
+      showDialog(
+        context: navigatorKey.currentContext!,
+        builder: (context) => SystemDialog(subTitle: '카카오계정으로 로그인 실패 $error'),
+      );
       return null;
     }
   }
