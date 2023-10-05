@@ -1,3 +1,4 @@
+import 'package:dodal_app/layout/modal_layout.dart';
 import 'package:dodal_app/model/certification_code_enum.dart';
 import 'package:dodal_app/services/manage_challenge/response.dart';
 import 'package:dodal_app/services/manage_challenge/service.dart';
@@ -32,94 +33,82 @@ class FeedCertificationModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
-      insetPadding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
-          color: AppColors.bgColor1,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    const AvatarImage(image: null, width: 32, height: 32),
-                    const SizedBox(width: 8),
-                    Text(
-                      feed.requestUserNickname!,
-                      style: context.body2(fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.close_rounded),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            AspectRatio(
-              aspectRatio: 1,
-              child: ImageWidget(
-                image: feed.certImageUrl,
-                width: double.infinity,
-                height: double.infinity,
+    return ModalLayout(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  const AvatarImage(image: null, width: 32, height: 32),
+                  const SizedBox(width: 8),
+                  Text(
+                    feed.requestUserNickname!,
+                    style: context.body2(fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
+              IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.close_rounded),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          AspectRatio(
+            aspectRatio: 1,
+            child: ImageWidget(
+              image: feed.certImageUrl,
+              width: double.infinity,
+              height: double.infinity,
             ),
-            const SizedBox(height: 16),
-            Text(feed.certContent!),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: AppColors.systemGrey3),
-                      padding: const EdgeInsets.all(14),
-                    ),
-                    onPressed: feed.certCode == CertCode.fail.index.toString()
-                        ? null
-                        : () => _request(context, false),
-                    child: Text(
-                      '거절',
-                      style: context.body2(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          Text(feed.certContent!),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(color: AppColors.systemGrey3),
+                    padding: const EdgeInsets.all(14),
+                  ),
+                  onPressed: feed.certCode == CertCode.fail.index.toString()
+                      ? null
+                      : () => _request(context, false),
+                  child: Text(
+                    '거절',
+                    style: context.body2(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 6),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: feed.certCode == CertCode.success.index.toString()
+                      ? null
+                      : () => _request(context, true),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(14),
+                  ),
+                  child: Text(
+                    '승인',
+                    style: context.body2(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.systemWhite,
                     ),
                   ),
                 ),
-                const SizedBox(width: 6),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed:
-                        feed.certCode == CertCode.success.index.toString()
-                            ? null
-                            : () => _request(context, true),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.all(14),
-                    ),
-                    child: Text(
-                      '승인',
-                      style: context.body2(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.systemWhite,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            )
-          ],
-        ),
+              ),
+            ],
+          )
+        ],
       ),
     );
   }

@@ -1,8 +1,10 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/model/challenge_model.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
+import 'package:dodal_app/providers/create_challenge_cubit.dart';
 import 'package:dodal_app/screens/challenge_preview/main.dart';
 import 'package:dodal_app/screens/challenge_route/main.dart';
+import 'package:dodal_app/screens/create_challenge/main.dart';
 import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/widgets/common/challenge_box/list_challenge_box.dart';
 import 'package:dodal_app/widgets/challenge_list/filter_top_bar.dart';
@@ -70,14 +72,25 @@ class _ChallengeListScreenState extends State<ChallengeListScreen> {
               pagingController: pagingController,
               builderDelegate: PagedChildBuilderDelegate<Challenge>(
                 noItemsFoundIndicatorBuilder: (context) {
-                  return const Column(
+                  return Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      FilterTopBar(),
-                      SizedBox(height: 130),
+                      const FilterTopBar(),
+                      const SizedBox(height: 130),
                       NoListContext(
                         title: '카테고리 관련 도전이 없습니다.',
                         subTitle: '도전 그룹을 운영해 보는 건 어떠세요?',
+                        buttonText: '도전 생성하기',
+                        onButtonPress: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (ctx) => BlocProvider(
+                                create: (context) => CreateChallengeCubit(),
+                                child: const CreateChallengeScreen(),
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   );

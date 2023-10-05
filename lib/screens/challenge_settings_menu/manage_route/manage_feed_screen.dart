@@ -1,9 +1,11 @@
+import 'package:dodal_app/layout/modal_layout.dart';
 import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/services/manage_challenge/response.dart';
 import 'package:dodal_app/services/manage_challenge/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/challenge_settings/certificate_feed_image.dart';
+import 'package:dodal_app/widgets/common/no_list_context.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -48,47 +50,118 @@ class _ManageFeedScreenState extends State<ManageFeedScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Widget header = Column(
+      children: [
+        const InformationHeader(),
+        DateChangeHeader(date: _date, changeHandler: _changeDate),
+      ],
+    );
+
+    if (_itemListByDate.keys.isEmpty) {
+      return Column(
+        children: [
+          header,
+          const SizedBox(height: 100),
+          const NoListContext(title: '피드가 존재하지 않습니다')
+        ],
+      );
+    }
+
     return ListView.builder(
       itemCount: _itemListByDate.keys.length + 1,
       itemBuilder: (context, index) {
-        if (index == 0) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: DateChangeHeader(date: _date, changeHandler: _changeDate),
-          );
-        } else {
-          final dateKey = _itemListByDate.keys.toList()[index - 1];
-          final feedList = _itemListByDate[dateKey];
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        if (index == 0) return header;
+
+        final dateKey = _itemListByDate.keys.toList()[index - 1];
+        final feedList = _itemListByDate[dateKey];
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 8),
+            Text(
+              dateKey,
+              style: context.body2(color: AppColors.systemGrey1),
+            ),
+            GridView.count(
+              padding: const EdgeInsets.only(top: 12, bottom: 24),
+              physics: const NeverScrollableScrollPhysics(),
+              crossAxisCount: 3,
+              childAspectRatio: 1,
+              mainAxisSpacing: 3,
+              crossAxisSpacing: 3,
+              shrinkWrap: true,
+              children: [
+                for (final feed in feedList!)
+                  CertificateFeedImage(
+                    feed: feed,
+                    getFeeds: () async {
+                      await _request(_date);
+                    },
+                  )
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class InformationHeader extends StatelessWidget {
+  const InformationHeader({super.key});
+
+  _moreInfoModal(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => const ModalLayout(child: Text('s')),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+      decoration: const BoxDecoration(
+        color: AppColors.systemGrey4,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
             children: [
-              const SizedBox(height: 8),
-              Text(
-                dateKey,
-                style: context.body2(color: AppColors.systemGrey1),
+              const Icon(
+                Icons.error,
+                color: AppColors.systemGrey1,
+                size: 14,
               ),
-              GridView.count(
-                padding: const EdgeInsets.only(top: 12, bottom: 24),
-                physics: const NeverScrollableScrollPhysics(),
-                crossAxisCount: 3,
-                childAspectRatio: 1,
-                mainAxisSpacing: 3,
-                crossAxisSpacing: 3,
-                shrinkWrap: true,
-                children: [
-                  for (final feed in feedList!)
-                    CertificateFeedImage(
-                      feed: feed,
-                      getFeeds: () async {
-                        await _request(_date);
-                      },
-                    )
-                ],
+              const SizedBox(width: 4),
+              Text(
+                '멤버들의 인증을 쉽게 관리해 보세요!',
+                style: context.caption(),
               ),
             ],
-          );
-        }
-      },
+          ),
+          IconButton(
+            onPressed: () {
+              _moreInfoModal(context);
+            },
+            style: IconButton.styleFrom(
+              minimumSize: Size.zero,
+              padding: EdgeInsets.zero,
+            ),
+            icon: Row(
+              children: [
+                Text(
+                  '자세히보기',
+                  style: context.body4(fontWeight: FontWeight.bold),
+                ),
+                const Icon(Icons.arrow_forward_ios_rounded, size: 14),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }
@@ -105,33 +178,36 @@ class DateChangeHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        IconButton(
-          onPressed: () {
-            changeHandler(-1);
-          },
-          icon: const Icon(
-            Icons.arrow_back_ios_rounded,
-            color: AppColors.systemGrey2,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(
+            onPressed: () {
+              changeHandler(-1);
+            },
+            icon: const Icon(
+              Icons.arrow_back_ios_rounded,
+              color: AppColors.systemGrey2,
+            ),
           ),
-        ),
-        Text(
-          DateFormat('yyyy년 MM월').format(date),
-          style: context.body1(),
-        ),
-        IconButton(
-          onPressed: () {
-            changeHandler(1);
-          },
-          icon: const Icon(
-            Icons.arrow_forward_ios_rounded,
-            color: AppColors.systemGrey2,
+          Text(
+            DateFormat('yyyy년 MM월').format(date),
+            style: context.body1(),
           ),
-        ),
-      ],
+          IconButton(
+            onPressed: () {
+              changeHandler(1);
+            },
+            icon: const Icon(
+              Icons.arrow_forward_ios_rounded,
+              color: AppColors.systemGrey2,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

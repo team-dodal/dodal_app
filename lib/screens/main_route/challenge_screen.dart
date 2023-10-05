@@ -1,5 +1,7 @@
 import 'package:animations/animations.dart';
+import 'package:dodal_app/providers/create_challenge_cubit.dart';
 import 'package:dodal_app/screens/challenge_route/main.dart';
+import 'package:dodal_app/screens/create_challenge/main.dart';
 import 'package:dodal_app/services/manage_challenge/response.dart';
 import 'package:dodal_app/services/manage_challenge/service.dart';
 import 'package:dodal_app/theme/color.dart';
@@ -7,6 +9,7 @@ import 'package:dodal_app/widgets/common/no_list_context.dart';
 import 'package:dodal_app/widgets/home/admin_challenge_box.dart';
 import 'package:dodal_app/widgets/home/joined_challenge_box.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChallengeScreen extends StatefulWidget {
   const ChallengeScreen({super.key});
@@ -157,12 +160,23 @@ class AdminList extends StatelessWidget {
                 color: AppColors.bgColor2,
                 child: Builder(builder: (context) {
                   if (list.isEmpty) {
-                    return const Column(
+                    return Column(
                       children: [
-                        SizedBox(height: 130),
+                        const SizedBox(height: 130),
                         NoListContext(
                           title: '운영 중인 도전이 없습니다.',
                           subTitle: '도전 그룹을 운영해 보는 건 어떠세요?',
+                          buttonText: '도전 생성하기',
+                          onButtonPress: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (ctx) => BlocProvider(
+                                  create: (context) => CreateChallengeCubit(),
+                                  child: const CreateChallengeScreen(),
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ],
                     );
