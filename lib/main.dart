@@ -22,7 +22,10 @@ void main() async {
   await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await Fcm.setupNotifications();
-  Kakao.KakaoSdk.init(nativeAppKey: dotenv.get('KAKAO_NATIVE_APP_KEY'));
+  Kakao.KakaoSdk.init(
+    nativeAppKey: dotenv.get('KAKAO_NATIVE_APP_KEY'),
+    javaScriptAppKey: dotenv.get('KAKAO_JAVASCRIPT_APP_KEY'),
+  );
   await initializeDateFormatting();
 
   runApp(const App());

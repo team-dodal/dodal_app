@@ -10,12 +10,6 @@ msg1 := 도달의 새로운 버전이 배포되었습니다
 msg2 := 배포되는데 시간이 조금 걸릴수 있어 10분정도 뒤에 테스트해보세요!
 play_store_address := https://play.google.com/apps/internaltest/4701572138827796274
 
-get_debug_keystore:
-	keytool -exportcert -alias debug-keystore -keystore ./android/app/keystore/debug.keystore | openssl sha1 -binary | openssl base64
-
-get_release_keystore: 
-	keytool -exportcert -alias release-keystore -keystore ./android/app/keystore/release.keystore | openssl sha1 -binary | openssl base64
-
 create_keystore:
 	rm -rf $(keystore_path)/key.properties
 	echo "debugStoreFile=./keystore/debug.keystore" >> $(keystore_path)/key.properties
