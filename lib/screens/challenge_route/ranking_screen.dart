@@ -5,6 +5,7 @@ import 'package:dodal_app/widgets/challenge_room/rank_list_item.dart';
 import 'package:dodal_app/widgets/challenge_room/rank_profile.dart';
 import 'package:dodal_app/widgets/common/cross_divider.dart';
 import 'package:dodal_app/widgets/common/filter_button.dart';
+import 'package:dodal_app/widgets/common/no_list_context.dart';
 import 'package:flutter/material.dart';
 
 class RankingScreen extends StatefulWidget {
@@ -73,6 +74,18 @@ class _RankingScreenState extends State<RankingScreen> {
                   ],
                 ),
               ),
+              if (_topThreeList == null && _list.isEmpty)
+                const Column(
+                  children: [
+                    SizedBox(height: 120),
+                    Center(
+                      child: NoListContext(
+                        title: '아직 인증한 유저가 없습니다.',
+                        subTitle: '먼저 인증을 시작해보세요!',
+                      ),
+                    ),
+                  ],
+                ),
               if (_topThreeList != null)
                 Column(
                   children: [

@@ -1,9 +1,35 @@
+import 'package:dodal_app/services/challenge/response.dart';
+import 'package:dodal_app/services/manage_challenge/response.dart';
+import 'package:dodal_app/services/manage_challenge/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/challenge_settings/member_certification_box.dart';
 import 'package:flutter/material.dart';
 
-class ManageMemberScreen extends StatelessWidget {
-  const ManageMemberScreen({super.key});
+class ManageMemberScreen extends StatefulWidget {
+  const ManageMemberScreen({super.key, required this.challenge});
+
+  final OneChallengeResponse challenge;
+
+  @override
+  State<ManageMemberScreen> createState() => _ManageMemberScreenState();
+}
+
+class _ManageMemberScreenState extends State<ManageMemberScreen> {
+  List<ChallengeUser> _userList = [];
+
+  _getUsers() async {
+    final res =
+        await ManageChallengeService.manageUsers(roomId: widget.challenge.id);
+    setState(() {
+      _userList = res;
+    });
+  }
+
+  @override
+  void initState() {
+    _getUsers();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,9 +39,9 @@ class ManageMemberScreen extends StatelessWidget {
         height: 1,
         color: AppColors.systemGrey3,
       ),
-      itemCount: 10,
+      itemCount: _userList.length,
       itemBuilder: (context, index) {
-        return const MemberCertificationBox();
+        return MemberCertificationBox(user: _userList[index]);
       },
     );
   }

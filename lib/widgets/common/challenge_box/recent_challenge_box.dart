@@ -38,7 +38,7 @@ class RecentChallengeBox extends StatelessWidget {
               userCnt: challenge.userCnt,
               certCnt: challenge.certCnt,
             ),
-            const Text('data')
+            const Text('challenge')
           ],
         ),
       ),

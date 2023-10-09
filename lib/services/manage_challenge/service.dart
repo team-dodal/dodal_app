@@ -33,6 +33,21 @@ class ManageChallengeService {
     }
   }
 
+  static manageUsers({required int roomId}) async {
+    try {
+      final service = dio();
+      final res =
+          await service.get('/api/v1/users/me/challenges/manage/$roomId/users');
+      List<dynamic> result = res.data['result'];
+      List<ChallengeUser> list =
+          result.map((item) => ChallengeUser.fromJson(item)).toList();
+      return list;
+    } on DioException catch (error) {
+      ResponseErrorDialog(error);
+      return null;
+    }
+  }
+
   static Future<Map<String, List<FeedItem>>?> getCertificationList({
     required int roomId,
     required String dateYM,

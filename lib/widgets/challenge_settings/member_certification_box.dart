@@ -1,17 +1,45 @@
+import 'package:dodal_app/model/certification_code_enum.dart';
+import 'package:dodal_app/services/manage_challenge/response.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/challenge_settings/member_manage_bottom_sheet.dart';
 import 'package:dodal_app/widgets/common/avatar_image.dart';
+import 'package:dodal_app/widgets/common/image_widget.dart';
 import 'package:flutter/material.dart';
 
-class MemberCertificationBox extends StatelessWidget {
-  const MemberCertificationBox({super.key});
+class MemberCertificationBox extends StatefulWidget {
+  const MemberCertificationBox({super.key, required this.user});
+
+  final ChallengeUser user;
+
+  @override
+  State<MemberCertificationBox> createState() => _MemberCertificationBoxState();
+}
+
+class _MemberCertificationBoxState extends State<MemberCertificationBox> {
+  List<UserWeekCertInfo?> _certList = [];
 
   _showCountBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
       builder: (_) => const MemberManageBottomSheet(),
     );
+  }
+
+  _createUserCertList() {
+    List<UserWeekCertInfo?> list = List.generate(7, (index) => null);
+    for (final certInfo in widget.user.userWeekCertInfoList!) {
+      list[int.parse(certInfo.dayCode!)] = certInfo;
+    }
+    setState(() {
+      _certList = list;
+    });
+  }
+
+  @override
+  void initState() {
+    _createUserCertList();
+    super.initState();
   }
 
   @override
@@ -31,11 +59,11 @@ class MemberCertificationBox extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Woody',
+                        widget.user.nickname!,
                         style: context.body4(fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        '인증 4회 | 인증 실패 1회',
+                        '인증 ${widget.user.certSuccessCnt}회 | 인증 실패 ${widget.user.certFailCnt}회',
                         style: context.caption(color: AppColors.systemGrey1),
                       ),
                     ],
@@ -63,9 +91,7 @@ class MemberCertificationBox extends StatelessWidget {
               crossAxisCount: 7,
               crossAxisSpacing: 6,
               physics: const NeverScrollableScrollPhysics(),
-              children: [
-                for (final i in [1, 2, 3, 4, 5, 6, 7]) const FeedImageBox()
-              ],
+              children: [for (final i in _certList) FeedImageBox(certInfo: i)],
             ),
           )
         ],
@@ -75,20 +101,65 @@ class MemberCertificationBox extends StatelessWidget {
 }
 
 class FeedImageBox extends StatelessWidget {
-  const FeedImageBox({super.key});
+  const FeedImageBox({super.key, required this.certInfo});
+
+  final UserWeekCertInfo? certInfo;
 
   @override
   Widget build(BuildContext context) {
+    Color borderColor = AppColors.systemGrey3;
+
+    if (certInfo != null) {
+      if (certInfo!.certCode == CertCode.success) {
+        borderColor = AppColors.success;
+      } else if (certInfo!.certCode == CertCode.fail) {
+        borderColor = AppColors.danger;
+      }
+    }
+
     return Container(
       width: double.infinity,
       height: double.infinity,
       decoration: BoxDecoration(
         border: Border.all(
-          color: AppColors.systemGrey3,
-          width: 2,
+          color: borderColor,
+          width: 3,
         ),
         borderRadius: const BorderRadius.all(Radius.circular(4)),
       ),
+      child: certInfo != null
+          ? Stack(
+              children: [
+                ImageWidget(
+                  width: double.infinity,
+                  height: double.infinity,
+                  image: certInfo!.certImageUrl,
+                  borderRadius: 2,
+                ),
+                if (certInfo!.certCode != CertCode.pending)
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Container(
+                      width: 14,
+                      height: 14,
+                      decoration: BoxDecoration(
+                        color: borderColor,
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(4)),
+                      ),
+                      child: Icon(
+                        certInfo!.certCode == CertCode.success
+                            ? Icons.check_rounded
+                            : Icons.close_rounded,
+                        size: 16,
+                        color: AppColors.systemWhite,
+                      ),
+                    ),
+                  )
+              ],
+            )
+          : null,
     );
   }
 }

@@ -82,9 +82,13 @@ class Fcm {
   }
 
   static Future<String?> getToken() async {
-    String? token = await FirebaseMessaging.instance.getToken();
-    Fcm.token = token!;
-    return token;
+    try {
+      String? token = await FirebaseMessaging.instance.getToken();
+      Fcm.token = token!;
+      return token;
+    } catch (error) {
+      return '';
+    }
   }
 }
 

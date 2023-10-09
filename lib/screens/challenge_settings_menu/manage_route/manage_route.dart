@@ -19,7 +19,7 @@ List<Route> routeList = [
   ),
   Route(
     name: '멤버 관리',
-    screen: (challenge) => const ManageMemberScreen(),
+    screen: (challenge) => ManageMemberScreen(challenge: challenge),
   ),
 ];
 

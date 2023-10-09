@@ -1,3 +1,4 @@
+import 'package:dodal_app/model/certification_code_enum.dart';
 import 'package:dodal_app/model/tag_model.dart';
 
 class JoinedChallengesResponse {
@@ -112,5 +113,61 @@ class FeedItem {
     certCode = json['cert_code'];
     registeredAt = json['registered_at'];
     registeredDate = json['registered_date'];
+  }
+}
+
+class ChallengeUser {
+  int? challengeRoomId;
+  int? userId;
+  String? nickname;
+  String? profileUrl;
+  int? certSuccessCnt;
+  int? certFailCnt;
+  List<UserWeekCertInfo>? userWeekCertInfoList;
+
+  ChallengeUser({
+    this.challengeRoomId,
+    this.userId,
+    this.nickname,
+    this.profileUrl,
+    this.certSuccessCnt,
+    this.certFailCnt,
+    this.userWeekCertInfoList,
+  });
+
+  ChallengeUser.fromJson(Map<String, dynamic> json) {
+    challengeRoomId = json['challenge_room_id'];
+    userId = json['user_id'];
+    nickname = json['nickname'];
+    profileUrl = json['profile_url'];
+    certSuccessCnt = json['cert_success_cnt'];
+    certFailCnt = json['cert_fail_cnt'];
+    if (json['user_week_cert_info_list'] != null) {
+      userWeekCertInfoList = <UserWeekCertInfo>[];
+      json['user_week_cert_info_list'].forEach((v) {
+        userWeekCertInfoList!.add(UserWeekCertInfo.fromJson(v));
+      });
+    }
+  }
+}
+
+class UserWeekCertInfo {
+  int? feedId;
+  String? certImageUrl;
+  CertCode? certCode;
+  String? dayCode;
+
+  UserWeekCertInfo({
+    this.feedId,
+    this.certImageUrl,
+    this.certCode,
+    this.dayCode,
+  });
+
+  UserWeekCertInfo.fromJson(Map<String, dynamic> json) {
+    feedId = json['feed_id'];
+    certImageUrl = json['cert_image_url'];
+    certCode = CertCode.values[int.parse(json['cert_code'])];
+    dayCode = json['day_code'];
   }
 }
