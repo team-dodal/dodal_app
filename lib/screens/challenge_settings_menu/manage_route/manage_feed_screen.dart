@@ -113,7 +113,24 @@ class InformationHeader extends StatelessWidget {
   _moreInfoModal(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => const ModalLayout(child: Text('s')),
+      builder: (context) => ModalLayout(
+          child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.close_rounded),
+              )
+            ],
+          ),
+          Image.asset('assets/images/user_manage_example.png'),
+        ],
+      )),
     );
   }
 

@@ -92,7 +92,7 @@ class UserInfoBox extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            '최장 인증 연속 달성',
+                            '총 달성 수',
                             style: context.caption(),
                           ),
                           Text(
