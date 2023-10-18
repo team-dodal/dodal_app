@@ -25,6 +25,7 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
     var res;
     if (state.id != null) {
       res = await ChallengeService.updateChallenge(
+        id: state.id!,
         title: state.title!,
         content: state.content!,
         thumbnailImg: state.thumbnailImg,

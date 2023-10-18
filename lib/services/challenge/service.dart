@@ -4,6 +4,7 @@ import 'package:dodal_app/model/challenge_model.dart';
 import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/services/common/error_dialog.dart';
 import 'package:dodal_app/services/common/main.dart';
+import 'package:dodal_app/services/common/presigned_s3.dart';
 
 class ChallengeService {
   static createChallenge({
@@ -58,6 +59,7 @@ class ChallengeService {
   }
 
   static updateChallenge({
+    required int id,
     required String title,
     required String content,
     required String tagValue,
@@ -70,7 +72,34 @@ class ChallengeService {
   }) async {
     try {
       final service = dio();
-      return null;
+      final data = {
+        "tag_value": tagValue,
+        "title": title,
+        "thumbnail_img_url": thumbnailImg,
+        "content": content,
+        "recruit_cnt": recruitCnt,
+        "cert_cnt": certCnt,
+        "cert_content": certContent,
+        "cert_correct_img_url": certCorrectImg,
+        "cert_wrong_img_url": certWrongImg
+      };
+      for (var key in [
+        'thumbnail_img_url',
+        'cert_correct_img_url',
+        'cert_wrong_img_url'
+      ]) {
+        if (data[key] != null) {
+          String fileName = 'roomId_${id}_date_${DateTime.now()}';
+          String s3Url = await PresignedS3.upload(
+            uploadUrl: await PresignedS3.getUrl(fileName: fileName),
+            file: data[key] as File,
+            fileName: fileName,
+          );
+          data[key] = s3Url;
+        }
+      }
+      service.patch('/api/v1/challenge/room/$id', data: data);
+      return true;
     } on DioException catch (err) {
       ResponseErrorDialog(err);
       return null;
@@ -226,7 +255,7 @@ class ChallengeService {
   static Future<bool> createFeed({
     required int challengeId,
     required String content,
-    required File image,
+    required File key,
   }) async {
     try {
       final service = dio();
@@ -234,7 +263,7 @@ class ChallengeService {
       FormData formData = FormData.fromMap({'content': content});
       formData.files.add(MapEntry(
         'certification_img',
-        await MultipartFile.fromFile(image.path),
+        await MultipartFile.fromFile(key.path),
       ));
 
       await service.post(
