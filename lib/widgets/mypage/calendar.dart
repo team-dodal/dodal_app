@@ -1,11 +1,65 @@
+import 'package:dodal_app/services/user/response.dart';
+import 'package:dodal_app/services/user/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/mypage/calendar_marker.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class Calendar extends StatelessWidget {
-  const Calendar({super.key});
+class Calendar extends StatefulWidget {
+  const Calendar({super.key, required this.roomId});
+
+  final int roomId;
+
+  @override
+  State<Calendar> createState() => _CalendarState();
+}
+
+class _CalendarState extends State<Calendar> {
+  DateTime _focusedDay = DateTime.now();
+  List<MyPageCalenderInfo> _feedList = [];
+
+  _requestFeedDate(DateTime focusDay) async {
+    String dateYM = DateFormat('yyyyMM').format(focusDay);
+    final res = await UserService.getFeedListByDate(
+      roomId: widget.roomId,
+      dateYM: dateYM,
+    );
+    if (res == null) return;
+    setState(() {
+      _feedList = res.myPageCalenderInfoList!;
+    });
+  }
+
+  Widget calenderBuilderFunction({
+    required DateTime day,
+    required DateTime focusedDay,
+    bool disabled = false,
+  }) {
+    List<MyPageCalenderInfo> findList = _feedList
+        .where((element) => element.day == DateFormat('dd').format(day))
+        .toList();
+    bool isInclude = findList.isNotEmpty;
+
+    return Padding(
+      padding: const EdgeInsets.all(5),
+      child: isInclude
+          ? ImageCalendarCell(
+              text: '${day.day}',
+              imageUrl: findList[0].certImageUrl,
+            )
+          : CalendarCell(text: '${day.day}', disabled: disabled),
+    );
+  }
+
+  @override
+  void initState() {
+    _requestFeedDate(_focusedDay);
+    super.initState();
+  }
+
+  /// @todo 챌린지가 변경될때마다 request 보내기
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +67,13 @@ class Calendar extends StatelessWidget {
       availableGestures: AvailableGestures.none,
       firstDay: DateTime.utc(2023, 1, 1),
       lastDay: DateTime.now(),
-      focusedDay: DateTime.now(),
+      focusedDay: _focusedDay,
+      onPageChanged: (focusedDay) {
+        _requestFeedDate(focusedDay);
+        setState(() {
+          _focusedDay = focusedDay;
+        });
+      },
       locale: 'ko-KR',
       headerStyle: HeaderStyle(
         formatButtonVisible: false,
@@ -37,27 +97,19 @@ class Calendar extends StatelessWidget {
       ),
       calendarStyle: const CalendarStyle(outsideDaysVisible: false),
       calendarBuilders: CalendarBuilders(
-        defaultBuilder: (context, day, focusedDay) {
-          return Padding(
-            padding: const EdgeInsets.all(5),
-            child: CalendarCell(
-              text: '${day.day}',
-              onPressed: () {},
-            ),
-          );
-        },
-        todayBuilder: (context, day, focusedDay) {
-          return Padding(
-            padding: const EdgeInsets.all(5),
-            child: CalendarCell(text: '${day.day}', onPressed: () {}),
-          );
-        },
-        disabledBuilder: (context, day, focusedDay) {
-          return Padding(
-            padding: const EdgeInsets.all(5),
-            child: CalendarCell(text: '${day.day}', disabled: true),
-          );
-        },
+        defaultBuilder: (context, day, focusedDay) => calenderBuilderFunction(
+          day: day,
+          focusedDay: focusedDay,
+        ),
+        todayBuilder: (context, day, focusedDay) => calenderBuilderFunction(
+          day: day,
+          focusedDay: focusedDay,
+        ),
+        disabledBuilder: (context, day, focusedDay) => calenderBuilderFunction(
+          day: day,
+          focusedDay: focusedDay,
+          disabled: true,
+        ),
       ),
     );
   }

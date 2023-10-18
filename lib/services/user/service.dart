@@ -129,4 +129,32 @@ class UserService {
       ResponseErrorDialog(err);
     }
   }
+
+  static Future<UserResponse?> me() async {
+    try {
+      final service = dio();
+      final res = await service.get('/api/v1/users/my-page');
+      return UserResponse.fromJson(res.data['result']);
+    } on DioException catch (err) {
+      ResponseErrorDialog(err);
+      return null;
+    }
+  }
+
+  static Future<FeedListByDateResponse?> getFeedListByDate({
+    required int roomId,
+    required String dateYM,
+  }) async {
+    try {
+      final service = dio();
+      final res = await service.get(
+        '/api/v1/users/my-page/challenge-room/$roomId?date_ym=$dateYM',
+      );
+      return FeedListByDateResponse.fromJson(res.data['result']);
+    } on DioException catch (err) {
+      print(err);
+      ResponseErrorDialog(err);
+      return null;
+    }
+  }
 }

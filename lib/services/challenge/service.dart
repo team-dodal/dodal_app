@@ -255,7 +255,7 @@ class ChallengeService {
   static Future<bool> createFeed({
     required int challengeId,
     required String content,
-    required File key,
+    required File image,
   }) async {
     try {
       final service = dio();
@@ -263,7 +263,7 @@ class ChallengeService {
       FormData formData = FormData.fromMap({'content': content});
       formData.files.add(MapEntry(
         'certification_img',
-        await MultipartFile.fromFile(key.path),
+        await MultipartFile.fromFile(image.path),
       ));
 
       await service.post(
