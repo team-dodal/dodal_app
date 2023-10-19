@@ -17,8 +17,10 @@ class ChallengePreviewScreen extends StatelessWidget {
     required this.step,
     required this.steps,
     required this.nextStep,
+    required this.isUpdate,
   });
 
+  final bool isUpdate;
   final int step, steps;
   final void Function() nextStep;
 
@@ -127,7 +129,10 @@ class ChallengePreviewScreen extends StatelessWidget {
           },
         );
       }),
-      bottomSheet: SubmitButton(onPress: nextStep, title: '도전 생성하기'),
+      bottomSheet: SubmitButton(
+        onPress: nextStep,
+        title: isUpdate ? '도전 수정하기' : '도전 생성하기',
+      ),
     );
   }
 }

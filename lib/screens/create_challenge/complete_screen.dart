@@ -4,7 +4,7 @@ import 'package:dodal_app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
 class CompleteCreateChallenge extends StatelessWidget {
-  const CompleteCreateChallenge({super.key, this.isUpdate = false});
+  const CompleteCreateChallenge({super.key, required this.isUpdate});
 
   final bool isUpdate;
 

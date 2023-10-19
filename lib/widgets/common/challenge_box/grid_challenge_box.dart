@@ -117,7 +117,8 @@ class _GridChallengeBoxState extends State<GridChallengeBox> {
                   style: context.body2(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
-                Row(
+                Flex(
+                  direction: Axis.horizontal,
                   children: [
                     AvatarImage(
                       image: widget.challenge.adminProfile,
@@ -125,9 +126,12 @@ class _GridChallengeBoxState extends State<GridChallengeBox> {
                       height: 16,
                     ),
                     const SizedBox(width: 4),
-                    Text(
-                      widget.challenge.adminNickname,
-                      style: context.caption(color: AppColors.systemGrey1),
+                    Flexible(
+                      child: Text(
+                        widget.challenge.adminNickname,
+                        style: context.caption(color: AppColors.systemGrey1),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                     Text(
                       ' · ',

@@ -66,9 +66,9 @@ class ChallengeService {
     required int recruitCnt,
     required int certCnt,
     required String certContent,
-    File? thumbnailImg,
-    required File? certCorrectImg,
-    required File? certWrongImg,
+    dynamic thumbnailImg,
+    dynamic certCorrectImg,
+    dynamic certWrongImg,
   }) async {
     try {
       final service = dio();
@@ -88,11 +88,11 @@ class ChallengeService {
         'cert_correct_img_url',
         'cert_wrong_img_url'
       ]) {
-        if (data[key] != null) {
+        if (data[key] != null && data[key].runtimeType == File) {
           String fileName = 'roomId_${id}_date_${DateTime.now()}';
           String s3Url = await PresignedS3.upload(
             uploadUrl: await PresignedS3.getUrl(fileName: fileName),
-            file: data[key] as File,
+            file: data[key],
             fileName: fileName,
           );
           data[key] = s3Url;

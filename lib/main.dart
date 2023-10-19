@@ -39,21 +39,13 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  User? _user;
-
-  checkingLoginStatus() async {
-    _user = await UserService.user();
-    setState(() {});
-  }
-
   @override
   void initState() {
-    checkingLoginStatus();
+    super.initState();
     UserService.updateFcmToken(Fcm.token);
     FlutterNativeSplash.remove();
     FirebaseMessaging.onMessage.listen(Fcm.foregroundNotification);
     FirebaseMessaging.onBackgroundMessage(Fcm.backgroundNotification);
-    super.initState();
   }
 
   @override
@@ -66,24 +58,32 @@ class _AppState extends State<App> {
         title: '도달',
         theme: lightTheme,
         navigatorKey: navigatorKey,
-        home: Builder(builder: (context) {
-          if (_user != null) {
-            context.read<UserCubit>().set(User(
-                  id: _user!.id,
-                  email: _user!.email,
-                  nickname: _user!.nickname,
-                  content: _user!.content,
-                  profileUrl: _user!.profileUrl,
-                  registerAt: _user!.registerAt,
-                  socialType: _user!.socialType,
-                  categoryList: _user!.categoryList,
-                  tagList: _user!.tagList,
-                ));
-            return const MainRoute();
-          } else {
-            return const SignInScreen();
-          }
-        }),
+        home: FutureBuilder(
+          future: UserService.user(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Container();
+            }
+
+            User? user = snapshot.data;
+            if (user != null) {
+              context.read<UserCubit>().set(User(
+                    id: user.id,
+                    email: user.email,
+                    nickname: user.nickname,
+                    content: user.content,
+                    profileUrl: user.profileUrl,
+                    registerAt: user.registerAt,
+                    socialType: user.socialType,
+                    categoryList: user.categoryList,
+                    tagList: user.tagList,
+                  ));
+              return const MainRoute();
+            } else {
+              return const SignInScreen();
+            }
+          },
+        ),
       ),
     );
   }

@@ -28,7 +28,6 @@ class GroupSettingsMenuScreen extends StatelessWidget {
         'name': '도전 상세 정보 편집',
         'page': BlocProvider(
           create: (context) => CreateChallengeCubit(
-            id: challenge.id,
             title: challenge.title,
             content: challenge.content,
             certContent: challenge.certContent,
@@ -39,7 +38,7 @@ class GroupSettingsMenuScreen extends StatelessWidget {
             recruitCnt: challenge.recruitCnt,
             certCnt: challenge.certCnt,
           ),
-          child: const CreateChallengeScreen(),
+          child: CreateChallengeScreen(roomId: challenge.id),
         ),
       },
       {

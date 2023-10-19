@@ -2,14 +2,12 @@ import 'package:dodal_app/model/tag_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CreateChallenge {
-  int? id;
   String? title, content, certContent;
   dynamic thumbnailImg, certCorrectImg, certWrongImg;
   int? recruitCnt, certCnt;
   Tag? tagValue;
 
   CreateChallenge({
-    this.id,
     required this.title,
     required this.content,
     required this.certContent,
@@ -48,7 +46,6 @@ class CreateChallenge {
 
 class CreateChallengeCubit extends Cubit<CreateChallenge> {
   CreateChallengeCubit({
-    int? id,
     String? title,
     String? content,
     String? certContent,
@@ -60,7 +57,6 @@ class CreateChallengeCubit extends Cubit<CreateChallenge> {
     int? certCnt,
   }) : super(
           CreateChallenge(
-            id: id,
             title: title ?? '',
             content: content ?? '',
             certContent: certContent ?? '',

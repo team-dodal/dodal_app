@@ -14,8 +14,10 @@ class ChallengeContentScreen extends StatefulWidget {
     required this.steps,
     required this.step,
     required this.nextStep,
+    required this.isUpdate,
   });
 
+  final bool isUpdate;
   final int steps, step;
   final void Function() nextStep;
 
@@ -63,7 +65,7 @@ class _ChallengeContentScreenState extends State<ChallengeContentScreen> {
     return BlocBuilder<CreateChallengeCubit, CreateChallenge>(
         builder: (context, state) {
       return Scaffold(
-        appBar: AppBar(title: Text(state.id == null ? '도전 만들기' : '도전 수정하기')),
+        appBar: AppBar(title: Text(widget.isUpdate ? '도전 수정하기' : '도전 만들기')),
         body: SingleChildScrollView(
           controller: scrollController,
           child: Padding(

@@ -59,7 +59,13 @@ class _CalendarState extends State<Calendar> {
     super.initState();
   }
 
-  /// @todo 챌린지가 변경될때마다 request 보내기
+  @override
+  void didUpdateWidget(covariant Calendar oldWidget) {
+    if (oldWidget.roomId != widget.roomId) {
+      _requestFeedDate(_focusedDay);
+    }
+    super.didUpdateWidget(oldWidget);
+  }
 
   @override
   Widget build(BuildContext context) {

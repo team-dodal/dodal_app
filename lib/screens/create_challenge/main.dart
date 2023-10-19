@@ -4,13 +4,15 @@ import 'package:dodal_app/screens/create_challenge/challenge_content_screen.dart
 import 'package:dodal_app/screens/create_challenge/challenge_preview_screen.dart';
 import 'package:dodal_app/screens/create_challenge/challenge_tag_screen.dart';
 import 'package:dodal_app/screens/create_challenge/challenge_title_screen.dart';
-import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/layout/create_screen_layout.dart';
+import 'package:dodal_app/services/challenge/service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CreateChallengeScreen extends StatefulWidget {
-  const CreateChallengeScreen({super.key});
+  const CreateChallengeScreen({super.key, this.roomId});
+
+  final int? roomId;
 
   @override
   State<CreateChallengeScreen> createState() => _CreateChallengeScreenState();
@@ -18,21 +20,22 @@ class CreateChallengeScreen extends StatefulWidget {
 
 class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
   int _currentIndex = 0;
+  bool _isUpdate = false;
   int steps = 4;
 
   _submit() async {
     final state = BlocProvider.of<CreateChallengeCubit>(context).state;
-    var res;
-    if (state.id != null) {
+    dynamic res;
+    if (widget.roomId != null) {
       res = await ChallengeService.updateChallenge(
-        id: state.id!,
+        id: widget.roomId!,
         title: state.title!,
         content: state.content!,
-        thumbnailImg: state.thumbnailImg,
         tagValue: state.tagValue!.value,
         recruitCnt: state.recruitCnt!,
         certCnt: state.certCnt!,
         certContent: state.certContent!,
+        thumbnailImg: state.thumbnailImg,
         certCorrectImg: state.certCorrectImg,
         certWrongImg: state.certWrongImg,
       );
@@ -52,10 +55,18 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
     if (res == null) return;
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
-          builder: (ctx) =>
-              CompleteCreateChallenge(isUpdate: state.id != null)),
+        builder: (ctx) => CompleteCreateChallenge(isUpdate: _isUpdate),
+      ),
       (route) => false,
     );
+  }
+
+  @override
+  void initState() {
+    setState(() {
+      _isUpdate = widget.roomId != null;
+    });
+    super.initState();
   }
 
   @override
@@ -69,6 +80,7 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
       },
       children: [
         ChallengeTagScreen(
+          isUpdate: _isUpdate,
           step: _currentIndex + 1,
           steps: steps,
           nextStep: () {
@@ -78,6 +90,7 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
           },
         ),
         ChallengeTitleScreen(
+          isUpdate: _isUpdate,
           step: _currentIndex + 1,
           steps: steps,
           nextStep: () {
@@ -87,6 +100,7 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
           },
         ),
         ChallengeContentScreen(
+          isUpdate: _isUpdate,
           step: _currentIndex + 1,
           steps: steps,
           nextStep: () {
@@ -96,6 +110,7 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
           },
         ),
         ChallengePreviewScreen(
+          isUpdate: _isUpdate,
           step: _currentIndex + 1,
           steps: steps,
           nextStep: _submit,
