@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:dodal_app/theme/color.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class ImageWidget extends StatelessWidget {
@@ -18,6 +19,17 @@ class ImageWidget extends StatelessWidget {
   final double height;
   final BoxShape shape;
   final double borderRadius;
+
+  getImgUrl(imgUrl) async {
+    try {
+      (await NetworkAssetBundle(Uri.parse(imgUrl)).load(imgUrl))
+          .buffer
+          .asUint8List();
+      return imgUrl;
+    } catch (e) {
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,13 +57,21 @@ class ImageWidget extends StatelessWidget {
                 height: double.infinity,
               );
             } else {
-              return FadeInImage(
-                placeholder: MemoryImage(kTransparentImage),
-                image: NetworkImage(image),
-                alignment: Alignment.topCenter,
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: double.infinity,
+              return FutureBuilder(
+                future: getImgUrl(image),
+                builder: (context, snapshot) {
+                  final imageUrl = snapshot.data;
+                  if (imageUrl == null) return const SizedBox();
+
+                  return FadeInImage(
+                    placeholder: MemoryImage(kTransparentImage),
+                    image: NetworkImage(image),
+                    alignment: Alignment.topCenter,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: double.infinity,
+                  );
+                },
               );
             }
           }

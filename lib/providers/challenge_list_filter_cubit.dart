@@ -42,13 +42,14 @@ class ChallengeListFilter {
 
 class ChallengeListFilterCubit extends Cubit<ChallengeListFilter> {
   final Category category;
+  final ConditionEnum? condition;
 
-  ChallengeListFilterCubit({required this.category})
+  ChallengeListFilterCubit({required this.category, this.condition})
       : super(
           ChallengeListFilter(
             category: category,
             tag: category.tags[0],
-            condition: ConditionEnum.popularity,
+            condition: condition ?? ConditionEnum.popularity,
             certCntList: [1, 2, 3, 4, 5, 6, 7],
           ),
         );

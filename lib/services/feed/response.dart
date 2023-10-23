@@ -12,6 +12,7 @@ class FeedContentResponse {
   final int likeCnt;
   final int accuseCnt;
   final bool likeYn;
+  final bool joinYn;
   final DateTime registeredAt;
 
   FeedContentResponse.fromJson(dynamic data)
@@ -28,5 +29,6 @@ class FeedContentResponse {
         likeCnt = data['like_cnt'],
         accuseCnt = data['accuse_cnt'],
         likeYn = data['like_yn'] == 'Y',
+        joinYn = data['join_yn'] == 'Y',
         registeredAt = DateTime.parse(data['registered_at']);
 }

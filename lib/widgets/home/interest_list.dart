@@ -6,6 +6,7 @@ import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/screens/challenge_preview/main.dart';
 import 'package:dodal_app/screens/challenge_route/main.dart';
+import 'package:dodal_app/screens/modify_user/main.dart';
 import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
@@ -47,7 +48,13 @@ class InterestList extends StatelessWidget {
                     Material(
                       color: AppColors.lightYellow,
                       child: InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const ModifyUserScreen()),
+                          );
+                        },
                         child: const Row(
                           children: [
                             Text('관심사 추가하기'),

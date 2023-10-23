@@ -1,6 +1,10 @@
 import 'package:animations/animations.dart';
+import 'package:dodal_app/model/category_model.dart';
 import 'package:dodal_app/model/challenge_code_enum.dart';
 import 'package:dodal_app/model/challenge_model.dart';
+import 'package:dodal_app/model/tag_model.dart';
+import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
+import 'package:dodal_app/screens/challenge_list/main.dart';
 import 'package:dodal_app/screens/challenge_preview/main.dart';
 import 'package:dodal_app/screens/challenge_route/main.dart';
 import 'package:dodal_app/services/challenge/service.dart';
@@ -8,6 +12,7 @@ import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/challenge_box/recent_challenge_box.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RecentList extends StatefulWidget {
   const RecentList({super.key});
@@ -72,7 +77,25 @@ class _RecentListState extends State<RecentList> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: OutlinedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider(
+                      create: (ctx) => ChallengeListFilterCubit(
+                        category: Category(
+                          name: '전체',
+                          subName: '',
+                          value: null,
+                          emoji: '',
+                          tags: [const Tag(name: '전체', value: null)],
+                        ),
+                        condition: ConditionEnum.newest,
+                      ),
+                      child: const ChallengeListScreen(),
+                    ),
+                  ),
+                );
+              },
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 0),
                 padding: const EdgeInsets.all(16),

@@ -1,3 +1,5 @@
+import 'package:dodal_app/screens/challenge_preview/main.dart';
+import 'package:dodal_app/screens/challenge_route/main.dart';
 import 'package:dodal_app/services/feed/response.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
@@ -37,7 +39,15 @@ class FeedContentHeader extends StatelessWidget {
             ],
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return feedContent.joinYn
+                      ? ChallengeRoute(id: feedContent.roomId)
+                      : ChallengePreviewScreen(id: feedContent.roomId);
+                },
+              ));
+            },
             icon: const Icon(Icons.arrow_forward_ios_rounded),
           )
         ],

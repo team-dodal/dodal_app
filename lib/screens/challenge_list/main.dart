@@ -1,10 +1,13 @@
 import 'package:animations/animations.dart';
+import 'package:dodal_app/helper/slide_page_route.dart';
 import 'package:dodal_app/model/challenge_model.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/providers/create_challenge_cubit.dart';
 import 'package:dodal_app/screens/challenge_preview/main.dart';
 import 'package:dodal_app/screens/challenge_route/main.dart';
 import 'package:dodal_app/screens/create_challenge/main.dart';
+import 'package:dodal_app/screens/notification/main.dart';
+import 'package:dodal_app/screens/search/main.dart';
 import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/widgets/common/challenge_box/list_challenge_box.dart';
 import 'package:dodal_app/widgets/challenge_list/filter_top_bar.dart';
@@ -61,7 +64,40 @@ class _ChallengeListScreenState extends State<ChallengeListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(bottom: const ListTabBar()),
+      appBar: AppBar(
+        bottom: const ListTabBar(),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                SlidePageRoute(screen: const SearchScreen()),
+              );
+            },
+            icon: const Icon(Icons.search),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                SlidePageRoute(screen: const NotiFicationScreen()),
+              );
+            },
+            icon: const Icon(Icons.notifications_none),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                SlidePageRoute(
+                  screen: BlocProvider(
+                    create: (context) => CreateChallengeCubit(),
+                    child: const CreateChallengeScreen(),
+                  ),
+                ),
+              );
+            },
+            icon: const Icon(Icons.add_rounded),
+          ),
+        ],
+      ),
       body: BlocListener<ChallengeListFilterCubit, ChallengeListFilter>(
         listener: (context, state) {
           pagingController.refresh();

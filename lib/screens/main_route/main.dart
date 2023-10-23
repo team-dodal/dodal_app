@@ -3,6 +3,7 @@ import 'package:dodal_app/helper/slide_page_route.dart';
 import 'package:dodal_app/providers/create_challenge_cubit.dart';
 import 'package:dodal_app/screens/create_challenge/main.dart';
 import 'package:dodal_app/screens/notification/main.dart';
+import 'package:dodal_app/screens/search/main.dart';
 import 'package:dodal_app/screens/settings_menu/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -50,7 +51,7 @@ List<Route> routeList = [
     name: '마이',
     iconPath: 'assets/icons/my_icon.svg',
     activeIconPath: 'assets/icons/my_active_icon.svg',
-    screen: MyPageScreen(),
+    screen: const MyPageScreen(),
   ),
 ];
 
@@ -76,33 +77,40 @@ class _MainRouteState extends State<MainRoute> {
         title: _currentIndex == 0
             ? Image.asset('assets/images/main_logo.png')
             : Text(
-                routeList.map((route) => route.name).toList()[_currentIndex]),
-        actions: [
-          if (_currentIndex == 0)
-            IconButton(
-              onPressed: () {
-                _handleActionBtn(const NotiFicationScreen());
-              },
-              icon: const Icon(Icons.notifications_none),
-            ),
-          if (_currentIndex == 2)
-            IconButton(
-              onPressed: () {
-                _handleActionBtn(BlocProvider(
-                  create: (context) => CreateChallengeCubit(),
-                  child: const CreateChallengeScreen(),
-                ));
-              },
-              icon: const Icon(Icons.add_rounded),
-            ),
-          if (_currentIndex == 3)
-            IconButton(
-              onPressed: () {
-                _handleActionBtn(const SettingsMenuScreen());
-              },
-              icon: const Icon(Icons.settings),
-            )
-        ],
+                routeList.map((route) => route.name).toList()[_currentIndex],
+              ),
+        actions: _currentIndex != 3
+            ? [
+                IconButton(
+                  onPressed: () {
+                    _handleActionBtn(const SearchScreen());
+                  },
+                  icon: const Icon(Icons.search),
+                ),
+                IconButton(
+                  onPressed: () {
+                    _handleActionBtn(const NotiFicationScreen());
+                  },
+                  icon: const Icon(Icons.notifications_none),
+                ),
+                IconButton(
+                  onPressed: () {
+                    _handleActionBtn(BlocProvider(
+                      create: (context) => CreateChallengeCubit(),
+                      child: const CreateChallengeScreen(),
+                    ));
+                  },
+                  icon: const Icon(Icons.add_rounded),
+                ),
+              ]
+            : [
+                IconButton(
+                  onPressed: () {
+                    _handleActionBtn(const SettingsMenuScreen());
+                  },
+                  icon: const Icon(Icons.settings),
+                )
+              ],
       ),
       body: PageTransitionSwitcher(
         transitionBuilder: (child, animation, secondaryAnimation) {

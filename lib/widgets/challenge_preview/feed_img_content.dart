@@ -26,30 +26,70 @@ class FeedImgContent extends StatelessWidget {
       );
     }
 
-    return GridView.count(
-      crossAxisCount: 3,
-      crossAxisSpacing: 3,
-      mainAxisSpacing: 3,
-      childAspectRatio: 1,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
+    return Stack(
+      alignment: Alignment.bottomCenter,
       children: [
-        for (final feed in feedList)
-          Stack(
-            children: [
-              ImageWidget(
-                image: feed,
-                width: double.infinity,
-                height: double.infinity,
-              ),
-              Positioned(
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(onTap: () {}),
-                ),
+        GridView.count(
+          crossAxisCount: 3,
+          crossAxisSpacing: 3,
+          mainAxisSpacing: 3,
+          childAspectRatio: 1,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            for (final feed
+                in feedList.length < 9 ? feedList : feedList.sublist(0, 9))
+              Stack(
+                children: [
+                  ImageWidget(
+                    image: feed,
+                    width: double.infinity,
+                    height: double.infinity,
+                  ),
+                  Positioned(
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(onTap: () {}),
+                    ),
+                  )
+                ],
               )
-            ],
-          )
+          ],
+        ),
+        if (feedList.length >= 9)
+          Positioned(
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.only(top: 40),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  colors: [
+                    AppColors.systemWhite.withOpacity(1),
+                    AppColors.systemWhite.withOpacity(1),
+                    AppColors.systemWhite.withOpacity(0.7),
+                    AppColors.systemWhite.withOpacity(0.5),
+                    AppColors.systemWhite.withOpacity(0.1),
+                    AppColors.systemWhite.withOpacity(0.05),
+                  ],
+                ),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 20),
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      color: AppColors.systemGrey4,
+                    ),
+                    child: const Text('도전방에 가입하여 더 많은 달성을 확인해보세요!'),
+                  )
+                ],
+              ),
+            ),
+          ),
       ],
     );
   }
