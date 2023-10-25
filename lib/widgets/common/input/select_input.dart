@@ -1,11 +1,9 @@
 import 'dart:io';
-
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math' as math;
-
 import 'input_title.dart';
 
 class Select {
@@ -44,12 +42,6 @@ class _SelectInputState extends State<SelectInput> {
   bool _isFocused = false;
   int? _selectedIdx;
 
-  void _onTextFieldFocusChange() {
-    setState(() {
-      _isFocused = _focusNode.hasFocus;
-    });
-  }
-
   _createOverlay() {
     if (_overlayEntry == null) {
       _overlayEntry =
@@ -68,7 +60,6 @@ class _SelectInputState extends State<SelectInput> {
 
   @override
   void initState() {
-    _focusNode.addListener(_onTextFieldFocusChange);
     super.initState();
   }
 
@@ -79,13 +70,11 @@ class _SelectInputState extends State<SelectInput> {
         _selectedIdx = widget.list.indexOf(widget.value!);
       });
     }
-
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   void dispose() {
-    _focusNode.removeListener(_onTextFieldFocusChange);
     _focusNode.dispose();
     _overlayEntry?.dispose();
     super.dispose();
@@ -117,12 +106,6 @@ class _SelectInputState extends State<SelectInput> {
                 key: _selectBoxKey,
                 child: Focus(
                   focusNode: _focusNode,
-                  onFocusChange: (value) {
-                    setState(() {
-                      _isFocused = value;
-                    });
-                    value ? _createOverlay() : _removeOverlay();
-                  },
                   child: InkWell(
                     onTap: () {
                       setState(() {

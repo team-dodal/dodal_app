@@ -1,5 +1,6 @@
 import 'package:dodal_app/model/challenge_model.dart';
 import 'package:dodal_app/theme/color.dart';
+import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/challenge_box/list_challenge_box.dart';
 import 'package:flutter/material.dart';
 
@@ -38,7 +39,20 @@ class RecentChallengeBox extends StatelessWidget {
               userCnt: challenge.userCnt,
               certCnt: challenge.certCnt,
             ),
-            const Text('challenge')
+            const SizedBox(height: 12),
+            Container(
+              height: 1,
+              decoration: const BoxDecoration(color: AppColors.basicColor2),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Text(
+                  challenge.content,
+                  style: context.body4(color: AppColors.systemGrey1),
+                ),
+              ],
+            )
           ],
         ),
       ),

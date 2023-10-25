@@ -3,7 +3,7 @@ class AlarmResponse {
   final int roomId;
   final String title;
   final String content;
-  final String registeredDate;
+  final DateTime registeredDate;
 
   AlarmResponse({
     required this.userId,
@@ -18,5 +18,5 @@ class AlarmResponse {
         roomId = json['room_id'],
         title = json['title'],
         content = json['content'],
-        registeredDate = json['registered_date'];
+        registeredDate = DateTime(int.parse(json['registered_date']));
 }

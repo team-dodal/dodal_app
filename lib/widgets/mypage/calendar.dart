@@ -1,8 +1,10 @@
+import 'package:animations/animations.dart';
 import 'package:dodal_app/services/user/response.dart';
 import 'package:dodal_app/services/user/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/mypage/calendar_marker.dart';
+import 'package:dodal_app/widgets/mypage/my_feed_box.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -45,9 +47,17 @@ class _CalendarState extends State<Calendar> {
     return Padding(
       padding: const EdgeInsets.all(5),
       child: isInclude
-          ? ImageCalendarCell(
-              text: '${day.day}',
-              imageUrl: findList[0].certImageUrl,
+          ? OpenContainer(
+              transitionType: ContainerTransitionType.fadeThrough,
+              closedBuilder: (context, action) {
+                return ImageCalendarCell(
+                  text: '${day.day}',
+                  imageUrl: findList[0].certImageUrl,
+                );
+              },
+              openBuilder: (context, action) {
+                return const MyFeedBox(feedId: 0);
+              },
             )
           : CalendarCell(text: '${day.day}', disabled: disabled),
     );

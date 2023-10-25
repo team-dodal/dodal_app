@@ -69,7 +69,9 @@ class UserInfoBox extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            ContentCntBox(user: user)
+            ContentCntBox(user: user),
+            const SizedBox(height: 8),
+            SvgPicture.asset('assets/icons/my_page_banner.svg'),
           ],
         ),
       ),
@@ -135,7 +137,7 @@ class ContentCntBox extends StatelessWidget {
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

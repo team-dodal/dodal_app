@@ -7,6 +7,7 @@ class Challenge extends Equatable {
   final String adminNickname;
   final String? adminProfile;
   final String title;
+  final String content;
   final int certCnt;
   final String? thumbnailImg;
   final int recruitCnt;
@@ -25,6 +26,7 @@ class Challenge extends Equatable {
         adminNickname = data['host_nickname'],
         adminProfile = data['host_profile_url'],
         title = data['title'],
+        content = data['content'],
         certCnt = data['cert_cnt'],
         thumbnailImg = data['thumbnail_img_url'],
         recruitCnt = data['recruit_cnt'],
@@ -49,6 +51,7 @@ class Challenge extends Equatable {
         adminNickname,
         adminProfile.toString(),
         title,
+        content,
         certCnt,
         thumbnailImg.toString(),
         recruitCnt,
