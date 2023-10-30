@@ -2,6 +2,7 @@ import 'package:dodal_app/services/feed/response.dart';
 import 'package:dodal_app/services/feed/service.dart';
 import 'package:dodal_app/widgets/common/cross_divider.dart';
 import 'package:dodal_app/widgets/common/feed_content_box/main.dart';
+import 'package:dodal_app/widgets/common/no_list_context.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -50,6 +51,17 @@ class _FeedScreenState extends State<FeedScreen> {
         return const CrossDivider();
       },
       builderDelegate: PagedChildBuilderDelegate(
+        noItemsFoundIndicatorBuilder: (context) {
+          return const Column(
+            children: [
+              SizedBox(height: 100),
+              NoListContext(
+                title: '아직 업로드된 피드가 없습니다.',
+                subTitle: '내가 먼저 업로드해보는건 어떨까요?',
+              ),
+            ],
+          );
+        },
         itemBuilder: (context, FeedContentResponse item, index) {
           return FeedContentBox(feedContent: item);
         },

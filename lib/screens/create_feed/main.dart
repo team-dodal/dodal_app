@@ -56,14 +56,20 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
       content: contentController.text,
       image: compressedFile,
     );
+
+    if (!mounted) return;
     if (res) {
-      if (mounted) {
-        showDialog(
-          context: context,
-          builder: (ctx) => const SystemDialog(subTitle: '피드가 성공적으로 업로드되었습니다.'),
-        );
-        Navigator.pop(context);
-      }
+      showDialog(
+        context: context,
+        builder: (ctx) => const SystemDialog(subTitle: '피드가 성공적으로 업로드되었습니다.'),
+      );
+      Navigator.pop(context);
+    } else {
+      showDialog(
+        context: context,
+        builder: (ctx) => const SystemDialog(subTitle: '피드 업로드에 실패하였습니다.'),
+      );
+      Navigator.pop(context);
     }
   }
 

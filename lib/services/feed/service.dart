@@ -22,4 +22,17 @@ class FeedService {
       return null;
     }
   }
+
+  static Future<FeedContentResponse?> getOneFeedById({
+    required int feedId,
+  }) async {
+    try {
+      final service = dio();
+      final res = await service.get('/api/v1/feed/$feedId');
+      return FeedContentResponse.fromJson(res.data['result']);
+    } on DioException catch (error) {
+      ResponseErrorDialog(error);
+      return null;
+    }
+  }
 }

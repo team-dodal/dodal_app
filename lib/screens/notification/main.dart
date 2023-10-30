@@ -77,7 +77,7 @@ class AlarmContainer extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '1시간 전',
+                      '${DateTime.now().difference(item.registeredAt).inHours}시간 전',
                       style: context.caption(
                         color: AppColors.systemGrey1,
                         fontWeight: FontWeight.w400,

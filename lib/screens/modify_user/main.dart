@@ -20,7 +20,6 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
   ScrollController scrollController = ScrollController();
   TextEditingController nicknameController = TextEditingController();
   TextEditingController contentController = TextEditingController();
-  String? _imageUrl;
   File? _uploadImage;
   bool nicknameChecked = true;
   List<Tag> _category = [];
@@ -35,10 +34,9 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
   _submit() async {
     User? res = await UserService.updateUser(
       nickname: nicknameController.text,
-      profileUrl: _imageUrl,
       profile: _uploadImage,
       content: contentController.text,
-      category: _category.map((e) => e.value as String).toList(),
+      tagList: _category.map((e) => e.value as String).toList(),
     );
     if (res == null) return;
     if (!mounted) return;
@@ -63,7 +61,6 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
     contentController.text = user.content;
     setState(() {
       _category = user.tagList;
-      _imageUrl = user.profileUrl;
     });
     super.initState();
   }
@@ -99,11 +96,10 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
               InputFormContent(
                 nicknameController: nicknameController,
                 contentController: contentController,
-                imageUrl: _imageUrl,
+                imageUrl: BlocProvider.of<UserCubit>(context).state!.profileUrl,
                 uploadImage: _uploadImage,
                 setImage: (image) {
                   setState(() {
-                    _imageUrl = null;
                     _uploadImage = image;
                   });
                 },

@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/services/common/error_dialog.dart';
 import 'package:dodal_app/services/common/main.dart';
+import 'package:dodal_app/services/common/presigned_s3.dart';
 import 'package:dodal_app/services/user/response.dart';
 import 'package:dodal_app/utilities/social_auth.dart';
 
@@ -70,30 +71,31 @@ class UserService {
 
   static updateUser({
     required String nickname,
-    required String? profileUrl,
-    required File? profile,
     required String content,
-    required List<String> category,
+    required File? profile,
+    required List<String> tagList,
   }) async {
-    FormData formData = FormData.fromMap({
+    late String s3Url;
+    if (profile != null) {
+      String fileName = 'user_${nickname}_date_${DateTime.now()}';
+      s3Url = await PresignedS3.upload(
+        uploadUrl: await PresignedS3.getUrl(fileName: fileName),
+        file: profile,
+        fileName: fileName,
+      );
+    }
+
+    final data = {
       "nickname": nickname,
       "content": content,
-      "tag_list": category,
-    });
-    if (profile != null) {
-      formData.files.add(MapEntry(
-        'profile',
-        await MultipartFile.fromFile(profile.path),
-      ));
-    }
-    if (profileUrl != null) {
-      formData.fields.add(MapEntry('profile_url', profileUrl));
-    }
+      "tag_list": tagList,
+    };
+    if (profile != null) data['profile_url'] = s3Url;
 
     try {
       final service = dio();
       service.options.contentType = 'multipart/form-data';
-      final res = await service.patch('/api/v1/users/me', data: formData);
+      final res = await service.patch('/api/v1/users/me', data: data);
       return User.formJson(res.data['result']);
     } on DioException catch (err) {
       ResponseErrorDialog(err);

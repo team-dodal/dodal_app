@@ -3,14 +3,14 @@ class AlarmResponse {
   final int roomId;
   final String title;
   final String content;
-  final DateTime registeredDate;
+  final DateTime registeredAt;
 
   AlarmResponse({
     required this.userId,
     required this.roomId,
     required this.title,
     required this.content,
-    required this.registeredDate,
+    required this.registeredAt,
   });
 
   AlarmResponse.fromJson(Map<String, dynamic> json)
@@ -18,5 +18,5 @@ class AlarmResponse {
         roomId = json['room_id'],
         title = json['title'],
         content = json['content'],
-        registeredDate = DateTime(int.parse(json['registered_date']));
+        registeredAt = DateTime(int.parse(json['registered_at']));
 }
