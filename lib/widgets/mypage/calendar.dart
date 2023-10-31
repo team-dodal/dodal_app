@@ -56,7 +56,7 @@ class _CalendarState extends State<Calendar> {
                 );
               },
               openBuilder: (context, action) {
-                return const MyFeedBox(feedId: 0);
+                return MyFeedBox(feedId: findList[0].feedId);
               },
             )
           : CalendarCell(text: '${day.day}', disabled: disabled),

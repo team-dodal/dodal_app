@@ -23,7 +23,6 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
   TextEditingController contentController = TextEditingController();
   GlobalKey frameKey = GlobalKey();
   File? _image;
-  bool _isLoading = false;
 
   _dismissKeyboard() {
     FocusScopeNode currentFocus = FocusScope.of(context);
@@ -51,26 +50,22 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
     if (file == null) return;
     final compressedFile = await imageCompress(file);
 
+    if (!mounted) return;
+    Navigator.pop(context);
+
     final res = await ChallengeService.createFeed(
       challengeId: widget.challenge.id,
       content: contentController.text,
       image: compressedFile,
     );
-
     if (!mounted) return;
-    if (res) {
-      showDialog(
-        context: context,
-        builder: (ctx) => const SystemDialog(subTitle: '피드가 성공적으로 업로드되었습니다.'),
-      );
-      Navigator.pop(context);
-    } else {
-      showDialog(
-        context: context,
-        builder: (ctx) => const SystemDialog(subTitle: '피드 업로드에 실패하였습니다.'),
-      );
-      Navigator.pop(context);
-    }
+    if (!res) return;
+
+    showDialog(
+      context: context,
+      builder: (ctx) => const SystemDialog(subTitle: '피드가 성공적으로 업로드되었습니다.'),
+    );
+    Navigator.pop(context);
   }
 
   _handleSubmit() async {
@@ -89,17 +84,9 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
           ),
           SystemDialogButton(
             text: '업로드하기',
-            onPressed: _isLoading
-                ? null
-                : () async {
-                    setState(() {
-                      _isLoading = true;
-                    });
-                    await _createFeed();
-                    setState(() {
-                      _isLoading = false;
-                    });
-                  },
+            onPressed: () async {
+              await _createFeed();
+            },
           ),
         ],
       ),

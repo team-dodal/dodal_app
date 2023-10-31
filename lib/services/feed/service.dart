@@ -23,6 +23,26 @@ class FeedService {
     }
   }
 
+  static Future<List<FeedContentResponse>?> getFeedsByRoomId({
+    required int page,
+    required int pageSize,
+    required int roomId,
+  }) async {
+    try {
+      final service = dio();
+      final res = await service
+          .get('/api/v1/feeds/$roomId?page=$page&page_size=$pageSize');
+      List<dynamic> contents = res.data['result']['content'];
+      List<FeedContentResponse> result = contents
+          .map((content) => FeedContentResponse.fromJson(content))
+          .toList();
+      return result;
+    } on DioException catch (error) {
+      ResponseErrorDialog(error);
+      return null;
+    }
+  }
+
   static Future<FeedContentResponse?> getOneFeedById({
     required int feedId,
   }) async {

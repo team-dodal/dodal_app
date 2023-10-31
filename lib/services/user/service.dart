@@ -94,7 +94,6 @@ class UserService {
 
     try {
       final service = dio();
-      service.options.contentType = 'multipart/form-data';
       final res = await service.patch('/api/v1/users/me', data: data);
       return User.formJson(res.data['result']);
     } on DioException catch (err) {

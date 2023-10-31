@@ -18,5 +18,5 @@ class AlarmResponse {
         roomId = json['room_id'],
         title = json['title'],
         content = json['content'],
-        registeredAt = DateTime(int.parse(json['registered_at']));
+        registeredAt = DateTime.parse(json['registered_at']);
 }
