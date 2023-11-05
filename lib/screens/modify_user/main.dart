@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
@@ -20,7 +19,7 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
   ScrollController scrollController = ScrollController();
   TextEditingController nicknameController = TextEditingController();
   TextEditingController contentController = TextEditingController();
-  File? _uploadImage;
+  dynamic _uploadImage;
   bool nicknameChecked = true;
   List<Tag> _category = [];
 
@@ -59,8 +58,10 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
     final user = BlocProvider.of<UserCubit>(context).state!;
     nicknameController.text = user.nickname;
     contentController.text = user.content;
+
     setState(() {
       _category = user.tagList;
+      _uploadImage = user.profileUrl;
     });
     super.initState();
   }
@@ -96,8 +97,7 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
               InputFormContent(
                 nicknameController: nicknameController,
                 contentController: contentController,
-                imageUrl: BlocProvider.of<UserCubit>(context).state!.profileUrl,
-                uploadImage: _uploadImage,
+                image: _uploadImage,
                 setImage: (image) {
                   setState(() {
                     _uploadImage = image;

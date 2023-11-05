@@ -8,9 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class UserInfoBox extends StatelessWidget {
-  const UserInfoBox({super.key, required this.user});
+  const UserInfoBox({super.key, required this.user, required this.refresh});
 
   final UserResponse user;
+  final Function() refresh;
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +41,15 @@ class UserInfoBox extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(
                       builder: (ctx) => const ModifyUserScreen(),
-                    ));
+                    ))
+                        .then(
+                      (value) {
+                        refresh();
+                      },
+                    );
                   },
                   icon: SvgPicture.asset('assets/icons/pencil_icon.svg'),
                 ),

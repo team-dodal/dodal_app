@@ -1,3 +1,4 @@
+import 'package:dodal_app/model/certification_code_enum.dart';
 import 'package:dodal_app/model/day_enum.dart';
 import 'package:dodal_app/model/tag_model.dart';
 
@@ -20,7 +21,7 @@ class OneChallengeResponse {
   final int bookmarkCnt;
   final bool isBookmarked;
   final bool isJoin;
-  final String? todayCertCode;
+  final CertCode? todayCertCode;
   final int accuseCnt;
   final String? noticeTitle;
   final String? noticeContent;
@@ -47,16 +48,20 @@ class OneChallengeResponse {
         bookmarkCnt = data['bookmark_cnt'],
         isBookmarked = data['bookmark_yn'] == 'Y',
         isJoin = data['join_yn'] == 'Y',
-        todayCertCode = data['today_cert_code'],
+        todayCertCode = data['today_cert_code'] != null
+            ? CertCode.values[int.parse(data['today_cert_code'])]
+            : null,
         accuseCnt = data['accuse_cnt'],
         noticeTitle = data['notice_title'],
         noticeContent = data['notice_content'],
         registeredAt = data['registered_at'] != null
             ? DateTime.parse(data['registered_at'])
             : null,
-        userCertPerWeekList = (data['user_cert_per_week_list'] as List)
-            .map((weekItem) => UserCertPerWeek.fromJson(weekItem))
-            .toList(),
+        userCertPerWeekList = data['user_cert_per_week_list'] != null
+            ? (data['user_cert_per_week_list'] as List)
+                .map((weekItem) => UserCertPerWeek.fromJson(weekItem))
+                .toList()
+            : [],
         continueCertCnt = data['continue_cert_cnt'];
 }
 

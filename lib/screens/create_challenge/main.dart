@@ -1,10 +1,10 @@
 import 'package:dodal_app/providers/create_challenge_cubit.dart';
-import 'package:dodal_app/screens/create_challenge/complete_screen.dart';
 import 'package:dodal_app/screens/create_challenge/challenge_content_screen.dart';
 import 'package:dodal_app/screens/create_challenge/challenge_preview_screen.dart';
 import 'package:dodal_app/screens/create_challenge/challenge_tag_screen.dart';
 import 'package:dodal_app/screens/create_challenge/challenge_title_screen.dart';
 import 'package:dodal_app/layout/create_screen_layout.dart';
+import 'package:dodal_app/screens/create_challenge/complete_screen.dart';
 import 'package:dodal_app/services/challenge/service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

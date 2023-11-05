@@ -13,15 +13,13 @@ class InputFormContent extends StatefulWidget {
     required this.contentController,
     required this.nicknameChecked,
     required this.setNicknameChecked,
-    required this.imageUrl,
-    this.uploadImage,
+    required this.image,
     required this.setImage,
   });
 
   final TextEditingController nicknameController;
   final TextEditingController contentController;
-  final String? imageUrl;
-  final File? uploadImage;
+  final dynamic image;
   final void Function(File?) setImage;
   final bool nicknameChecked;
   final void Function(bool) setNicknameChecked;
@@ -64,7 +62,7 @@ class _InputFormContentState extends State<InputFormContent> {
             width: 100,
             height: 100,
             onChanged: widget.setImage,
-            image: widget.uploadImage ?? widget.imageUrl,
+            image: widget.image,
           ),
           const SizedBox(height: 35),
           TextInput(

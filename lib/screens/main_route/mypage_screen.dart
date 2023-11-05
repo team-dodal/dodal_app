@@ -44,7 +44,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            UserInfoBox(user: _user!),
+            UserInfoBox(user: _user!, refresh: _getUser),
             const SizedBox(height: 20),
             if (_user!.challengeRoomList!.isNotEmpty)
               Padding(

@@ -27,25 +27,37 @@ class ChallengeService {
         'recruit_cnt': recruitCnt,
         'cert_cnt': certCnt,
         'cert_content': certContent,
-        'cert_correct_img_url': certCorrectImg,
-        'cert_wrong_img_url': certWrongImg,
-        'thumbnail_img_url': thumbnailImg,
       };
 
-      for (var key in [
-        'cert_correct_img_url',
-        'cert_wrong_img_url',
-        'thumbnail_img_url'
-      ]) {
-        if (data[key] != null && data[key].runtimeType == File) {
-          String fileName = '${key}_date_${DateTime.now()}';
-          String s3Url = await PresignedS3.upload(
-            uploadUrl: await PresignedS3.getUrl(fileName: fileName),
-            file: data[key] as File,
-            fileName: fileName,
-          );
-          data[key] = s3Url;
-        }
+      if (thumbnailImg != null) {
+        String key = 'thumbnail_img_url';
+        String fileName = 'roomId_${key}_date_${DateTime.now()}';
+        String s3Url = await PresignedS3.upload(
+          uploadUrl: await PresignedS3.getUrl(fileName: fileName),
+          file: thumbnailImg,
+          fileName: fileName,
+        );
+        data[key] = s3Url;
+      }
+      if (certCorrectImg != null) {
+        String key = 'cert_correct_img_url';
+        String fileName = 'roomId_${key}_date_${DateTime.now()}';
+        String s3Url = await PresignedS3.upload(
+          uploadUrl: await PresignedS3.getUrl(fileName: fileName),
+          file: certCorrectImg,
+          fileName: fileName,
+        );
+        data[key] = s3Url;
+      }
+      if (certWrongImg != null) {
+        String key = 'cert_wrong_img_url';
+        String fileName = 'roomId_${key}_date_${DateTime.now()}';
+        String s3Url = await PresignedS3.upload(
+          uploadUrl: await PresignedS3.getUrl(fileName: fileName),
+          file: certWrongImg,
+          fileName: fileName,
+        );
+        data[key] = s3Url;
       }
 
       final res = await service.post('/api/v1/challenge/room', data: data);
@@ -73,29 +85,42 @@ class ChallengeService {
       final data = {
         "tag_value": tagValue,
         "title": title,
-        "thumbnail_img_url": thumbnailImg,
         "content": content,
         "recruit_cnt": recruitCnt,
         "cert_cnt": certCnt,
         "cert_content": certContent,
-        "cert_correct_img_url": certCorrectImg,
-        "cert_wrong_img_url": certWrongImg
       };
-      for (var key in [
-        'thumbnail_img_url',
-        'cert_correct_img_url',
-        'cert_wrong_img_url'
-      ]) {
-        if (data[key] != null && data[key].runtimeType == File) {
-          String fileName = 'roomId_${id}_${key}_date_${DateTime.now()}';
-          String s3Url = await PresignedS3.upload(
-            uploadUrl: await PresignedS3.getUrl(fileName: fileName),
-            file: data[key],
-            fileName: fileName,
-          );
-          data[key] = s3Url;
-        }
+      if (thumbnailImg != null) {
+        String key = 'thumbnail_img_url';
+        String fileName = 'roomId_${id}_${key}_date_${DateTime.now()}';
+        String s3Url = await PresignedS3.upload(
+          uploadUrl: await PresignedS3.getUrl(fileName: fileName),
+          file: thumbnailImg,
+          fileName: fileName,
+        );
+        data[key] = s3Url;
       }
+      if (certCorrectImg != null) {
+        String key = 'cert_correct_img_url';
+        String fileName = 'roomId_${id}_${key}_date_${DateTime.now()}';
+        String s3Url = await PresignedS3.upload(
+          uploadUrl: await PresignedS3.getUrl(fileName: fileName),
+          file: certCorrectImg,
+          fileName: fileName,
+        );
+        data[key] = s3Url;
+      }
+      if (certWrongImg != null) {
+        String key = 'cert_wrong_img_url';
+        String fileName = 'roomId_${id}_${key}_date_${DateTime.now()}';
+        String s3Url = await PresignedS3.upload(
+          uploadUrl: await PresignedS3.getUrl(fileName: fileName),
+          file: certWrongImg,
+          fileName: fileName,
+        );
+        data[key] = s3Url;
+      }
+
       service.patch('/api/v1/challenge/room/$id', data: data);
       return true;
     } on DioException catch (err) {

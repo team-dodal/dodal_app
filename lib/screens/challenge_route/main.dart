@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/helper/slide_page_route.dart';
+import 'package:dodal_app/model/certification_code_enum.dart';
 import 'package:dodal_app/screens/challenge_route/chat_screen.dart';
 import 'package:dodal_app/screens/challenge_route/home_feed_screen.dart';
 import 'package:dodal_app/screens/challenge_route/ranking_screen.dart';
@@ -41,8 +42,12 @@ class _ChallengeRouteState extends State<ChallengeRoute>
       ChallengeService.getChallengeOne(challengeId: widget.id);
 
   void _routeMenuScreen(OneChallengeResponse challenge) {
-    Navigator.of(context).push(
-        SlidePageRoute(screen: GroupSettingsMenuScreen(challenge: challenge)));
+    Navigator.of(context)
+        .push(SlidePageRoute(
+            screen: GroupSettingsMenuScreen(challenge: challenge)))
+        .then((value) {
+      setState(() {});
+    });
   }
 
   @override
@@ -108,21 +113,37 @@ class _ChallengeRouteState extends State<ChallengeRoute>
                   .toList()[_currentIndex],
             ),
             bottomSheet: _currentIndex == 0
-                ? ChallengeBottomSheet(
-                    buttonText: '인증하기',
-                    roomId: challenge.id,
-                    bookmarked: challenge.isBookmarked,
-                    onPress: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              CreateFeedScreen(challenge: challenge),
-                        ),
-                      );
-                      setState(() {});
-                    },
-                  )
+                ? Builder(builder: (context) {
+                    String text;
+                    Function()? onPress;
+                    switch (challenge.todayCertCode) {
+                      case CertCode.pending:
+                        text = '인증 대기중';
+                        break;
+                      case CertCode.success:
+                        text = '인증 완료';
+                        break;
+                      default:
+                        text = '인증하기';
+                        onPress = () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  CreateFeedScreen(challenge: challenge),
+                            ),
+                          );
+                          setState(() {});
+                        };
+                        break;
+                    }
+                    return ChallengeBottomSheet(
+                      buttonText: text,
+                      roomId: challenge.id,
+                      bookmarked: challenge.isBookmarked,
+                      onPress: onPress,
+                    );
+                  })
                 : null,
           );
         });

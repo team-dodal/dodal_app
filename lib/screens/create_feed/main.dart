@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:dodal_app/screens/challenge_route/main.dart';
 import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/utilities/add_watermark.dart';
@@ -63,9 +64,24 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
 
     showDialog(
       context: context,
-      builder: (ctx) => const SystemDialog(subTitle: '피드가 성공적으로 업로드되었습니다.'),
+      builder: (ctx) => SystemDialog(
+        subTitle: '피드가 성공적으로 업로드되었습니다.',
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ChallengeRoute(id: widget.challenge.id),
+                ),
+                (route) => route.isFirst,
+              );
+            },
+            child: const Text('확인'),
+          )
+        ],
+      ),
     );
-    Navigator.pop(context);
   }
 
   _handleSubmit() async {
@@ -119,6 +135,7 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
                     child: FeedImage(image: _image),
                   ),
                 ),
+                const SizedBox(height: 16),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextInput(
