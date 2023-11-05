@@ -39,7 +39,10 @@ class HomeFeedScreen extends StatelessWidget {
           const SizedBox(height: 32),
           const CrossDivider(),
           const SizedBox(height: 32),
-          const CurrentCertificationBox(),
+          CurrentCertificationBox(
+            userWeekList: challenge.userCertPerWeekList,
+            continueCertCnt: challenge.continueCertCnt,
+          ),
           const SizedBox(height: 32),
           const CrossDivider(),
           const SizedBox(height: 32),

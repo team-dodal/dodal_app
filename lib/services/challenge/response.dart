@@ -1,3 +1,4 @@
+import 'package:dodal_app/model/day_enum.dart';
 import 'package:dodal_app/model/tag_model.dart';
 
 class OneChallengeResponse {
@@ -24,6 +25,8 @@ class OneChallengeResponse {
   final String? noticeTitle;
   final String? noticeContent;
   final DateTime? registeredAt;
+  final List<UserCertPerWeek> userCertPerWeekList;
+  final int continueCertCnt;
 
   OneChallengeResponse.fromJson(Map<String, dynamic> data)
       : id = data['room_id'],
@@ -50,7 +53,23 @@ class OneChallengeResponse {
         noticeContent = data['notice_content'],
         registeredAt = data['registered_at'] != null
             ? DateTime.parse(data['registered_at'])
-            : null;
+            : null,
+        userCertPerWeekList = (data['user_cert_per_week_list'] as List)
+            .map((weekItem) => UserCertPerWeek.fromJson(weekItem))
+            .toList(),
+        continueCertCnt = data['continue_cert_cnt'];
+}
+
+class UserCertPerWeek {
+  DayEnum? day;
+  String? certImgUrl;
+
+  UserCertPerWeek({this.day, this.certImgUrl});
+
+  UserCertPerWeek.fromJson(Map<String, dynamic> json) {
+    day = DayEnum.values[json['day_code']];
+    certImgUrl = json['cert_img_url'];
+  }
 }
 
 class ChallengeRoomNoticeResponse {

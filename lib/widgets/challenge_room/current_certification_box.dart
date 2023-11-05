@@ -1,16 +1,23 @@
+import 'package:dodal_app/model/day_enum.dart';
+import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/avatar_image.dart';
 import 'package:flutter/material.dart';
 
 class CurrentCertificationBox extends StatelessWidget {
-  const CurrentCertificationBox({super.key});
+  const CurrentCertificationBox({
+    super.key,
+    required this.userWeekList,
+    required this.continueCertCnt,
+  });
+
+  final int continueCertCnt;
+  final List<UserCertPerWeek> userWeekList;
 
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
-    List<int> dayList = List.generate(7, (index) => index + 1);
-    int currentDayOfWeek = now.weekday;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -23,23 +30,33 @@ class CurrentCertificationBox extends StatelessWidget {
                 style: context.body1(fontWeight: FontWeight.bold),
               ),
               const SizedBox(width: 5),
-              const Text('+23일 째 도전중!'),
+              Text('+$continueCertCnt일 째 도전중!'),
             ],
           ),
           const SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: GridView.count(
-              crossAxisCount: dayList.length,
+              crossAxisCount: DayEnum.values.length,
               crossAxisSpacing: 6,
               childAspectRatio: 1,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               children: [
-                for (final day in dayList)
-                  DayCircle(
-                    dayNum: day,
-                    isToday: day == currentDayOfWeek,
+                for (final day in DayEnum.values)
+                  Builder(
+                    builder: (context) {
+                      final contains = userWeekList
+                          .where((element) => element.day == day)
+                          .toList();
+                      final content = contains.isNotEmpty ? contains[0] : null;
+
+                      return DayCircle(
+                        dayNum: day,
+                        isToday: day == DayEnum.values[now.weekday - 1],
+                        content: content,
+                      );
+                    },
                   )
               ],
             ),
@@ -51,18 +68,26 @@ class CurrentCertificationBox extends StatelessWidget {
 }
 
 class DayCircle extends StatelessWidget {
-  const DayCircle({super.key, required this.dayNum, required this.isToday});
+  const DayCircle({
+    super.key,
+    required this.dayNum,
+    required this.isToday,
+    required this.content,
+  });
 
-  final int dayNum;
+  final DayEnum dayNum;
   final bool isToday;
+  final UserCertPerWeek? content;
 
   @override
   Widget build(BuildContext context) {
-    List<String> daysOfWeek = ["월", "화", "수", "목", "금", "토", "일"];
     return Stack(
       children: [
-        const AvatarImage(
-            image: null, width: double.infinity, height: double.infinity),
+        AvatarImage(
+          image: content?.certImgUrl,
+          width: double.infinity,
+          height: double.infinity,
+        ),
         Positioned(
           bottom: 0,
           right: 0,
@@ -82,7 +107,7 @@ class DayCircle extends StatelessWidget {
               ],
             ),
             child: Center(
-              child: Text(daysOfWeek[dayNum - 1], style: context.caption()),
+              child: Text(dayNum.name, style: context.caption()),
             ),
           ),
         )
