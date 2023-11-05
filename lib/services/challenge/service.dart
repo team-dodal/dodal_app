@@ -20,37 +20,35 @@ class ChallengeService {
   }) async {
     try {
       final service = dio();
-      service.options.contentType = 'multipart/form-data';
-      FormData formData = FormData.fromMap({
+      final data = {
         'title': title,
         'content': content,
         'tag_value': tagValue,
         'recruit_cnt': recruitCnt,
         'cert_cnt': certCnt,
         'cert_content': certContent,
-      });
+        'cert_correct_img_url': certCorrectImg,
+        'cert_wrong_img_url': certWrongImg,
+        'thumbnail_img_url': thumbnailImg,
+      };
 
-      if (certCorrectImg != null) {
-        formData.files.add(MapEntry(
-          'cert_correct_img',
-          await MultipartFile.fromFile(certCorrectImg.path),
-        ));
-      }
-      if (certWrongImg != null) {
-        formData.files.add(MapEntry(
-          'cert_wrong_img',
-          await MultipartFile.fromFile(certWrongImg.path),
-        ));
-      }
-
-      if (thumbnailImg != null) {
-        formData.files.add(MapEntry(
-          'thumbnail_img',
-          await MultipartFile.fromFile(thumbnailImg.path),
-        ));
+      for (var key in [
+        'cert_correct_img_url',
+        'cert_wrong_img_url',
+        'thumbnail_img_url'
+      ]) {
+        if (data[key] != null && data[key].runtimeType == File) {
+          String fileName = '${key}_date_${DateTime.now()}';
+          String s3Url = await PresignedS3.upload(
+            uploadUrl: await PresignedS3.getUrl(fileName: fileName),
+            file: data[key] as File,
+            fileName: fileName,
+          );
+          data[key] = s3Url;
+        }
       }
 
-      final res = await service.post('/api/v1/challenge/room', data: formData);
+      final res = await service.post('/api/v1/challenge/room', data: data);
       return res.data['result'];
     } on DioException catch (err) {
       ResponseErrorDialog(err);
@@ -89,7 +87,7 @@ class ChallengeService {
         'cert_wrong_img_url'
       ]) {
         if (data[key] != null && data[key].runtimeType == File) {
-          String fileName = 'roomId_${id}_date_${DateTime.now()}';
+          String fileName = 'roomId_${id}_${key}_date_${DateTime.now()}';
           String s3Url = await PresignedS3.upload(
             uploadUrl: await PresignedS3.getUrl(fileName: fileName),
             file: data[key],
@@ -259,16 +257,20 @@ class ChallengeService {
   }) async {
     try {
       final service = dio();
-      service.options.contentType = 'multipart/form-data';
-      FormData formData = FormData.fromMap({'content': content});
-      formData.files.add(MapEntry(
-        'certification_img',
-        await MultipartFile.fromFile(image.path),
-      ));
+      final data = {"content": content};
+
+      String fileName =
+          'challengeId_${challengeId}_feedImage_date_${DateTime.now()}';
+      String s3Url = await PresignedS3.upload(
+        uploadUrl: await PresignedS3.getUrl(fileName: fileName),
+        file: image,
+        fileName: fileName,
+      );
+      data['certification_img_url'] = s3Url;
 
       await service.post(
         '/api/v1/challenge/room/$challengeId/certification',
-        data: formData,
+        data: data,
       );
       return true;
     } on DioException catch (error) {

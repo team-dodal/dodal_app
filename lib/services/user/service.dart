@@ -36,21 +36,26 @@ class UserService {
   }) async {
     try {
       final service = dio();
-      final formData = FormData.fromMap({
+      final data = {
         "social_type": socialType.name,
         "social_id": socialId,
         "email": email,
         "nickname": nickname,
         "content": content,
         "tag_list": category,
-      });
+      };
+
       if (profile != null) {
-        formData.files.add(MapEntry(
-          'profile',
-          await MultipartFile.fromFile(profile.path),
-        ));
+        String fileName = 'user_userProfile_date_${DateTime.now()}';
+        String s3Url = await PresignedS3.upload(
+          uploadUrl: await PresignedS3.getUrl(fileName: fileName),
+          file: profile,
+          fileName: fileName,
+        );
+        data['profile_url'] = s3Url;
       }
-      final res = await service.post('/api/v1/users/sign-up', data: formData);
+
+      final res = await service.post('/api/v1/users/sign-up', data: data);
       return SignUpResponse.fromJson(res.data['result']);
     } on DioException catch (err) {
       ResponseErrorDialog(err, err.response!.data['result']);
