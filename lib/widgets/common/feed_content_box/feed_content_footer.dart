@@ -2,6 +2,7 @@ import 'package:dodal_app/services/feed/response.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/avatar_image.dart';
+import 'package:dodal_app/widgets/common/report_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -12,6 +13,15 @@ class FeedContentFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    _showBottomSheet() {
+      showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return const ReportBottomSheet();
+        },
+      );
+    }
+
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
       child: Column(
@@ -31,7 +41,7 @@ class FeedContentFooter extends StatelessWidget {
                 ],
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: _showBottomSheet,
                 icon: const Icon(
                   Icons.more_vert,
                   color: AppColors.systemGrey2,

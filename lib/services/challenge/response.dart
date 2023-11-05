@@ -19,7 +19,7 @@ class OneChallengeResponse {
   final int bookmarkCnt;
   final bool isBookmarked;
   final bool isJoin;
-  final String todayCertCode;
+  final String? todayCertCode;
   final int accuseCnt;
   final String? noticeTitle;
   final String? noticeContent;

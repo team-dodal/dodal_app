@@ -27,6 +27,9 @@ class SubmitButton extends StatelessWidget {
           onPressed: onPress,
           style: ElevatedButton.styleFrom(
             padding: EdgeInsets.only(top: 20, bottom: Platform.isIOS ? 40 : 20),
+            shape: const BeveledRectangleBorder(
+              borderRadius: BorderRadius.zero,
+            ),
           ),
           child: Text(
             title,

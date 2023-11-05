@@ -60,13 +60,18 @@ class _TextInputState extends State<TextInput> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        InputTitle(
-          title: widget.title!,
-          required: widget.required,
-          wordLength: widget.wordLength,
-          isFocused: _isFocused,
-        ),
-        const SizedBox(height: 10),
+        if (widget.title != '')
+          Column(
+            children: [
+              InputTitle(
+                title: widget.title!,
+                required: widget.required,
+                wordLength: widget.wordLength,
+                isFocused: _isFocused,
+              ),
+              const SizedBox(height: 10),
+            ],
+          ),
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
