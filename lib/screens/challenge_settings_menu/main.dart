@@ -1,9 +1,9 @@
 import 'package:dodal_app/providers/create_challenge_cubit.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
-import 'package:dodal_app/screens/challenge_settings_menu/challenge_report_screen.dart';
 import 'package:dodal_app/screens/challenge_settings_menu/manage_route/manage_route.dart';
 import 'package:dodal_app/screens/create_challenge/main.dart';
 import 'package:dodal_app/screens/main_route/main.dart';
+import 'package:dodal_app/screens/report/main.dart';
 import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/widgets/common/system_dialog.dart';
@@ -92,7 +92,7 @@ class GroupSettingsMenuScreen extends StatelessWidget {
       },
       {
         'name': '신고하기',
-        'page': const ChallengeReportScreen(),
+        'page': const ReportScreen(),
       },
     ];
 

@@ -80,7 +80,7 @@ class _ReportScreenState extends State<ReportScreen> {
                   showDialog(
                     context: context,
                     builder: (context) => const SystemDialog(
-                      title: '신고가 완료되었습니다.',
+                      subTitle: '신고가 완료되었습니다.',
                     ),
                   );
                 }

@@ -91,4 +91,23 @@ class ManageChallengeService {
       return null;
     }
   }
+
+  static mandateAdmin({
+    required int roomId,
+    required int userId,
+  }) async {
+    try {
+      final service = dio();
+
+      await service.patch(
+        '/api/v1/users/me/challenges/manage/$roomId/mandate',
+        data: {"user_id": userId},
+      );
+
+      return true;
+    } on DioException catch (error) {
+      ResponseErrorDialog(error);
+      return null;
+    }
+  }
 }

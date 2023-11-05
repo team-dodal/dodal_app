@@ -41,7 +41,10 @@ class _ManageMemberScreenState extends State<ManageMemberScreen> {
       ),
       itemCount: _userList.length,
       itemBuilder: (context, index) {
-        return MemberCertificationBox(user: _userList[index]);
+        return MemberCertificationBox(
+          user: _userList[index],
+          challenge: widget.challenge,
+        );
       },
     );
   }

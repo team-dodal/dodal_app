@@ -1,4 +1,6 @@
 import 'package:dodal_app/model/certification_code_enum.dart';
+import 'package:dodal_app/model/day_enum.dart';
+import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/services/manage_challenge/response.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
@@ -8,9 +10,14 @@ import 'package:dodal_app/widgets/common/image_widget.dart';
 import 'package:flutter/material.dart';
 
 class MemberCertificationBox extends StatefulWidget {
-  const MemberCertificationBox({super.key, required this.user});
+  const MemberCertificationBox({
+    super.key,
+    required this.user,
+    required this.challenge,
+  });
 
   final ChallengeUser user;
+  final OneChallengeResponse challenge;
 
   @override
   State<MemberCertificationBox> createState() => _MemberCertificationBoxState();
@@ -22,14 +29,18 @@ class _MemberCertificationBoxState extends State<MemberCertificationBox> {
   _showCountBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      builder: (_) => const MemberManageBottomSheet(),
+      builder: (_) => MemberManageBottomSheet(
+        userId: widget.user.userId,
+        roomId: widget.challenge.id,
+      ),
     );
   }
 
   _createUserCertList() {
     List<UserWeekCertInfo?> list = List.generate(7, (index) => null);
     for (final certInfo in widget.user.userWeekCertInfoList!) {
-      list[int.parse(certInfo.dayCode!)] = certInfo;
+      final index = DayEnum.values.indexOf(certInfo.dayCode!);
+      list[index] = certInfo;
     }
     setState(() {
       _certList = list;
@@ -59,7 +70,7 @@ class _MemberCertificationBoxState extends State<MemberCertificationBox> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.user.nickname!,
+                        widget.user.nickname,
                         style: context.body4(fontWeight: FontWeight.bold),
                       ),
                       Text(
