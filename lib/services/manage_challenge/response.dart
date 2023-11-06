@@ -19,7 +19,7 @@ class JoinedChallengesResponse {
   final String categoryValue;
   final Tag tag;
   final int weekUserCertCnt;
-  final String certCode;
+  final CertCode? certCode;
 
   JoinedChallengesResponse.fromJson(Map<String, dynamic> data)
       : id = data['challenge_room_id'],
@@ -40,7 +40,9 @@ class JoinedChallengesResponse {
         categoryValue = data['category_value'],
         tag = Tag(name: data['tag_name'], value: data['tag_value']),
         weekUserCertCnt = data['week_user_cert_cnt'],
-        certCode = data['cert_code'];
+        certCode = data['cert_code'] != null
+            ? CertCode.values[int.parse(data['cert_code'])]
+            : null;
 }
 
 class HostChallengesResponse {
@@ -133,9 +135,11 @@ class ChallengeUser {
         profileUrl = json['profile_url'],
         certSuccessCnt = json['cert_success_cnt'],
         certFailCnt = json['cert_fail_cnt'],
-        userWeekCertInfoList = (json['user_cert_per_week_list'] as List)
-            .map((weekItem) => UserWeekCertInfo.fromJson(weekItem))
-            .toList();
+        userWeekCertInfoList = json['user_cert_per_week_list'] != null
+            ? (json['user_cert_per_week_list'] as List)
+                .map((weekItem) => UserWeekCertInfo.fromJson(weekItem))
+                .toList()
+            : [];
 }
 
 class UserWeekCertInfo {

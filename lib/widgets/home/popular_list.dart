@@ -25,13 +25,12 @@ class _PopularListState extends State<PopularList> {
   List<Challenge> _challenges = [];
 
   _getChallenges() async {
-    final res = await ChallengeService.getChallengesByCategory(
-      tagValue: '',
+    final res = await ChallengeService.getChallenges(
       conditionCode: ChallengeCodeEnum.popular.index,
-      certCntList: [1, 2, 3, 4, 5, 6, 7],
       page: 0,
       pageSize: 4,
     );
+
     setState(() {
       _challenges = res!;
     });

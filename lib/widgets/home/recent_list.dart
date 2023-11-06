@@ -25,10 +25,8 @@ class _RecentListState extends State<RecentList> {
   List<Challenge> _challenges = [];
 
   _getChallenges() async {
-    final res = await ChallengeService.getChallengesByCategory(
-      tagValue: '',
+    final res = await ChallengeService.getChallenges(
       conditionCode: ChallengeCodeEnum.recent.index,
-      certCntList: [1, 2, 3, 4, 5, 6, 7],
       page: 0,
       pageSize: 3,
     );

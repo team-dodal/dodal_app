@@ -62,7 +62,7 @@ class OneChallengeResponse {
                 .map((weekItem) => UserCertPerWeek.fromJson(weekItem))
                 .toList()
             : [],
-        continueCertCnt = data['continue_cert_cnt'];
+        continueCertCnt = int.parse(data['continue_cert_cnt'] ?? 0);
 }
 
 class UserCertPerWeek {

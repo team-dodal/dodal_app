@@ -129,6 +129,27 @@ class ChallengeService {
     }
   }
 
+  static Future<List<Challenge>?> getChallenges({
+    required int conditionCode,
+    required int page,
+    required int pageSize,
+  }) async {
+    try {
+      final service = dio();
+      String requestUrl = '/api/v1/challenge/rooms?';
+      requestUrl += 'condition=$conditionCode&';
+      requestUrl += 'page=$page&page_size=$pageSize';
+      final res = await service.get(requestUrl);
+      List<dynamic> contents = res.data['result']['content'];
+      List<Challenge> result =
+          contents.map((item) => Challenge.fromJson(item)).toList();
+      return result;
+    } on DioException catch (error) {
+      ResponseErrorDialog(error);
+      return null;
+    }
+  }
+
   static Future<List<Challenge>?> getChallengesByCategory({
     String? categoryValue,
     String? tagValue,
