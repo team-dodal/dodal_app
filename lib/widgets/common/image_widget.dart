@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -65,7 +66,7 @@ class ImageWidget extends StatelessWidget {
 
                   return FadeInImage(
                     placeholder: MemoryImage(kTransparentImage),
-                    image: NetworkImage(image),
+                    image: CachedNetworkImageProvider(image, cacheKey: image),
                     alignment: Alignment.topCenter,
                     fit: BoxFit.cover,
                     width: double.infinity,

@@ -61,6 +61,7 @@ dependencies:
   openapi_generator_annotations: ^4.11.0
   expandable_page_view: ^1.0.17
   path_provider: ^2.1.1
+  cached_network_image: ^3.3.0
 
 dev_dependencies:
   flutter_test:

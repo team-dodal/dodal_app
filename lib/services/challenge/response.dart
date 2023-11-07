@@ -27,7 +27,7 @@ class OneChallengeResponse {
   final String? noticeContent;
   final DateTime? registeredAt;
   final List<UserCertPerWeek> userCertPerWeekList;
-  final int continueCertCnt;
+  final int? continueCertCnt;
 
   OneChallengeResponse.fromJson(Map<String, dynamic> data)
       : id = data['room_id'],
@@ -62,7 +62,9 @@ class OneChallengeResponse {
                 .map((weekItem) => UserCertPerWeek.fromJson(weekItem))
                 .toList()
             : [],
-        continueCertCnt = int.parse(data['continue_cert_cnt'] ?? 0);
+        continueCertCnt = data['continue_cert_cnt'] != null
+            ? int.parse(data['continue_cert_cnt'])
+            : null;
 }
 
 class UserCertPerWeek {

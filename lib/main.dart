@@ -39,6 +39,7 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
+  Future<User?> getUser() async => await UserService.user();
   @override
   void initState() {
     super.initState();
@@ -59,7 +60,7 @@ class _AppState extends State<App> {
         theme: lightTheme,
         navigatorKey: navigatorKey,
         home: FutureBuilder(
-          future: UserService.user(),
+          future: getUser(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Container();

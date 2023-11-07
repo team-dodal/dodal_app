@@ -36,10 +36,16 @@ class ChallengeRoute extends StatefulWidget {
 class _ChallengeRouteState extends State<ChallengeRoute>
     with TickerProviderStateMixin {
   int _currentIndex = 0;
+  OneChallengeResponse? _challenge;
   late TabController _tabController;
 
-  Future<OneChallengeResponse?> getOneChallenge() async =>
-      ChallengeService.getChallengeOne(challengeId: widget.id);
+  getOneChallenge() async {
+    final challenge =
+        await ChallengeService.getChallengeOne(challengeId: widget.id);
+    setState(() {
+      _challenge = challenge;
+    });
+  }
 
   void _routeMenuScreen(OneChallengeResponse challenge) {
     Navigator.of(context)
@@ -53,6 +59,7 @@ class _ChallengeRouteState extends State<ChallengeRoute>
   @override
   void initState() {
     _tabController = TabController(length: routeList.length, vsync: this);
+    getOneChallenge();
     super.initState();
   }
 
@@ -64,88 +71,83 @@ class _ChallengeRouteState extends State<ChallengeRoute>
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: getOneChallenge(),
-        builder: (context, snapshot) {
-          if (snapshot.data == null) {
-            return Scaffold(
-              appBar: AppBar(),
-              body: const Center(child: CircularProgressIndicator()),
-            );
-          }
-          final OneChallengeResponse challenge = snapshot.data!;
-          return Scaffold(
-            appBar: AppBar(
-              actions: [
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.share),
-                ),
-                IconButton(
-                  onPressed: () {
-                    _routeMenuScreen(challenge);
-                  },
-                  icon: const Icon(Icons.more_vert),
-                )
-              ],
-              bottom: TabBar(
-                controller: _tabController,
-                tabs: routeList.map((route) => Tab(text: route.name)).toList(),
-                indicatorSize: TabBarIndicatorSize.tab,
-                onTap: (value) {
-                  setState(() {
-                    _currentIndex = value;
-                  });
-                },
-              ),
-              title: const Text('그룹'),
-            ),
-            body: PageTransitionSwitcher(
-              transitionBuilder: (child, animation, secondaryAnimation) {
-                return FadeThroughTransition(
-                  animation: animation,
-                  secondaryAnimation: secondaryAnimation,
-                  child: child,
-                );
-              },
-              child: routeList
-                  .map((route) => route.screen(challenge))
-                  .toList()[_currentIndex],
-            ),
-            bottomSheet: _currentIndex == 0
-                ? Builder(builder: (context) {
-                    String text;
-                    Function()? onPress;
-                    switch (challenge.todayCertCode) {
-                      case CertCode.pending:
-                        text = '인증 대기중';
-                        break;
-                      case CertCode.success:
-                        text = '인증 완료';
-                        break;
-                      default:
-                        text = '인증하기';
-                        onPress = () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  CreateFeedScreen(challenge: challenge),
-                            ),
-                          );
-                          setState(() {});
-                        };
-                        break;
-                    }
-                    return ChallengeBottomSheet(
-                      buttonText: text,
-                      roomId: challenge.id,
-                      bookmarked: challenge.isBookmarked,
-                      onPress: onPress,
-                    );
-                  })
-                : null,
+    if (_challenge == null) {
+      return Scaffold(
+        appBar: AppBar(),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
+    return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.share),
+          ),
+          IconButton(
+            onPressed: () {
+              _routeMenuScreen(_challenge!);
+            },
+            icon: const Icon(Icons.more_vert),
+          )
+        ],
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: routeList.map((route) => Tab(text: route.name)).toList(),
+          indicatorSize: TabBarIndicatorSize.tab,
+          onTap: (value) {
+            setState(() {
+              _currentIndex = value;
+            });
+          },
+        ),
+        title: const Text('그룹'),
+      ),
+      body: PageTransitionSwitcher(
+        transitionBuilder: (child, animation, secondaryAnimation) {
+          return FadeThroughTransition(
+            animation: animation,
+            secondaryAnimation: secondaryAnimation,
+            child: child,
           );
-        });
+        },
+        child: routeList
+            .map((route) => route.screen(_challenge!))
+            .toList()[_currentIndex],
+      ),
+      bottomSheet: _currentIndex == 0
+          ? Builder(builder: (context) {
+              String text;
+              Function()? onPress;
+              switch (_challenge!.todayCertCode) {
+                case CertCode.pending:
+                  text = '인증 대기중';
+                  break;
+                case CertCode.success:
+                  text = '인증 완료';
+                  break;
+                default:
+                  text = '인증하기';
+                  onPress = () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            CreateFeedScreen(challenge: _challenge!),
+                      ),
+                    );
+                    setState(() {});
+                  };
+                  break;
+              }
+              return ChallengeBottomSheet(
+                buttonText: text,
+                roomId: _challenge!.id,
+                bookmarked: _challenge!.isBookmarked,
+                onPress: onPress,
+              );
+            })
+          : null,
+    );
   }
 }

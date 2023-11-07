@@ -93,7 +93,7 @@ class JoinedList extends StatelessWidget {
                       children: [
                         SizedBox(height: 130),
                         NoListContext(
-                          title: '운영 중인 도전이 없습니다.',
+                          title: '진행 중인 도전이 없습니다.',
                           subTitle: '도전 그룹을 운영해 보는 건 어떠세요?',
                         ),
                       ],

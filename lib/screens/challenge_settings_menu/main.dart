@@ -74,7 +74,9 @@ class GroupSettingsMenuScreen extends StatelessWidget {
                 SystemDialogButton(
                   text: '나가기',
                   onPressed: () async {
-                    await ChallengeService.out(challengeId: challenge.id);
+                    final res =
+                        await ChallengeService.out(challengeId: challenge.id);
+                    if (!res) return;
                     if (context.mounted) {
                       Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
