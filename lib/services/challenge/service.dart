@@ -195,6 +195,21 @@ class ChallengeService {
     }
   }
 
+  static Future<List<Challenge>?> getBookmarkList() async {
+    try {
+      final service = dio();
+      final res = await service.get('/api/v1/challenge/room/bookmarks');
+
+      List<Challenge> result = (res.data['result'] as List)
+          .map((item) => Challenge.fromJson(item))
+          .toList();
+      return result;
+    } on DioException catch (error) {
+      ResponseErrorDialog(error);
+      return null;
+    }
+  }
+
   static bookmark({required int roomId, required bool value}) async {
     try {
       final service = dio();

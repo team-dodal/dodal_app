@@ -35,7 +35,8 @@ class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
             },
           ),
           SystemDialogButton(
-            text: '확인',
+            text: '로그아웃',
+            color: AppColors.danger,
             onPressed: () {
               secureStorage.deleteAll();
               if (!mounted) return;

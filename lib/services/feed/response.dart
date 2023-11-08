@@ -5,6 +5,7 @@ class FeedContentResponse {
   final String title;
   final String categoryName;
   final int userId;
+  final String? profileUrl;
   final String nickname;
   final int continueCertCnt;
   final String certImgUrl;
@@ -22,6 +23,7 @@ class FeedContentResponse {
         title = data['title'],
         categoryName = data['category_name'],
         userId = data['user_id'],
+        profileUrl = data['profile_url'],
         nickname = data['nickname'],
         continueCertCnt = data['continue_cert_cnt'],
         certImgUrl = data['cert_img_url'],

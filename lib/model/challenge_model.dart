@@ -12,7 +12,7 @@ class Challenge extends Equatable {
   final String? thumbnailImg;
   final int recruitCnt;
   final int userCnt;
-  final int bookmarkCnt;
+  final int? bookmarkCnt;
   final bool isBookmarked;
   final bool isJoined;
   final DateTime? registeredAt;
@@ -56,7 +56,7 @@ class Challenge extends Equatable {
         thumbnailImg.toString(),
         recruitCnt,
         userCnt,
-        bookmarkCnt,
+        bookmarkCnt.toString(),
         isBookmarked,
         isJoined,
         registeredAt.toString(),

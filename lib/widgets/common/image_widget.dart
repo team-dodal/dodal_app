@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class ImageWidget extends StatelessWidget {
@@ -21,16 +20,16 @@ class ImageWidget extends StatelessWidget {
   final BoxShape shape;
   final double borderRadius;
 
-  getImgUrl(imgUrl) async {
-    try {
-      (await NetworkAssetBundle(Uri.parse(imgUrl)).load(imgUrl))
-          .buffer
-          .asUint8List();
-      return imgUrl;
-    } catch (e) {
-      return null;
-    }
-  }
+  // getImgUrl(imgUrl) async {
+  //   try {
+  //     (await NetworkAssetBundle(Uri.parse(imgUrl)).load(imgUrl))
+  //         .buffer
+  //         .asUint8List();
+  //     return imgUrl;
+  //   } catch (e) {
+  //     return null;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -58,21 +57,14 @@ class ImageWidget extends StatelessWidget {
                 height: double.infinity,
               );
             } else {
-              return FutureBuilder(
-                future: getImgUrl(image),
-                builder: (context, snapshot) {
-                  final imageUrl = snapshot.data;
-                  if (imageUrl == null) return const SizedBox();
-
-                  return FadeInImage(
-                    placeholder: MemoryImage(kTransparentImage),
-                    image: CachedNetworkImageProvider(image, cacheKey: image),
-                    alignment: Alignment.topCenter,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: double.infinity,
-                  );
-                },
+              return CachedNetworkImage(
+                imageUrl: image,
+                progressIndicatorBuilder: (context, url, _) => const SizedBox(),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+                alignment: Alignment.topCenter,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
               );
             }
           }

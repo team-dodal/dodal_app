@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/helper/slide_page_route.dart';
 import 'package:dodal_app/providers/create_challenge_cubit.dart';
+import 'package:dodal_app/screens/bookmark/main.dart';
 import 'package:dodal_app/screens/create_challenge/main.dart';
 import 'package:dodal_app/screens/notification/main.dart';
 import 'package:dodal_app/screens/search/main.dart';
@@ -85,13 +86,13 @@ class _MainRouteState extends State<MainRoute> {
                   onPressed: () {
                     _handleActionBtn(const SearchScreen());
                   },
-                  icon: const Icon(Icons.search),
+                  icon: SvgPicture.asset('assets/icons/search_icon.svg'),
                 ),
                 IconButton(
                   onPressed: () {
                     _handleActionBtn(const NotiFicationScreen());
                   },
-                  icon: const Icon(Icons.notifications_none),
+                  icon: SvgPicture.asset('assets/icons/bell_icon.svg'),
                 ),
                 IconButton(
                   onPressed: () {
@@ -100,16 +101,28 @@ class _MainRouteState extends State<MainRoute> {
                       child: const CreateChallengeScreen(),
                     ));
                   },
-                  icon: const Icon(Icons.add_rounded),
+                  icon: SvgPicture.asset('assets/icons/plus_icon.svg'),
                 ),
               ]
             : [
                 IconButton(
                   onPressed: () {
+                    _handleActionBtn(const BookmarkScreen());
+                  },
+                  icon: SvgPicture.asset('assets/icons/bookmark_icon.svg'),
+                ),
+                IconButton(
+                  onPressed: () {
+                    _handleActionBtn(const NotiFicationScreen());
+                  },
+                  icon: SvgPicture.asset('assets/icons/bell_icon.svg'),
+                ),
+                IconButton(
+                  onPressed: () {
                     _handleActionBtn(const SettingsMenuScreen());
                   },
-                  icon: const Icon(Icons.settings),
-                )
+                  icon: SvgPicture.asset('assets/icons/settings_icon.svg'),
+                ),
               ],
       ),
       body: PageTransitionSwitcher(

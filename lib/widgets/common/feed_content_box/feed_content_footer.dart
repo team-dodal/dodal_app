@@ -32,7 +32,11 @@ class FeedContentFooter extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const AvatarImage(image: null, width: 24, height: 24),
+                  AvatarImage(
+                    image: feedContent.profileUrl,
+                    width: 24,
+                    height: 24,
+                  ),
                   const SizedBox(width: 8),
                   Text(
                     feedContent.nickname,

@@ -94,11 +94,13 @@ class SystemDialogButton extends StatelessWidget {
     required this.text,
     this.primary = true,
     required this.onPressed,
+    this.color = AppColors.orange,
   });
 
   final String text;
   final bool primary;
   final void Function()? onPressed;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -106,6 +108,7 @@ class SystemDialogButton extends StatelessWidget {
       return ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
+          backgroundColor: color,
           padding: const EdgeInsets.all(16),
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(8)),
