@@ -1,4 +1,5 @@
 import 'package:dodal_app/services/feed/response.dart';
+import 'package:dodal_app/services/feed/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/avatar_image.dart';
@@ -6,10 +7,36 @@ import 'package:dodal_app/widgets/common/report_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class FeedContentFooter extends StatelessWidget {
+class FeedContentFooter extends StatefulWidget {
   const FeedContentFooter({super.key, required this.feedContent});
 
   final FeedContentResponse feedContent;
+
+  @override
+  State<FeedContentFooter> createState() => _FeedContentFooterState();
+}
+
+class _FeedContentFooterState extends State<FeedContentFooter> {
+  // int _likeCnt = 0;
+
+  like(bool value) async {
+    final res = await FeedService.feedLike(
+      feedId: widget.feedContent.feedId,
+      value: value,
+    );
+    if (res == null) return;
+    setState(() {
+      widget.feedContent.likeYn = value;
+      widget.feedContent.likeCnt = value
+          ? widget.feedContent.likeCnt + 1
+          : widget.feedContent.likeCnt - 1;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +60,13 @@ class FeedContentFooter extends StatelessWidget {
               Row(
                 children: [
                   AvatarImage(
-                    image: feedContent.profileUrl,
+                    image: widget.feedContent.profileUrl,
                     width: 24,
                     height: 24,
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    feedContent.nickname,
+                    widget.feedContent.nickname,
                     style: context.body2(fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -54,7 +81,7 @@ class FeedContentFooter extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          Text(feedContent.certContent),
+          Text(widget.feedContent.certContent),
           const SizedBox(height: 12),
           Container(
             width: double.infinity,
@@ -77,11 +104,18 @@ class FeedContentFooter extends StatelessWidget {
                           padding: EdgeInsets.zero,
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
-                        onPressed: () {},
-                        icon: const Icon(Icons.favorite_border_rounded),
+                        onPressed: () {
+                          like(!widget.feedContent.likeYn);
+                        },
+                        icon: widget.feedContent.likeYn
+                            ? const Icon(
+                                Icons.favorite_rounded,
+                                color: AppColors.orange,
+                              )
+                            : const Icon(Icons.favorite_border_rounded),
                       ),
                       Text(
-                        '${feedContent.likeCnt}',
+                        '${widget.feedContent.likeCnt}',
                         style: context.body2(color: AppColors.systemGrey1),
                       ),
                     ],
@@ -106,7 +140,7 @@ class FeedContentFooter extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '${feedContent.accuseCnt}',
+                        '${widget.feedContent.accuseCnt}',
                         style: context.body2(color: AppColors.systemGrey1),
                       ),
                     ],
@@ -114,7 +148,7 @@ class FeedContentFooter extends StatelessWidget {
                 ],
               ),
               Text(
-                feedContent.registerCode,
+                widget.feedContent.registerCode,
                 style: context.body4(
                   fontWeight: FontWeight.w400,
                   color: AppColors.systemGrey1,

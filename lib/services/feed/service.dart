@@ -55,4 +55,23 @@ class FeedService {
       return null;
     }
   }
+
+  static Future<bool?> feedLike({
+    required int feedId,
+    required bool value,
+  }) async {
+    try {
+      final service = dio();
+      if (value) {
+        await service.post('/api/v1/like/$feedId');
+        return true;
+      } else {
+        await service.delete('/api/v1/like/$feedId');
+        return false;
+      }
+    } on DioException catch (error) {
+      ResponseErrorDialog(error);
+      return null;
+    }
+  }
 }

@@ -10,9 +10,9 @@ class FeedContentResponse {
   final int continueCertCnt;
   final String certImgUrl;
   final String certContent;
-  final int likeCnt;
+  int likeCnt;
   final int accuseCnt;
-  final bool likeYn;
+  bool likeYn;
   final bool joinYn;
   final DateTime registeredAt;
   final String registerCode;
