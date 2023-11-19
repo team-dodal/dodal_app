@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
 class SearchBarWidget extends StatefulWidget {
-  const SearchBarWidget({super.key, required this.controller});
+  const SearchBarWidget({
+    super.key,
+    required this.controller,
+    required this.onSubmit,
+  });
 
   final TextEditingController controller;
+  final Function(String) onSubmit;
 
   @override
   State<SearchBarWidget> createState() => _SearchBarWidgetState();
@@ -25,6 +30,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
           onChanged: (_) {
             setState(() {});
           },
+          onSubmitted: widget.onSubmit,
           decoration: InputDecoration(
             hintText: '검색어를 입력하세요',
             border: OutlineInputBorder(

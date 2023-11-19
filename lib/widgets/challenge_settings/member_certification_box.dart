@@ -1,5 +1,6 @@
 import 'package:dodal_app/model/certification_code_enum.dart';
 import 'package:dodal_app/model/day_enum.dart';
+import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/services/manage_challenge/response.dart';
 import 'package:dodal_app/theme/color.dart';
@@ -8,6 +9,7 @@ import 'package:dodal_app/widgets/challenge_settings/member_manage_bottom_sheet.
 import 'package:dodal_app/widgets/common/avatar_image.dart';
 import 'package:dodal_app/widgets/common/image_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MemberCertificationBox extends StatefulWidget {
   const MemberCertificationBox({
@@ -81,17 +83,25 @@ class _MemberCertificationBoxState extends State<MemberCertificationBox> {
                   )
                 ],
               ),
-              TextButton(
-                onPressed: () {
-                  _showCountBottomSheet(context);
+              Builder(
+                builder: (context) {
+                  final state = BlocProvider.of<UserCubit>(context).state;
+                  if (state!.id != widget.user.userId) {
+                    return TextButton(
+                      onPressed: () {
+                        _showCountBottomSheet(context);
+                      },
+                      child: Text(
+                        '관리하기',
+                        style: context.caption(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.orange,
+                        ),
+                      ),
+                    );
+                  }
+                  return const SizedBox();
                 },
-                child: Text(
-                  '관리하기',
-                  style: context.caption(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.orange,
-                  ),
-                ),
               )
             ],
           ),

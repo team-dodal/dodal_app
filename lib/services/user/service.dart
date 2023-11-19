@@ -77,11 +77,14 @@ class UserService {
   static updateUser({
     required String nickname,
     required String content,
-    required File? profile,
+    required dynamic profile,
     required List<String> tagList,
   }) async {
-    late String s3Url;
-    if (profile != null) {
+    late String? s3Url;
+    if (profile.runtimeType == String) {
+      s3Url = profile;
+    }
+    if (profile.runtimeType == File) {
       String fileName = 'user_${nickname}_date_${DateTime.now()}';
       s3Url = await PresignedS3.upload(
         uploadUrl: await PresignedS3.getUrl(fileName: fileName),
@@ -95,7 +98,7 @@ class UserService {
       "content": content,
       "tag_list": tagList,
     };
-    if (profile != null) data['profile_url'] = s3Url;
+    if (s3Url != null) data['profile_url'] = s3Url;
 
     try {
       final service = dio();

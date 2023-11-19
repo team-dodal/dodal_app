@@ -1,10 +1,18 @@
+import 'package:dodal_app/model/category_model.dart';
+import 'package:dodal_app/model/tag_model.dart';
+import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
+import 'package:dodal_app/screens/search/search_result.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/search/search_bar.dart';
 import 'package:dodal_app/widgets/search/search_item_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({super.key});
+  const SearchScreen({super.key, this.word});
+
+  final String? word;
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
@@ -12,6 +20,70 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   TextEditingController controller = TextEditingController();
+  List<String> _list = [];
+
+  getSearchList() async {
+    final pref = await SharedPreferences.getInstance();
+    final list = pref.getStringList('search_list');
+    if (list == null) {
+      pref.setStringList('search_list', []);
+      setState(() {
+        _list = [];
+      });
+    } else {
+      setState(() {
+        _list = list;
+      });
+    }
+  }
+
+  addSearchItem(String word) async {
+    final pref = await SharedPreferences.getInstance();
+    final list = pref.getStringList('search_list');
+    if (list == null) return;
+    pref.setStringList('search_list', [...list, word]);
+    setState(() {
+      _list = [...list, word];
+    });
+  }
+
+  removeList() async {
+    final pref = await SharedPreferences.getInstance();
+    pref.setStringList('search_list', []);
+    setState(() {
+      _list = [];
+    });
+  }
+
+  goResultScreen(String word) {
+    if (!mounted) return;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BlocProvider(
+          create: (ctx) => ChallengeListFilterCubit(
+            category: Category(
+              name: '전체',
+              subName: '',
+              value: null,
+              emoji: '',
+              tags: [const Tag(name: '전체', value: null)],
+            ),
+          ),
+          child: SearchResultScreen(word: word),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    if (widget.word != null) {
+      controller.text = widget.word!;
+    }
+    getSearchList();
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -22,7 +94,15 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: SearchBarWidget(controller: controller)),
+      appBar: AppBar(
+        title: SearchBarWidget(
+          controller: controller,
+          onSubmit: (value) async {
+            await addSearchItem(value);
+            goResultScreen(value);
+          },
+        ),
+      ),
       body: ListView(
         children: [
           Padding(
@@ -34,14 +114,28 @@ class _SearchScreenState extends State<SearchScreen> {
                   '최근 검색어',
                   style: context.body1(fontWeight: FontWeight.bold),
                 ),
-                TextButton(onPressed: () {}, child: const Text('전체 삭제'))
+                TextButton(
+                  onPressed: () async {
+                    await removeList();
+                  },
+                  child: const Text('전체 삭제'),
+                )
               ],
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Wrap(
-              children: [SearchItemButton(text: '러닝')],
+              spacing: 6,
+              children: [
+                for (String word in _list)
+                  SearchItemButton(
+                    text: word,
+                    onTap: () {
+                      goResultScreen(word);
+                    },
+                  )
+              ],
             ),
           )
         ],

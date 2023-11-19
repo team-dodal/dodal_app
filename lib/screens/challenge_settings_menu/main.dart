@@ -49,10 +49,6 @@ class GroupSettingsMenuScreen extends StatelessWidget {
         'name': '도전 멤버 관리',
         'page': ManageRoute(index: 1, challenge: challenge),
       },
-      {
-        'name': '도전 그룹 삭제하기',
-        'action': () {},
-      },
     ];
 
     List<Map<String, dynamic>> userItemList = [

@@ -114,7 +114,7 @@ class FeedContentFooter extends StatelessWidget {
                 ],
               ),
               Text(
-                '${DateTime.now().difference(feedContent.registeredAt).inHours}시간 전',
+                feedContent.registerCode,
                 style: context.body4(
                   fontWeight: FontWeight.w400,
                   color: AppColors.systemGrey1,

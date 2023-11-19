@@ -1,40 +1,174 @@
+import 'package:animations/animations.dart';
+import 'package:dodal_app/model/challenge_model.dart';
+import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
+import 'package:dodal_app/providers/create_challenge_cubit.dart';
+import 'package:dodal_app/screens/challenge_preview/main.dart';
+import 'package:dodal_app/screens/challenge_route/main.dart';
+import 'package:dodal_app/screens/create_challenge/main.dart';
+import 'package:dodal_app/screens/search/main.dart';
+import 'package:dodal_app/services/challenge/service.dart';
+import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
-import 'package:dodal_app/widgets/search/search_bar.dart';
+import 'package:dodal_app/widgets/challenge_list/filter_top_bar.dart';
+import 'package:dodal_app/widgets/common/challenge_box/list_challenge_box.dart';
+import 'package:dodal_app/widgets/common/no_list_context.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class SearchResultScreen extends StatefulWidget {
-  const SearchResultScreen({super.key});
+  const SearchResultScreen({super.key, required this.word});
+
+  final String word;
 
   @override
   State<SearchResultScreen> createState() => _SearchResultScreenState();
 }
 
 class _SearchResultScreenState extends State<SearchResultScreen> {
-  TextEditingController controller = TextEditingController();
+  static const pageSize = 20;
+  final PagingController<int, Challenge> pagingController =
+      PagingController(firstPageKey: 0);
+
+  _request(int pageKey) async {
+    final state = BlocProvider.of<ChallengeListFilterCubit>(context).state;
+    List<Challenge>? res = await ChallengeService.getChallengesByCategory(
+      categoryValue: state.category.value,
+      tagValue: state.tag.value,
+      conditionCode: state.condition.index,
+      certCntList: state.certCntList,
+      page: pageKey,
+      pageSize: pageSize,
+    );
+    if (res == null) return;
+    final isLastPage = res.length < pageSize;
+    if (isLastPage) {
+      pagingController.appendLastPage(res);
+    } else {
+      final nextPageKey = pageKey + res.length;
+      pagingController.appendPage(res, nextPageKey);
+    }
+  }
+
+  @override
+  void initState() {
+    pagingController.addPageRequestListener(_request);
+    super.initState();
+  }
 
   @override
   void dispose() {
-    controller.dispose();
+    pagingController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: SearchBarWidget(controller: controller)),
-      body: ListView(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '최근 겁색어',
-                style: context.body1(fontWeight: FontWeight.bold),
+      appBar: AppBar(title: NewWidget(word: widget.word)),
+      body: BlocListener<ChallengeListFilterCubit, ChallengeListFilter>(
+        listener: (context, state) {
+          pagingController.refresh();
+        },
+        child: BlocBuilder<ChallengeListFilterCubit, ChallengeListFilter>(
+          builder: (context, state) {
+            return PagedListView<int, Challenge>(
+              pagingController: pagingController,
+              builderDelegate: PagedChildBuilderDelegate<Challenge>(
+                noItemsFoundIndicatorBuilder: (context) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const FilterTopBar(),
+                      const SizedBox(height: 130),
+                      NoListContext(
+                        title: '카테고리 관련 도전이 없습니다.',
+                        subTitle: '도전 그룹을 운영해 보는 건 어떠세요?',
+                        buttonText: '도전 생성하기',
+                        onButtonPress: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (ctx) => BlocProvider(
+                                create: (context) => CreateChallengeCubit(),
+                                child: const CreateChallengeScreen(),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                },
+                itemBuilder: (context, item, index) {
+                  return Column(
+                    children: [
+                      if (index == 0) const FilterTopBar(),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        child: OpenContainer(
+                          transitionType: ContainerTransitionType.fadeThrough,
+                          closedElevation: 0,
+                          closedBuilder: (context, action) {
+                            return InkWell(
+                              onTap: action,
+                              child: ListChallengeBox(
+                                id: item.id,
+                                title: item.title,
+                                tag: item.tag,
+                                thumbnailImg: item.thumbnailImg,
+                                adminProfile: item.adminProfile,
+                                adminNickname: item.adminNickname,
+                                userCnt: item.userCnt,
+                                certCnt: item.certCnt,
+                                recruitCnt: item.recruitCnt,
+                                isBookmarked: item.isBookmarked,
+                              ),
+                            );
+                          },
+                          openBuilder: (context, action) => item.isJoined
+                              ? ChallengeRoute(id: item.id)
+                              : ChallengePreviewScreen(id: item.id),
+                        ),
+                      )
+                    ],
+                  );
+                },
               ),
-              TextButton(onPressed: () {}, child: const Text('전체 삭제'))
-            ],
-          )
-        ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class NewWidget extends StatelessWidget {
+  const NewWidget({super.key, required this.word});
+
+  final String word;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SearchScreen(word: word),
+          ),
+        );
+      },
+      child: Container(
+        height: 42,
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(100)),
+          color: AppColors.systemGrey4,
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        alignment: Alignment.centerLeft,
+        child: Text(word, style: context.body4()),
       ),
     );
   }

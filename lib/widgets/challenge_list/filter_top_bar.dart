@@ -3,7 +3,6 @@ import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/challenge_list/count_bottom_sheet.dart';
 import 'package:dodal_app/widgets/challenge_list/sort_bottom_sheet.dart';
-import 'package:dodal_app/widgets/common/cross_divider.dart';
 import 'package:dodal_app/widgets/common/filter_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,7 +42,6 @@ class FilterTopBar extends StatelessWidget {
 
       return Column(
         children: [
-          const CrossDivider(),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
             child: Row(

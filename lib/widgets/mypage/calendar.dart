@@ -40,7 +40,7 @@ class _CalendarState extends State<Calendar> {
     bool disabled = false,
   }) {
     List<MyPageCalenderInfo> findList = _feedList
-        .where((element) => element.day == DateFormat('dd').format(day))
+        .where((element) => element.day == DateFormat('d').format(day))
         .toList();
     bool isInclude = findList.isNotEmpty;
 

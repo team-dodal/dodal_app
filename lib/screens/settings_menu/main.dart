@@ -7,7 +7,6 @@ import 'package:dodal_app/widgets/common/system_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsMenuScreen extends StatefulWidget {
   const SettingsMenuScreen({super.key});
@@ -18,7 +17,6 @@ class SettingsMenuScreen extends StatefulWidget {
 
 class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
   FlutterSecureStorage secureStorage = const FlutterSecureStorage();
-  late SharedPreferences pref;
   bool _notification = true;
 
   _signOut() async {
