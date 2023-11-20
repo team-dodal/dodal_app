@@ -1,3 +1,4 @@
+import 'package:dodal_app/screens/comment/main.dart';
 import 'package:dodal_app/services/feed/response.dart';
 import 'package:dodal_app/services/feed/service.dart';
 import 'package:dodal_app/theme/color.dart';
@@ -17,8 +18,6 @@ class FeedContentFooter extends StatefulWidget {
 }
 
 class _FeedContentFooterState extends State<FeedContentFooter> {
-  // int _likeCnt = 0;
-
   like(bool value) async {
     final res = await FeedService.feedLike(
       feedId: widget.feedContent.feedId,
@@ -33,6 +32,15 @@ class _FeedContentFooterState extends State<FeedContentFooter> {
     });
   }
 
+  _showBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return const ReportBottomSheet();
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -40,15 +48,6 @@ class _FeedContentFooterState extends State<FeedContentFooter> {
 
   @override
   Widget build(BuildContext context) {
-    _showBottomSheet() {
-      showModalBottomSheet(
-        context: context,
-        builder: (context) {
-          return const ReportBottomSheet();
-        },
-      );
-    }
-
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
       child: Column(
@@ -130,7 +129,16 @@ class _FeedContentFooterState extends State<FeedContentFooter> {
                           padding: const EdgeInsets.all(2),
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CommentScreen(
+                                feedId: widget.feedContent.feedId,
+                              ),
+                            ),
+                          );
+                        },
                         icon: SvgPicture.asset(
                           'assets/icons/chat_icon.svg',
                           colorFilter: const ColorFilter.mode(

@@ -74,4 +74,21 @@ class FeedService {
       return null;
     }
   }
+
+  static getAllComments({
+    required int feedId,
+  }) async {
+    try {
+      final service = dio();
+      final res = await service.get('/api/v1/comments/$feedId');
+
+      List<dynamic> contents = res.data['result'];
+      return contents
+          .map((content) => CommentResponse.fromJson(content))
+          .toList();
+    } on DioException catch (error) {
+      ResponseErrorDialog(error);
+      return null;
+    }
+  }
 }

@@ -22,6 +22,7 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
   dynamic _uploadImage;
   bool nicknameChecked = true;
   List<Tag> _category = [];
+  bool _isLoading = false;
 
   _dismissKeyboard(context) {
     FocusScopeNode currentFocus = FocusScope.of(context);
@@ -31,6 +32,9 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
   }
 
   _submit() async {
+    setState(() {
+      _isLoading = true;
+    });
     User? res = await UserService.updateUser(
       nickname: nicknameController.text,
       profile: _uploadImage,
@@ -50,6 +54,9 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
           categoryList: res.categoryList,
           tagList: res.tagList,
         ));
+    setState(() {
+      _isLoading = false;
+    });
     Navigator.of(context).pop();
   }
 
@@ -81,7 +88,9 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
         title: const Text('프로필 설정'),
         actions: [
           TextButton(
-            onPressed: nicknameChecked && _category.isNotEmpty ? _submit : null,
+            onPressed: nicknameChecked && _category.isNotEmpty && !_isLoading
+                ? _submit
+                : null,
             child: const Text('저장'),
           ),
         ],

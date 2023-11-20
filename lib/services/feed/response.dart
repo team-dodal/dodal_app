@@ -36,3 +36,30 @@ class FeedContentResponse {
         registeredAt = DateTime.parse(data['registered_at']),
         registerCode = data['register_code'];
 }
+
+class CommentResponse {
+  final int commentId;
+  final int feedId;
+  final int userId;
+  final String nickname;
+  final String profileUrl;
+  final int? parentId;
+  final String content;
+  final String registerCode;
+  final String registeredAt;
+  final List<CommentResponse> children;
+
+  CommentResponse.fromJson(Map<String, dynamic> data)
+      : commentId = data['comment_id'],
+        feedId = data['feed_id'],
+        userId = data['user_id'],
+        nickname = data['nickname'],
+        profileUrl = data['profile_url'],
+        parentId = data['parent_id'],
+        content = data['content'],
+        registerCode = data['register_code'],
+        registeredAt = data['registered_at'],
+        children = (data['children'] as List<dynamic>)
+            .map((comment) => CommentResponse.fromJson(comment))
+            .toList();
+}
