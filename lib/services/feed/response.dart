@@ -16,6 +16,7 @@ class FeedContentResponse {
   final bool joinYn;
   final DateTime registeredAt;
   final String registerCode;
+  final int commentCnt;
 
   FeedContentResponse.fromJson(dynamic data)
       : roomId = data['room_id'],
@@ -34,7 +35,8 @@ class FeedContentResponse {
         likeYn = data['like_yn'] == 'Y',
         joinYn = data['join_yn'] == 'Y',
         registeredAt = DateTime.parse(data['registered_at']),
-        registerCode = data['register_code'];
+        registerCode = data['register_code'],
+        commentCnt = data['comment_cnt'];
 }
 
 class CommentResponse {

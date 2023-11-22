@@ -148,7 +148,7 @@ class _FeedContentFooterState extends State<FeedContentFooter> {
                         ),
                       ),
                       Text(
-                        '${widget.feedContent.accuseCnt}',
+                        '${widget.feedContent.commentCnt}',
                         style: context.body2(color: AppColors.systemGrey1),
                       ),
                     ],

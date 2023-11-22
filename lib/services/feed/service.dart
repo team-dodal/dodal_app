@@ -91,4 +91,24 @@ class FeedService {
       return null;
     }
   }
+
+  static createComment({
+    required int feedId,
+    required String content,
+    int? parentId,
+  }) async {
+    try {
+      final service = dio();
+      final data = {"parent_id": parentId, "content": content};
+
+      final res = await service.post('/api/v1/comments/$feedId', data: data);
+      List<dynamic> contents = res.data['result'];
+      return contents
+          .map((content) => CommentResponse.fromJson(content))
+          .toList();
+    } on DioException catch (error) {
+      ResponseErrorDialog(error);
+      return null;
+    }
+  }
 }

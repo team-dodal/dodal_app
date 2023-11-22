@@ -150,6 +150,11 @@ ThemeData lightTheme = ThemeData(
       borderSide: BorderSide(width: 2),
     ),
   ),
+  iconButtonTheme: IconButtonThemeData(
+    style: IconButton.styleFrom(
+      padding: EdgeInsets.zero,
+    ),
+  ),
   colorScheme: ColorScheme.fromSeed(seedColor: AppColors.orange)
       .copyWith(background: AppColors.bgColor1, primary: AppColors.orange),
 );
