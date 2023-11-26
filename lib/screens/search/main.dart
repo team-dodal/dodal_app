@@ -41,9 +41,13 @@ class _SearchScreenState extends State<SearchScreen> {
     final pref = await SharedPreferences.getInstance();
     final list = pref.getStringList('search_list');
     if (list == null) return;
-    pref.setStringList('search_list', [...list, word]);
+    final newList = [word, ...list];
+    if (newList.length >= 20) {
+      newList.removeLast();
+    }
+    pref.setStringList('search_list', newList);
     setState(() {
-      _list = [...list, word];
+      _list = newList;
     });
   }
 

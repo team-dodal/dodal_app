@@ -1,8 +1,10 @@
 import 'package:dodal_app/providers/user_cubit.dart';
+import 'package:dodal_app/screens/settings_menu/rule.dart';
 import 'package:dodal_app/screens/sign_in/main.dart';
 import 'package:dodal_app/services/user/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/utilities/fcm.dart';
+import 'package:dodal_app/widgets/common/cross_divider.dart';
 import 'package:dodal_app/widgets/common/system_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -99,13 +101,25 @@ class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
       body: Column(
         children: [
           SwitchListTile(
-            title: const Text('알림'),
+            title: const Text('전체 알림 설정'),
             value: _notification,
             onChanged: (value) async {
               _notification = await setNotificationValue(value);
               setState(() {});
             },
           ),
+          ListTile(
+            title: const Text('법적 고지/정책'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const RuleScreen(),
+                ),
+              );
+            },
+          ),
+          const CrossDivider(),
           ListTile(
             title: const Text('로그아웃'),
             onTap: _signOut,

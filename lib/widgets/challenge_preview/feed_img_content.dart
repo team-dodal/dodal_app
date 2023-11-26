@@ -7,9 +7,11 @@ class FeedImgContent extends StatelessWidget {
   const FeedImgContent({
     super.key,
     required this.feedList,
+    this.isPreview = false,
   });
 
   final List<dynamic> feedList;
+  final bool isPreview;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +58,7 @@ class FeedImgContent extends StatelessWidget {
               )
           ],
         ),
-        if (feedList.length >= 9)
+        if (isPreview && feedList.length >= 9)
           Positioned(
             child: Container(
               width: double.infinity,

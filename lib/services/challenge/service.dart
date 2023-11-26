@@ -89,36 +89,24 @@ class ChallengeService {
         "recruit_cnt": recruitCnt,
         "cert_cnt": certCnt,
         "cert_content": certContent,
+        'thumbnail_img_url': thumbnailImg,
+        'cert_correct_img_url': certCorrectImg,
+        'cert_wrong_img_url': certWrongImg,
       };
-      if (thumbnailImg != null) {
-        String key = 'thumbnail_img_url';
-        String fileName = 'roomId_${id}_${key}_date_${DateTime.now()}';
-        String s3Url = await PresignedS3.upload(
-          uploadUrl: await PresignedS3.getUrl(fileName: fileName),
-          file: thumbnailImg,
-          fileName: fileName,
-        );
-        data[key] = s3Url;
-      }
-      if (certCorrectImg != null) {
-        String key = 'cert_correct_img_url';
-        String fileName = 'roomId_${id}_${key}_date_${DateTime.now()}';
-        String s3Url = await PresignedS3.upload(
-          uploadUrl: await PresignedS3.getUrl(fileName: fileName),
-          file: certCorrectImg,
-          fileName: fileName,
-        );
-        data[key] = s3Url;
-      }
-      if (certWrongImg != null) {
-        String key = 'cert_wrong_img_url';
-        String fileName = 'roomId_${id}_${key}_date_${DateTime.now()}';
-        String s3Url = await PresignedS3.upload(
-          uploadUrl: await PresignedS3.getUrl(fileName: fileName),
-          file: certWrongImg,
-          fileName: fileName,
-        );
-        data[key] = s3Url;
+      for (var key in [
+        'thumbnail_img_url',
+        'cert_correct_img_url',
+        'cert_wrong_img_url'
+      ]) {
+        if (data[key].runtimeType.toString() == '_File') {
+          String fileName = 'roomId_${id}_${key}_date_${DateTime.now()}';
+          String s3Url = await PresignedS3.upload(
+            uploadUrl: await PresignedS3.getUrl(fileName: fileName),
+            file: thumbnailImg,
+            fileName: fileName,
+          );
+          data[key] = s3Url;
+        }
       }
 
       service.patch('/api/v1/challenge/room/$id', data: data);
@@ -351,6 +339,33 @@ class ChallengeService {
       List<dynamic> result = res.data['result'];
 
       return result.map((e) => ChallengeRankResponse.fromJson(e)).toList();
+    } on DioException catch (error) {
+      ResponseErrorDialog(error);
+      return null;
+    }
+  }
+
+  static Future<List<Challenge>?> getChallengesByKeyword({
+    required String word,
+    required int conditionCode,
+    required List<int> certCntList,
+    required int page,
+    required int pageSize,
+  }) async {
+    try {
+      final service = dio();
+      String requestUrl = '/api/v1/challenge/rooms/search?';
+      requestUrl += 'word=$word&';
+      requestUrl += 'condition_code=$conditionCode&';
+      for (final certCnt in certCntList) {
+        requestUrl += 'cert_cnt_list=$certCnt&';
+      }
+      requestUrl += 'page=$page&page_size=$pageSize';
+      final res = await service.get(requestUrl);
+      List<dynamic> contents = res.data['result']['content'];
+      List<Challenge> result =
+          contents.map((item) => Challenge.fromJson(item)).toList();
+      return result;
     } on DioException catch (error) {
       ResponseErrorDialog(error);
       return null;

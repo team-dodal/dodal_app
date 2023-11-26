@@ -1,10 +1,11 @@
+import 'package:dodal_app/layout/filter_bottom_sheet_layout.dart';
 import 'package:dodal_app/screens/comment/main.dart';
+import 'package:dodal_app/screens/report/main.dart';
 import 'package:dodal_app/services/feed/response.dart';
 import 'package:dodal_app/services/feed/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/avatar_image.dart';
-import 'package:dodal_app/widgets/common/report_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -36,7 +37,23 @@ class _FeedContentFooterState extends State<FeedContentFooter> {
     showModalBottomSheet(
       context: context,
       builder: (context) {
-        return const ReportBottomSheet();
+        return FilterBottomSheetLayout(
+          child: Column(
+            children: [
+              ListTile(
+                title: Text('신고하기', style: context.body2()),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ReportScreen(),
+                    ),
+                  );
+                },
+              )
+            ],
+          ),
+        );
       },
     );
   }

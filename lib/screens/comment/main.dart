@@ -37,6 +37,13 @@ class _CommentScreenState extends State<CommentScreen> {
     textEditingController.clear();
   }
 
+  Future<void> _removeComment(commentId) async {
+    final res = await FeedService.removeComment(commentId: commentId);
+    setState(() {
+      _list = res;
+    });
+  }
+
   @override
   void initState() {
     _getCommentList();
@@ -64,7 +71,10 @@ class _CommentScreenState extends State<CommentScreen> {
             );
           },
           itemCount: _list.length,
-          itemBuilder: (context, index) => CommentBox(comment: _list[index]),
+          itemBuilder: (context, index) => CommentBox(
+            comment: _list[index],
+            removeComment: _removeComment,
+          ),
         ),
       ),
       bottomSheet: BottomTextInput(

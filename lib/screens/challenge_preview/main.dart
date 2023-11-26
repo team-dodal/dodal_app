@@ -123,7 +123,7 @@ class PreviewScreen extends StatelessWidget {
               ],
             ),
           ),
-          FeedImgContent(feedList: challenge.feedUrlList),
+          FeedImgContent(feedList: challenge.feedUrlList, isPreview: true),
           const SizedBox(height: 32),
           const CrossDivider(),
           const SizedBox(height: 32),

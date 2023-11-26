@@ -1,13 +1,55 @@
+import 'package:dodal_app/layout/filter_bottom_sheet_layout.dart';
+import 'package:dodal_app/providers/user_cubit.dart';
+import 'package:dodal_app/screens/report/main.dart';
 import 'package:dodal_app/services/feed/response.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/avatar_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CommentBox extends StatelessWidget {
-  const CommentBox({super.key, required this.comment});
+  const CommentBox({
+    super.key,
+    required this.comment,
+    required this.removeComment,
+  });
 
   final CommentResponse comment;
+  final Future<void> Function(int value) removeComment;
+
+  _openBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        final state = BlocProvider.of<UserCubit>(context).state!;
+        return FilterBottomSheetLayout(
+          child: Column(
+            children: [
+              if (comment.userId == state.id)
+                ListTile(
+                  title: Text('삭제하기', style: context.body2()),
+                  onTap: () async {
+                    await removeComment(comment.commentId);
+                  },
+                ),
+              ListTile(
+                title: Text('신고하기', style: context.body2()),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ReportScreen(),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +77,9 @@ class CommentBox extends StatelessWidget {
                       style: context.body4(fontWeight: FontWeight.bold),
                     ),
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        _openBottomSheet(context);
+                      },
                       customBorder: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(100),
                       ),

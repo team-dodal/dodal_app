@@ -79,12 +79,13 @@ class UserService {
     required String content,
     required dynamic profile,
     required List<String> tagList,
+    String? profileUrl,
   }) async {
-    late String? s3Url;
-    if (profile.runtimeType == String) {
+    String? s3Url;
+    if (profile.runtimeType is String) {
       s3Url = profile;
     }
-    if (profile.runtimeType == File) {
+    if (profile.runtimeType.toString() == '_File') {
       String fileName = 'user_${nickname}_date_${DateTime.now()}';
       s3Url = await PresignedS3.upload(
         uploadUrl: await PresignedS3.getUrl(fileName: fileName),

@@ -32,9 +32,8 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
 
   _request(int pageKey) async {
     final state = BlocProvider.of<ChallengeListFilterCubit>(context).state;
-    List<Challenge>? res = await ChallengeService.getChallengesByCategory(
-      categoryValue: state.category.value,
-      tagValue: state.tag.value,
+    List<Challenge>? res = await ChallengeService.getChallengesByKeyword(
+      word: widget.word,
       conditionCode: state.condition.index,
       certCntList: state.certCntList,
       page: pageKey,
@@ -65,7 +64,7 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: NewWidget(word: widget.word)),
+      appBar: AppBar(title: SearchAppBar(word: widget.word)),
       body: BlocListener<ChallengeListFilterCubit, ChallengeListFilter>(
         listener: (context, state) {
           pagingController.refresh();
@@ -143,8 +142,8 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
   }
 }
 
-class NewWidget extends StatelessWidget {
-  const NewWidget({super.key, required this.word});
+class SearchAppBar extends StatelessWidget {
+  const SearchAppBar({super.key, required this.word});
 
   final String word;
 

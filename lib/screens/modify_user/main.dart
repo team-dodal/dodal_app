@@ -87,12 +87,16 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
       appBar: AppBar(
         title: const Text('프로필 설정'),
         actions: [
-          TextButton(
-            onPressed: nicknameChecked && _category.isNotEmpty && !_isLoading
-                ? _submit
-                : null,
-            child: const Text('저장'),
-          ),
+          !_isLoading
+              ? TextButton(
+                  onPressed:
+                      nicknameChecked && _category.isNotEmpty ? _submit : null,
+                  child: const Text('저장'),
+                )
+              : const TextButton(
+                  onPressed: null,
+                  child: CircularProgressIndicator(),
+                ),
         ],
       ),
       body: SingleChildScrollView(
