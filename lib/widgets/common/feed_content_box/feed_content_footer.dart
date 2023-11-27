@@ -154,7 +154,11 @@ class _FeedContentFooterState extends State<FeedContentFooter> {
                                 feedId: widget.feedContent.feedId,
                               ),
                             ),
-                          );
+                          ).then((value) {
+                            setState(() {
+                              widget.feedContent.commentCnt = value;
+                            });
+                          });
                         },
                         icon: SvgPicture.asset(
                           'assets/icons/chat_icon.svg',

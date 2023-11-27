@@ -354,7 +354,7 @@ class ChallengeService {
   }) async {
     try {
       final service = dio();
-      String requestUrl = '/api/v1/challenge/rooms/search?';
+      String requestUrl = '/api/v1/challenge/room/search?';
       requestUrl += 'word=$word&';
       requestUrl += 'condition_code=$conditionCode&';
       for (final certCnt in certCntList) {

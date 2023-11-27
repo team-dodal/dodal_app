@@ -112,11 +112,16 @@ class FeedService {
     }
   }
 
-  static removeComment({required int commentId}) async {
+  static removeComment({
+    required int feedId,
+    required int commentId,
+  }) async {
     try {
       final service = dio();
 
-      final res = await service.delete('/api/v1/comments/$commentId');
+      final res = await service.delete('/api/v1/comments/$feedId', data: {
+        "comment_id": commentId,
+      });
       List<dynamic> contents = res.data['result'];
       return contents
           .map((content) => CommentResponse.fromJson(content))

@@ -38,7 +38,10 @@ class _CommentScreenState extends State<CommentScreen> {
   }
 
   Future<void> _removeComment(commentId) async {
-    final res = await FeedService.removeComment(commentId: commentId);
+    final res = await FeedService.removeComment(
+      feedId: widget.feedId,
+      commentId: commentId,
+    );
     setState(() {
       _list = res;
     });
@@ -58,30 +61,36 @@ class _CommentScreenState extends State<CommentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('댓글')),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: ListView.separated(
-          separatorBuilder: (context, index) {
-            return Container(
-              height: 1,
-              width: double.infinity,
-              color: AppColors.basicColor2,
-            );
-          },
-          itemCount: _list.length,
-          itemBuilder: (context, index) => CommentBox(
-            comment: _list[index],
-            removeComment: _removeComment,
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pop(context, _list.length);
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(title: const Text('댓글')),
+        body: Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16, bottom: 20),
+          child: ListView.separated(
+            separatorBuilder: (context, index) {
+              return Container(
+                height: 1,
+                width: double.infinity,
+                color: AppColors.basicColor2,
+              );
+            },
+            itemCount: _list.length,
+            itemBuilder: (context, index) => CommentBox(
+              comment: _list[index],
+              removeComment: _removeComment,
+            ),
           ),
         ),
-      ),
-      bottomSheet: BottomTextInput(
-        controller: textEditingController,
-        postComment: () async {
-          await _postComment();
-        },
+        bottomSheet: BottomTextInput(
+          controller: textEditingController,
+          postComment: () async {
+            await _postComment();
+          },
+        ),
       ),
     );
   }

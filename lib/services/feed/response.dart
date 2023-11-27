@@ -16,7 +16,7 @@ class FeedContentResponse {
   final bool joinYn;
   final DateTime registeredAt;
   final String registerCode;
-  final int commentCnt;
+  int commentCnt;
 
   FeedContentResponse.fromJson(dynamic data)
       : roomId = data['room_id'],

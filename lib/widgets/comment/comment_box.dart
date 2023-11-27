@@ -8,6 +8,8 @@ import 'package:dodal_app/widgets/common/avatar_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+const String DELETED_MSG = '삭제된 메시지입니다.';
+
 class CommentBox extends StatelessWidget {
   const CommentBox({
     super.key,
@@ -31,6 +33,8 @@ class CommentBox extends StatelessWidget {
                   title: Text('삭제하기', style: context.body2()),
                   onTap: () async {
                     await removeComment(comment.commentId);
+                    if (!context.mounted) return;
+                    Navigator.pop(context);
                   },
                 ),
               ListTile(
@@ -91,7 +95,16 @@ class CommentBox extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 2),
-                Text(comment.content),
+                comment.content == DELETED_MSG
+                    ? Text(
+                        comment.content,
+                        style: context.body4(
+                          color: AppColors.systemGrey3,
+                          decoration: TextDecoration.lineThrough,
+                          decorationColor: AppColors.systemGrey3,
+                        ),
+                      )
+                    : Text(comment.content),
                 const SizedBox(height: 6),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
