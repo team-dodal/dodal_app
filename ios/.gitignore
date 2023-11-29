@@ -36,3 +36,4 @@ Runner/GeneratedPluginRegistrant.*
 Runner.app.*
 Runner.ipa
 report.xml
+app-store-api-key.json

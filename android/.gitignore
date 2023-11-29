@@ -12,4 +12,5 @@ key.properties
 **/*.keystore
 **/*.jks
 
+gcp-api-key.json
 report.xml
