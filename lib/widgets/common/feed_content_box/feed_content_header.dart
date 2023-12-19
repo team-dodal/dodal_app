@@ -18,25 +18,28 @@ class FeedContentHeader extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  SmallTag(text: feedContent.categoryName),
-                  const SizedBox(width: 4),
-                  SmallTag(
-                    text: '주 ${feedContent.certCnt}회',
-                    backgroundColor: AppColors.systemGrey4,
-                    foregroundColor: AppColors.systemGrey1,
-                  ),
-                ],
-              ),
-              Text(
-                feedContent.title,
-                style: context.body1(fontWeight: FontWeight.bold),
-              ),
-            ],
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    SmallTag(text: feedContent.categoryName),
+                    const SizedBox(width: 4),
+                    SmallTag(
+                      text: '주 ${feedContent.certCnt}회',
+                      backgroundColor: AppColors.systemGrey4,
+                      foregroundColor: AppColors.systemGrey1,
+                    ),
+                  ],
+                ),
+                Text(
+                  feedContent.title,
+                  overflow: TextOverflow.ellipsis,
+                  style: context.body1(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
           ),
           IconButton(
             onPressed: () {

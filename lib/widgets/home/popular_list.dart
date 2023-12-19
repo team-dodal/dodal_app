@@ -80,6 +80,7 @@ class _PopularListState extends State<PopularList> {
                   )
               ],
             ),
+            const SizedBox(height: 20),
             OutlinedButton(
               onPressed: () {
                 Navigator.of(context).push(

@@ -95,61 +95,58 @@ class _GridChallengeBoxState extends State<GridChallengeBox> {
             ),
           ),
           const SizedBox(height: 12),
-          Flexible(
-            flex: 1,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    SmallTag(text: widget.challenge.tag.name),
-                    const SizedBox(width: 4),
-                    SmallTag(
-                      text: '주 ${widget.challenge.certCnt}회',
-                      backgroundColor: AppColors.systemGrey4,
-                      foregroundColor: AppColors.systemGrey1,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  widget.challenge.title,
-                  style: context.body2(fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8),
-                Flex(
-                  direction: Axis.horizontal,
-                  children: [
-                    AvatarImage(
-                      image: widget.challenge.adminProfile,
-                      width: 16,
-                      height: 16,
-                    ),
-                    const SizedBox(width: 4),
-                    Flexible(
-                      child: Text(
-                        widget.challenge.adminNickname,
-                        style: context.caption(color: AppColors.systemGrey1),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    Text(
-                      ' · ',
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  SmallTag(text: widget.challenge.tag.name),
+                  const SizedBox(width: 4),
+                  SmallTag(
+                    text: '주 ${widget.challenge.certCnt}회',
+                    backgroundColor: AppColors.systemGrey4,
+                    foregroundColor: AppColors.systemGrey1,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Text(
+                widget.challenge.title,
+                style: context.body2(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              Flex(
+                direction: Axis.horizontal,
+                children: [
+                  AvatarImage(
+                    image: widget.challenge.adminProfile,
+                    width: 16,
+                    height: 16,
+                  ),
+                  const SizedBox(width: 4),
+                  Flexible(
+                    child: Text(
+                      widget.challenge.adminNickname,
                       style: context.caption(color: AppColors.systemGrey1),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    const Icon(
-                      Icons.person,
-                      color: AppColors.systemGrey2,
-                      size: 16,
-                    ),
-                    Text(
-                      '${widget.challenge.userCnt}/${widget.challenge.recruitCnt}',
-                      style: context.caption(color: AppColors.systemGrey1),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                  Text(
+                    ' · ',
+                    style: context.caption(color: AppColors.systemGrey1),
+                  ),
+                  const Icon(
+                    Icons.person,
+                    color: AppColors.systemGrey2,
+                    size: 16,
+                  ),
+                  Text(
+                    '${widget.challenge.userCnt}/${widget.challenge.recruitCnt}',
+                    style: context.caption(color: AppColors.systemGrey1),
+                  ),
+                ],
+              ),
+            ],
           )
         ],
       ),

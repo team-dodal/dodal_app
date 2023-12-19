@@ -22,10 +22,10 @@ class _RankingScreenState extends State<RankingScreen> {
   List<ChallengeRankResponse?>? _topThreeList;
   List<ChallengeRankResponse?> _list = [];
 
-  _getRankList() async {
+  _getRankList(ChallengeRankFilterEnum code) async {
     final rankList = await ChallengeService.getRanks(
       id: widget.challenge.id,
-      code: _code.index,
+      code: code.index,
     );
     if (rankList == null) return;
     setState(() {
@@ -44,6 +44,7 @@ class _RankingScreenState extends State<RankingScreen> {
           setState(() {
             _code = value;
           });
+          _getRankList(_code);
         },
       ),
     );
@@ -51,7 +52,7 @@ class _RankingScreenState extends State<RankingScreen> {
 
   @override
   void initState() {
-    _getRankList();
+    _getRankList(_code);
     super.initState();
   }
 

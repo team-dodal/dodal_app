@@ -77,7 +77,7 @@ class _ListChallengeBoxState extends State<ListChallengeBox> {
   Widget build(BuildContext context) {
     return Container(
       color: AppColors.systemWhite,
-      height: 90,
+      height: 100,
       child: Row(
         children: [
           AspectRatio(
@@ -93,6 +93,7 @@ class _ListChallengeBoxState extends State<ListChallengeBox> {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -133,21 +134,27 @@ class _ListChallengeBoxState extends State<ListChallengeBox> {
                       ),
                   ],
                 ),
-                const SizedBox(height: 4),
                 Text(
                   widget.title,
+                  maxLines: 2,
                   style: context.body2(fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 6),
-                Row(children: [
+                Row(mainAxisSize: MainAxisSize.max, children: [
                   AvatarImage(
                     image: widget.adminProfile,
                     width: 16,
                     height: 16,
                   ),
                   const SizedBox(width: 6),
+                  Flexible(
+                    child: Text(
+                      widget.adminNickname,
+                      overflow: TextOverflow.ellipsis,
+                      style: context.body4(color: AppColors.systemGrey1),
+                    ),
+                  ),
                   Text(
-                    '${widget.adminNickname} · ',
+                    ' · ',
                     style: context.body4(color: AppColors.systemGrey1),
                   ),
                   const Icon(
