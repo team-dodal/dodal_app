@@ -3,7 +3,6 @@ import 'package:dodal_app/screens/settings_menu/rule.dart';
 import 'package:dodal_app/screens/sign_in/main.dart';
 import 'package:dodal_app/services/user/service.dart';
 import 'package:dodal_app/theme/color.dart';
-import 'package:dodal_app/utilities/fcm.dart';
 import 'package:dodal_app/widgets/common/cross_divider.dart';
 import 'package:dodal_app/widgets/common/system_dialog.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +18,7 @@ class SettingsMenuScreen extends StatefulWidget {
 
 class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
   FlutterSecureStorage secureStorage = const FlutterSecureStorage();
-  bool _notification = true;
+  final bool _notification = true;
 
   _signOut() async {
     showDialog(
@@ -86,7 +85,7 @@ class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
   @override
   void initState() {
     () async {
-      _notification = await getNotificationValue();
+      // _notification = await getNotificationValue();
       setState(() {});
     }();
     super.initState();
@@ -104,7 +103,7 @@ class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
             title: const Text('전체 알림 설정'),
             value: _notification,
             onChanged: (value) async {
-              _notification = await setNotificationValue(value);
+              // _notification = await setNotificationValue(value);
               setState(() {});
             },
           ),
