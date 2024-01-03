@@ -35,7 +35,6 @@ deploy_ios:
 	source $(cwd)/$(env_file) && \
 	fastlane beta version:$(get_last_version) password:$$KEY_PASSWORD && \
 	source $(cwd)/deploy.history && \
-	 && \
 	curl \
   	-H "Content-Type: application/json" \
   	-d '{"username": "$(bot_name)", "content": "**$(msg1)**\n> 대상: IOS\n> 버전: $(get_last_version)\n> 빌드 넘버: '$$IOS_BUILD_NUMBER'\n$(msg2)"}' \
