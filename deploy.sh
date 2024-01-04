@@ -43,5 +43,5 @@ deploy_ios () {
     rm $(pwd)/deploy.history
 }
 
-deploy_android
+# deploy_android
 deploy_ios
