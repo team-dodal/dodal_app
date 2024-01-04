@@ -19,17 +19,14 @@ platform :ios do
   desc "Push a new release build to the App Store"
   lane :beta do |options|
     keychainName = 'ios-keychain'
-
-    ENV['MATCH_PASSWORD']=options[:password]
-    print(options[:password])
     create_keychain(
       name: keychainName,
-      password: password,
+      password: options[:password],
       unlock: true,
       timeout: 0,
       lock_when_sleeps: true,
     )
-    
+      
     version = options[:version]
     match(
       git_url: "git@github.com:team-dodal/ios_certification.git",

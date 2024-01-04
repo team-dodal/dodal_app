@@ -15,13 +15,12 @@ create_keystore:
 	echo "releaseStoreFile=./keystore/release.keystore" >> $(keystore_path)/key.properties
 	echo "debugKeyAlias=debug-keystore" >> $(keystore_path)/key.properties
 	echo "releaseKeyAlias=release-keystore" >> $(keystore_path)/key.properties
-	source $(cwd)/$(env_file) && \
 	echo "keyPassword='$$KEY_PASSWORD'" >> $(keystore_path)/key.properties
-	source $(cwd)/$(env_file) && \
 	echo "storePassword='$$STORE_PASSWORD'" >> $(keystore_path)/key.properties
 
 deploy_android: create_keystore
 	cd $(cwd)/$(android_path) && \
+	source $(cwd)/$(env_file) && \
 	fastlane beta version:$(get_last_version) && \
 	source $(cwd)/deploy.history && \
 	curl \
