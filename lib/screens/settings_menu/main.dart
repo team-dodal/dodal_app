@@ -1,5 +1,6 @@
 import 'package:dodal_app/providers/user_cubit.dart';
-import 'package:dodal_app/screens/settings_menu/rule.dart';
+import 'package:dodal_app/screens/settings_menu/personal_data_rule_screen.dart';
+import 'package:dodal_app/screens/settings_menu/service_rule_screen.dart';
 import 'package:dodal_app/screens/sign_in/main.dart';
 import 'package:dodal_app/services/user/service.dart';
 import 'package:dodal_app/theme/color.dart';
@@ -108,12 +109,23 @@ class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
             },
           ),
           ListTile(
-            title: const Text('법적 고지/정책'),
+            title: const Text('이용 약관'),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const RuleScreen(),
+                  builder: (context) => ServiceRuleScreen(),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text('개인정보처리방침'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PersonalDataRuleScreen(),
                 ),
               );
             },

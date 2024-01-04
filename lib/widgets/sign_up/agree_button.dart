@@ -8,13 +8,13 @@ class AgreeButton extends StatelessWidget {
     super.key,
     required this.onChanged,
     required this.value,
-    required this.context,
+    required this.text,
     required this.morePress,
   });
 
   final void Function(bool?) onChanged;
   final void Function() morePress;
-  final String context;
+  final String text;
   final bool value;
 
   @override
@@ -65,7 +65,7 @@ class AgreeButton extends StatelessWidget {
                   },
                   child: Ink(
                     child: Text(
-                      '[필수] 제공동의 내용내용내용내용내용',
+                      text,
                       style: context.body3(
                         fontWeight: FontWeight.w400,
                         color: AppColors.systemGrey1,
@@ -77,7 +77,7 @@ class AgreeButton extends StatelessWidget {
             ],
           ),
           InkWell(
-            onTap: () {},
+            onTap: morePress,
             child: Text(
               '보기',
               style: context.body3(

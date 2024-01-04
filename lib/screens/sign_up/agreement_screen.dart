@@ -1,3 +1,5 @@
+import 'package:dodal_app/screens/settings_menu/personal_data_rule_screen.dart';
+import 'package:dodal_app/screens/settings_menu/service_rule_screen.dart';
 import 'package:dodal_app/widgets/common/create_form_title.dart';
 import 'package:dodal_app/widgets/sign_up/agree_button.dart';
 import 'package:dodal_app/widgets/sign_up/all_agree_button.dart';
@@ -21,7 +23,7 @@ class AgreementScreen extends StatefulWidget {
 }
 
 class _AgreementScreenState extends State<AgreementScreen> {
-  List<bool> _agreements = [false, false, false, false];
+  List<bool> _agreements = [false, false];
 
   _onChanged(int idx, bool? value) {
     List<bool> copy = [..._agreements];
@@ -50,45 +52,41 @@ class _AgreementScreenState extends State<AgreementScreen> {
               value: _agreements.every((agree) => agree == true),
               onPressed: () {
                 setState(() {
-                  _agreements = [true, true, true, true];
+                  _agreements = [true, true];
                 });
               },
             ),
             const SizedBox(height: 24),
             AgreeButton(
-              context: '[필수] 제공동의 내용내용내용내용내용',
+              text: '[필수] 이용약관 동의',
               value: _agreements[0],
               onChanged: (value) {
                 _onChanged(0, value);
               },
-              morePress: () {},
+              morePress: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ServiceRuleScreen(),
+                  ),
+                );
+              },
             ),
             const SizedBox(height: 16),
             AgreeButton(
-              context: '[필수] 제공동의 내용내용내용내용내용',
+              text: '[필수] 개인정보 취급 동의',
               value: _agreements[1],
               onChanged: (value) {
                 _onChanged(1, value);
               },
-              morePress: () {},
-            ),
-            const SizedBox(height: 16),
-            AgreeButton(
-              context: '[선택] 제공동의 내용내용내용내용내용',
-              value: _agreements[2],
-              onChanged: (value) {
-                _onChanged(2, value);
+              morePress: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PersonalDataRuleScreen(),
+                  ),
+                );
               },
-              morePress: () {},
-            ),
-            const SizedBox(height: 16),
-            AgreeButton(
-              context: '[선택] 제공동의 내용내용내용내용내용',
-              value: _agreements[3],
-              onChanged: (value) {
-                _onChanged(3, value);
-              },
-              morePress: () {},
             ),
           ],
         ),
