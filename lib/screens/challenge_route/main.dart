@@ -80,10 +80,10 @@ class _ChallengeRouteState extends State<ChallengeRoute>
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.share),
-          ),
+          // IconButton(
+          //   onPressed: () {},
+          //   icon: const Icon(Icons.share),
+          // ),
           IconButton(
             onPressed: () {
               _routeMenuScreen(_challenge!);

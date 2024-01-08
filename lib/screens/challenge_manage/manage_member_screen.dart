@@ -17,7 +17,7 @@ class ManageMemberScreen extends StatefulWidget {
 class _ManageMemberScreenState extends State<ManageMemberScreen> {
   List<ChallengeUser> _userList = [];
 
-  _getUsers() async {
+  Future<void> _getUsers() async {
     final res =
         await ManageChallengeService.manageUsers(roomId: widget.challenge.id);
     setState(() {
@@ -44,6 +44,7 @@ class _ManageMemberScreenState extends State<ManageMemberScreen> {
         return MemberCertificationBox(
           user: _userList[index],
           challenge: widget.challenge,
+          getUsers: _getUsers,
         );
       },
     );

@@ -19,7 +19,7 @@ class SettingsMenuScreen extends StatefulWidget {
 
 class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
   FlutterSecureStorage secureStorage = const FlutterSecureStorage();
-  final bool _notification = true;
+  bool _notification = true;
 
   _signOut() async {
     showDialog(
@@ -105,7 +105,9 @@ class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
             value: _notification,
             onChanged: (value) async {
               // _notification = await setNotificationValue(value);
-              setState(() {});
+              setState(() {
+                _notification = value;
+              });
             },
           ),
           ListTile(

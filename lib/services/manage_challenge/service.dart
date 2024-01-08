@@ -92,7 +92,7 @@ class ManageChallengeService {
     }
   }
 
-  static mandateAdmin({
+  static handOverAdmin({
     required int roomId,
     required int userId,
   }) async {
@@ -102,6 +102,24 @@ class ManageChallengeService {
       await service.patch(
         '/api/v1/users/me/challenges/manage/$roomId/mandate',
         data: {"user_id": userId},
+      );
+
+      return true;
+    } on DioException catch (error) {
+      ResponseErrorDialog(error);
+      return null;
+    }
+  }
+
+  static banishUser({
+    required int roomId,
+    required int userId,
+  }) async {
+    try {
+      final service = dio();
+
+      await service.delete(
+        '/api/v1/users/me/challenges/manage/$roomId/users/$userId',
       );
 
       return true;

@@ -95,49 +95,55 @@ class _ListChallengeBoxState extends State<ListChallengeBox> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisSize: MainAxisSize.max,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.max,
                       children: [
-                        SmallTag(text: widget.tag.name),
-                        const SizedBox(width: 4),
-                        SmallTag(
-                          text: '주 ${widget.certCnt}회',
-                          backgroundColor: AppColors.systemGrey4,
-                          foregroundColor: AppColors.systemGrey1,
+                        Row(
+                          children: [
+                            SmallTag(text: widget.tag.name),
+                            const SizedBox(width: 4),
+                            SmallTag(
+                              text: '주 ${widget.certCnt}회',
+                              backgroundColor: AppColors.systemGrey4,
+                              foregroundColor: AppColors.systemGrey1,
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    if (widget.isBookmarked != null)
-                      SizedBox(
-                        width: 30,
-                        height: 30,
-                        child: IconButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: _handleBookmark,
-                          icon: SvgPicture.asset(
-                            _bookmarkStatus
-                                ? 'assets/icons/bookmark_active_icon.svg'
-                                : 'assets/icons/bookmark_icon.svg',
-                            // width: 25,
-                            // height: 25,
-                            colorFilter: ColorFilter.mode(
-                              _bookmarkStatus
-                                  ? AppColors.systemBlack
-                                  : AppColors.systemGrey1,
-                              BlendMode.srcIn,
+                        if (widget.isBookmarked != null)
+                          SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              onPressed: _handleBookmark,
+                              icon: SvgPicture.asset(
+                                _bookmarkStatus
+                                    ? 'assets/icons/bookmark_active_icon.svg'
+                                    : 'assets/icons/bookmark_icon.svg',
+                                // width: 25,
+                                // height: 25,
+                                colorFilter: ColorFilter.mode(
+                                  _bookmarkStatus
+                                      ? AppColors.systemBlack
+                                      : AppColors.systemGrey1,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
+                      ],
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      widget.title,
+                      maxLines: 2,
+                      style: context.body2(fontWeight: FontWeight.bold),
+                    ),
                   ],
-                ),
-                Text(
-                  widget.title,
-                  maxLines: 2,
-                  style: context.body2(fontWeight: FontWeight.bold),
                 ),
                 Row(mainAxisSize: MainAxisSize.max, children: [
                   AvatarImage(

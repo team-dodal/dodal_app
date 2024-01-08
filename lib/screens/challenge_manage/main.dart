@@ -23,17 +23,21 @@ List<Route> routeList = [
   ),
 ];
 
-class ManageRoute extends StatefulWidget {
-  const ManageRoute({super.key, required this.index, required this.challenge});
+class ChallengeManageRoute extends StatefulWidget {
+  const ChallengeManageRoute({
+    super.key,
+    required this.index,
+    required this.challenge,
+  });
 
   final OneChallengeResponse challenge;
   final int index;
 
   @override
-  State<ManageRoute> createState() => _ManageRouteState();
+  State<ChallengeManageRoute> createState() => _ChallengeManageRouteState();
 }
 
-class _ManageRouteState extends State<ManageRoute>
+class _ChallengeManageRouteState extends State<ChallengeManageRoute>
     with TickerProviderStateMixin {
   late TabController _tabController;
   late int _currentIndex;

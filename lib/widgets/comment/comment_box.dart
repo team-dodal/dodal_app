@@ -116,25 +116,25 @@ class CommentBox extends StatelessWidget {
                         color: AppColors.systemGrey1,
                       ),
                     ),
-                    Row(
-                      children: [
-                        TextButton(
-                          onPressed: () {},
-                          style: TextButton.styleFrom(
-                            minimumSize: Size.zero,
-                            padding: const EdgeInsets.all(4),
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          ),
-                          child: Text(
-                            '답글 달기',
-                            style: context.caption(
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.orange,
-                            ),
-                          ),
-                        )
-                      ],
-                    )
+                    // Row(
+                    //   children: [
+                    //     TextButton(
+                    //       onPressed: () {},
+                    //       style: TextButton.styleFrom(
+                    //         minimumSize: Size.zero,
+                    //         padding: const EdgeInsets.all(4),
+                    //         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    //       ),
+                    //       child: Text(
+                    //         '답글 달기',
+                    //         style: context.caption(
+                    //           fontWeight: FontWeight.bold,
+                    //           color: AppColors.orange,
+                    //         ),
+                    //       ),
+                    //     )
+                    //   ],
+                    // )
                   ],
                 )
               ],

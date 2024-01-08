@@ -16,8 +16,10 @@ class MemberCertificationBox extends StatefulWidget {
     super.key,
     required this.user,
     required this.challenge,
+    required this.getUsers,
   });
 
+  final Future<void> Function() getUsers;
   final ChallengeUser user;
   final OneChallengeResponse challenge;
 
@@ -32,6 +34,7 @@ class _MemberCertificationBoxState extends State<MemberCertificationBox> {
     showModalBottomSheet(
       context: context,
       builder: (_) => MemberManageBottomSheet(
+        getUsers: widget.getUsers,
         userId: widget.user.userId,
         roomId: widget.challenge.id,
       ),

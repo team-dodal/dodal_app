@@ -1,4 +1,6 @@
+import 'package:dodal_app/helper/slide_page_route.dart';
 import 'package:dodal_app/screens/challenge_route/main.dart';
+import 'package:dodal_app/screens/challenge_settings_menu/main.dart';
 import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/theme/color.dart';
@@ -56,7 +58,22 @@ class _ChallengePreviewScreenState extends State<ChallengePreviewScreen> {
       );
     }
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () {
+              if (_challenge == null) return;
+              Navigator.push(
+                context,
+                SlidePageRoute(
+                  screen: GroupSettingsMenuScreen(challenge: _challenge!),
+                ),
+              );
+            },
+            icon: const Icon(Icons.more_vert),
+          )
+        ],
+      ),
       body: PreviewScreen(challenge: _challenge!),
       bottomSheet: ChallengeBottomSheet(
         roomId: _challenge!.id,

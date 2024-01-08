@@ -19,8 +19,7 @@ Future<String> fcmSetting() async {
     badge: true,
     sound: true,
   );
-  NotificationSettings settings =
-      await FirebaseMessaging.instance.requestPermission(
+  NotificationSettings settings = await messaging.requestPermission(
     alert: true,
     badge: true,
     sound: true,

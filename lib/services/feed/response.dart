@@ -44,7 +44,7 @@ class CommentResponse {
   final int feedId;
   final int userId;
   final String nickname;
-  final String profileUrl;
+  final String? profileUrl;
   final int? parentId;
   final String content;
   final String registerCode;

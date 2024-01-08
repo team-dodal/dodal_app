@@ -10,10 +10,72 @@ class MemberManageBottomSheet extends StatelessWidget {
     super.key,
     required this.userId,
     required this.roomId,
+    required this.getUsers,
   });
 
+  final Future<void> Function() getUsers;
   final int userId;
   final int roomId;
+
+  handOverAdmin(BuildContext context) async {
+    final res = await ManageChallengeService.handOverAdmin(
+      roomId: roomId,
+      userId: userId,
+    );
+    if (context.mounted) {
+      Navigator.pop(context);
+
+      if (res) {
+        showDialog(
+          context: context,
+          builder: (context) => const SystemDialog(
+            subTitle: '방장 권한을 성공적으로 넘겼습니다',
+          ),
+        );
+        Navigator.popUntil(
+          context,
+          (route) => route.isFirst,
+        );
+      }
+    }
+  }
+
+  banishUser(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => SystemDialog(
+        subTitle: '해당 유저를 내보낼까요?',
+        children: [
+          SystemDialogButton(
+            text: '취소',
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            primary: false,
+          ),
+          SystemDialogButton(
+            text: '내보내기',
+            onPressed: () async {
+              Navigator.pop(context);
+              final res = await ManageChallengeService.banishUser(
+                roomId: roomId,
+                userId: userId,
+              );
+              if (res == null || !res) return;
+              await getUsers();
+              if (!context.mounted) return;
+              showDialog(
+                context: context,
+                builder: (context) => const SystemDialog(
+                  subTitle: '유저를 내보냈습니다.',
+                ),
+              );
+            },
+          )
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +84,9 @@ class MemberManageBottomSheet extends StatelessWidget {
         children: [
           ListTile(
             title: Center(child: Text('내보내기', style: context.body2())),
-            onTap: () {},
+            onTap: () {
+              banishUser(context);
+            },
           ),
           ListTile(
             title: Center(child: Text('신고하기', style: context.body2())),
@@ -53,26 +117,7 @@ class MemberManageBottomSheet extends StatelessWidget {
                     SystemDialogButton(
                       text: '확인',
                       onPressed: () async {
-                        final res = await ManageChallengeService.mandateAdmin(
-                          roomId: roomId,
-                          userId: userId,
-                        );
-                        if (context.mounted) {
-                          Navigator.pop(context);
-
-                          if (res) {
-                            showDialog(
-                              context: context,
-                              builder: (context) => const SystemDialog(
-                                subTitle: '방장 권한을 성공적으로 넘겼습니다',
-                              ),
-                            );
-                            Navigator.popUntil(
-                              context,
-                              (route) => route.isFirst,
-                            );
-                          }
-                        }
+                        await handOverAdmin(context);
                       },
                     )
                   ],

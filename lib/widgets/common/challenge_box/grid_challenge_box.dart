@@ -112,7 +112,10 @@ class _GridChallengeBoxState extends State<GridChallengeBox> {
               const SizedBox(height: 4),
               Text(
                 widget.challenge.title,
-                style: context.body2(fontWeight: FontWeight.bold),
+                style: context.body2(
+                  fontWeight: FontWeight.bold,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
               const SizedBox(height: 8),
               Flex(

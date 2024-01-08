@@ -81,6 +81,7 @@ class _ListTabBarState extends State<ListTabBar> with TickerProviderStateMixin {
         child: Column(
           children: [
             TabBar(
+              isScrollable: true,
               labelStyle: context.body2(fontWeight: FontWeight.bold),
               controller: tabController,
               tabs: _categories
