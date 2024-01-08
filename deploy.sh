@@ -18,26 +18,26 @@ create_keystore () {
 }
 
 deploy_android () {
-    source $env_file_path
-    create_keystore
-    cd $(pwd)/android
-    fastlane beta version:$get_last_version
-    cd ..
+    source $env_file_path &&
+    create_keystore &&
+    cd $(pwd)/android &&
+    fastlane beta version:$get_last_version &&
+    cd .. &&
     source $(pwd)/deploy.history
     curl -H "Content-Type: application/json" \
          -d "{\"username\": \"$bot_name\", \"content\": \"**$msg1**\n> 대상: 안드로이드\n> 버전: $get_last_version\n> 빌드 넘버: $ANDROID_BUILD_NUMBER\n> $PLAY_STORE_ADDRESS\n$msg2\"}" \
-         "$DISCORD_URL"
+         "$DISCORD_URL" &&
     rm $(pwd)/deploy.history
 }
 
 deploy_ios () {
-    source $env_file_path
-    cd $(pwd)/ios
-    fastlane beta version:$get_last_version password:$KEY_PASSWORD
-    cd ..
+    source $env_file_path &&
+    cd $(pwd)/ios &&
+    fastlane beta version:$get_last_version password:$KEY_PASSWORD &&
+    cd .. &&
     curl -H "Content-Type: application/json" \
          -d "{\"username\": \"$bot_name\", \"content\": \"**$msg1**\n> 대상: IOS\n> 버전: $get_last_version\n> 빌드 넘버: $build_number\n$msg2\"}" \
-         "$DISCORD_URL"
+         "$DISCORD_URL" &&
     rm $(pwd)/deploy.history
 }
 
