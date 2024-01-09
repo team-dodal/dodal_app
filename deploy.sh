@@ -9,10 +9,10 @@ create_keystore () {
     rm -rf "$keystore_path/key.properties"
     touch "$keystore_path/key.properties"
 
-    echo "debugStoreFile=./keystore/debug.keystore" >> "$keystore_path/key.properties"
-    echo "releaseStoreFile=./keystore/release.keystore" >> "$keystore_path/key.properties"
+    echo "debugKeystore=./keystore/debug.keystore" >> "$keystore_path/key.properties"
+    echo "uploadKeystore=./keystore/upload-keystore.jks" >> "$keystore_path/key.properties"
     echo "debugKeyAlias=debug-keystore" >> "$keystore_path/key.properties"
-    echo "releaseKeyAlias=release-keystore" >> "$keystore_path/key.properties"
+    echo "uploadKeyAlias=upload-keystore" >> "$keystore_path/key.properties"
     echo "keyPassword=$KEY_PASSWORD" >> "$keystore_path/key.properties"
     echo "storePassword=$STORE_PASSWORD" >> "$keystore_path/key.properties"
 }

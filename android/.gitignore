@@ -14,3 +14,4 @@ key.properties
 
 gcp-api-key.json
 report.xml
+/app/google-services.json

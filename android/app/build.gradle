@@ -57,13 +57,13 @@ android {
             keyAlias keystoreProperties.getProperty('debugKeyAlias')
             keyPassword keystoreProperties.getProperty('keyPassword')
             storePassword keystoreProperties.getProperty('storePassword')
-            storeFile file(keystoreProperties.getProperty('debugStoreFile'))
+            storeFile file(keystoreProperties.getProperty('debugKeystore'))
         }
         release {
-            keyAlias keystoreProperties.getProperty('releaseKeyAlias')
+            keyAlias keystoreProperties.getProperty('uploadKeyAlias')
             keyPassword keystoreProperties.getProperty('keyPassword')
             storePassword keystoreProperties.getProperty('storePassword')
-            storeFile file(keystoreProperties.getProperty('releaseStoreFile'))
+            storeFile file(keystoreProperties.getProperty('uploadKeystore'))
         }
    }
    buildTypes {
