@@ -88,32 +88,12 @@ class CategorySelect extends StatelessWidget {
                     for (Category category in categories)
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 6),
-                        child: Material(
-                          child: InkWell(
-                            onTap: () {
-                              _goListPage(context, category);
-                            },
-                            child: Column(
-                              children: [
-                                Container(
-                                  width: 62,
-                                  height: 62,
-                                  decoration: const BoxDecoration(
-                                    color: AppColors.lightYellow,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: SvgPicture.asset(
-                                    category.iconPath,
-                                    width: 12,
-                                    height: 12,
-                                    fit: BoxFit.scaleDown,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(category.name)
-                              ],
-                            ),
-                          ),
+                        child: CategoryButton(
+                          iconPath: category.iconPath,
+                          name: category.name,
+                          onTap: () {
+                            _goListPage(context, category);
+                          },
                         ),
                       ),
                   ],
@@ -122,6 +102,47 @@ class CategorySelect extends StatelessWidget {
             },
           )
         ],
+      ),
+    );
+  }
+}
+
+class CategoryButton extends StatelessWidget {
+  const CategoryButton(
+      {super.key,
+      required this.onTap,
+      required this.iconPath,
+      required this.name});
+
+  final String iconPath;
+  final void Function() onTap;
+  final String name;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: InkWell(
+        onTap: onTap,
+        child: Column(
+          children: [
+            Container(
+              width: 62,
+              height: 62,
+              decoration: const BoxDecoration(
+                color: AppColors.lightYellow,
+                shape: BoxShape.circle,
+              ),
+              child: SvgPicture.asset(
+                iconPath,
+                width: 12,
+                height: 12,
+                fit: BoxFit.scaleDown,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(name)
+          ],
+        ),
       ),
     );
   }

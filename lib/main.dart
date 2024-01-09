@@ -5,6 +5,7 @@ import 'package:dodal_app/screens/sign_in/main.dart';
 import 'package:dodal_app/services/user/service.dart';
 import 'package:dodal_app/theme/theme_data.dart';
 import 'package:dodal_app/utilities/fcm_setting.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -37,10 +38,38 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  Future<User?> getUser() async => await UserService.user();
+  bool _isLoading = true;
+  User? _user;
+
+  Future<void> checkUserSignIn() async {
+    User? user = await UserService.user();
+    if (user == null) {
+      setState(() {
+        _isLoading = false;
+      });
+      return;
+    } else {
+      setState(() {
+        _user = User(
+          id: user.id,
+          email: user.email,
+          nickname: user.nickname,
+          content: user.content,
+          profileUrl: user.profileUrl,
+          registerAt: user.registerAt,
+          socialType: user.socialType,
+          categoryList: user.categoryList,
+          tagList: user.tagList,
+        );
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    checkUserSignIn();
     UserService.updateFcmToken(widget.fcmToken);
     FlutterNativeSplash.remove();
   }
@@ -55,29 +84,19 @@ class _AppState extends State<App> {
         title: '도달',
         theme: lightTheme,
         navigatorKey: navigatorKey,
-        home: FutureBuilder(
-          future: getUser(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Container();
-            }
-
-            User? user = snapshot.data;
-            if (user != null) {
-              context.read<UserCubit>().set(User(
-                    id: user.id,
-                    email: user.email,
-                    nickname: user.nickname,
-                    content: user.content,
-                    profileUrl: user.profileUrl,
-                    registerAt: user.registerAt,
-                    socialType: user.socialType,
-                    categoryList: user.categoryList,
-                    tagList: user.tagList,
-                  ));
-              return const MainRoute();
+        home: Builder(
+          builder: (context) {
+            if (_isLoading) {
+              return const Scaffold(
+                body: Center(child: CupertinoActivityIndicator()),
+              );
             } else {
-              return const SignInScreen();
+              if (_user != null) {
+                context.read<UserCubit>().set(_user!);
+                return const MainRoute();
+              } else {
+                return const SignInScreen();
+              }
             }
           },
         ),
