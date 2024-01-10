@@ -1,6 +1,6 @@
 import 'package:dodal_app/services/feed/response.dart';
 import 'package:dodal_app/services/feed/service.dart';
-import 'package:dodal_app/widgets/common/cross_divider.dart';
+import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/common/feed_content_box/main.dart';
 import 'package:dodal_app/widgets/common/no_list_context.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +48,7 @@ class _FeedScreenState extends State<FeedScreen> {
     return PagedListView.separated(
       pagingController: pagingController,
       separatorBuilder: (context, index) {
-        return const CrossDivider();
+        return const Divider(thickness: 8, color: AppColors.systemGrey4);
       },
       builderDelegate: PagedChildBuilderDelegate(
         noItemsFoundIndicatorBuilder: (context) {

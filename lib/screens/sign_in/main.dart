@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
@@ -87,7 +88,10 @@ class SignInScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           mainAxisSize: MainAxisSize.max,
           children: [
-            Image.asset('assets/images/login_image.png'),
+            FadeInImage(
+              placeholder: MemoryImage(kTransparentImage),
+              image: const AssetImage('assets/images/login_image.png'),
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(

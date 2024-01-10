@@ -1,9 +1,9 @@
 import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/services/challenge/service.dart';
+import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/challenge_room/rank_filter_bottom_sheet.dart';
 import 'package:dodal_app/widgets/challenge_room/rank_list_item.dart';
 import 'package:dodal_app/widgets/challenge_room/rank_profile.dart';
-import 'package:dodal_app/widgets/common/cross_divider.dart';
 import 'package:dodal_app/widgets/common/filter_button.dart';
 import 'package:dodal_app/widgets/common/no_list_context.dart';
 import 'package:flutter/material.dart';
@@ -128,7 +128,10 @@ class _RankingScreenState extends State<RankingScreen> {
                               ),
                             ],
                           ),
-                          const CrossDivider(),
+                          const Divider(
+                            thickness: 8,
+                            color: AppColors.systemGrey4,
+                          ),
                         ],
                       ),
                     ),

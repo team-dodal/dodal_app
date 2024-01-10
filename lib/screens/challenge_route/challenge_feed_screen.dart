@@ -1,6 +1,6 @@
 import 'package:dodal_app/services/feed/response.dart';
 import 'package:dodal_app/services/feed/service.dart';
-import 'package:dodal_app/widgets/common/cross_divider.dart';
+import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/common/feed_content_box/continue_cert_box.dart';
 import 'package:dodal_app/widgets/common/feed_content_box/feed_content_footer.dart';
 import 'package:dodal_app/widgets/common/image_widget.dart';
@@ -62,7 +62,7 @@ class _ChallengeFeedScreenState extends State<ChallengeFeedScreen> {
       body: PagedListView.separated(
         pagingController: pagingController,
         separatorBuilder: (context, index) {
-          return const CrossDivider();
+          return const Divider(thickness: 8, color: AppColors.systemGrey4);
         },
         builderDelegate: PagedChildBuilderDelegate(
           noItemsFoundIndicatorBuilder: (context) {

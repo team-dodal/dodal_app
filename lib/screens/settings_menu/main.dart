@@ -4,7 +4,6 @@ import 'package:dodal_app/screens/settings_menu/service_rule_screen.dart';
 import 'package:dodal_app/screens/sign_in/main.dart';
 import 'package:dodal_app/services/user/service.dart';
 import 'package:dodal_app/theme/color.dart';
-import 'package:dodal_app/widgets/common/cross_divider.dart';
 import 'package:dodal_app/widgets/common/system_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -132,7 +131,7 @@ class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
               );
             },
           ),
-          const CrossDivider(),
+          const Divider(thickness: 8, color: AppColors.systemGrey4),
           ListTile(
             title: const Text('로그아웃'),
             onTap: _signOut,

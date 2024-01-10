@@ -7,7 +7,6 @@ import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/challenge_preview/feed_img_content.dart';
 import 'package:dodal_app/widgets/challenge_room/challenge_bottom_sheet.dart';
-import 'package:dodal_app/widgets/common/cross_divider.dart';
 import 'package:dodal_app/widgets/common/image_widget.dart';
 import 'package:dodal_app/widgets/common/room_info_box.dart';
 import 'package:dodal_app/widgets/create_challenge/certificate_image_input.dart';
@@ -113,7 +112,7 @@ class PreviewScreen extends StatelessWidget {
             maxMember: challenge.recruitCnt,
             curMember: challenge.userCnt,
           ),
-          const CrossDivider(),
+          const Divider(thickness: 8, color: AppColors.systemGrey4),
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(
@@ -142,7 +141,7 @@ class PreviewScreen extends StatelessWidget {
           ),
           FeedImgContent(feedList: challenge.feedUrlList, isPreview: true),
           const SizedBox(height: 32),
-          const CrossDivider(),
+          const Divider(thickness: 8, color: AppColors.systemGrey4),
           const SizedBox(height: 32),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20),

@@ -5,7 +5,6 @@ import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/challenge_preview/feed_img_content.dart';
 import 'package:dodal_app/widgets/challenge_room/current_certification_box.dart';
 import 'package:dodal_app/widgets/challenge_room/notice_box.dart';
-import 'package:dodal_app/widgets/common/cross_divider.dart';
 import 'package:dodal_app/widgets/common/image_widget.dart';
 import 'package:dodal_app/widgets/common/room_info_box.dart';
 import 'package:flutter/material.dart';
@@ -37,14 +36,14 @@ class HomeFeedScreen extends StatelessWidget {
           ),
           NoticeBox(challenge: challenge),
           const SizedBox(height: 32),
-          const CrossDivider(),
+          const Divider(thickness: 8, color: AppColors.systemGrey4),
           const SizedBox(height: 32),
           CurrentCertificationBox(
             userWeekList: challenge.userCertPerWeekList,
             continueCertCnt: challenge.continueCertCnt!,
           ),
           const SizedBox(height: 32),
-          const CrossDivider(),
+          const Divider(thickness: 8, color: AppColors.systemGrey4),
           const SizedBox(height: 32),
           FeedImgContent(feedList: challenge.feedUrlList),
           const SizedBox(height: 16),
