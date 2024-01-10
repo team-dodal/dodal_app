@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/screens/main_route/main.dart';
@@ -38,39 +40,9 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  bool _isLoading = true;
-  User? _user;
-
-  Future<void> checkUserSignIn() async {
-    User? user = await UserService.user();
-    if (user == null) {
-      setState(() {
-        _isLoading = false;
-      });
-      return;
-    } else {
-      setState(() {
-        _user = User(
-          id: user.id,
-          email: user.email,
-          nickname: user.nickname,
-          content: user.content,
-          profileUrl: user.profileUrl,
-          registerAt: user.registerAt,
-          socialType: user.socialType,
-          categoryList: user.categoryList,
-          tagList: user.tagList,
-        );
-        _isLoading = false;
-      });
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    checkUserSignIn();
-    UserService.updateFcmToken(widget.fcmToken);
     FlutterNativeSplash.remove();
   }
 
@@ -84,15 +56,30 @@ class _AppState extends State<App> {
         title: '도달',
         theme: lightTheme,
         navigatorKey: navigatorKey,
-        home: Builder(
-          builder: (context) {
-            if (_isLoading) {
+        home: StreamBuilder(
+          stream: Stream.fromFuture(UserService.user()),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
               return const Scaffold(
                 body: Center(child: CupertinoActivityIndicator()),
               );
             } else {
-              if (_user != null) {
-                context.read<UserCubit>().set(_user!);
+              if (snapshot.hasData) {
+                (() async {
+                  await UserService.updateFcmToken(widget.fcmToken);
+                })();
+                User user = snapshot.data!;
+                context.read<UserCubit>().set(User(
+                      id: user.id,
+                      email: user.email,
+                      nickname: user.nickname,
+                      content: user.content,
+                      profileUrl: user.profileUrl,
+                      registerAt: user.registerAt,
+                      socialType: user.socialType,
+                      categoryList: user.categoryList,
+                      tagList: user.tagList,
+                    ));
                 return const MainRoute();
               } else {
                 return const SignInScreen();

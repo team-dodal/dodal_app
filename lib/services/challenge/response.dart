@@ -29,42 +29,73 @@ class OneChallengeResponse {
   final List<UserCertPerWeek> userCertPerWeekList;
   final int? continueCertCnt;
 
-  OneChallengeResponse.fromJson(Map<String, dynamic> data)
-      : id = data['room_id'],
-        thumbnailImgUrl = data['thumbnail_img_url'],
-        tag = Tag(name: data['tag_name'], value: data['tag_value']),
-        certCnt = data['cert_cnt'],
-        title = data['title'],
-        hostId = data['host_id'],
-        hostNickname = data['host_nickname'],
-        hostProfileUrl = data['host_profile_url'],
-        userCnt = data['user_cnt'],
-        recruitCnt = data['recruit_cnt'],
-        content = data['content'],
-        feedUrlList = data['feed_url_list'],
-        certContent = data['cert_content'],
-        certCorrectImgUrl = data['cert_correct_img_url'],
-        certWrongImgUrl = data['cert_wrong_img_url'],
-        bookmarkCnt = data['bookmark_cnt'],
-        isBookmarked = data['bookmark_yn'] == 'Y',
-        isJoin = data['join_yn'] == 'Y',
-        todayCertCode = data['today_cert_code'] != null
-            ? CertCode.values[int.parse(data['today_cert_code'])]
-            : null,
-        accuseCnt = data['accuse_cnt'],
-        noticeTitle = data['notice_title'],
-        noticeContent = data['notice_content'],
-        registeredAt = data['registered_at'] != null
-            ? DateTime.parse(data['registered_at'])
-            : null,
-        userCertPerWeekList = data['user_cert_per_week_list'] != null
-            ? (data['user_cert_per_week_list'] as List)
-                .map((weekItem) => UserCertPerWeek.fromJson(weekItem))
-                .toList()
-            : [],
-        continueCertCnt = data['continue_cert_cnt'] != null
-            ? int.parse(data['continue_cert_cnt'])
-            : null;
+  OneChallengeResponse({
+    required this.id,
+    required this.thumbnailImgUrl,
+    required this.tag,
+    required this.certCnt,
+    required this.title,
+    required this.hostId,
+    required this.hostNickname,
+    required this.hostProfileUrl,
+    required this.userCnt,
+    required this.recruitCnt,
+    required this.content,
+    required this.feedUrlList,
+    required this.certContent,
+    required this.certCorrectImgUrl,
+    required this.certWrongImgUrl,
+    required this.bookmarkCnt,
+    required this.isBookmarked,
+    required this.isJoin,
+    required this.todayCertCode,
+    required this.accuseCnt,
+    required this.noticeTitle,
+    required this.noticeContent,
+    required this.registeredAt,
+    required this.userCertPerWeekList,
+    required this.continueCertCnt,
+  });
+
+  factory OneChallengeResponse.fromJson(Map<String, dynamic> data) {
+    return OneChallengeResponse(
+      id: data['room_id'],
+      thumbnailImgUrl: data['thumbnail_img_url'],
+      tag: Tag(name: data['tag_name'], value: data['tag_value']),
+      certCnt: data['cert_cnt'],
+      title: data['title'],
+      hostId: data['host_id'],
+      hostNickname: data['host_nickname'],
+      hostProfileUrl: data['host_profile_url'],
+      userCnt: data['user_cnt'],
+      recruitCnt: data['recruit_cnt'],
+      content: data['content'],
+      feedUrlList: data['feed_url_list'],
+      certContent: data['cert_content'],
+      certCorrectImgUrl: data['cert_correct_img_url'],
+      certWrongImgUrl: data['cert_wrong_img_url'],
+      bookmarkCnt: data['bookmark_cnt'],
+      isBookmarked: data['bookmark_yn'] == 'Y',
+      isJoin: data['join_yn'] == 'Y',
+      todayCertCode: data['today_cert_code'] != null
+          ? CertCode.values[int.parse(data['today_cert_code'])]
+          : null,
+      accuseCnt: data['accuse_cnt'],
+      noticeTitle: data['notice_title'],
+      noticeContent: data['notice_content'],
+      registeredAt: data['registered_at'] != null
+          ? DateTime.parse(data['registered_at'])
+          : null,
+      userCertPerWeekList: data['user_cert_per_week_list'] != null
+          ? (data['user_cert_per_week_list'] as List)
+              .map((weekItem) => UserCertPerWeek.fromJson(weekItem))
+              .toList()
+          : [],
+      continueCertCnt: data['continue_cert_cnt'] != null
+          ? int.parse(data['continue_cert_cnt'])
+          : null,
+    );
+  }
 }
 
 class UserCertPerWeek {
@@ -73,9 +104,11 @@ class UserCertPerWeek {
 
   UserCertPerWeek({this.day, this.certImgUrl});
 
-  UserCertPerWeek.fromJson(Map<String, dynamic> json) {
-    day = DayEnum.values[json['day_code']];
-    certImgUrl = json['cert_img_url'];
+  factory UserCertPerWeek.fromJson(Map<String, dynamic> json) {
+    return UserCertPerWeek(
+      day: DayEnum.values[json['day_code']],
+      certImgUrl: json['cert_img_url'],
+    );
   }
 }
 
@@ -94,12 +127,15 @@ class ChallengeRoomNoticeResponse {
     required this.date,
   });
 
-  ChallengeRoomNoticeResponse.fromJson(Map<String, dynamic> data)
-      : notiId = data['noti_id'],
-        roomId = data['room_id'],
-        title = data['title'],
-        content = data['content'],
-        date = data['date'];
+  factory ChallengeRoomNoticeResponse.fromJson(Map<String, dynamic> data) {
+    return ChallengeRoomNoticeResponse(
+      notiId: data['noti_id'],
+      roomId: data['room_id'],
+      title: data['title'],
+      content: data['content'],
+      date: data['date'],
+    );
+  }
 }
 
 class ChallengeRankResponse {
@@ -108,9 +144,19 @@ class ChallengeRankResponse {
   final int certCnt;
   final String? profileUrl;
 
-  ChallengeRankResponse.fromJson(Map<String, dynamic> data)
-      : userId = data['user_id'],
-        nickname = data['nickname'],
-        profileUrl = data['profile_url'],
-        certCnt = data['cert_cnt'];
+  ChallengeRankResponse({
+    required this.userId,
+    required this.nickname,
+    required this.certCnt,
+    required this.profileUrl,
+  });
+
+  factory ChallengeRankResponse.fromJson(Map<String, dynamic> data) {
+    return ChallengeRankResponse(
+      userId: data['user_id'],
+      nickname: data['nickname'],
+      profileUrl: data['profile_url'],
+      certCnt: data['cert_cnt'],
+    );
+  }
 }

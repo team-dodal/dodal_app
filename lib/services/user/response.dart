@@ -3,11 +3,19 @@ import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/model/user_model.dart';
 
 class SignUpResponse {
-  String? accessToken, refreshToken;
+  final String? accessToken, refreshToken;
 
-  SignUpResponse.fromJson(Map<String, dynamic> data)
-      : accessToken = data['access_token'],
-        refreshToken = data['refresh_token'];
+  SignUpResponse({
+    required this.accessToken,
+    required this.refreshToken,
+  });
+
+  factory SignUpResponse.fromJson(Map<String, dynamic> data) {
+    return SignUpResponse(
+      accessToken: data['access_token'],
+      refreshToken: data['refresh_token'],
+    );
+  }
 }
 
 class SignInResponse extends User {
@@ -22,25 +30,35 @@ class SignInResponse extends User {
 }
 
 class UserResponse {
-  int? userId;
-  String? nickname;
-  String? profileUrl;
-  String? content;
-  List<Category>? categoryList;
-  List<Tag>? tagList;
-  List<ChallengeRoomList>? challengeRoomList;
-  int? maxContinueCertCnt;
-  int? totalCertCnt;
+  final int? userId;
+  final String? nickname;
+  final String? profileUrl;
+  final String? content;
+  final List<Category>? categoryList;
+  final List<Tag>? tagList;
+  final List<ChallengeRoomList>? challengeRoomList;
+  final int? maxContinueCertCnt;
+  final int? totalCertCnt;
 
-  UserResponse.fromJson(Map<String, dynamic> data) {
-    userId = data['user_id'];
-    nickname = data['nickname'];
-    profileUrl = data['profile_url'];
-    content = data['content'];
+  UserResponse({
+    required this.userId,
+    required this.nickname,
+    required this.profileUrl,
+    required this.content,
+    required this.categoryList,
+    required this.tagList,
+    required this.challengeRoomList,
+    required this.maxContinueCertCnt,
+    required this.totalCertCnt,
+  });
+
+  factory UserResponse.fromJson(Map<String, dynamic> data) {
+    List<Category> categoryList = [];
+    List<Tag> tagList = [];
+    List<ChallengeRoomList> challengeRoomList = [];
     if (data['category_list'] != null) {
-      categoryList = <Category>[];
       data['category_list'].forEach((category) {
-        categoryList!.add(Category(
+        categoryList.add(Category(
           name: category['name'],
           subName: category['sub_name'],
           value: category['value'],
@@ -50,19 +68,26 @@ class UserResponse {
       });
     }
     if (data['tag_list'] != null) {
-      tagList = <Tag>[];
       data['tag_list'].forEach((tag) {
-        tagList!.add(Tag(name: tag['name'], value: tag['value']));
+        tagList.add(Tag(name: tag['name'], value: tag['value']));
       });
     }
     if (data['challenge_room_list'] != null) {
-      challengeRoomList = <ChallengeRoomList>[];
       data['challenge_room_list'].forEach((challengeRoom) {
-        challengeRoomList!.add(ChallengeRoomList.fromJson(challengeRoom));
+        challengeRoomList.add(ChallengeRoomList.fromJson(challengeRoom));
       });
     }
-    maxContinueCertCnt = data['max_continue_cert_cnt'];
-    totalCertCnt = data['total_cert_cnt'];
+    return UserResponse(
+      userId: data['user_id'],
+      nickname: data['nickname'],
+      profileUrl: data['profile_url'],
+      content: data['content'],
+      maxContinueCertCnt: data['max_continue_cert_cnt'],
+      totalCertCnt: data['total_cert_cnt'],
+      categoryList: categoryList,
+      challengeRoomList: challengeRoomList,
+      tagList: tagList,
+    );
   }
 }
 
@@ -70,23 +95,33 @@ class ChallengeRoomList {
   final int? roomId;
   final String? title;
 
-  ChallengeRoomList.fromJson(Map<String, dynamic> json)
-      : roomId = json['room_id'],
-        title = json['title'];
+  ChallengeRoomList({required this.roomId, required this.title});
+
+  factory ChallengeRoomList.fromJson(Map<String, dynamic> json) {
+    return ChallengeRoomList(roomId: json['room_id'], title: json['title']);
+  }
 }
 
 class FeedListByDateResponse {
-  int? userId;
-  List<MyPageCalenderInfo>? myPageCalenderInfoList;
+  final int? userId;
+  final List<MyPageCalenderInfo>? myPageCalenderInfoList;
 
-  FeedListByDateResponse.fromJson(Map<String, dynamic> json) {
-    userId = json['user_id'];
+  FeedListByDateResponse({
+    required this.userId,
+    required this.myPageCalenderInfoList,
+  });
+
+  factory FeedListByDateResponse.fromJson(Map<String, dynamic> json) {
+    List<MyPageCalenderInfo> myPageCalenderInfoList = [];
     if (json['my_page_calender_info_list'] != null) {
-      myPageCalenderInfoList = <MyPageCalenderInfo>[];
       json['my_page_calender_info_list'].forEach((v) {
-        myPageCalenderInfoList!.add(MyPageCalenderInfo.fromJson(v));
+        myPageCalenderInfoList.add(MyPageCalenderInfo.fromJson(v));
       });
     }
+    return FeedListByDateResponse(
+      userId: json['user_id'],
+      myPageCalenderInfoList: myPageCalenderInfoList,
+    );
   }
 }
 
@@ -101,8 +136,11 @@ class MyPageCalenderInfo {
     required this.day,
   });
 
-  MyPageCalenderInfo.fromJson(Map<String, dynamic> json)
-      : feedId = json['feed_id'],
-        certImageUrl = json['cert_image_url'],
-        day = json['day'];
+  factory MyPageCalenderInfo.fromJson(Map<String, dynamic> json) {
+    return MyPageCalenderInfo(
+      feedId: json['feed_id'],
+      certImageUrl: json['cert_image_url'],
+      day: json['day'],
+    );
+  }
 }
