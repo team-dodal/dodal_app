@@ -4,9 +4,10 @@ import 'package:dodal_app/services/common/main.dart';
 import 'package:dodal_app/services/manage_challenge/response.dart';
 
 class ManageChallengeService {
+  static final service = dio();
+
   static Future<List<JoinedChallengesResponse>?> joinedChallenges() async {
     try {
-      final service = dio();
       final res = await service.get('/api/v1/users/me/challenges/user');
       List<dynamic> result = res.data['result'];
       List<JoinedChallengesResponse> list = result
@@ -21,7 +22,6 @@ class ManageChallengeService {
 
   static Future<List<HostChallengesResponse>?> hostChallenges() async {
     try {
-      final service = dio();
       final res = await service.get('/api/v1/users/me/challenges/host');
       List<dynamic> result = res.data['result'];
       List<HostChallengesResponse> list =
@@ -35,7 +35,6 @@ class ManageChallengeService {
 
   static manageUsers({required int roomId}) async {
     try {
-      final service = dio();
       final res =
           await service.get('/api/v1/users/me/challenges/manage/$roomId/users');
       List<dynamic> result = res.data['result'];
@@ -53,7 +52,6 @@ class ManageChallengeService {
     required String dateYM,
   }) async {
     try {
-      final service = dio();
       final res = await service.get(
           '/api/v1/users/me/challenges/manage/$roomId/certifications?date_ym=$dateYM');
 
@@ -80,8 +78,6 @@ class ManageChallengeService {
     required bool confirmValue,
   }) async {
     try {
-      final service = dio();
-
       await service.patch(
           '/api/v1/users/me/challenges/manage/$roomId/certifications/$feedId?confirm_yn=${confirmValue ? 'Y' : 'N'}');
 
@@ -97,8 +93,6 @@ class ManageChallengeService {
     required int userId,
   }) async {
     try {
-      final service = dio();
-
       await service.patch(
         '/api/v1/users/me/challenges/manage/$roomId/mandate',
         data: {"user_id": userId},
@@ -116,8 +110,6 @@ class ManageChallengeService {
     required int userId,
   }) async {
     try {
-      final service = dio();
-
       await service.delete(
         '/api/v1/users/me/challenges/manage/$roomId/users/$userId',
       );

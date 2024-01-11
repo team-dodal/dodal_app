@@ -3,11 +3,11 @@ import 'package:dodal_app/services/common/refresh.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-Dio dio() {
+Dio dio([String url = '']) {
   FlutterSecureStorage secureStorage = const FlutterSecureStorage();
-
+  print(dotenv.get('BASE_URL') + url);
   Dio dio = Dio(BaseOptions(
-    baseUrl: dotenv.get('BASE_URL'),
+    baseUrl: dotenv.get('BASE_URL') + url,
   ));
 
   dio.interceptors.addAll([

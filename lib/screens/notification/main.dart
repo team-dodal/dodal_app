@@ -4,46 +4,111 @@ import 'package:dodal_app/services/alarm/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/no_list_context.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class NotiFicationScreen extends StatelessWidget {
+class NotiFicationScreen extends StatefulWidget {
   const NotiFicationScreen({super.key});
+
+  @override
+  State<NotiFicationScreen> createState() => _NotiFicationScreenState();
+}
+
+class _NotiFicationScreenState extends State<NotiFicationScreen> {
+  List<AlarmResponse> _list = [];
+  bool _isLoading = true;
+
+  _deleteAlarmList() async {
+    final userId = context.read<UserCubit>().state!.id;
+    await AlarmService.deleteAllAlarmList(userId: userId);
+    setState(() {
+      _list = [];
+    });
+  }
+
+  _getAlarmList() async {
+    final userId = context.read<UserCubit>().state!.id;
+    final res = await AlarmService.getAllAlarmList(userId: userId);
+    if (res == null) return;
+    setState(() {
+      _isLoading = false;
+      _list = res;
+    });
+  }
+
+  @override
+  void initState() {
+    _getAlarmList();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('알림'),
-      ),
-      body: FutureBuilder(
-        future: AlarmService.getAllAlarmList(
-          userId: BlocProvider.of<UserCubit>(context).state!.id,
+        appBar: AppBar(
+          title: const Text('알림'),
+          actions: [
+            TextButton(
+              onPressed: _deleteAlarmList,
+              child: const Text('알림 삭제'),
+            )
+          ],
         ),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
-          }
+        body: Builder(
+          builder: (context) {
+            if (_isLoading) {
+              return const Center(
+                child: CupertinoActivityIndicator(),
+              );
+            }
 
-          List<AlarmResponse> list = snapshot.data!;
-          if (list.isEmpty) {
-            return const Column(
-              children: [
-                SizedBox(height: 100),
-                Center(child: NoListContext(title: '알림이 없습니다')),
-              ],
-            );
-          } else {
+            if (_list.isEmpty) {
+              return const Column(
+                children: [
+                  SizedBox(height: 100),
+                  Center(child: NoListContext(title: '알림이 없습니다')),
+                ],
+              );
+            }
             return ListView.builder(
-              itemCount: list.length,
+              itemCount: _list.length,
               itemBuilder: (context, index) {
-                return AlarmContainer(item: list[index]);
+                return AlarmContainer(item: _list[index]);
               },
             );
-          }
-        },
-      ),
-    );
+          },
+        )
+        // FutureBuilder(
+        //   future: AlarmService.getAllAlarmList(
+        //     userId: BlocProvider.of<UserCubit>(context).state!.id,
+        //   ),
+        //   builder: (context, snapshot) {
+        //     if (snapshot.connectionState == ConnectionState.waiting) {
+        //       return const Center(
+        //         child: CupertinoActivityIndicator(),
+        //       );
+        //     }
+
+        //     List<AlarmResponse> list = snapshot.data!;
+        //     if (list.isEmpty) {
+        //       return const Column(
+        //         children: [
+        //           SizedBox(height: 100),
+        //           Center(child: NoListContext(title: '알림이 없습니다')),
+        //         ],
+        //       );
+        //     } else {
+        //       return ListView.builder(
+        //         itemCount: list.length,
+        //         itemBuilder: (context, index) {
+        //           return AlarmContainer(item: list[index]);
+        //         },
+        //       );
+        //     }
+        //   },
+        // ),
+        );
   }
 }
 

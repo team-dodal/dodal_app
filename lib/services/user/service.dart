@@ -8,9 +8,10 @@ import 'package:dodal_app/services/user/response.dart';
 import 'package:dodal_app/utilities/social_auth.dart';
 
 class UserService {
+  static final service = dio();
+
   static signIn(SocialType socialType, String socialId) async {
     try {
-      final service = dio();
       final res = await service.post('/api/v1/users/sign-in',
           data: {"social_type": socialType.name, "social_id": socialId});
 
@@ -35,7 +36,6 @@ class UserService {
     required List<String?> category,
   }) async {
     try {
-      final service = dio();
       final data = {
         "social_type": socialType.name,
         "social_id": socialId,
@@ -65,7 +65,6 @@ class UserService {
 
   static Future<User?> user() async {
     try {
-      final service = dio();
       final res = await service.get('/api/v1/users/me');
       return User.formJson(res.data['result']);
     } on DioException catch (err) {
@@ -102,7 +101,6 @@ class UserService {
     if (s3Url != null) data['profile_url'] = s3Url;
 
     try {
-      final service = dio();
       final res = await service.patch('/api/v1/users/me', data: data);
       return User.formJson(res.data['result']);
     } on DioException catch (err) {
@@ -113,7 +111,6 @@ class UserService {
 
   static updateFcmToken(String token) async {
     try {
-      final service = dio();
       await service.post('/api/v1/users/fcm-token', data: {'fcm_token': token});
     } on DioException catch (err) {
       ResponseErrorDialog(err);
@@ -122,7 +119,6 @@ class UserService {
 
   static checkNickName(String nickname) async {
     try {
-      final service = dio();
       await service.get('/api/v1/users/nickname/$nickname');
       return true;
     } on DioException catch (err) {
@@ -133,7 +129,6 @@ class UserService {
 
   static removeUser() async {
     try {
-      final service = dio();
       await service.delete('/api/v1/users/me');
     } on DioException catch (err) {
       ResponseErrorDialog(err);
@@ -142,7 +137,6 @@ class UserService {
 
   static Future<UserResponse?> me() async {
     try {
-      final service = dio();
       final res = await service.get('/api/v1/users/my-page');
       return UserResponse.fromJson(res.data['result']);
     } on DioException catch (err) {
@@ -156,7 +150,6 @@ class UserService {
     required String dateYM,
   }) async {
     try {
-      final service = dio();
       final res = await service.get(
         '/api/v1/users/my-page/challenge-room/$roomId?date_ym=$dateYM',
       );

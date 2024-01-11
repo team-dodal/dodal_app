@@ -4,12 +4,13 @@ import 'package:dodal_app/services/common/main.dart';
 import 'package:dodal_app/services/feed/response.dart';
 
 class FeedService {
+  static final service = dio();
+
   static Future<List<FeedContentResponse>?> getAllFeeds({
     required int page,
     required int pageSize,
   }) async {
     try {
-      final service = dio();
       final res =
           await service.get('/api/v1/feeds?page=$page&page_size=$pageSize');
       List<dynamic> contents = res.data['result']['content'];
@@ -29,7 +30,6 @@ class FeedService {
     required int roomId,
   }) async {
     try {
-      final service = dio();
       final res = await service
           .get('/api/v1/feeds/$roomId?page=$page&page_size=$pageSize');
       List<dynamic> contents = res.data['result']['content'];
@@ -47,7 +47,6 @@ class FeedService {
     required int feedId,
   }) async {
     try {
-      final service = dio();
       final res = await service.get('/api/v1/feed/$feedId');
       return FeedContentResponse.fromJson(res.data['result']);
     } on DioException catch (error) {
@@ -61,7 +60,6 @@ class FeedService {
     required bool value,
   }) async {
     try {
-      final service = dio();
       if (value) {
         await service.post('/api/v1/like/$feedId');
         return true;
@@ -79,7 +77,6 @@ class FeedService {
     required int feedId,
   }) async {
     try {
-      final service = dio();
       final res = await service.get('/api/v1/comments/$feedId');
 
       List<dynamic> contents = res.data['result'];
@@ -98,7 +95,6 @@ class FeedService {
     int? parentId,
   }) async {
     try {
-      final service = dio();
       final data = {"parent_id": parentId, "content": content};
 
       final res = await service.post('/api/v1/comments/$feedId', data: data);
@@ -117,8 +113,6 @@ class FeedService {
     required int commentId,
   }) async {
     try {
-      final service = dio();
-
       final res = await service.delete('/api/v1/comments/$feedId', data: {
         "comment_id": commentId,
       });

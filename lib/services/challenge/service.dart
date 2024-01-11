@@ -7,6 +7,8 @@ import 'package:dodal_app/services/common/main.dart';
 import 'package:dodal_app/services/common/presigned_s3.dart';
 
 class ChallengeService {
+  static final service = dio('/api/v1/challenge');
+
   static createChallenge({
     required String title,
     required String content,
@@ -19,7 +21,6 @@ class ChallengeService {
     required File? certWrongImg,
   }) async {
     try {
-      final service = dio();
       final data = {
         'title': title,
         'content': content,
@@ -60,7 +61,7 @@ class ChallengeService {
         data[key] = s3Url;
       }
 
-      final res = await service.post('/api/v1/challenge/room', data: data);
+      final res = await service.post('/room', data: data);
       return res.data['result'];
     } on DioException catch (err) {
       ResponseErrorDialog(err);
@@ -81,7 +82,6 @@ class ChallengeService {
     dynamic certWrongImg,
   }) async {
     try {
-      final service = dio();
       final data = {
         "tag_value": tagValue,
         "title": title,
@@ -109,7 +109,7 @@ class ChallengeService {
         }
       }
 
-      service.patch('/api/v1/challenge/room/$id', data: data);
+      service.patch('/room/$id', data: data);
       return true;
     } on DioException catch (err) {
       ResponseErrorDialog(err);
@@ -123,8 +123,7 @@ class ChallengeService {
     required int pageSize,
   }) async {
     try {
-      final service = dio();
-      String requestUrl = '/api/v1/challenge/rooms?';
+      String requestUrl = '/rooms?';
       requestUrl += 'condition=$conditionCode&';
       requestUrl += 'page=$page&page_size=$pageSize';
       final res = await service.get(requestUrl);
@@ -147,8 +146,7 @@ class ChallengeService {
     required int pageSize,
   }) async {
     try {
-      final service = dio();
-      String requestUrl = '/api/v1/challenge/rooms/category?';
+      String requestUrl = '/rooms/category?';
       if (categoryValue != null) {
         requestUrl += 'category_value=$categoryValue&';
       }
@@ -174,8 +172,7 @@ class ChallengeService {
   static Future<OneChallengeResponse?> getChallengeOne(
       {required int challengeId}) async {
     try {
-      final service = dio();
-      final res = await service.get('/api/v1/challenge/rooms/$challengeId');
+      final res = await service.get('/rooms/$challengeId');
       return OneChallengeResponse.fromJson(res.data['result']);
     } on DioException catch (error) {
       ResponseErrorDialog(error);
@@ -185,8 +182,7 @@ class ChallengeService {
 
   static Future<List<Challenge>?> getBookmarkList() async {
     try {
-      final service = dio();
-      final res = await service.get('/api/v1/challenge/room/bookmarks');
+      final res = await service.get('/room/bookmarks');
 
       List<Challenge> result = (res.data['result'] as List)
           .map((item) => Challenge.fromJson(item))
@@ -200,12 +196,11 @@ class ChallengeService {
 
   static bookmark({required int roomId, required bool value}) async {
     try {
-      final service = dio();
       if (value) {
-        await service.post('/api/v1/challenge/room/$roomId/bookmark');
+        await service.post('/room/$roomId/bookmark');
         return true;
       } else {
-        await service.delete('/api/v1/challenge/room/$roomId/bookmark');
+        await service.delete('/room/$roomId/bookmark');
         return false;
       }
     } on DioException catch (error) {
@@ -216,8 +211,7 @@ class ChallengeService {
 
   static join({required int challengeId}) async {
     try {
-      final service = dio();
-      await service.post('/api/v1/challenge/rooms/$challengeId/join');
+      await service.post('/rooms/$challengeId/join');
       return true;
     } on DioException catch (error) {
       ResponseErrorDialog(error);
@@ -227,8 +221,7 @@ class ChallengeService {
 
   static out({required int challengeId}) async {
     try {
-      final service = dio();
-      await service.delete('/api/v1/challenge/rooms/$challengeId/join');
+      await service.delete('/rooms/$challengeId/join');
       return true;
     } on DioException catch (error) {
       ResponseErrorDialog(error);
@@ -242,9 +235,8 @@ class ChallengeService {
     required String content,
   }) async {
     try {
-      final service = dio();
       await service.post(
-        '/api/v1/challenge/room/$roomId/noti',
+        '/room/$roomId/noti',
         data: {"title": title, "content": content},
       );
       return true;
@@ -257,8 +249,7 @@ class ChallengeService {
   static Future<List<ChallengeRoomNoticeResponse>?> getNoticeList(
       {required int roomId}) async {
     try {
-      final service = dio();
-      final res = await service.get('/api/v1/challenge/room/$roomId/noti');
+      final res = await service.get('/room/$roomId/noti');
       final List<dynamic> result = res.data['result'];
       return result
           .map((notice) => ChallengeRoomNoticeResponse.fromJson(notice))
@@ -276,9 +267,8 @@ class ChallengeService {
     required String content,
   }) async {
     try {
-      final service = dio();
       await service.patch(
-        '/api/v1/challenge/rooms/$roomId/noti/$notiId',
+        '/rooms/$roomId/noti/$notiId',
         data: {title: title, content: content},
       );
       return true;
@@ -290,8 +280,7 @@ class ChallengeService {
 
   static deleteNotice({required int roomId, required int notiId}) async {
     try {
-      final service = dio();
-      await service.delete('/api/v1/challenge/rooms/$roomId/noti/$notiId');
+      await service.delete('/rooms/$roomId/noti/$notiId');
       return true;
     } on DioException catch (error) {
       ResponseErrorDialog(error);
@@ -305,7 +294,6 @@ class ChallengeService {
     required File image,
   }) async {
     try {
-      final service = dio();
       final data = {"content": content};
 
       String fileName =
@@ -318,7 +306,7 @@ class ChallengeService {
       data['certification_img_url'] = s3Url;
 
       await service.post(
-        '/api/v1/challenge/room/$challengeId/certification',
+        '/room/$challengeId/certification',
         data: data,
       );
       return true;
@@ -333,9 +321,7 @@ class ChallengeService {
     required int code,
   }) async {
     try {
-      final service = dio();
-      final res =
-          await service.get('/api/v1/challenge/room/$id/rank?code=$code');
+      final res = await service.get('/room/$id/rank?code=$code');
       List<dynamic> result = res.data['result'];
 
       return result.map((e) => ChallengeRankResponse.fromJson(e)).toList();
@@ -353,8 +339,7 @@ class ChallengeService {
     required int pageSize,
   }) async {
     try {
-      final service = dio();
-      String requestUrl = '/api/v1/challenge/room/search?';
+      String requestUrl = '/room/search?';
       requestUrl += 'word=$word&';
       requestUrl += 'condition_code=$conditionCode&';
       for (final certCnt in certCntList) {
