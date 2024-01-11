@@ -8,6 +8,7 @@ import 'package:dodal_app/widgets/common/image_widget.dart';
 import 'package:dodal_app/widgets/common/small_tag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ListChallengeBox extends StatefulWidget {
   const ListChallengeBox({
@@ -177,6 +178,120 @@ class _ListChallengeBoxState extends State<ListChallengeBox> {
             ),
           )
         ],
+      ),
+    );
+  }
+}
+
+class ListChallengeBoxSkeleton extends StatelessWidget {
+  const ListChallengeBoxSkeleton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: AppColors.systemWhite,
+      height: 100,
+      child: Shimmer.fromColors(
+        baseColor: AppColors.systemGrey4,
+        highlightColor: AppColors.systemWhite,
+        child: Row(
+          children: [
+            AspectRatio(
+              aspectRatio: 1,
+              child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                  color: AppColors.systemGrey4,
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                width: 40,
+                                height: 20,
+                                decoration: const BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(4)),
+                                  color: AppColors.systemGrey4,
+                                ),
+                              ),
+                              const SizedBox(width: 4),
+                              Container(
+                                width: 40,
+                                height: 20,
+                                decoration: const BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(4)),
+                                  color: AppColors.systemGrey4,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Container(
+                        width: double.infinity,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(4)),
+                          color: AppColors.systemGrey4,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Container(
+                        width: double.infinity - 100,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(4)),
+                          color: AppColors.systemGrey4,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Container(
+                        width: 16,
+                        height: 16,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.systemGrey4,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Container(
+                        width: 80,
+                        height: 20,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(4)),
+                          color: AppColors.systemGrey4,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

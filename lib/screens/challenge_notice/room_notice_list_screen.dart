@@ -3,6 +3,7 @@ import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
+import 'package:dodal_app/widgets/common/no_list_context.dart';
 import 'package:flutter/material.dart';
 
 class RoomNoticeListScreen extends StatefulWidget {
@@ -74,6 +75,19 @@ class _RoomNoticeListScreenState extends State<RoomNoticeListScreen> {
           }
           List<ChallengeRoomNoticeResponse> noticeList = snapshot.data!;
 
+          if (noticeList.isEmpty) {
+            return const Column(
+              children: [
+                SizedBox(height: 100),
+                Center(
+                  child: NoListContext(
+                    title: '알림',
+                    subTitle: '작성된 공지사항이 없습니다.',
+                  ),
+                ),
+              ],
+            );
+          }
           return ListView.builder(
             itemCount: noticeList.length,
             itemBuilder: (context, index) {

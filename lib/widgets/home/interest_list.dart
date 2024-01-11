@@ -96,6 +96,7 @@ class InterestCategoryCard extends StatefulWidget {
 
 class _InterestCategoryCardState extends State<InterestCategoryCard> {
   List<Challenge> _challenges = [];
+  bool _isLoading = true;
 
   _getChallenges() async {
     final res = await ChallengeService.getChallengesByCategory(
@@ -106,15 +107,17 @@ class _InterestCategoryCardState extends State<InterestCategoryCard> {
       page: 0,
       pageSize: 3,
     );
+    if (res == null) return;
     setState(() {
-      _challenges = res!;
+      _challenges = res;
+      _isLoading = false;
     });
   }
 
   @override
   void initState() {
-    super.initState();
     _getChallenges();
+    super.initState();
   }
 
   @override
@@ -147,35 +150,51 @@ class _InterestCategoryCardState extends State<InterestCategoryCard> {
               '${widget.category.hashTags[0]} ${widget.category.hashTags[1]}',
               style: context.body4(color: AppColors.systemGrey1),
             ),
-            Column(
-              children: [
-                for (final challenge in _challenges)
-                  OpenContainer(
-                    transitionType: ContainerTransitionType.fadeThrough,
-                    closedElevation: 0,
-                    closedBuilder: (context, action) {
-                      return Container(
-                        padding: const EdgeInsets.only(top: 20),
-                        constraints: const BoxConstraints(minHeight: 80),
-                        child: ListChallengeBox(
-                          id: challenge.id,
-                          title: challenge.title,
-                          thumbnailImg: challenge.thumbnailImg,
-                          tag: challenge.tag,
-                          adminProfile: challenge.adminProfile,
-                          adminNickname: challenge.adminNickname,
-                          recruitCnt: challenge.recruitCnt,
-                          userCnt: challenge.userCnt,
-                          certCnt: challenge.certCnt,
-                          isBookmarked: challenge.isBookmarked,
-                        ),
-                      );
-                    },
-                    openBuilder: (context, action) => challenge.isJoined
-                        ? ChallengeRoute(id: challenge.id)
-                        : ChallengePreviewScreen(id: challenge.id),
-                  )
-              ],
+            Builder(
+              builder: (context) {
+                if (_isLoading) {
+                  return Column(
+                    children: [
+                      for (final _ in List.generate(3, (index) => index))
+                        Container(
+                          padding: const EdgeInsets.only(top: 20),
+                          constraints: const BoxConstraints(minHeight: 80),
+                          child: const ListChallengeBoxSkeleton(),
+                        )
+                    ],
+                  );
+                }
+                return Column(
+                  children: [
+                    for (final challenge in _challenges)
+                      OpenContainer(
+                        transitionType: ContainerTransitionType.fadeThrough,
+                        closedElevation: 0,
+                        closedBuilder: (context, action) {
+                          return Container(
+                            padding: const EdgeInsets.only(top: 20),
+                            constraints: const BoxConstraints(minHeight: 80),
+                            child: ListChallengeBox(
+                              id: challenge.id,
+                              title: challenge.title,
+                              thumbnailImg: challenge.thumbnailImg,
+                              tag: challenge.tag,
+                              adminProfile: challenge.adminProfile,
+                              adminNickname: challenge.adminNickname,
+                              recruitCnt: challenge.recruitCnt,
+                              userCnt: challenge.userCnt,
+                              certCnt: challenge.certCnt,
+                              isBookmarked: challenge.isBookmarked,
+                            ),
+                          );
+                        },
+                        openBuilder: (context, action) => challenge.isJoined
+                            ? ChallengeRoute(id: challenge.id)
+                            : ChallengePreviewScreen(id: challenge.id),
+                      )
+                  ],
+                );
+              },
             ),
           ],
         ),

@@ -5,17 +5,24 @@ import 'package:dodal_app/screens/challenge_list/main.dart';
 import 'package:dodal_app/services/category/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
+import 'package:dodal_app/widgets/home/category_select/skeleton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math' as math;
 
-class CategorySelect extends StatelessWidget {
-  CategorySelect({super.key});
-  final Future<List<Category>?> _categories =
-      CategoryService.getAllCategories();
+class CategorySelect extends StatefulWidget {
+  const CategorySelect({super.key});
 
-  _goListPage(context, Category category) {
+  @override
+  State<CategorySelect> createState() => _CategorySelectState();
+}
+
+class _CategorySelectState extends State<CategorySelect> {
+  late List<Category> _categories;
+  bool _isLoading = true;
+
+  void _goListPage(context, Category category) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => BlocProvider(
@@ -26,8 +33,27 @@ class CategorySelect extends StatelessWidget {
     );
   }
 
+  void _getCategories() async {
+    final res = await CategoryService.getAllCategories();
+    if (res == null) return;
+    setState(() {
+      _categories = res;
+      _isLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    _getCategories();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Skeleton();
+    }
+
     return SizedBox(
       child: Column(
         children: [
@@ -74,33 +100,24 @@ class CategorySelect extends StatelessWidget {
               ],
             ),
           ),
-          FutureBuilder(
-            future: _categories,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const SizedBox();
-              }
-              final List<Category> categories = snapshot.data!;
-              return SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    for (Category category in categories)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 6),
-                        child: CategoryButton(
-                          iconPath: category.iconPath,
-                          name: category.name,
-                          onTap: () {
-                            _goListPage(context, category);
-                          },
-                        ),
-                      ),
-                  ],
-                ),
-              );
-            },
-          )
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                for (Category category in _categories)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    child: CategoryButton(
+                      iconPath: category.iconPath,
+                      name: category.name,
+                      onTap: () {
+                        _goListPage(context, category);
+                      },
+                    ),
+                  ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -108,11 +125,12 @@ class CategorySelect extends StatelessWidget {
 }
 
 class CategoryButton extends StatelessWidget {
-  const CategoryButton(
-      {super.key,
-      required this.onTap,
-      required this.iconPath,
-      required this.name});
+  const CategoryButton({
+    super.key,
+    required this.onTap,
+    required this.iconPath,
+    required this.name,
+  });
 
   final String iconPath;
   final void Function() onTap;

@@ -1,4 +1,4 @@
-import 'package:dodal_app/widgets/home/category_select.dart';
+import 'package:dodal_app/widgets/home/category_select/main.dart';
 import 'package:dodal_app/widgets/home/interest_list.dart';
 import 'package:dodal_app/widgets/home/popular_list.dart';
 import 'package:dodal_app/widgets/home/recent_list.dart';
@@ -19,16 +19,16 @@ class _HomeScreenState extends State<HomeScreen> {
         constraints: BoxConstraints(
           minHeight: MediaQuery.of(context).size.height,
         ),
-        child: Column(
+        child: const Column(
           children: [
             CategorySelect(),
-            const SizedBox(height: 32),
-            const InterestList(),
-            const SizedBox(height: 32),
-            const PopularList(),
-            const SizedBox(height: 48),
-            const RecentList(),
-            const SizedBox(height: 48),
+            SizedBox(height: 32),
+            InterestList(),
+            SizedBox(height: 32),
+            PopularList(),
+            SizedBox(height: 48),
+            RecentList(),
+            SizedBox(height: 48),
           ],
         ),
       ),
