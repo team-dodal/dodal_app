@@ -5,10 +5,14 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 Dio dio([String url = '']) {
   FlutterSecureStorage secureStorage = const FlutterSecureStorage();
-  print(dotenv.get('BASE_URL') + url);
-  Dio dio = Dio(BaseOptions(
-    baseUrl: dotenv.get('BASE_URL') + url,
-  ));
+  Dio dio = Dio(
+    BaseOptions(
+      baseUrl: dotenv.get('BASE_URL') + url,
+      receiveTimeout: const Duration(seconds: 3),
+      sendTimeout: const Duration(seconds: 3),
+      connectTimeout: const Duration(seconds: 3),
+    ),
+  );
 
   dio.interceptors.addAll([
     // DioCacheInterceptor(options: cacheOptions),
