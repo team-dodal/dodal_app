@@ -83,8 +83,8 @@
 		<key>UIStatusBarHidden</key>
 		<true/>
 		<key>NSPhotoLibraryUsageDescription</key>
-		<string>사진 업로드를 위한 갤러리 접근 권한</string>
+		<string>도전 사진 인증을 위한 인증사진 업로드를 위한 갤러리 접근 권한이 필요합니다.</string>
 		<key>NSCameraUsageDescription</key>
-		<string>사진 업로드를 위한 카메라 접근 권한</string>
+		<string>도전 사진 인증을 위한 인증사진 업로드를 위한 카메라 접근 권한이 필요합니다.</string>
 	</dict>
 </plist>

@@ -1,5 +1,6 @@
 import 'package:dodal_app/model/category_model.dart';
 import 'package:dodal_app/model/tag_model.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 enum ConditionEnum {
@@ -12,13 +13,13 @@ enum ConditionEnum {
   const ConditionEnum(this.displayName);
 }
 
-class ChallengeListFilter {
-  Category category;
-  Tag tag;
-  ConditionEnum condition;
-  List<int> certCntList;
+class ChallengeListFilter extends Equatable {
+  final Category category;
+  final Tag tag;
+  final ConditionEnum condition;
+  final List<int> certCntList;
 
-  ChallengeListFilter({
+  const ChallengeListFilter({
     required this.category,
     required this.tag,
     required this.condition,
@@ -38,6 +39,9 @@ class ChallengeListFilter {
       certCntList: certCntList ?? this.certCntList,
     );
   }
+
+  @override
+  List<Object?> get props => [category, tag, condition, certCntList];
 }
 
 class ChallengeListFilterCubit extends Cubit<ChallengeListFilter> {
@@ -50,7 +54,7 @@ class ChallengeListFilterCubit extends Cubit<ChallengeListFilter> {
             category: category,
             tag: category.tags[0],
             condition: condition ?? ConditionEnum.popularity,
-            certCntList: [1, 2, 3, 4, 5, 6, 7],
+            certCntList: const [1, 2, 3, 4, 5, 6, 7],
           ),
         );
 
