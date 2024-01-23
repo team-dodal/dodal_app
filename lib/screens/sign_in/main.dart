@@ -4,6 +4,8 @@ import 'package:dodal_app/providers/create_user_cubit.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/screens/main_route/main.dart';
 import 'package:dodal_app/screens/sign_up/main.dart';
+import 'package:dodal_app/screens/sign_up/nickname_check_bloc.dart';
+import 'package:dodal_app/screens/sign_up/nickname_check_repository.dart';
 import 'package:dodal_app/services/user/response.dart';
 import 'package:dodal_app/services/user/service.dart';
 import 'package:dodal_app/theme/color.dart';
@@ -66,13 +68,25 @@ class SignInScreen extends StatelessWidget {
       if (context.mounted) {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (ctx) => BlocProvider(
-              create: (context) => CreateUserCubit(
-                socialId: id!,
-                email: email!,
-                socialType: type,
+            builder: (ctx) => RepositoryProvider(
+              create: (context) => NicknameCheckRepository(),
+              child: MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                    create: (context) => CreateUserCubit(
+                      socialId: id!,
+                      email: email!,
+                      socialType: type,
+                    ),
+                  ),
+                  BlocProvider(
+                    create: (context) => NicknameCheckBloc(
+                      context.read<NicknameCheckRepository>(),
+                    ),
+                  )
+                ],
+                child: const SignUpScreen(),
               ),
-              child: const SignUpScreen(),
             ),
           ),
         );

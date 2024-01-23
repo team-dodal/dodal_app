@@ -29,7 +29,7 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
   final Future<dynamic> _categories = CategoryService.getAllCategories();
 
   handleSelect(Tag value) {
-    List<Tag?> categoryList =
+    List<Tag> categoryList =
         BlocProvider.of<CreateUserCubit>(context).state.category;
     final copy = categoryList;
     bool isSelected = categoryList.contains(value);
@@ -39,7 +39,7 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
       copy.add(value);
     }
     setState(() {
-      context.read<CreateUserCubit>().updateData(category: copy);
+      context.read<CreateUserCubit>().updateCategory(copy);
     });
   }
 

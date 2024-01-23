@@ -1,16 +1,51 @@
 import 'dart:io';
 import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/utilities/social_auth.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CreateUser {
+class CreateUserCubit extends Cubit<CreateUser> {
   final SocialType socialType;
-  final String socialId, email;
-  late String nickname, content;
-  late File? image;
-  late List<Tag?> category;
+  final String socialId;
+  final String email;
 
-  CreateUser({
+  CreateUserCubit({
+    required this.socialId,
+    required this.email,
+    required this.socialType,
+  }) : super(CreateUser.init(
+          socialId: socialId,
+          email: email,
+          socialType: socialType,
+        ));
+
+  updateNickname(String nickname) {
+    emit(state.copyWith(nickname: nickname));
+  }
+
+  updateContent(String content) {
+    emit(state.copyWith(content: content));
+  }
+
+  updateImage(File? image) {
+    emit(state.copyWith(image: image));
+  }
+
+  updateCategory(List<Tag> category) {
+    emit(state.copyWith(category: category));
+  }
+}
+
+class CreateUser extends Equatable {
+  final SocialType socialType;
+  final String socialId;
+  final String email;
+  final String nickname;
+  final String content;
+  final File? image;
+  final List<Tag> category;
+
+  const CreateUser({
     required this.socialId,
     required this.email,
     required this.socialType,
@@ -20,11 +55,25 @@ class CreateUser {
     required this.category,
   });
 
-  copyWith({
+  CreateUser.init({
+    required String socialId,
+    required String email,
+    required SocialType socialType,
+  }) : this(
+          socialId: socialId,
+          email: email,
+          nickname: '',
+          image: null,
+          content: '',
+          category: [],
+          socialType: socialType,
+        );
+
+  CreateUser copyWith({
     String? nickname,
     String? content,
     File? image,
-    List<Tag?>? category,
+    List<Tag>? category,
   }) {
     return CreateUser(
       socialId: socialId,
@@ -36,41 +85,8 @@ class CreateUser {
       category: category ?? this.category,
     );
   }
-}
 
-class CreateUserCubit extends Cubit<CreateUser> {
-  final SocialType socialType;
-  final String socialId, email;
-
-  CreateUserCubit({
-    required this.socialId,
-    required this.email,
-    required this.socialType,
-  }) : super(
-          CreateUser(
-            socialId: socialId,
-            email: email,
-            nickname: '',
-            image: null,
-            content: '',
-            category: [],
-            socialType: socialType,
-          ),
-        );
-
-  updateData({
-    String? nickname,
-    String? content,
-    File? image,
-    List<Tag?>? category,
-  }) {
-    final updatedState = state.copyWith(
-      nickname: nickname,
-      image: image,
-      content: content,
-      category: category,
-    );
-
-    emit(updatedState);
-  }
+  @override
+  List<Object?> get props =>
+      [socialType, socialId, email, nickname, content, image, category];
 }

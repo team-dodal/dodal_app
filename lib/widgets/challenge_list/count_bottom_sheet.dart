@@ -16,18 +16,20 @@ class CountBottomSheet extends StatelessWidget {
     if (clone.contains(i)) {
       if (clone.length <= 1) return;
       clone.remove(i);
-      context.read<ChallengeListFilterCubit>().updateData(certCntList: clone);
+      context
+          .read<ChallengeListFilterCubit>()
+          .updateCertCnt(certCntList: clone);
     } else {
       context
           .read<ChallengeListFilterCubit>()
-          .updateData(certCntList: [...clone, i]);
+          .updateCertCnt(certCntList: [...clone, i]);
     }
   }
 
   _changeAll(BuildContext context) {
     context
         .read<ChallengeListFilterCubit>()
-        .updateData(certCntList: [1, 2, 3, 4, 5, 6, 7]);
+        .updateCertCnt(certCntList: [1, 2, 3, 4, 5, 6, 7]);
   }
 
   @override

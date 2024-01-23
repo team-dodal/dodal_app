@@ -9,7 +9,9 @@ class SortBottomSheet extends StatelessWidget {
   const SortBottomSheet({super.key});
 
   _onTap(BuildContext context, ConditionEnum condition) {
-    context.read<ChallengeListFilterCubit>().updateData(condition: condition);
+    context
+        .read<ChallengeListFilterCubit>()
+        .updateCondition(condition: condition);
     Navigator.pop(context);
   }
 
@@ -17,31 +19,32 @@ class SortBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return FilterBottomSheetLayout(
       child: BlocBuilder<ChallengeListFilterCubit, ChallengeListFilter>(
-          builder: (context, state) {
-        final condition = state.condition;
-        return Column(
-          children: ConditionEnum.values
-              .map(
-                (item) => ListTile(
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        item.displayName,
-                        style: context.body2(),
-                      ),
-                      if (item == condition)
-                        SvgPicture.asset('assets/icons/check_icon.svg')
-                    ],
+        builder: (context, state) {
+          final condition = state.condition;
+          return Column(
+            children: ConditionEnum.values
+                .map(
+                  (item) => ListTile(
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          item.displayName,
+                          style: context.body2(),
+                        ),
+                        if (item == condition)
+                          SvgPicture.asset('assets/icons/check_icon.svg')
+                      ],
+                    ),
+                    onTap: () {
+                      _onTap(context, item);
+                    },
                   ),
-                  onTap: () {
-                    _onTap(context, item);
-                  },
-                ),
-              )
-              .toList(),
-        );
-      }),
+                )
+                .toList(),
+          );
+        },
+      ),
     );
   }
 }

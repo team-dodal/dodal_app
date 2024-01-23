@@ -44,7 +44,7 @@ class _ListTabBarState extends State<ListTabBar> with TickerProviderStateMixin {
       tabController.index = selectedIdx;
       context
           .read<ChallengeListFilterCubit>()
-          .updateData(tag: list[selectedIdx].tags[0]);
+          .updateTag(tag: list[selectedIdx].tags[0]);
       setState(() {
         _categories = list;
       });
@@ -88,10 +88,12 @@ class _ListTabBarState extends State<ListTabBar> with TickerProviderStateMixin {
                   .map((category) => Tab(text: category.name))
                   .toList(),
               onTap: (value) {
-                context.read<ChallengeListFilterCubit>().updateData(
-                      category: _categories[value],
-                      tag: _categories[value].tags[0],
-                    );
+                context
+                    .read<ChallengeListFilterCubit>()
+                    .updateCategory(category: _categories[value]);
+                context
+                    .read<ChallengeListFilterCubit>()
+                    .updateTag(tag: _categories[value].tags[0]);
               },
             ),
             SizedBox(
@@ -138,7 +140,7 @@ class TagButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.read<ChallengeListFilterCubit>().updateData(tag: tag);
+        context.read<ChallengeListFilterCubit>().updateTag(tag: tag);
       },
       borderRadius: BorderRadius.circular(40),
       child: Ink(

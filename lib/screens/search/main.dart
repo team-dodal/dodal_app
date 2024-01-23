@@ -1,5 +1,3 @@
-import 'package:dodal_app/model/category_model.dart';
-import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/screens/search/search_result.dart';
 import 'package:dodal_app/theme/typo.dart';
@@ -65,15 +63,7 @@ class _SearchScreenState extends State<SearchScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => BlocProvider(
-          create: (ctx) => ChallengeListFilterCubit(
-            category: Category(
-              name: '전체',
-              subName: '',
-              value: null,
-              emoji: '',
-              tags: [const Tag(name: '전체', value: null)],
-            ),
-          ),
+          create: (ctx) => ChallengeListFilterCubit(),
           child: SearchResultScreen(word: word),
         ),
       ),

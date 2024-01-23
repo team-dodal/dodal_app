@@ -97,7 +97,7 @@ class _InputFormScreenState extends State<InputFormScreen> {
                   height: 100,
                   onChanged: (image) {
                     setState(() {
-                      context.read<CreateUserCubit>().updateData(image: image);
+                      context.read<CreateUserCubit>().updateImage(image);
                     });
                   },
                   image: state.image,
@@ -114,9 +114,7 @@ class _InputFormScreenState extends State<InputFormScreen> {
                   onChanged: (value) {
                     setState(() {
                       _nicknameChecked = false;
-                      context
-                          .read<CreateUserCubit>()
-                          .updateData(nickname: value);
+                      context.read<CreateUserCubit>().updateNickname(value);
                     });
                   },
                   child: ElevatedButton(
@@ -158,7 +156,7 @@ class _InputFormScreenState extends State<InputFormScreen> {
                   maxLength: 50,
                   multiLine: true,
                   onChanged: (value) {
-                    context.read<CreateUserCubit>().updateData(content: value);
+                    context.read<CreateUserCubit>().updateContent(value);
                   },
                 ),
               ],

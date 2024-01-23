@@ -98,78 +98,76 @@ class _ChallengeListScreenState extends State<ChallengeListScreen> {
           ),
         ],
       ),
-      body: BlocListener<ChallengeListFilterCubit, ChallengeListFilter>(
+      body: BlocConsumer<ChallengeListFilterCubit, ChallengeListFilter>(
         listener: (context, state) {
           pagingController.refresh();
         },
-        child: BlocBuilder<ChallengeListFilterCubit, ChallengeListFilter>(
-          builder: (context, state) {
-            return PagedListView<int, Challenge>(
-              pagingController: pagingController,
-              builderDelegate: PagedChildBuilderDelegate<Challenge>(
-                noItemsFoundIndicatorBuilder: (context) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const FilterTopBar(),
-                      const SizedBox(height: 130),
-                      NoListContext(
-                        title: '카테고리 관련 도전이 없습니다.',
-                        subTitle: '도전 그룹을 운영해 보는 건 어떠세요?',
-                        buttonText: '도전 생성하기',
-                        onButtonPress: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (ctx) => BlocProvider(
-                                create: (context) => CreateChallengeCubit(),
-                                child: const CreateChallengeScreen(),
-                              ),
+        builder: (context, state) {
+          return PagedListView<int, Challenge>(
+            pagingController: pagingController,
+            builderDelegate: PagedChildBuilderDelegate<Challenge>(
+              noItemsFoundIndicatorBuilder: (context) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const FilterTopBar(),
+                    const SizedBox(height: 130),
+                    NoListContext(
+                      title: '카테고리 관련 도전이 없습니다.',
+                      subTitle: '도전 그룹을 운영해 보는 건 어떠세요?',
+                      buttonText: '도전 생성하기',
+                      onButtonPress: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (ctx) => BlocProvider(
+                              create: (context) => CreateChallengeCubit(),
+                              child: const CreateChallengeScreen(),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                );
+              },
+              itemBuilder: (context, item, index) {
+                return Column(
+                  children: [
+                    if (index == 0) const FilterTopBar(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      child: OpenContainer(
+                        transitionType: ContainerTransitionType.fadeThrough,
+                        closedElevation: 0,
+                        closedBuilder: (context, action) {
+                          return InkWell(
+                            onTap: action,
+                            child: ListChallengeBox(
+                              id: item.id,
+                              title: item.title,
+                              tag: item.tag,
+                              thumbnailImg: item.thumbnailImg,
+                              adminProfile: item.adminProfile,
+                              adminNickname: item.adminNickname,
+                              userCnt: item.userCnt,
+                              certCnt: item.certCnt,
+                              recruitCnt: item.recruitCnt,
+                              isBookmarked: item.isBookmarked,
                             ),
                           );
                         },
+                        openBuilder: (context, action) => item.isJoined
+                            ? ChallengeRoute(id: item.id)
+                            : ChallengePreviewScreen(id: item.id),
                       ),
-                    ],
-                  );
-                },
-                itemBuilder: (context, item, index) {
-                  return Column(
-                    children: [
-                      if (index == 0) const FilterTopBar(),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
-                        child: OpenContainer(
-                          transitionType: ContainerTransitionType.fadeThrough,
-                          closedElevation: 0,
-                          closedBuilder: (context, action) {
-                            return InkWell(
-                              onTap: action,
-                              child: ListChallengeBox(
-                                id: item.id,
-                                title: item.title,
-                                tag: item.tag,
-                                thumbnailImg: item.thumbnailImg,
-                                adminProfile: item.adminProfile,
-                                adminNickname: item.adminNickname,
-                                userCnt: item.userCnt,
-                                certCnt: item.certCnt,
-                                recruitCnt: item.recruitCnt,
-                                isBookmarked: item.isBookmarked,
-                              ),
-                            );
-                          },
-                          openBuilder: (context, action) => item.isJoined
-                              ? ChallengeRoute(id: item.id)
-                              : ChallengePreviewScreen(id: item.id),
-                        ),
-                      )
-                    ],
-                  );
-                },
-              ),
-            );
-          },
-        ),
+                    )
+                  ],
+                );
+              },
+            ),
+          );
+        },
       ),
     );
   }
