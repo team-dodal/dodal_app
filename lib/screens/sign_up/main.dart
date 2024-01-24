@@ -1,15 +1,8 @@
-import 'dart:io';
-import 'package:dodal_app/providers/create_user_cubit.dart';
 import 'package:dodal_app/screens/sign_up/agreement_screen.dart';
 import 'package:dodal_app/screens/sign_up/input_form_screen.dart';
 import 'package:dodal_app/screens/sign_up/tag_select_screen.dart';
-import 'package:dodal_app/screens/sign_up/complete_screen.dart';
-import 'package:dodal_app/services/user/response.dart';
-import 'package:dodal_app/services/user/service.dart';
 import 'package:dodal_app/layout/create_screen_layout.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -19,35 +12,8 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  FlutterSecureStorage secureStorage = const FlutterSecureStorage();
   int _currentIndex = 0;
   int steps = 3;
-  File? image;
-
-  _submit() async {
-    final signUpData = BlocProvider.of<CreateUserCubit>(context).state;
-    SignUpResponse? res = await UserService.signUp(
-      socialType: signUpData.socialType,
-      socialId: signUpData.socialId,
-      email: signUpData.email,
-      nickname: signUpData.nickname,
-      profile: signUpData.image,
-      content: signUpData.content,
-      category: signUpData.category.map((e) => e!.value as String).toList(),
-    );
-    if (res == null) return;
-    if (res.accessToken != null && res.refreshToken != null) {
-      secureStorage.write(key: 'accessToken', value: res.accessToken);
-      secureStorage.write(key: 'refreshToken', value: res.refreshToken);
-
-      if (!mounted) return;
-
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (ctx) => const CompleteSignUpScreen()),
-        (route) => false,
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,9 +46,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         TagSelectScreen(
           steps: steps,
           step: _currentIndex + 1,
-          nextStep: () {
-            _submit();
-          },
         ),
       ],
     );

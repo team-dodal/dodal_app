@@ -1,6 +1,7 @@
 import 'package:dodal_app/model/category_model.dart';
-import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/providers/create_user_cubit.dart';
+import 'package:dodal_app/screens/sign_in/main.dart';
+import 'package:dodal_app/screens/sign_up/complete_screen.dart';
 import 'package:dodal_app/services/category/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/common/create_form_title.dart';
@@ -8,18 +9,17 @@ import 'package:dodal_app/widgets/common/category_content.dart';
 import 'package:dodal_app/widgets/common/submit_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class TagSelectScreen extends StatefulWidget {
   const TagSelectScreen({
     super.key,
     required this.step,
-    required this.nextStep,
     required this.steps,
   });
 
   final int step;
   final int steps;
-  final void Function() nextStep;
 
   @override
   State<TagSelectScreen> createState() => _TagSelectScreenState();
@@ -27,25 +27,35 @@ class TagSelectScreen extends StatefulWidget {
 
 class _TagSelectScreenState extends State<TagSelectScreen> {
   final Future<dynamic> _categories = CategoryService.getAllCategories();
+  FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 
-  handleSelect(Tag value) {
-    List<Tag> categoryList =
-        BlocProvider.of<CreateUserCubit>(context).state.category;
-    final copy = categoryList;
-    bool isSelected = categoryList.contains(value);
-    if (isSelected) {
-      copy.remove(value);
+  Future<void> _submit() async {
+    final res = await context.read<CreateUserCubit>().createUser();
+    if (res == null) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (ctx) => const SignInScreen()),
+        (route) => false,
+      );
     } else {
-      copy.add(value);
+      await secureStorage.write(
+        key: 'accessToken',
+        value: res["accessToken"],
+      );
+      await secureStorage.write(
+        key: 'refreshToken',
+        value: res["refreshToken"],
+      );
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (ctx) => const CompleteSignUpScreen()),
+        (route) => false,
+      );
     }
-    setState(() {
-      context.read<CreateUserCubit>().updateCategory(copy);
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreateUserCubit, CreateUser>(builder: (context, state) {
+    return BlocBuilder<CreateUserCubit, CreateUserState>(
+        builder: (context, state) {
       return Scaffold(
         appBar: AppBar(title: const Text('프로필 설정')),
         body: SingleChildScrollView(
@@ -73,7 +83,9 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
                       for (Category category in categories)
                         CategoryContent(
                           category: category,
-                          handleSelect: handleSelect,
+                          handleSelect: (value) {
+                            context.read<CreateUserCubit>().handleTag(value);
+                          },
                           itemList: state.category,
                         ),
                       const Center(
@@ -91,7 +103,7 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
         ),
         bottomSheet: SubmitButton(
           title: '완료',
-          onPress: state.category.isEmpty ? null : widget.nextStep,
+          onPress: state.category.isEmpty ? null : _submit,
         ),
       );
     });

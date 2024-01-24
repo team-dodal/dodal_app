@@ -1,8 +1,10 @@
 import 'package:dodal_app/model/category_model.dart';
 import 'package:dodal_app/model/tag_model.dart';
+import 'package:dodal_app/providers/create_user_cubit.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CategoryContent extends StatelessWidget {
   const CategoryContent({
@@ -16,71 +18,71 @@ class CategoryContent extends StatelessWidget {
   final void Function(Tag) handleSelect;
   final List<Tag?> itemList;
 
-  bool isSelected(Tag tag) {
-    if (itemList.isEmpty) return false;
-    return itemList.map((e) => e!.value).toList().contains(tag.value);
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
+    return BlocBuilder<CreateUserCubit, CreateUserState>(
+      builder: (context, state) {
+        bool isSelected(tag) => state.category.contains(tag);
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              category.name,
-              style: context.body1(fontWeight: FontWeight.bold),
+            Row(
+              children: [
+                Text(
+                  category.name,
+                  style: context.body1(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 2),
+                Text(category.emoji, style: context.body1()),
+              ],
             ),
-            const SizedBox(width: 2),
-            Text(category.emoji, style: context.body1()),
-          ],
-        ),
-        const SizedBox(height: 5),
-        Wrap(
-          children: [
-            for (Tag tag in category.tags)
-              Builder(builder: (ctx) {
-                return Padding(
-                  padding: const EdgeInsets.only(right: 4),
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(100)),
-                      ),
-                      side: BorderSide(
-                        color: isSelected(tag)
+            const SizedBox(height: 5),
+            Wrap(
+              children: [
+                for (Tag tag in category.tags)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 4),
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(100)),
+                        ),
+                        side: BorderSide(
+                          color: isSelected(tag)
+                              ? AppColors.lightOrange
+                              : AppColors.systemGrey3,
+                        ),
+                        backgroundColor: isSelected(tag)
                             ? AppColors.lightOrange
-                            : AppColors.systemGrey3,
+                            : AppColors.bgColor1,
                       ),
-                      backgroundColor: isSelected(tag)
-                          ? AppColors.lightOrange
-                          : AppColors.bgColor1,
-                    ),
-                    onPressed: () {
-                      handleSelect(tag);
-                    },
-                    child: Text(
-                      '${tag.name}',
-                      style: context.body4(
-                        color: isSelected(tag)
-                            ? AppColors.orange
-                            : AppColors.systemGrey1,
-                        fontWeight:
-                            isSelected(tag) ? FontWeight.bold : FontWeight.w500,
+                      onPressed: () {
+                        handleSelect(tag);
+                      },
+                      child: Text(
+                        '${tag.name}',
+                        style: context.body4(
+                          color: isSelected(tag)
+                              ? AppColors.orange
+                              : AppColors.systemGrey1,
+                          fontWeight: isSelected(tag)
+                              ? FontWeight.bold
+                              : FontWeight.w500,
+                        ),
                       ),
                     ),
-                  ),
-                );
-              })
+                  )
+              ],
+            ),
+            const SizedBox(height: 25)
           ],
-        ),
-        const SizedBox(height: 25)
-      ],
+        );
+      },
     );
   }
 }
