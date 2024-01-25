@@ -1,6 +1,14 @@
 import 'package:dodal_app/model/tag_model.dart';
+import 'package:equatable/equatable.dart';
 
-class Category {
+class Category extends Equatable {
+  final String name;
+  final String subName;
+  final String emoji;
+  final String? value;
+  List<Tag> tags;
+  late String iconPath;
+
   Category({
     required this.name,
     required this.subName,
@@ -9,16 +17,25 @@ class Category {
     required this.tags,
   }) {
     if (value != null) {
-      iconPath = getIconPath(value);
+      iconPath = _getIconPath(value);
     }
   }
 
-  final String name, subName, emoji;
-  final String? value;
-  List<Tag> tags;
-  late String iconPath;
+  factory Category.fromJson(Map<String, dynamic> json) {
+    final List<Tag> tagList = (json['tags'] as List).map((tag) {
+      return Tag(name: tag['name'], value: tag['value']);
+    }).toList();
 
-  getIconPath(value) {
+    return Category(
+      name: json['name'],
+      subName: json['sub_name'],
+      value: json['value'],
+      emoji: json['emoji'],
+      tags: tagList,
+    );
+  }
+
+  String _getIconPath(value) {
     switch (value) {
       case '001':
         return 'assets/icons/category/health_category_icon.svg';
@@ -30,8 +47,13 @@ class Category {
         return 'assets/icons/category/clock_category_icon.svg';
       case '005':
         return 'assets/icons/category/light_category_icon.svg';
+      default:
+        return '';
     }
   }
+
+  @override
+  List<Object?> get props => [name, subName, emoji, value, tags, iconPath];
 }
 
 class MyCategory {
@@ -45,27 +67,4 @@ class MyCategory {
     required this.emoji,
     required this.hashTags,
   });
-}
-
-List<Category> parseCategoriesByJson(Map<String, dynamic> data) {
-  final List<dynamic> categoryList = data['categories'];
-  final List<Category> categories = categoryList.map((categoryData) {
-    final List<dynamic> tagList = categoryData['tags'];
-    final List<Tag> tags = tagList.map((tagData) {
-      return Tag(
-        name: tagData['name'],
-        value: tagData['value'],
-      );
-    }).toList();
-
-    return Category(
-      name: categoryData['name'],
-      subName: categoryData['sub_name'],
-      value: categoryData['value'],
-      emoji: categoryData['emoji'],
-      tags: tags,
-    );
-  }).toList();
-
-  return categories;
 }

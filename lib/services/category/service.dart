@@ -11,7 +11,9 @@ class CategoryService {
       final res = await service.get('/api/v1/categories/tags');
 
       final responseData = res.data['result'];
-      final List<Category> categories = parseCategoriesByJson(responseData);
+      List<Category> categories = responseData['categories']
+          .map<Category>((value) => Category.fromJson(value))
+          .toList();
 
       return categories;
     } on DioException catch (err) {

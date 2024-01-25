@@ -32,7 +32,7 @@ class _ListTabBarState extends State<ListTabBar> with TickerProviderStateMixin {
         subName: '',
         value: null,
         emoji: '',
-        tags: [],
+        tags: const [],
       ),
       ...categoryList
     ]);

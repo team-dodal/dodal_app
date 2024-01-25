@@ -1,10 +1,7 @@
-import 'dart:async';
-
-import 'package:dodal_app/model/user_model.dart';
+import 'package:dodal_app/providers/category_list_bloc.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/screens/main_route/main.dart';
 import 'package:dodal_app/screens/sign_in/main.dart';
-import 'package:dodal_app/services/user/service.dart';
 import 'package:dodal_app/theme/theme_data.dart';
 import 'package:dodal_app/utilities/fcm_setting.dart';
 import 'package:flutter/cupertino.dart';
@@ -51,39 +48,30 @@ class _AppState extends State<App> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => UserCubit()),
+        BlocProvider(create: (context) => UserBloc(widget.fcmToken)),
+        BlocProvider(create: (context) => CategoryListBloc()),
       ],
       child: MaterialApp(
         title: '도달',
         theme: lightTheme,
         navigatorKey: navigatorKey,
-        home: StreamBuilder(
-          stream: Stream.fromFuture(UserService.user()),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Scaffold(
-                body: Center(child: CupertinoActivityIndicator()),
-              );
-            } else {
-              if (snapshot.hasData) {
-                (() async {
-                  await UserService.updateFcmToken(widget.fcmToken);
-                })();
-                User user = snapshot.data!;
-                context.read<UserCubit>().set(User(
-                      id: user.id,
-                      email: user.email,
-                      nickname: user.nickname,
-                      content: user.content,
-                      profileUrl: user.profileUrl,
-                      registerAt: user.registerAt,
-                      socialType: user.socialType,
-                      categoryList: user.categoryList,
-                      tagList: user.tagList,
-                    ));
-                return const MainRoute();
-              } else {
+        home: BlocConsumer<UserBloc, UserBlocState>(
+          listener: (context, state) {
+            if (state.status == UserBlocStatus.loaded) {
+              context.read<UserCubit>().set(state.result!);
+            }
+          },
+          builder: (context, state) {
+            switch (state.status) {
+              case UserBlocStatus.init:
+              case UserBlocStatus.loading:
+                return const Scaffold(
+                  body: Center(child: CupertinoActivityIndicator()),
+                );
+              case UserBlocStatus.error:
                 return const SignInScreen();
-              }
+              case UserBlocStatus.loaded:
+                return const MainRoute();
             }
           },
         ),
