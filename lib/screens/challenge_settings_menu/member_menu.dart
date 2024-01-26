@@ -59,7 +59,7 @@ class MemberMenu extends StatelessWidget {
           onTap: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => const ReportScreen(),
+                builder: (context) => ReportScreen(roomId: challenge.id),
               ),
             );
           },

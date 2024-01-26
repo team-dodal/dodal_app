@@ -46,7 +46,8 @@ class _FeedContentFooterState extends State<FeedContentFooter> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const ReportScreen(),
+                      builder: (context) =>
+                          ReportScreen(userId: widget.feedContent.userId),
                     ),
                   );
                 },

@@ -1,9 +1,12 @@
+import 'package:dodal_app/providers/user_cubit.dart';
+import 'package:dodal_app/services/common/firestore.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/input/text_input.dart';
 import 'package:dodal_app/widgets/common/submit_button.dart';
 import 'package:dodal_app/widgets/common/system_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 enum ReportItem {
   value_1('상업적/홍보성'),
@@ -19,8 +22,10 @@ enum ReportItem {
 }
 
 class ReportScreen extends StatefulWidget {
-  const ReportScreen({super.key});
+  const ReportScreen({super.key, this.roomId, this.userId});
 
+  final int? roomId;
+  final int? userId;
   @override
   State<ReportScreen> createState() => _ReportScreenState();
 }
@@ -28,6 +33,24 @@ class ReportScreen extends StatefulWidget {
 class _ReportScreenState extends State<ReportScreen> {
   ReportItem? _reportValue;
   TextEditingController textEditingController = TextEditingController();
+
+  void _report() async {
+    final res = await FireStoreService.reportUser(
+      userId: context.read<UserBloc>().state.result!.id,
+      userName: context.read<UserBloc>().state.result!.nickname,
+      reason: _reportValue!.title,
+      detailReason: textEditingController.text,
+      targetRoomId: widget.roomId,
+      targetUserId: widget.userId,
+    );
+    if (res) {
+      Navigator.pop(context);
+      showDialog(
+        context: context,
+        builder: (context) => const SystemDialog(subTitle: '신고가 완료되었습니다.'),
+      );
+    }
+  }
 
   @override
   void dispose() {
@@ -74,18 +97,13 @@ class _ReportScreenState extends State<ReportScreen> {
         ],
       ),
       bottomSheet: SubmitButton(
-          onPress: _reportValue != null
-              ? () {
-                  Navigator.pop(context);
-                  showDialog(
-                    context: context,
-                    builder: (context) => const SystemDialog(
-                      subTitle: '신고가 완료되었습니다.',
-                    ),
-                  );
-                }
-              : null,
-          title: '신고하기'),
+        onPress: _reportValue != null
+            ? () {
+                _report();
+              }
+            : null,
+        title: '신고하기',
+      ),
     );
   }
 }

@@ -43,7 +43,8 @@ class CommentBox extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const ReportScreen(),
+                      builder: (context) =>
+                          ReportScreen(userId: comment.userId),
                     ),
                   );
                 },
