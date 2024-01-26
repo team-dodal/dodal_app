@@ -1,9 +1,19 @@
 import 'package:dodal_app/model/category_model.dart';
+import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/services/category/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 enum CategoryListStatus { init, loading, loaded, error }
+
+Category CATEGORY_OF_ALL = Category(
+  name: '전체',
+  subName: '',
+  value: null,
+  emoji: '',
+  tags: const [],
+);
+const TAG_OF_ALL = Tag(name: '전체', value: null);
 
 class CategoryListBloc extends Bloc<CategoryListEvent, CategoryListState> {
   CategoryListBloc() : super(CategoryListState.init()) {
@@ -57,6 +67,17 @@ class CategoryListState extends Equatable {
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }
+
+  // List<Category> displayList() {
+  //   if (status == CategoryListStatus.init) {
+  //     return [...result].map((category) {
+  //       category.tags.insert(0, TAG_OF_ALL);
+  //       return category;
+  //     }).toList();
+  //   } else {
+  //     return [];
+  //   }
+  // }
 
   @override
   List<Object?> get props => [status, result, errorMessage];
