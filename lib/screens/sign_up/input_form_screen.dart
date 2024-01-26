@@ -1,9 +1,8 @@
 import 'package:dodal_app/providers/create_user_cubit.dart';
 import 'package:dodal_app/providers/nickname_check_bloc.dart';
-import 'package:dodal_app/theme/color.dart';
-import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/create_form_title.dart';
 import 'package:dodal_app/widgets/common/avatar_image.dart';
+import 'package:dodal_app/widgets/common/input/nickname_input.dart';
 import 'package:dodal_app/widgets/common/submit_button.dart';
 import 'package:dodal_app/widgets/common/input/text_input.dart';
 import 'package:flutter/material.dart';
@@ -74,7 +73,12 @@ class _InputFormScreenState extends State<InputFormScreen> {
                     image: state.image,
                   ),
                   const SizedBox(height: 35),
-                  NicknameInput(nicknameController: nicknameController),
+                  NicknameInput(
+                    nicknameController: nicknameController,
+                    onApproveNickname: (nickname) {
+                      context.read<CreateUserCubit>().updateNickname(nickname);
+                    },
+                  ),
                   const SizedBox(height: 40),
                   TextInput(
                     controller: contentController,
@@ -100,65 +104,6 @@ class _InputFormScreenState extends State<InputFormScreen> {
                   : null,
             );
           }),
-        );
-      },
-    );
-  }
-}
-
-class NicknameInput extends StatelessWidget {
-  const NicknameInput({super.key, required this.nicknameController});
-
-  final TextEditingController nicknameController;
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocConsumer<NicknameBloc, NicknameState>(
-      listener: (context, state) {
-        context.read<CreateUserCubit>().updateNickname(state.nickname);
-      },
-      builder: (context, state) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextInput(
-              controller: nicknameController,
-              title: '닉네임',
-              placeholder: '사용하실 닉네임을 입력해주세요.',
-              required: true,
-              wordLength: '${nicknameController.text.length}/16',
-              maxLength: 16,
-              textInputAction: TextInputAction.next,
-              onChanged: (value) {
-                context.read<NicknameBloc>().add(ChangeNicknameEvent(value));
-              },
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                ),
-                onPressed: state.status == NicknameStatus.success
-                    ? null
-                    : () {
-                        context.read<NicknameBloc>().add(CheckNicknameEvent());
-                      },
-                child: const Text('중복 확인'),
-              ),
-            ),
-            const SizedBox(height: 6),
-            if (state.status == NicknameStatus.success)
-              Text(
-                '중복 확인 완료되었습니다.',
-                style: context.caption(color: AppColors.success),
-              ),
-            if (state.status == NicknameStatus.error)
-              Text(
-                state.errorMessage!,
-                style: context.caption(color: AppColors.danger),
-              ),
-          ],
         );
       },
     );

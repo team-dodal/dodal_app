@@ -1,3 +1,6 @@
+import 'package:dodal_app/providers/modify_user_cubit.dart';
+import 'package:dodal_app/providers/nickname_check_bloc.dart';
+import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/screens/modify_user/main.dart';
 import 'package:dodal_app/services/user/response.dart';
 import 'package:dodal_app/theme/color.dart';
@@ -5,6 +8,7 @@ import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/avatar_image.dart';
 import 'package:dodal_app/widgets/common/small_tag.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class UserInfoBox extends StatelessWidget {
@@ -43,7 +47,28 @@ class UserInfoBox extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context)
                         .push(MaterialPageRoute(
-                      builder: (ctx) => const ModifyUserScreen(),
+                      builder: (ctx) => MultiBlocProvider(
+                        providers: [
+                          BlocProvider(
+                            create: (context) => ModifyUserCubit(
+                              nickname:
+                                  context.read<UserCubit>().state!.nickname,
+                              content: context.read<UserCubit>().state!.content,
+                              image:
+                                  context.read<UserCubit>().state!.profileUrl,
+                              category:
+                                  context.read<UserCubit>().state!.tagList,
+                            ),
+                          ),
+                          BlocProvider(
+                            create: (context) => NicknameBloc(
+                              nickname:
+                                  context.read<UserCubit>().state!.nickname,
+                            ),
+                          ),
+                        ],
+                        child: const ModifyUserScreen(),
+                      ),
                     ))
                         .then(
                       (value) {

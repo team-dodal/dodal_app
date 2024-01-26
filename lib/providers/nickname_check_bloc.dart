@@ -5,7 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 enum NicknameStatus { init, loading, success, error }
 
 class NicknameBloc extends Bloc<NicknameEvent, NicknameState> {
-  NicknameBloc() : super(const NicknameState.init()) {
+  final String? nickname;
+
+  NicknameBloc({this.nickname}) : super(NicknameState.init(nickname)) {
     on<CheckNicknameEvent>(_checkNickname);
     on<ChangeNicknameEvent>(_changeNickname);
   }
@@ -62,7 +64,12 @@ class NicknameState extends Equatable {
     this.errorMessage,
   });
 
-  const NicknameState.init() : this(status: NicknameStatus.init, nickname: '');
+  const NicknameState.init(String? nickname)
+      : this(
+          status:
+              nickname == null ? NicknameStatus.init : NicknameStatus.success,
+          nickname: nickname ?? '',
+        );
 
   NicknameState copyWith({
     NicknameStatus? status,

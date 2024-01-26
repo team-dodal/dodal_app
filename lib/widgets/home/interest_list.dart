@@ -3,6 +3,8 @@ import 'package:dodal_app/model/category_model.dart';
 import 'package:dodal_app/model/challenge_code_enum.dart';
 import 'package:dodal_app/model/challenge_model.dart';
 import 'package:dodal_app/model/user_model.dart';
+import 'package:dodal_app/providers/modify_user_cubit.dart';
+import 'package:dodal_app/providers/nickname_check_bloc.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/screens/challenge_preview/main.dart';
 import 'package:dodal_app/screens/challenge_route/main.dart';
@@ -52,7 +54,41 @@ class InterestList extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const ModifyUserScreen()),
+                              builder: (context) => MultiBlocProvider(
+                                providers: [
+                                  BlocProvider(
+                                    create: (context) => ModifyUserCubit(
+                                      nickname: context
+                                          .read<UserCubit>()
+                                          .state!
+                                          .nickname,
+                                      content: context
+                                          .read<UserCubit>()
+                                          .state!
+                                          .content,
+                                      image: context
+                                          .read<UserCubit>()
+                                          .state!
+                                          .profileUrl,
+                                      category: context
+                                          .read<UserCubit>()
+                                          .state!
+                                          .tagList,
+                                    ),
+                                    child: const ModifyUserScreen(),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) => NicknameBloc(
+                                      nickname: context
+                                          .read<UserCubit>()
+                                          .state!
+                                          .nickname,
+                                    ),
+                                  ),
+                                ],
+                                child: const ModifyUserScreen(),
+                              ),
+                            ),
                           );
                         },
                         child: const Row(
