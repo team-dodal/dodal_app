@@ -47,7 +47,6 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => UserCubit()),
         BlocProvider(create: (context) => UserBloc(widget.fcmToken)),
         BlocProvider(create: (context) => CategoryListBloc()),
       ],
@@ -55,12 +54,7 @@ class _AppState extends State<App> {
         title: '도달',
         theme: lightTheme,
         navigatorKey: navigatorKey,
-        home: BlocConsumer<UserBloc, UserBlocState>(
-          listener: (context, state) {
-            if (state.status == UserBlocStatus.loaded) {
-              context.read<UserCubit>().set(state.result!);
-            }
-          },
+        home: BlocBuilder<UserBloc, UserBlocState>(
           builder: (context, state) {
             switch (state.status) {
               case UserBlocStatus.init:

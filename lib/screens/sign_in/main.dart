@@ -47,18 +47,18 @@ class SignInScreen extends StatelessWidget {
     if (res != null && res.isSigned) {
       secureStorage.write(key: 'accessToken', value: res.accessToken);
       secureStorage.write(key: 'refreshToken', value: res.refreshToken);
-
-      context.read<UserCubit>().set(User(
-            id: res.id,
-            email: res.email,
-            nickname: res.nickname,
-            content: res.content,
-            profileUrl: res.profileUrl,
-            registerAt: res.registerAt,
-            socialType: res.socialType,
-            categoryList: res.categoryList,
-            tagList: res.tagList,
-          ));
+      User user = User(
+        id: res.id,
+        email: res.email,
+        nickname: res.nickname,
+        content: res.content,
+        profileUrl: res.profileUrl,
+        registerAt: res.registerAt,
+        socialType: res.socialType,
+        categoryList: res.categoryList,
+        tagList: res.tagList,
+      );
+      context.read<UserBloc>().add(UpdateUserBlocEvent(user));
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (ctx) => const MainRoute()),
         (route) => false,

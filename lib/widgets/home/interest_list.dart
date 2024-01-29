@@ -2,7 +2,6 @@ import 'package:animations/animations.dart';
 import 'package:dodal_app/model/category_model.dart';
 import 'package:dodal_app/model/challenge_code_enum.dart';
 import 'package:dodal_app/model/challenge_model.dart';
-import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/providers/modify_user_cubit.dart';
 import 'package:dodal_app/providers/nickname_check_bloc.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
@@ -59,20 +58,24 @@ class InterestList extends StatelessWidget {
                                   BlocProvider(
                                     create: (context) => ModifyUserCubit(
                                       nickname: context
-                                          .read<UserCubit>()
-                                          .state!
+                                          .read<UserBloc>()
+                                          .state
+                                          .result!
                                           .nickname,
                                       content: context
-                                          .read<UserCubit>()
-                                          .state!
+                                          .read<UserBloc>()
+                                          .state
+                                          .result!
                                           .content,
                                       image: context
-                                          .read<UserCubit>()
-                                          .state!
+                                          .read<UserBloc>()
+                                          .state
+                                          .result!
                                           .profileUrl,
                                       category: context
-                                          .read<UserCubit>()
-                                          .state!
+                                          .read<UserBloc>()
+                                          .state
+                                          .result!
                                           .tagList,
                                     ),
                                     child: const ModifyUserScreen(),
@@ -80,8 +83,9 @@ class InterestList extends StatelessWidget {
                                   BlocProvider(
                                     create: (context) => NicknameBloc(
                                       nickname: context
-                                          .read<UserCubit>()
-                                          .state!
+                                          .read<UserBloc>()
+                                          .state
+                                          .result!
                                           .nickname,
                                     ),
                                   ),
@@ -102,17 +106,18 @@ class InterestList extends StatelessWidget {
                   ],
                 ),
               ),
-              BlocBuilder<UserCubit, User?>(
-                builder: (context, state) {
-                  List<MyCategory> categoryList = state!.categoryList;
-                  return ExpandablePageView.builder(
-                    itemCount: categoryList.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) =>
-                        InterestCategoryCard(category: categoryList[index]),
-                  );
-                },
-              )
+              ExpandablePageView.builder(
+                itemCount:
+                    context.read<UserBloc>().state.result!.categoryList.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) => InterestCategoryCard(
+                  category: context
+                      .read<UserBloc>()
+                      .state
+                      .result!
+                      .categoryList[index],
+                ),
+              ),
             ],
           ),
         ),

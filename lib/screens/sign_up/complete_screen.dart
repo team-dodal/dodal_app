@@ -19,18 +19,19 @@ class CompleteSignUpScreen extends StatelessWidget {
         builder: (context, snapshot) {
           Widget? child;
           if (snapshot.connectionState == ConnectionState.done) {
-            User user = snapshot.data!;
-            context.read<UserCubit>().set(User(
-                  id: user.id,
-                  email: user.email,
-                  nickname: user.nickname,
-                  content: user.content,
-                  profileUrl: user.profileUrl,
-                  registerAt: user.registerAt,
-                  socialType: user.socialType,
-                  categoryList: user.categoryList,
-                  tagList: user.tagList,
-                ));
+            User res = snapshot.data!;
+            User user = User(
+              id: res.id,
+              email: res.email,
+              nickname: res.nickname,
+              content: res.content,
+              profileUrl: res.profileUrl,
+              registerAt: res.registerAt,
+              socialType: res.socialType,
+              categoryList: res.categoryList,
+              tagList: res.tagList,
+            );
+            context.read<UserBloc>().add(UpdateUserBlocEvent(user));
             final String nickname = snapshot.data!.nickname;
             child = Column(
               children: [

@@ -39,7 +39,7 @@ class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
             onPressed: () {
               secureStorage.deleteAll();
               if (!mounted) return;
-              context.read<UserCubit>().clear();
+              context.read<UserBloc>().add(ClearUserBlocEvent());
               Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(builder: (ctx) => const SignInScreen()),
                   (route) => false);
@@ -69,7 +69,7 @@ class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
               await UserService.removeUser();
               await secureStorage.deleteAll();
               if (!mounted) return;
-              context.read<UserCubit>().clear();
+              context.read<UserBloc>().add(ClearUserBlocEvent());
 
               if (!mounted) return;
               Navigator.of(context).pushAndRemoveUntil(

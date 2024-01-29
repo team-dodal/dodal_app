@@ -14,12 +14,12 @@ class NoticeBox extends StatelessWidget {
   final OneChallengeResponse challenge;
 
   _goNoticeScreen(BuildContext context, int? openIndex) {
-    final user = BlocProvider.of<UserCubit>(context).state!;
+    final user = BlocProvider.of<UserBloc>(context).state.result;
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => RoomNoticeListScreen(
           id: challenge.id,
-          isAdmin: challenge.hostId == user.id,
+          isAdmin: challenge.hostId == user!.id,
           openIndex: openIndex,
         ),
       ),

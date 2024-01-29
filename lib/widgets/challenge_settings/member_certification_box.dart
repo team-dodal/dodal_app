@@ -88,7 +88,7 @@ class _MemberCertificationBoxState extends State<MemberCertificationBox> {
               ),
               Builder(
                 builder: (context) {
-                  final state = BlocProvider.of<UserCubit>(context).state;
+                  final state = BlocProvider.of<UserBloc>(context).state.result;
                   if (state!.id != widget.user.userId) {
                     return TextButton(
                       onPressed: () {

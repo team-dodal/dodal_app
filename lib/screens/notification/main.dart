@@ -20,7 +20,7 @@ class _NotiFicationScreenState extends State<NotiFicationScreen> {
   bool _isLoading = true;
 
   _deleteAlarmList() async {
-    final userId = context.read<UserCubit>().state!.id;
+    final userId = context.read<UserBloc>().state.result!.id;
     await AlarmService.deleteAllAlarmList(userId: userId);
     setState(() {
       _list = [];
@@ -28,7 +28,7 @@ class _NotiFicationScreenState extends State<NotiFicationScreen> {
   }
 
   _getAlarmList() async {
-    final userId = context.read<UserCubit>().state!.id;
+    final userId = context.read<UserBloc>().state.result!.id;
     final res = await AlarmService.getAllAlarmList(userId: userId);
     if (res == null) return;
     setState(() {

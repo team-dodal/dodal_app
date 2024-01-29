@@ -15,7 +15,7 @@ class GroupSettingsMenuScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userId = BlocProvider.of<UserCubit>(context).state!.id;
+    final userId = BlocProvider.of<UserBloc>(context).state.result!.id;
     bool isHost = challenge.hostId == userId;
     bool isJoined = challenge.isJoin;
 

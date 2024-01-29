@@ -51,19 +51,35 @@ class UserInfoBox extends StatelessWidget {
                         providers: [
                           BlocProvider(
                             create: (context) => ModifyUserCubit(
-                              nickname:
-                                  context.read<UserCubit>().state!.nickname,
-                              content: context.read<UserCubit>().state!.content,
-                              image:
-                                  context.read<UserCubit>().state!.profileUrl,
-                              category:
-                                  context.read<UserCubit>().state!.tagList,
+                              nickname: context
+                                  .read<UserBloc>()
+                                  .state
+                                  .result!
+                                  .nickname,
+                              content: context
+                                  .read<UserBloc>()
+                                  .state
+                                  .result!
+                                  .content,
+                              image: context
+                                  .read<UserBloc>()
+                                  .state
+                                  .result!
+                                  .profileUrl,
+                              category: context
+                                  .read<UserBloc>()
+                                  .state
+                                  .result!
+                                  .tagList,
                             ),
                           ),
                           BlocProvider(
                             create: (context) => NicknameBloc(
-                              nickname:
-                                  context.read<UserCubit>().state!.nickname,
+                              nickname: context
+                                  .read<UserBloc>()
+                                  .state
+                                  .result!
+                                  .nickname,
                             ),
                           ),
                         ],

@@ -43,7 +43,7 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
     });
     User? res = await context.read<ModifyUserCubit>().modifyUser();
     if (res == null) return;
-    context.read<UserCubit>().set(res);
+    context.read<UserBloc>().add(UpdateUserBlocEvent(res));
     setState(() {
       _isLoading = false;
     });

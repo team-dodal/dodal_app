@@ -3,20 +3,6 @@ import 'package:dodal_app/services/user/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class UserCubit extends Cubit<User?> {
-  UserCubit() : super(null);
-
-  void set(User user) {
-    if (user.toString() != state.toString()) {
-      emit(user);
-    }
-  }
-
-  void clear() {
-    emit(null);
-  }
-}
-
 enum UserBlocStatus { init, loading, loaded, error }
 
 class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
@@ -24,6 +10,8 @@ class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
 
   UserBloc(this.fcmToken) : super(const UserBlocState.init()) {
     on<LoadUserBlocEvent>(_loadData);
+    on<UpdateUserBlocEvent>(_updateUser);
+    on<ClearUserBlocEvent>(_clearUser);
     add(LoadUserBlocEvent(fcmToken));
   }
 
@@ -44,6 +32,14 @@ class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
     }
   }
 
+  _updateUser(UpdateUserBlocEvent event, emit) async {
+    emit(state.copyWith(result: event.user));
+  }
+
+  _clearUser(ClearUserBlocEvent event, emit) async {
+    emit(state.copyWith(result: null));
+  }
+
   _postFcmToken(String fcmToken) async {
     await UserService.updateFcmToken(fcmToken);
   }
@@ -54,6 +50,19 @@ abstract class UserBlocEvent extends Equatable {}
 class LoadUserBlocEvent extends UserBlocEvent {
   final String fcmToken;
   LoadUserBlocEvent(this.fcmToken);
+  @override
+  List<Object?> get props => [fcmToken];
+}
+
+class UpdateUserBlocEvent extends UserBlocEvent {
+  final User user;
+  UpdateUserBlocEvent(this.user);
+  @override
+  List<Object?> get props => [user];
+}
+
+class ClearUserBlocEvent extends UserBlocEvent {
+  ClearUserBlocEvent();
   @override
   List<Object?> get props => [];
 }

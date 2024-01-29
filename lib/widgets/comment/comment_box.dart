@@ -24,11 +24,11 @@ class CommentBox extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       builder: (context) {
-        final state = BlocProvider.of<UserCubit>(context).state!;
+        final state = BlocProvider.of<UserBloc>(context).state.result;
         return FilterBottomSheetLayout(
           child: Column(
             children: [
-              if (comment.userId == state.id)
+              if (comment.userId == state!.id)
                 ListTile(
                   title: Text('삭제하기', style: context.body2()),
                   onTap: () async {
