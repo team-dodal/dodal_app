@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/helper/slide_page_route.dart';
 import 'package:dodal_app/model/certification_code_enum.dart';
+import 'package:dodal_app/providers/create_feed_bloc.dart';
 import 'package:dodal_app/screens/challenge_route/chat_screen.dart';
 import 'package:dodal_app/screens/challenge_route/home_feed_screen.dart';
 import 'package:dodal_app/screens/challenge_route/ranking_screen.dart';
@@ -10,6 +11,7 @@ import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/widgets/challenge_room/challenge_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Route {
   final String name;
@@ -132,8 +134,10 @@ class _ChallengeRouteState extends State<ChallengeRoute>
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            CreateFeedScreen(challenge: _challenge!),
+                        builder: (context) => BlocProvider(
+                          create: (context) => CreateFeedBloc(),
+                          child: CreateFeedScreen(challenge: _challenge!),
+                        ),
                       ),
                     );
                     setState(() {});

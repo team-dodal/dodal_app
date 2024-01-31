@@ -1,15 +1,16 @@
-import 'dart:io';
+import 'package:dodal_app/providers/create_feed_bloc.dart';
 import 'package:dodal_app/screens/challenge_route/main.dart';
 import 'package:dodal_app/services/challenge/response.dart';
-import 'package:dodal_app/services/challenge/service.dart';
-import 'package:dodal_app/utilities/add_watermark.dart';
-import 'package:dodal_app/utilities/image_compress.dart';
+import 'package:dodal_app/theme/color.dart';
+import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/image_bottom_sheet.dart';
 import 'package:dodal_app/widgets/common/system_dialog.dart';
 import 'package:dodal_app/widgets/common/input/text_input.dart';
 import 'package:dodal_app/widgets/create_feed/feed_bottom_sheet.dart';
 import 'package:dodal_app/widgets/create_feed/feed_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CreateFeedScreen extends StatefulWidget {
   const CreateFeedScreen({super.key, required this.challenge});
@@ -23,7 +24,6 @@ class CreateFeedScreen extends StatefulWidget {
 class _CreateFeedScreenState extends State<CreateFeedScreen> {
   TextEditingController contentController = TextEditingController();
   GlobalKey frameKey = GlobalKey();
-  File? _image;
 
   _dismissKeyboard() {
     FocusScopeNode currentFocus = FocusScope.of(context);
@@ -32,36 +32,19 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
     }
   }
 
-  _showBottomSheet(BuildContext context) {
+  _showBottomSheet() {
     _dismissKeyboard();
     showModalBottomSheet(
       context: context,
-      builder: (context) => ImageBottomSheet(
+      builder: (_) => ImageBottomSheet(
         setImage: (image) {
-          setState(() {
-            _image = image;
-          });
+          context.read<CreateFeedBloc>().add(ChangeImageCreateFeedEvent(image));
         },
       ),
     );
   }
 
-  _createFeed() async {
-    final file = await captureCreateImage(frameKey);
-    if (file == null) return;
-    final compressedFile = await imageCompress(file);
-
-    if (!mounted) return;
-    Navigator.pop(context);
-
-    final res = await ChallengeService.createFeed(
-      challengeId: widget.challenge.id,
-      content: contentController.text,
-      image: compressedFile,
-    );
-    if (!mounted) return;
-    if (!res) return;
-
+  _successAlert() {
     showDialog(
       context: context,
       builder: (ctx) => SystemDialog(
@@ -84,10 +67,18 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
     );
   }
 
+  _errorAlert(String errorMessage) {
+    showDialog(
+      context: context,
+      builder: (ctx) => SystemDialog(subTitle: errorMessage),
+    );
+    Navigator.pop(context);
+  }
+
   _handleSubmit() async {
     showDialog(
       context: context,
-      builder: (context) => SystemDialog(
+      builder: (_) => SystemDialog(
         title: '인증 게시물을 업로드 하시겠어요?',
         subTitle: '업로드 후에 삭제는 가능하지만, 수정은 불가능합니다.',
         children: [
@@ -100,13 +91,26 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
           ),
           SystemDialogButton(
             text: '업로드하기',
-            onPressed: () async {
-              await _createFeed();
+            onPressed: () {
+              context
+                  .read<CreateFeedBloc>()
+                  .add(SubmitCreateFeedEvent(widget.challenge.id, frameKey));
+              Navigator.pop(context);
             },
           ),
         ],
       ),
     );
+  }
+
+  bool _buttonDisabled() {
+    if (context.read<CreateFeedBloc>().state.image == null) return true;
+    if (context.read<CreateFeedBloc>().state.content.isEmpty) return true;
+    if (context.read<CreateFeedBloc>().state.status ==
+        CreateFeedStatus.loading) {
+      return true;
+    }
+    return false;
   }
 
   @override
@@ -117,47 +121,68 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(widget.challenge.title)),
-      body: GestureDetector(
-        onTap: _dismissKeyboard,
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 100),
-            child: Column(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    _showBottomSheet(context);
-                  },
-                  child: RepaintBoundary(
-                    key: frameKey,
-                    child: FeedImage(image: _image),
-                  ),
+    return BlocConsumer<CreateFeedBloc, CreateFeedState>(
+      listener: (context, state) {
+        if (state.status == CreateFeedStatus.success) {
+          _successAlert();
+        }
+        if (state.status == CreateFeedStatus.error) {
+          _errorAlert(state.errorMessage!);
+        }
+      },
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(title: Text(widget.challenge.title)),
+          body: GestureDetector(
+            onTap: _dismissKeyboard,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 100),
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      onTap: _showBottomSheet,
+                      child: RepaintBoundary(
+                        key: frameKey,
+                        child: FeedImage(image: state.image),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: TextInput(
+                        controller: contentController,
+                        placeholder: '오늘의 인증에 대해 입력해주세요.',
+                        maxLength: 100,
+                        multiLine: true,
+                        onChanged: (value) {
+                          context
+                              .read<CreateFeedBloc>()
+                              .add(ChangeContentCreateFeedEvent(value));
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 16),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: TextInput(
-                    controller: contentController,
-                    placeholder: '오늘의 인증에 대해 입력해주세요.',
-                    maxLength: 100,
-                    multiLine: true,
-                    onChanged: (value) {
-                      setState(() {});
-                    },
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
-      bottomSheet: FeedBottomSheet(
-        onPress: _image == null || contentController.text.isEmpty
-            ? null
-            : _handleSubmit,
-      ),
+          bottomSheet: FeedBottomSheet(
+            onPress: _buttonDisabled() ? null : _handleSubmit,
+            child: state.status == CreateFeedStatus.loading
+                ? const CupertinoActivityIndicator()
+                : Text(
+                    '인증하기',
+                    style: context.body1(
+                      fontWeight: FontWeight.bold,
+                      color: _buttonDisabled()
+                          ? AppColors.systemGrey2
+                          : AppColors.systemWhite,
+                    ),
+                  ),
+          ),
+        );
+      },
     );
   }
 }

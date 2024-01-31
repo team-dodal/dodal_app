@@ -1,21 +1,18 @@
 import 'dart:io';
+
 import 'package:dodal_app/theme/color.dart';
-import 'package:dodal_app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
-class FeedBottomSheet extends StatefulWidget {
+class FeedBottomSheet extends StatelessWidget {
   const FeedBottomSheet({
     super.key,
     required this.onPress,
+    required this.child,
   });
 
   final void Function()? onPress;
+  final Widget child;
 
-  @override
-  State<FeedBottomSheet> createState() => _FeedBottomSheetState();
-}
-
-class _FeedBottomSheetState extends State<FeedBottomSheet> {
   @override
   Widget build(BuildContext context) {
     if (MediaQuery.of(context).viewInsets.bottom != 0) {
@@ -42,22 +39,14 @@ class _FeedBottomSheetState extends State<FeedBottomSheet> {
             children: [
               Expanded(
                 child: ElevatedButton(
-                  onPressed: widget.onPress,
+                  onPressed: onPress,
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(100),
                     ),
                   ),
-                  child: Text(
-                    '인증하기',
-                    style: context.body1(
-                      fontWeight: FontWeight.bold,
-                      color: widget.onPress != null
-                          ? AppColors.systemWhite
-                          : AppColors.systemGrey2,
-                    ),
-                  ),
+                  child: child,
                 ),
               ),
             ],

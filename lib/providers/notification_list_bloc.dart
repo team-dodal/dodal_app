@@ -25,6 +25,7 @@ class NotificationListBloc
   }
 
   Future<void> _clearData(ClearNotificationListEvent event, emit) async {
+    if (state.list.isEmpty) return;
     emit(state.copyWith(status: NotificationListStatus.success, list: []));
     await AlarmService.deleteAllAlarmList(userId: userId);
   }

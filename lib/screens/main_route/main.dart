@@ -1,6 +1,8 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/helper/slide_page_route.dart';
 import 'package:dodal_app/providers/create_challenge_cubit.dart';
+import 'package:dodal_app/providers/notification_list_bloc.dart';
+import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/screens/bookmark/main.dart';
 import 'package:dodal_app/screens/create_challenge/main.dart';
 import 'package:dodal_app/screens/notification/main.dart';
@@ -90,7 +92,14 @@ class _MainRouteState extends State<MainRoute> {
                 ),
                 IconButton(
                   onPressed: () {
-                    _handleActionBtn(const NotiFicationScreen());
+                    _handleActionBtn(
+                      BlocProvider(
+                        create: (context) => NotificationListBloc(
+                          userId: context.read<UserBloc>().state.result!.id,
+                        ),
+                        child: const NotiFicationScreen(),
+                      ),
+                    );
                   },
                   icon: SvgPicture.asset('assets/icons/bell_icon.svg'),
                 ),
@@ -113,7 +122,14 @@ class _MainRouteState extends State<MainRoute> {
                 ),
                 IconButton(
                   onPressed: () {
-                    _handleActionBtn(const NotiFicationScreen());
+                    _handleActionBtn(
+                      BlocProvider(
+                        create: (context) => NotificationListBloc(
+                          userId: context.read<UserBloc>().state.result!.id,
+                        ),
+                        child: const NotiFicationScreen(),
+                      ),
+                    );
                   },
                   icon: SvgPicture.asset('assets/icons/bell_icon.svg'),
                 ),

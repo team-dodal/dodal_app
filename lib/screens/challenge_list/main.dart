@@ -3,6 +3,8 @@ import 'package:dodal_app/helper/slide_page_route.dart';
 import 'package:dodal_app/model/challenge_model.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/providers/create_challenge_cubit.dart';
+import 'package:dodal_app/providers/notification_list_bloc.dart';
+import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/screens/challenge_preview/main.dart';
 import 'package:dodal_app/screens/challenge_route/main.dart';
 import 'package:dodal_app/screens/create_challenge/main.dart';
@@ -78,7 +80,14 @@ class _ChallengeListScreenState extends State<ChallengeListScreen> {
           IconButton(
             onPressed: () {
               Navigator.of(context).push(
-                SlidePageRoute(screen: const NotiFicationScreen()),
+                SlidePageRoute(
+                  screen: BlocProvider(
+                    create: (context) => NotificationListBloc(
+                      userId: context.read<UserBloc>().state.result!.id,
+                    ),
+                    child: const NotiFicationScreen(),
+                  ),
+                ),
               );
             },
             icon: const Icon(Icons.notifications_none),
