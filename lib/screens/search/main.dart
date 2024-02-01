@@ -1,3 +1,5 @@
+import 'package:dodal_app/model/category_model.dart';
+import 'package:dodal_app/providers/category_list_bloc.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/screens/search/search_result.dart';
 import 'package:dodal_app/theme/typo.dart';
@@ -59,11 +61,13 @@ class _SearchScreenState extends State<SearchScreen> {
 
   goResultScreen(String word) {
     if (!mounted) return;
+    List<Category> list =
+        context.read<CategoryListBloc>().state.categoryListForFilter();
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => BlocProvider(
-          create: (ctx) => ChallengeListFilterCubit(),
+          create: (ctx) => ChallengeListFilterCubit(category: list[0]),
           child: SearchResultScreen(word: word),
         ),
       ),

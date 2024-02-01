@@ -3,14 +3,6 @@ import 'package:dodal_app/model/tag_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-final CATEGORY_ALL = Category(
-  name: '전체',
-  subName: '',
-  value: null,
-  emoji: '',
-  tags: [const Tag(name: '전체', value: null)],
-);
-
 enum ConditionEnum {
   popularity('인기순'),
   newest('최신순'),
@@ -21,47 +13,53 @@ enum ConditionEnum {
   const ConditionEnum(this.displayName);
 }
 
-class ChallengeListFilterCubit extends Cubit<ChallengeListFilter> {
-  ChallengeListFilterCubit({Category? category, ConditionEnum? condition})
-      : super(
-          ChallengeListFilter(
-            category: category ?? CATEGORY_ALL,
-            tag: category != null ? category.tags[0] : CATEGORY_ALL.tags[0],
-            condition: condition ?? ConditionEnum.popularity,
-            certCntList: const [1, 2, 3, 4, 5, 6, 7],
-          ),
-        );
-
-  updateCategory({required Category category}) {
-    emit(state.copyWith(category: category));
+class ChallengeListFilterCubit extends Cubit<ChallengeListFilterState> {
+  ChallengeListFilterCubit(
+      {required Category category, ConditionEnum? condition})
+      : super(ChallengeListFilterState.init(category)) {
+    if (condition != null) {
+      updateCondition(condition: condition);
+    }
   }
 
-  updateTag({required Tag tag}) {
+  void updateCategory({required Category category}) {
+    emit(state.copyWith(category: category, tag: category.tags[0]));
+  }
+
+  void updateTag({required Tag tag}) {
     emit(state.copyWith(tag: tag));
   }
 
-  updateCondition({required ConditionEnum condition}) {
+  void updateCondition({required ConditionEnum condition}) {
     emit(state.copyWith(condition: condition));
   }
 
-  updateCertCnt({required List<int> certCntList}) {
+  void updateCertCnt({required List<int> certCntList}) {
     certCntList.sort();
     emit(state.copyWith(certCntList: certCntList));
   }
 }
 
-class ChallengeListFilter extends Equatable {
+class ChallengeListFilterState extends Equatable {
   final Category category;
   final Tag tag;
   final ConditionEnum condition;
   final List<int> certCntList;
 
-  const ChallengeListFilter({
+  const ChallengeListFilterState({
     required this.category,
     required this.tag,
     required this.condition,
     required this.certCntList,
   });
+
+  ChallengeListFilterState.init(Category category)
+      : this(
+          category: category,
+          tag: category.tags[0],
+          condition: ConditionEnum.popularity,
+          certCntList: const [1, 2, 3, 4, 5, 6, 7],
+        );
 
   copyWith({
     Category? category,
@@ -69,7 +67,7 @@ class ChallengeListFilter extends Equatable {
     ConditionEnum? condition,
     List<int>? certCntList,
   }) {
-    return ChallengeListFilter(
+    return ChallengeListFilterState(
       category: category ?? this.category,
       tag: tag ?? this.tag,
       condition: condition ?? this.condition,

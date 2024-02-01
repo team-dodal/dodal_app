@@ -43,7 +43,8 @@ class CountBottomSheet extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(20),
-            child: BlocBuilder<ChallengeListFilterCubit, ChallengeListFilter>(
+            child:
+                BlocBuilder<ChallengeListFilterCubit, ChallengeListFilterState>(
               builder: (context, state) {
                 final certCntList = state.certCntList;
                 return SizedBox(

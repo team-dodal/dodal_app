@@ -11,19 +11,24 @@ enum ChallengeListStatus { init, loading, success, error }
 const pageSize = 20;
 
 class ChallengeListBloc extends Bloc<ChallengeListEvent, ChallengeListState> {
-  final Category category;
-  final Tag tag;
-  final ConditionEnum condition;
-  final List<int> certCntList;
-
   ChallengeListBloc({
-    required this.category,
-    required this.tag,
-    required this.condition,
-    required this.certCntList,
+    required Category category,
+    required Tag tag,
+    required ConditionEnum condition,
+    required List<int> certCntList,
   }) : super(ChallengeListState.init()) {
     on<LoadChallengeListEvent>(_loadData);
-    add(LoadChallengeListEvent());
+    on<ResetChallengeListEvent>(_resetData);
+    add(LoadChallengeListEvent(
+      category: category,
+      tag: tag,
+      condition: condition,
+      certCntList: certCntList,
+    ));
+  }
+
+  void _resetData(ResetChallengeListEvent event, emit) {
+    emit(ChallengeListState.init());
   }
 
   Future<void> _loadData(LoadChallengeListEvent event, emit) async {
@@ -34,10 +39,10 @@ class ChallengeListBloc extends Bloc<ChallengeListEvent, ChallengeListState> {
     if (state.isLastPage) return;
     emit(state.copyWith(status: ChallengeListStatus.loading));
     final res = await ChallengeService.getChallengesByCategory(
-      categoryValue: category.value,
-      tagValue: tag.value,
-      conditionCode: condition.index,
-      certCntList: certCntList,
+      categoryValue: event.category.value,
+      tagValue: event.tag.value,
+      conditionCode: event.condition.index,
+      certCntList: event.certCntList,
       page: state.currentPage,
       pageSize: pageSize,
     );
@@ -64,6 +69,21 @@ class ChallengeListBloc extends Bloc<ChallengeListEvent, ChallengeListState> {
 abstract class ChallengeListEvent extends Equatable {}
 
 class LoadChallengeListEvent extends ChallengeListEvent {
+  final Category category;
+  final Tag tag;
+  final ConditionEnum condition;
+  final List<int> certCntList;
+  LoadChallengeListEvent({
+    required this.category,
+    required this.tag,
+    required this.condition,
+    required this.certCntList,
+  });
+  @override
+  List<Object?> get props => [category, tag, condition, certCntList];
+}
+
+class ResetChallengeListEvent extends ChallengeListEvent {
   @override
   List<Object?> get props => [];
 }

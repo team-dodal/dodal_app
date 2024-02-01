@@ -65,11 +65,11 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: SearchAppBar(word: widget.word)),
-      body: BlocListener<ChallengeListFilterCubit, ChallengeListFilter>(
+      body: BlocListener<ChallengeListFilterCubit, ChallengeListFilterState>(
         listener: (context, state) {
           pagingController.refresh();
         },
-        child: BlocBuilder<ChallengeListFilterCubit, ChallengeListFilter>(
+        child: BlocBuilder<ChallengeListFilterCubit, ChallengeListFilterState>(
           builder: (context, state) {
             return PagedListView<int, Challenge>(
               pagingController: pagingController,

@@ -33,7 +33,7 @@ class FilterTopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChallengeListFilterCubit, ChallengeListFilter>(
+    return BlocBuilder<ChallengeListFilterCubit, ChallengeListFilterState>(
         builder: (context, state) {
       bool isSelectedAll = state.certCntList.length == 7;
       String text = isSelectedAll
@@ -43,7 +43,7 @@ class FilterTopBar extends StatelessWidget {
       return Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

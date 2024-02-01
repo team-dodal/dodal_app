@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/helper/slide_page_route.dart';
 import 'package:dodal_app/providers/create_challenge_cubit.dart';
+import 'package:dodal_app/providers/my_bookmark_list_cubit.dart';
 import 'package:dodal_app/providers/notification_list_bloc.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/screens/bookmark/main.dart';
@@ -116,7 +117,10 @@ class _MainRouteState extends State<MainRoute> {
             : [
                 IconButton(
                   onPressed: () {
-                    _handleActionBtn(const BookmarkScreen());
+                    _handleActionBtn(BlocProvider(
+                      create: (context) => MyBookmarkListCubit(),
+                      child: const BookmarkScreen(),
+                    ));
                   },
                   icon: SvgPicture.asset('assets/icons/bookmark_icon.svg'),
                 ),

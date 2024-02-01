@@ -1,6 +1,6 @@
 import 'package:dodal_app/model/category_model.dart';
-import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/providers/category_list_bloc.dart';
+import 'package:dodal_app/providers/challenge_list_bloc.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/screens/challenge_list/main.dart';
 import 'package:dodal_app/theme/color.dart';
@@ -13,12 +13,22 @@ import 'dart:math' as math;
 class CategorySelect extends StatelessWidget {
   const CategorySelect({super.key});
 
-  void _goListPage(context, Category category) {
+  void _goListPage(BuildContext context, Category category) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => BlocProvider(
           create: (ctx) => ChallengeListFilterCubit(category: category),
-          child: const ChallengeListScreen(),
+          child: BlocProvider(
+            create: (context) => ChallengeListBloc(
+              category: context.read<ChallengeListFilterCubit>().state.category,
+              tag: context.read<ChallengeListFilterCubit>().state.tag,
+              condition:
+                  context.read<ChallengeListFilterCubit>().state.condition,
+              certCntList:
+                  context.read<ChallengeListFilterCubit>().state.certCntList,
+            ),
+            child: const ChallengeListScreen(),
+          ),
         ),
       ),
     );
@@ -42,16 +52,8 @@ class CategorySelect extends StatelessWidget {
                     ),
                     IconButton(
                       onPressed: () {
-                        _goListPage(
-                          context,
-                          Category(
-                            name: '전체',
-                            subName: '',
-                            value: null,
-                            emoji: '',
-                            tags: const [Tag(name: '전체', value: null)],
-                          ),
-                        );
+                        Category allCategory = state.categoryListForFilter()[0];
+                        _goListPage(context, allCategory);
                       },
                       style: IconButton.styleFrom(
                         shape: const BeveledRectangleBorder(
@@ -85,7 +87,11 @@ class CategorySelect extends StatelessWidget {
                           iconPath: category.iconPath,
                           name: category.name,
                           onTap: () {
-                            _goListPage(context, category);
+                            List<Category> list = state.categoryListForFilter();
+                            Category filterCategory = list.firstWhere(
+                              (element) => element.value == category.value,
+                            );
+                            _goListPage(context, filterCategory);
                           },
                         ),
                       ),

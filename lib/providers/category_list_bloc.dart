@@ -6,15 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 enum CategoryListStatus { init, loading, loaded, error }
 
-Category CATEGORY_OF_ALL = Category(
-  name: '전체',
-  subName: '',
-  value: null,
-  emoji: '',
-  tags: const [],
-);
-const TAG_OF_ALL = Tag(name: '전체', value: null);
-
 class CategoryListBloc extends Bloc<CategoryListEvent, CategoryListState> {
   CategoryListBloc() : super(CategoryListState.init()) {
     on<LoadCategoryListEvent>(_loadCategoryList);
@@ -68,16 +59,27 @@ class CategoryListState extends Equatable {
     );
   }
 
-  // List<Category> displayList() {
-  //   if (status == CategoryListStatus.init) {
-  //     return [...result].map((category) {
-  //       category.tags.insert(0, TAG_OF_ALL);
-  //       return category;
-  //     }).toList();
-  //   } else {
-  //     return [];
-  //   }
-  // }
+  List<Category> categoryListForFilter() {
+    Category allCategory = Category(
+      name: '전체',
+      subName: '',
+      value: null,
+      emoji: '',
+      tags: const [],
+    );
+    Tag allTag = const Tag(name: '전체', value: null);
+    return [allCategory, ...result]
+        .map(
+          (Category category) => Category(
+            name: category.name,
+            subName: category.subName,
+            value: category.value,
+            emoji: category.emoji,
+            tags: [allTag, ...category.tags],
+          ),
+        )
+        .toList();
+  }
 
   @override
   List<Object?> get props => [status, result, errorMessage];

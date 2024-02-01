@@ -7,7 +7,7 @@ class Category extends Equatable {
   final String emoji;
   final String? value;
   List<Tag> tags;
-  late String iconPath;
+  final String iconPath;
 
   Category({
     required this.name,
@@ -15,11 +15,7 @@ class Category extends Equatable {
     required this.value,
     required this.emoji,
     required this.tags,
-  }) {
-    if (value != null) {
-      iconPath = _getIconPath(value);
-    }
-  }
+  }) : iconPath = getIconPath(value);
 
   factory Category.fromJson(Map<String, dynamic> json) {
     final List<Tag> tagList = (json['tags'] as List).map((tag) {
@@ -35,21 +31,20 @@ class Category extends Equatable {
     );
   }
 
-  String _getIconPath(value) {
-    switch (value) {
-      case '001':
-        return 'assets/icons/category/health_category_icon.svg';
-      case '002':
-        return 'assets/icons/category/book_category_icon.svg';
-      case '003':
-        return 'assets/icons/category/pen_category_icon.svg';
-      case '004':
-        return 'assets/icons/category/clock_category_icon.svg';
-      case '005':
-        return 'assets/icons/category/light_category_icon.svg';
-      default:
-        return '';
-    }
+  Category copyWith({
+    String? name,
+    String? subName,
+    String? emoji,
+    String? value,
+    List<Tag>? tags,
+  }) {
+    return Category(
+      name: name ?? this.name,
+      subName: subName ?? this.subName,
+      value: value ?? this.value,
+      emoji: emoji ?? this.emoji,
+      tags: tags ?? this.tags,
+    );
   }
 
   @override
@@ -67,4 +62,21 @@ class MyCategory {
     required this.emoji,
     required this.hashTags,
   });
+}
+
+String getIconPath(value) {
+  switch (value) {
+    case '001':
+      return 'assets/icons/category/health_category_icon.svg';
+    case '002':
+      return 'assets/icons/category/book_category_icon.svg';
+    case '003':
+      return 'assets/icons/category/pen_category_icon.svg';
+    case '004':
+      return 'assets/icons/category/clock_category_icon.svg';
+    case '005':
+      return 'assets/icons/category/light_category_icon.svg';
+    default:
+      return '';
+  }
 }

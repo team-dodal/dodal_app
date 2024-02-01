@@ -1,13 +1,14 @@
 import 'package:dodal_app/model/category_model.dart';
 import 'package:dodal_app/model/tag_model.dart';
+import 'package:dodal_app/providers/category_list_bloc.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
-import 'package:dodal_app/services/category/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
+import 'package:dodal_app/widgets/challenge_list/filter_top_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-const double CATEGORY_BAR_HEIGHT = 120;
+const double CATEGORY_BAR_HEIGHT = 170;
 
 class ListTabBar extends StatefulWidget implements PreferredSizeWidget {
   const ListTabBar({super.key});
@@ -21,46 +22,15 @@ class ListTabBar extends StatefulWidget implements PreferredSizeWidget {
 
 class _ListTabBarState extends State<ListTabBar> with TickerProviderStateMixin {
   late TabController tabController;
-  List<Category> _categories = [];
-
-  _initCategory() async {
-    final categoryList = await CategoryService.getAllCategories();
-    if (categoryList == null) return;
-    final list = _addAllValueTag([
-      Category(
-        name: '전체',
-        subName: '',
-        value: null,
-        emoji: '',
-        tags: const [],
-      ),
-      ...categoryList
-    ]);
-    tabController = TabController(length: list.length, vsync: this);
-    if (mounted) {
-      final state = BlocProvider.of<ChallengeListFilterCubit>(context).state;
-      final selectedIdx =
-          list.indexWhere((category) => category.value == state.category.value);
-      tabController.index = selectedIdx;
-      context
-          .read<ChallengeListFilterCubit>()
-          .updateTag(tag: list[selectedIdx].tags[0]);
-      setState(() {
-        _categories = list;
-      });
-    }
-  }
-
-  List<Category> _addAllValueTag(List<Category> list) {
-    return list.map((category) {
-      category.tags = [const Tag(name: '전체', value: null), ...category.tags];
-      return category;
-    }).toList();
-  }
 
   @override
   void initState() {
-    _initCategory();
+    List<Category> list =
+        context.read<CategoryListBloc>().state.categoryListForFilter();
+    tabController = TabController(length: list.length, vsync: this);
+    Category currentCategory =
+        context.read<ChallengeListFilterCubit>().state.category;
+    tabController.index = list.indexOf(currentCategory);
     super.initState();
   }
 
@@ -72,9 +42,10 @@ class _ListTabBarState extends State<ListTabBar> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    if (_categories.isEmpty) return const SizedBox();
+    List<Category> categories =
+        context.read<CategoryListBloc>().state.categoryListForFilter();
 
-    return BlocBuilder<ChallengeListFilterCubit, ChallengeListFilter>(
+    return BlocBuilder<ChallengeListFilterCubit, ChallengeListFilterState>(
         builder: (context, state) {
       return SizedBox(
         height: CATEGORY_BAR_HEIGHT,
@@ -84,41 +55,39 @@ class _ListTabBarState extends State<ListTabBar> with TickerProviderStateMixin {
               isScrollable: true,
               labelStyle: context.body2(fontWeight: FontWeight.bold),
               controller: tabController,
-              tabs: _categories
+              tabs: categories
                   .map((category) => Tab(text: category.name))
                   .toList(),
-              onTap: (value) {
+              onTap: (index) {
                 context
                     .read<ChallengeListFilterCubit>()
-                    .updateCategory(category: _categories[value]);
-                context
-                    .read<ChallengeListFilterCubit>()
-                    .updateTag(tag: _categories[value].tags[0]);
+                    .updateCategory(category: categories[index]);
               },
             ),
             SizedBox(
               width: double.infinity,
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                child: Builder(builder: (context) {
-                  final tagList = _categories.firstWhere(
-                      (category) => category.value == state.category.value);
-                  return Row(
-                    children: [
-                      for (final tag in tagList.tags)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 16,
-                            horizontal: 4,
+                child: Builder(
+                  builder: (context) {
+                    return Row(
+                      children: [
+                        for (final tag in state.category.tags)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 16,
+                              horizontal: 4,
+                            ),
+                            child:
+                                TagButton(tag: tag, selected: tag == state.tag),
                           ),
-                          child:
-                              TagButton(tag: tag, selected: tag == state.tag),
-                        ),
-                    ],
-                  );
-                }),
+                      ],
+                    );
+                  },
+                ),
               ),
-            )
+            ),
+            const FilterTopBar(),
           ],
         ),
       );

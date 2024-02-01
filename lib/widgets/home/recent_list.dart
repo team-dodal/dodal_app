@@ -1,6 +1,9 @@
 import 'package:animations/animations.dart';
+import 'package:dodal_app/model/category_model.dart';
 import 'package:dodal_app/model/challenge_code_enum.dart';
 import 'package:dodal_app/model/challenge_model.dart';
+import 'package:dodal_app/providers/category_list_bloc.dart';
+import 'package:dodal_app/providers/challenge_list_bloc.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/screens/challenge_list/main.dart';
 import 'package:dodal_app/screens/challenge_preview/main.dart';
@@ -74,13 +77,38 @@ class _RecentListState extends State<RecentList> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: OutlinedButton(
               onPressed: () {
+                List<Category> list = context
+                    .read<CategoryListBloc>()
+                    .state
+                    .categoryListForFilter();
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => BlocProvider(
                       create: (ctx) => ChallengeListFilterCubit(
+                        category: list[0],
                         condition: ConditionEnum.newest,
                       ),
-                      child: const ChallengeListScreen(),
+                      child: BlocProvider(
+                        create: (context) => ChallengeListBloc(
+                          category: context
+                              .read<ChallengeListFilterCubit>()
+                              .state
+                              .category,
+                          tag: context
+                              .read<ChallengeListFilterCubit>()
+                              .state
+                              .tag,
+                          condition: context
+                              .read<ChallengeListFilterCubit>()
+                              .state
+                              .condition,
+                          certCntList: context
+                              .read<ChallengeListFilterCubit>()
+                              .state
+                              .certCntList,
+                        ),
+                        child: const ChallengeListScreen(),
+                      ),
                     ),
                   ),
                 );

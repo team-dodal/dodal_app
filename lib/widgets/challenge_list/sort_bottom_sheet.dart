@@ -18,7 +18,7 @@ class SortBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FilterBottomSheetLayout(
-      child: BlocBuilder<ChallengeListFilterCubit, ChallengeListFilter>(
+      child: BlocBuilder<ChallengeListFilterCubit, ChallengeListFilterState>(
         builder: (context, state) {
           final condition = state.condition;
           return Column(
