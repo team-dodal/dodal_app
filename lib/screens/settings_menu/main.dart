@@ -1,9 +1,11 @@
+import 'package:dodal_app/providers/sign_in_bloc.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/screens/settings_menu/personal_data_rule_screen.dart';
 import 'package:dodal_app/screens/settings_menu/service_rule_screen.dart';
 import 'package:dodal_app/screens/sign_in/main.dart';
 import 'package:dodal_app/services/user/service.dart';
 import 'package:dodal_app/theme/color.dart';
+import 'package:dodal_app/utilities/social_auth.dart';
 import 'package:dodal_app/widgets/common/system_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,7 +43,17 @@ class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
               if (!mounted) return;
               context.read<UserBloc>().add(ClearUserBlocEvent());
               Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (ctx) => const SignInScreen()),
+                  MaterialPageRoute(
+                    builder: (ctx) => BlocProvider(
+                      create: (context) => SignInBloc(
+                        googleAuthService: GoogleAuthService(),
+                        appleAuthService: AppleAuthService(),
+                        kakaoAuthService: KakaoAuthService(),
+                        secureStorage: const FlutterSecureStorage(),
+                      ),
+                      child: const SignInScreen(),
+                    ),
+                  ),
                   (route) => false);
             },
           )
@@ -73,7 +85,17 @@ class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
 
               if (!mounted) return;
               Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (ctx) => const SignInScreen()),
+                  MaterialPageRoute(
+                    builder: (ctx) => BlocProvider(
+                      create: (context) => SignInBloc(
+                        googleAuthService: GoogleAuthService(),
+                        appleAuthService: AppleAuthService(),
+                        kakaoAuthService: KakaoAuthService(),
+                        secureStorage: const FlutterSecureStorage(),
+                      ),
+                      child: const SignInScreen(),
+                    ),
+                  ),
                   (route) => false);
             },
           )

@@ -1,7 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:dodal_app/main.dart';
+import 'package:dodal_app/providers/sign_in_bloc.dart';
 import 'package:dodal_app/screens/sign_in/main.dart';
+import 'package:dodal_app/utilities/social_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -26,7 +29,17 @@ Future<Dio> refreshDio() async {
       // 리프레쉬 토큰도 만료되었을 때
       if (e.response!.statusCode == 401) {
         navigatorKey.currentState!.pushAndRemoveUntil(
-          MaterialPageRoute(builder: (ctx) => const SignInScreen()),
+          MaterialPageRoute(
+            builder: (ctx) => BlocProvider(
+              create: (context) => SignInBloc(
+                googleAuthService: GoogleAuthService(),
+                appleAuthService: AppleAuthService(),
+                kakaoAuthService: KakaoAuthService(),
+                secureStorage: const FlutterSecureStorage(),
+              ),
+              child: const SignInScreen(),
+            ),
+          ),
           (route) => false,
         );
 

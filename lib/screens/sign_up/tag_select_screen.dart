@@ -1,7 +1,9 @@
 import 'package:dodal_app/providers/create_user_cubit.dart';
+import 'package:dodal_app/providers/sign_in_bloc.dart';
 import 'package:dodal_app/screens/sign_in/main.dart';
 import 'package:dodal_app/screens/sign_up/complete_screen.dart';
 import 'package:dodal_app/theme/color.dart';
+import 'package:dodal_app/utilities/social_auth.dart';
 import 'package:dodal_app/widgets/common/category_tag_select.dart';
 import 'package:dodal_app/widgets/common/create_form_title.dart';
 import 'package:dodal_app/widgets/common/submit_button.dart';
@@ -30,7 +32,17 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
     final res = await context.read<CreateUserCubit>().createUser();
     if (res == null) {
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (ctx) => const SignInScreen()),
+        MaterialPageRoute(
+          builder: (ctx) => BlocProvider(
+            create: (context) => SignInBloc(
+              googleAuthService: GoogleAuthService(),
+              appleAuthService: AppleAuthService(),
+              kakaoAuthService: KakaoAuthService(),
+              secureStorage: const FlutterSecureStorage(),
+            ),
+            child: const SignInScreen(),
+          ),
+        ),
         (route) => false,
       );
     } else {

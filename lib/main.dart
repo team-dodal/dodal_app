@@ -1,14 +1,17 @@
 import 'package:dodal_app/providers/category_list_bloc.dart';
+import 'package:dodal_app/providers/sign_in_bloc.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/screens/main_route/main.dart';
 import 'package:dodal_app/screens/sign_in/main.dart';
 import 'package:dodal_app/theme/theme_data.dart';
 import 'package:dodal_app/utilities/fcm_setting.dart';
+import 'package:dodal_app/utilities/social_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart' as Kakao;
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -63,7 +66,15 @@ class _AppState extends State<App> {
                   body: Center(child: CupertinoActivityIndicator()),
                 );
               case UserBlocStatus.error:
-                return const SignInScreen();
+                return BlocProvider(
+                  create: (context) => SignInBloc(
+                    googleAuthService: GoogleAuthService(),
+                    appleAuthService: AppleAuthService(),
+                    kakaoAuthService: KakaoAuthService(),
+                    secureStorage: const FlutterSecureStorage(),
+                  ),
+                  child: const SignInScreen(),
+                );
               case UserBlocStatus.loaded:
                 return const MainRoute();
             }
