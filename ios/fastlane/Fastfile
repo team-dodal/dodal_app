@@ -55,13 +55,58 @@ platform :ios do
       skip_waiting_for_build_processing: true,
       api_key_path: "app-store-api-key.json",
       app_version: version,
+      groups:[
+        "development"
+      ]
     )
     delete_keychain(name: 'ios-keychain')
   end
 
-  lane :release do
-    increment_build_number(xcodeproj: "Runner.xcodeproj")
-    build_app(workspace: "Runner.xcworkspace", scheme: "Runner")
-    upload_to_app_store
+  lane :release do |options|
+    version = options[:version]
+    password = options[:password]
+    keychainName = 'ios-keychain'
+
+    create_keychain(
+      name: keychainName,
+      password: password,
+      unlock: true,
+      timeout: 0,
+      lock_when_sleeps: true,
+    )
+      
+    match(
+      git_url: "git@github.com:team-dodal/ios_certification.git",
+      keychain_name: keychainName,
+      keychain_password: password,
+      type: "appstore",
+      api_key_path: "app-store-api-key.json",
+      readonly: true,
+    )
+
+    current_version_code = latest_testflight_build_number(
+      api_key_path: "app-store-api-key.json",
+    )
+    build_number = current_version_code.to_i + 1
+
+    gym(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      xcargs: "FLUTTER_BUILD_NAME='#{version}' FLUTTER_BUILD_NUMBER='#{build_number}'"
+    )
+
+    deliver(
+      api_key_path: "app-store-api-key.json",
+      app_version: version,
+      skip_screenshots: true,
+      skip_metadata: true,
+      precheck_include_in_app_purchases: false,
+      force: true, # 터미널 skip
+      submit_for_review: true, # 올리자마자 심사
+      automatic_release: true, # 심사하자마자 앱스토어 등록
+      submission_information: {add_id_info_uses_idfa: false}
+    )
+
+    delete_keychain(name: 'ios-keychain')
   end
 end

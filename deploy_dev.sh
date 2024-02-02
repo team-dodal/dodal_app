@@ -44,12 +44,15 @@ deploy_ios () {
 PLATFORM=$1
 case "$PLATFORM" in
     "android")
+    cp .env.development .env
     deploy_android
     ;;
     "ios")
+    cp .env.development .env
     deploy_ios
     ;;
     "start")
+    cp .env.development .env
     deploy_android
     deploy_ios
     ;;

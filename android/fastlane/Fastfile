@@ -44,8 +44,26 @@ platform :android do
   end
 
   desc "Deploy a new version to the Google Play"
-  lane :deploy do
-    gradle(task: "clean assembleRelease")
-    upload_to_play_store
+  lane :release do |options|
+    version = options[:version]
+    
+    current_version_code = google_play_track_version_codes(track: 'internal')
+    new_version_code = current_version_code[0] + 1
+    
+    gradle(
+      task: "bundle",
+      properties: {
+        "versionCode" => new_version_code,
+        "versionName" => version,
+      }
+    )
+    supply(
+      track: 'production',
+      skip_upload_metadata: false,
+      skip_upload_changelogs: false,
+      skip_upload_images: false,
+      skip_upload_apk: false,
+      aab: '../build/app/outputs/bundle/release/app-release.aab',
+    )
   end
 end
