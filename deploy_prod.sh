@@ -2,7 +2,7 @@ keystore_path="$(pwd)/android/app/keystore"
 env_file_path="$(pwd)/.env"
 get_last_version=$(git describe --tags $(git rev-list --tags --max-count=1))
 bot_name="앱 배포 알림봇"
-msg1="도달의 새로운 버전이 심사를 기다리고 있습니다"
+msg1="도달의 새로운 버전이 심사를 기다리고 있습니다 🚀"
 msg2="심사에는 1~3일정도가 소요됩니다!"
 
 create_keystore () {

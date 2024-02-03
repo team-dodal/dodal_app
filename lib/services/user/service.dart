@@ -67,9 +67,8 @@ class UserService {
     try {
       final res = await service.get('/api/v1/users/me');
       return User.formJson(res.data['result']);
-    } on DioException catch (err) {
-      ResponseErrorDialog(err);
-      return null;
+    } on DioException {
+      rethrow;
     }
   }
 
@@ -155,7 +154,6 @@ class UserService {
       );
       return FeedListByDateResponse.fromJson(res.data['result']);
     } on DioException catch (err) {
-      print(err);
       ResponseErrorDialog(err);
       return null;
     }

@@ -17,18 +17,18 @@ class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
 
   _loadData(LoadUserBlocEvent event, emit) async {
     emit(state.copyWith(status: UserBlocStatus.loading));
-    User? res = await UserService.user();
-    if (res == null) {
-      emit(state.copyWith(
-        status: UserBlocStatus.error,
-        errorMessage: '유저 정보를 불러오는데에 실패하였습니다.',
-      ));
-    } else {
+    try {
+      User? res = await UserService.user();
       emit(state.copyWith(
         status: UserBlocStatus.loaded,
         result: res,
       ));
       await _postFcmToken(event.fcmToken);
+    } catch (error) {
+      emit(state.copyWith(
+        status: UserBlocStatus.error,
+        errorMessage: '유저 정보를 불러오는데에 실패하였습니다.',
+      ));
     }
   }
 

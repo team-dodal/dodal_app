@@ -24,9 +24,10 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
   }
 
   Future<void> _signIn(SocialSignInEvent event, emit) async {
-    emit(state.copyWith(status: SignInStatus.loading, type: event.type));
     try {
+      emit(state.copyWith(status: SignInStatus.loading, type: event.type));
       final data = await _getSocialIdAndEmail(event.type);
+      emit(state.copyWith(id: data.id, email: data.email));
       SignInResponse? res = await UserService.signIn(event.type, data.id);
       if (res != null && res.isSigned) {
         secureStorage.write(key: 'accessToken', value: res.accessToken);
@@ -135,11 +136,13 @@ class SignInState extends Equatable {
   List<Object?> get props => [status, errorMessage, id, email];
 }
 
-class SocialResponse {
-  String id;
-  String email;
-  SocialResponse({
+class SocialResponse extends Equatable {
+  final String id;
+  final String email;
+  const SocialResponse({
     required this.id,
     required this.email,
   });
+  @override
+  List<Object?> get props => [id, email];
 }

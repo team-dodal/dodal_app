@@ -76,7 +76,19 @@ class _AppState extends State<App> {
                   child: const SignInScreen(),
                 );
               case UserBlocStatus.loaded:
-                return const MainRoute();
+                if (state.result == null) {
+                  return BlocProvider(
+                    create: (context) => SignInBloc(
+                      googleAuthService: GoogleAuthService(),
+                      appleAuthService: AppleAuthService(),
+                      kakaoAuthService: KakaoAuthService(),
+                      secureStorage: const FlutterSecureStorage(),
+                    ),
+                    child: const SignInScreen(),
+                  );
+                } else {
+                  return const MainRoute();
+                }
             }
           },
         ),
