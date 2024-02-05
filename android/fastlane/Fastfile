@@ -26,8 +26,9 @@ platform :android do
   lane :beta do |options|
     version = options[:version]
     
-    current_version_code = google_play_track_version_codes(track: 'internal')
-    new_version_code = current_version_code[0] + 1
+    internal_code = google_play_track_version_codes(track: 'internal')
+    production_code = google_play_track_version_codes(track: 'production')
+    new_version_code = [internal_code[0], production_code[0]].max + 1
     
     sh("echo 'ANDROID_BUILD_NUMBER=#{new_version_code}' >> ../../deploy.history")
     gradle(
@@ -47,8 +48,9 @@ platform :android do
   lane :release do |options|
     version = options[:version]
     
-    current_version_code = google_play_track_version_codes(track: 'internal')
-    new_version_code = current_version_code[0] + 1
+    internal_code = google_play_track_version_codes(track: 'internal')
+    production_code = google_play_track_version_codes(track: 'production')
+    new_version_code = [internal_code[0], production_code[0]].max + 1
     
     gradle(
       task: "bundle",
@@ -59,10 +61,10 @@ platform :android do
     )
     supply(
       track: 'production',
-      skip_upload_metadata: false,
-      skip_upload_changelogs: false,
-      skip_upload_images: false,
-      skip_upload_apk: false,
+      skip_upload_metadata: true,
+      skip_upload_changelogs: true,
+      skip_upload_images: true,
+      skip_upload_apk: true,
       aab: '../build/app/outputs/bundle/release/app-release.aab',
     )
   end

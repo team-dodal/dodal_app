@@ -55,9 +55,6 @@ platform :ios do
       skip_waiting_for_build_processing: true,
       api_key_path: "app-store-api-key.json",
       app_version: version,
-      groups:[
-        "development"
-      ]
     )
     delete_keychain(name: 'ios-keychain')
   end
