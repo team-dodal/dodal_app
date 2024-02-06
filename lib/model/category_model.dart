@@ -6,7 +6,7 @@ class Category extends Equatable {
   final String subName;
   final String emoji;
   final String? value;
-  List<Tag> tags;
+  final List<Tag> tags;
   final String iconPath;
 
   Category({

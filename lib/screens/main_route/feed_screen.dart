@@ -1,71 +1,53 @@
+import 'package:dodal_app/providers/feed_list_bloc.dart';
 import 'package:dodal_app/services/feed/response.dart';
-import 'package:dodal_app/services/feed/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/common/feed_content_box/main.dart';
 import 'package:dodal_app/widgets/common/no_list_context.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class FeedScreen extends StatefulWidget {
+class FeedScreen extends StatelessWidget {
   const FeedScreen({super.key});
 
-  @override
-  State<FeedScreen> createState() => _FeedScreenState();
-}
-
-class _FeedScreenState extends State<FeedScreen> {
-  static const pageSize = 10;
-  final PagingController<int, FeedContentResponse> pagingController =
-      PagingController(firstPageKey: 0);
-
-  _request(int pageKey) async {
-    List<FeedContentResponse>? res =
-        await FeedService.getAllFeeds(page: pageKey, pageSize: pageSize);
-    if (res == null) return;
-    final isLastPage = res.length < pageSize;
-    if (isLastPage) {
-      pagingController.appendLastPage(res);
-    } else {
-      final nextPageKey = pageKey + res.length;
-      pagingController.appendPage(res, nextPageKey);
-    }
+  Widget _empty() {
+    return const Center(
+      child: NoListContext(
+        title: '생성된 피드가 없습니다.',
+        subTitle: '가장 처음 인증글을 올려보는 건 어떠세요?',
+      ),
+    );
   }
 
-  @override
-  void initState() {
-    pagingController.addPageRequestListener(_request);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    pagingController.dispose();
-    super.dispose();
+  Widget _success(List<FeedContentResponse> list) {
+    return ListView.separated(
+      separatorBuilder: (context, index) => const Divider(
+        thickness: 8,
+        color: AppColors.systemGrey4,
+      ),
+      itemCount: list.length,
+      itemBuilder: (context, index) => FeedContentBox(feedContent: list[index]),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return PagedListView.separated(
-      pagingController: pagingController,
-      separatorBuilder: (context, index) {
-        return const Divider(thickness: 8, color: AppColors.systemGrey4);
+    return BlocBuilder<FeedListBloc, FeedListState>(
+      builder: (context, state) {
+        switch (state.status) {
+          case FeedListStatus.init:
+          case FeedListStatus.loading:
+            return const Center(child: CupertinoActivityIndicator());
+          case FeedListStatus.success:
+            if (state.list.isEmpty) {
+              return _empty();
+            } else {
+              return _success(state.list);
+            }
+          case FeedListStatus.error:
+            return Center(child: Text(state.errorMessage!));
+        }
       },
-      builderDelegate: PagedChildBuilderDelegate(
-        noItemsFoundIndicatorBuilder: (context) {
-          return const Column(
-            children: [
-              SizedBox(height: 100),
-              NoListContext(
-                title: '아직 업로드된 피드가 없습니다.',
-                subTitle: '내가 먼저 업로드해보는건 어떨까요?',
-              ),
-            ],
-          );
-        },
-        itemBuilder: (context, FeedContentResponse item, index) {
-          return FeedContentBox(feedContent: item);
-        },
-      ),
     );
   }
 }

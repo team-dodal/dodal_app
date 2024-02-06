@@ -61,7 +61,7 @@ class _AppState extends State<App> {
           builder: (context, state) {
             switch (state.status) {
               case UserBlocStatus.init:
-              case UserBlocStatus.loading:
+              case UserBlocStatus.success:
                 return const Scaffold(
                   body: Center(child: CupertinoActivityIndicator()),
                 );

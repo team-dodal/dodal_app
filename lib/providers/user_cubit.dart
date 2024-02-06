@@ -3,7 +3,7 @@ import 'package:dodal_app/services/user/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-enum UserBlocStatus { init, loading, loaded, error }
+enum UserBlocStatus { init, success, loaded, error }
 
 class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
   String fcmToken;
@@ -16,7 +16,7 @@ class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
   }
 
   _loadData(LoadUserBlocEvent event, emit) async {
-    emit(state.copyWith(status: UserBlocStatus.loading));
+    emit(state.copyWith(status: UserBlocStatus.success));
     try {
       User? res = await UserService.user();
       emit(state.copyWith(
@@ -37,7 +37,7 @@ class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
   }
 
   _clearUser(ClearUserBlocEvent event, emit) async {
-    emit(state.copyWith(result: null));
+    emit(const UserBlocState.init());
   }
 
   _postFcmToken(String fcmToken) async {
@@ -62,7 +62,6 @@ class UpdateUserBlocEvent extends UserBlocEvent {
 }
 
 class ClearUserBlocEvent extends UserBlocEvent {
-  ClearUserBlocEvent();
   @override
   List<Object?> get props => [];
 }

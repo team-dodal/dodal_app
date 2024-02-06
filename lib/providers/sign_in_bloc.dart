@@ -32,18 +32,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
       if (res != null && res.isSigned) {
         secureStorage.write(key: 'accessToken', value: res.accessToken);
         secureStorage.write(key: 'refreshToken', value: res.refreshToken);
-        User user = User(
-          id: res.id,
-          email: res.email,
-          nickname: res.nickname,
-          content: res.content,
-          profileUrl: res.profileUrl,
-          registerAt: res.registerAt,
-          socialType: res.socialType,
-          categoryList: res.categoryList,
-          tagList: res.tagList,
-        );
-        emit(state.copyWith(status: SignInStatus.success, user: user));
+        emit(state.copyWith(status: SignInStatus.success, user: res.user));
       } else {
         emit(state.copyWith(status: SignInStatus.success));
       }

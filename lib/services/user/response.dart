@@ -4,29 +4,43 @@ import 'package:dodal_app/model/user_model.dart';
 
 class SignUpResponse {
   final String? accessToken, refreshToken;
+  final User user;
 
   SignUpResponse({
     required this.accessToken,
     required this.refreshToken,
+    required this.user,
   });
 
   factory SignUpResponse.fromJson(Map<String, dynamic> data) {
     return SignUpResponse(
       accessToken: data['access_token'],
       refreshToken: data['refresh_token'],
+      user: User.formJson(data),
     );
   }
 }
 
-class SignInResponse extends User {
+class SignInResponse {
   final String? accessToken, refreshToken;
   final bool isSigned;
+  final User user;
 
-  SignInResponse.fromJson(Map<String, dynamic> data)
-      : accessToken = data['access_token'],
-        refreshToken = data['refresh_token'],
-        isSigned = data['is_signed']!.toLowerCase() == 'true',
-        super.formJson(data);
+  SignInResponse({
+    required this.accessToken,
+    required this.refreshToken,
+    required this.isSigned,
+    required this.user,
+  });
+
+  factory SignInResponse.fromJson(Map<String, dynamic> data) {
+    return SignInResponse(
+      accessToken: data['access_token'],
+      refreshToken: data['refresh_token'],
+      isSigned: data['is_signed']!.toLowerCase() == 'true',
+      user: User.formJson(data),
+    );
+  }
 }
 
 class UserResponse {
@@ -63,7 +77,7 @@ class UserResponse {
           subName: category['sub_name'],
           value: category['value'],
           emoji: category['emoji'],
-          tags: [],
+          tags: const [],
         ));
       });
     }

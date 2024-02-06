@@ -2,9 +2,25 @@ import 'package:dodal_app/model/category_model.dart';
 import 'package:dodal_app/model/tag_model.dart';
 import 'package:equatable/equatable.dart';
 
+List<Tag> parseTag(List<dynamic> tagList) =>
+    tagList.map((e) => Tag(name: e['name'], value: e['value'])).toList();
+
+List<MyCategory> parseCategory(List<dynamic> categoryList) => categoryList
+    .map((e) => MyCategory(
+          name: e['name'],
+          subName: e['sub_name'],
+          value: e['value'],
+          emoji: e['emoji'],
+          hashTags: e['hash_tags'],
+        ))
+    .toList();
+
 class User extends Equatable {
   final int id;
-  final String email, nickname, content, socialType;
+  final String email;
+  final String nickname;
+  final String content;
+  final String socialType;
   final String? profileUrl;
   final DateTime? registerAt;
   final List<MyCategory> categoryList;
@@ -22,33 +38,19 @@ class User extends Equatable {
     required this.tagList,
   });
 
-  User.formJson(Map<String, dynamic> data)
-      : id = data['user_id'],
-        email = data['email'],
-        nickname = data['nickname'],
-        content = data['content'],
-        profileUrl = data['profile_url'],
-        registerAt = data['register_at'] != null
-            ? DateTime.parse(data['register_at'])
-            : null,
-        socialType = data['social_type'],
-        categoryList = (data['category_list'] as List<dynamic>?)
-                ?.map((e) => MyCategory(
-                      name: e['name'],
-                      subName: e['sub_name'],
-                      value: e['value'],
-                      emoji: e['emoji'],
-                      hashTags: e['hash_tags'],
-                    ))
-                .toList() ??
-            [],
-        tagList = (data['tag_list'] as List<dynamic>?)
-                ?.map((e) => Tag(name: e['name'], value: e['value']))
-                .toList() ??
-            [];
-
-  @override
-  bool get stringify => true;
+  factory User.formJson(Map<String, dynamic> data) {
+    return User(
+      id: data['user_id'],
+      email: data['email'],
+      nickname: data['nickname'],
+      content: data['content'],
+      profileUrl: data['profile_url'],
+      registerAt: DateTime.parse(data['register_at']),
+      socialType: data['social_type'],
+      categoryList: parseCategory(data['category_list']),
+      tagList: parseTag(data['tag_list']),
+    );
+  }
 
   @override
   List<Object> get props => [
@@ -56,9 +58,10 @@ class User extends Equatable {
         email,
         nickname,
         content,
+        socialType,
         profileUrl.toString(),
         registerAt.toString(),
-        socialType,
-        tagList.toString(),
+        categoryList,
+        tagList,
       ];
 }

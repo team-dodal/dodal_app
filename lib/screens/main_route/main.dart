@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/helper/slide_page_route.dart';
 import 'package:dodal_app/providers/create_challenge_cubit.dart';
+import 'package:dodal_app/providers/feed_list_bloc.dart';
 import 'package:dodal_app/providers/my_bookmark_list_cubit.dart';
 import 'package:dodal_app/providers/notification_list_bloc.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
@@ -43,7 +44,10 @@ List<Route> routeList = [
     name: '피드',
     iconPath: 'assets/icons/feed_icon.svg',
     activeIconPath: 'assets/icons/feed_active_icon.svg',
-    screen: const FeedScreen(),
+    screen: BlocProvider(
+      create: (context) => FeedListBloc(),
+      child: const FeedScreen(),
+    ),
   ),
   Route(
     name: '도전',
