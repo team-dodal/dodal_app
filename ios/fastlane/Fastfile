@@ -96,7 +96,7 @@ platform :ios do
       api_key_path: "app-store-api-key.json",
       app_version: version,
       skip_screenshots: true,
-      skip_metadata: true,
+      skip_metadata: false,
       precheck_include_in_app_purchases: false,
       force: true, # 터미널 skip
       submit_for_review: true, # 올리자마자 심사

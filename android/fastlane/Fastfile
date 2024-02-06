@@ -61,7 +61,6 @@ platform :android do
     )
     supply(
       track: 'production',
-      skip_upload_metadata: true,
       skip_upload_changelogs: true,
       skip_upload_images: true,
       skip_upload_apk: true,
