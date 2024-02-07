@@ -3,6 +3,7 @@ import 'package:dodal_app/helper/slide_page_route.dart';
 import 'package:dodal_app/providers/create_challenge_cubit.dart';
 import 'package:dodal_app/providers/feed_list_bloc.dart';
 import 'package:dodal_app/providers/my_bookmark_list_cubit.dart';
+import 'package:dodal_app/providers/my_challenge_list_bloc.dart';
 import 'package:dodal_app/providers/notification_list_bloc.dart';
 import 'package:dodal_app/providers/user_cubit.dart';
 import 'package:dodal_app/screens/bookmark/main.dart';
@@ -53,7 +54,10 @@ List<Route> routeList = [
     name: '도전',
     iconPath: 'assets/icons/flag_icon.svg',
     activeIconPath: 'assets/icons/flag_active_icon.svg',
-    screen: const ChallengeScreen(),
+    screen: BlocProvider(
+      create: (context) => MyChallengeListBloc(),
+      child: const ChallengeScreen(),
+    ),
   ),
   Route(
     name: '마이',

@@ -7,8 +7,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class FeedScreen extends StatelessWidget {
+class FeedScreen extends StatefulWidget {
   const FeedScreen({super.key});
+
+  @override
+  State<FeedScreen> createState() => _FeedScreenState();
+}
+
+class _FeedScreenState extends State<FeedScreen> {
+  ScrollController scrollController = ScrollController();
 
   Widget _empty() {
     return const Center(
@@ -21,6 +28,7 @@ class FeedScreen extends StatelessWidget {
 
   Widget _success(List<FeedContentResponse> list) {
     return ListView.separated(
+      controller: scrollController,
       separatorBuilder: (context, index) => const Divider(
         thickness: 8,
         color: AppColors.systemGrey4,
@@ -31,13 +39,30 @@ class FeedScreen extends StatelessWidget {
   }
 
   @override
+  void initState() {
+    scrollController.addListener(() {
+      if (scrollController.position.maxScrollExtent - 200 <=
+          scrollController.offset) {
+        context.read<FeedListBloc>().add(LoadFeedListEvent());
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<FeedListBloc, FeedListState>(
       builder: (context, state) {
         switch (state.status) {
           case FeedListStatus.init:
-          case FeedListStatus.loading:
             return const Center(child: CupertinoActivityIndicator());
+          case FeedListStatus.loading:
           case FeedListStatus.success:
             if (state.list.isEmpty) {
               return _empty();

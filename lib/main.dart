@@ -64,7 +64,7 @@ class _AppState extends State<App> {
           builder: (context, state) {
             switch (state.status) {
               case UserBlocStatus.init:
-              case UserBlocStatus.success:
+              case UserBlocStatus.loading:
                 return const Scaffold(
                   body: Center(child: CupertinoActivityIndicator()),
                 );
@@ -73,7 +73,7 @@ class _AppState extends State<App> {
                   create: (context) => SignInBloc(const FlutterSecureStorage()),
                   child: const SignInScreen(),
                 );
-              case UserBlocStatus.loaded:
+              case UserBlocStatus.success:
                 if (state.result == null) {
                   return BlocProvider(
                     create: (context) =>

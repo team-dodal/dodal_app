@@ -9,7 +9,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-enum UserBlocStatus { init, success, loaded, error }
+enum UserBlocStatus { init, loading, success, error }
 
 class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
   String fcmToken;
@@ -27,11 +27,11 @@ class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
   }
 
   _loadData(LoadUserBlocEvent event, emit) async {
-    emit(state.copyWith(status: UserBlocStatus.success));
+    emit(state.copyWith(status: UserBlocStatus.loading));
     try {
       User? res = await UserService.user();
       emit(state.copyWith(
-        status: UserBlocStatus.loaded,
+        status: UserBlocStatus.success,
         result: res,
       ));
       await _postFcmToken(event.fcmToken);
@@ -44,6 +44,7 @@ class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
   }
 
   _signUp(SignUpUserBlocEvent event, emit) async {
+    emit(state.copyWith(status: UserBlocStatus.loading));
     SignUpResponse? res = await UserService.signUp(
       socialType: event.socialType,
       socialId: event.socialId,
@@ -70,6 +71,7 @@ class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
   }
 
   _clearUser(ClearUserBlocEvent event, emit) async {
+    await secureStorage.deleteAll();
     emit(const UserBlocState.init());
   }
 

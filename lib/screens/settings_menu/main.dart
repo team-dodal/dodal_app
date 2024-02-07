@@ -36,7 +36,6 @@ class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
           ),
           SystemDialogButton(
             text: '로그아웃',
-            color: AppColors.danger,
             onPressed: () {
               secureStorage.deleteAll();
               if (!mounted) return;
@@ -72,6 +71,7 @@ class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
           ),
           SystemDialogButton(
             text: '확인',
+            color: AppColors.danger,
             onPressed: () async {
               await UserService.removeUser();
               await secureStorage.deleteAll();
