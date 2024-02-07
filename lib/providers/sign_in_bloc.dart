@@ -9,17 +9,9 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 enum SignInStatus { init, loading, success, error }
 
 class SignInBloc extends Bloc<SignInEvent, SignInState> {
-  final GoogleAuthService googleAuthService;
-  final KakaoAuthService kakaoAuthService;
-  final AppleAuthService appleAuthService;
   final FlutterSecureStorage secureStorage;
 
-  SignInBloc({
-    required this.appleAuthService,
-    required this.googleAuthService,
-    required this.kakaoAuthService,
-    required this.secureStorage,
-  }) : super(const SignInState.init()) {
+  SignInBloc(this.secureStorage) : super(const SignInState.init()) {
     on<SocialSignInEvent>(_signIn);
   }
 

@@ -1,7 +1,5 @@
 import 'dart:io';
 import 'package:dodal_app/model/tag_model.dart';
-import 'package:dodal_app/services/user/response.dart';
-import 'package:dodal_app/services/user/service.dart';
 import 'package:dodal_app/utilities/social_auth.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,20 +36,6 @@ class CreateUserCubit extends Cubit<CreateUserState> {
     bool isSelected = cloneList.contains(tag);
     isSelected ? cloneList.remove(tag) : cloneList.add(tag);
     emit(state.copyWith(category: cloneList));
-  }
-
-  Future<Map<String, String>?> createUser() async {
-    SignUpResponse? res = await UserService.signUp(
-      socialType: state.socialType,
-      socialId: state.socialId,
-      email: state.email,
-      nickname: state.nickname,
-      profile: state.image,
-      content: state.content,
-      category: state.category.map((e) => e.value as String).toList(),
-    );
-    if (res == null) return null;
-    return {"accessToken": res.accessToken!, "refreshToken": res.refreshToken!};
   }
 }
 

@@ -5,7 +5,6 @@ import 'package:dodal_app/screens/main_route/main.dart';
 import 'package:dodal_app/screens/sign_in/main.dart';
 import 'package:dodal_app/theme/theme_data.dart';
 import 'package:dodal_app/utilities/fcm_setting.dart';
-import 'package:dodal_app/utilities/social_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -50,7 +49,11 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => UserBloc(widget.fcmToken)),
+        BlocProvider(
+            create: (context) => UserBloc(
+                  widget.fcmToken,
+                  const FlutterSecureStorage(),
+                )),
         BlocProvider(create: (context) => CategoryListBloc()),
       ],
       child: MaterialApp(
@@ -67,23 +70,14 @@ class _AppState extends State<App> {
                 );
               case UserBlocStatus.error:
                 return BlocProvider(
-                  create: (context) => SignInBloc(
-                    googleAuthService: GoogleAuthService(),
-                    appleAuthService: AppleAuthService(),
-                    kakaoAuthService: KakaoAuthService(),
-                    secureStorage: const FlutterSecureStorage(),
-                  ),
+                  create: (context) => SignInBloc(const FlutterSecureStorage()),
                   child: const SignInScreen(),
                 );
               case UserBlocStatus.loaded:
                 if (state.result == null) {
                   return BlocProvider(
-                    create: (context) => SignInBloc(
-                      googleAuthService: GoogleAuthService(),
-                      appleAuthService: AppleAuthService(),
-                      kakaoAuthService: KakaoAuthService(),
-                      secureStorage: const FlutterSecureStorage(),
-                    ),
+                    create: (context) =>
+                        SignInBloc(const FlutterSecureStorage()),
                     child: const SignInScreen(),
                   );
                 } else {
