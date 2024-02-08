@@ -1,57 +1,20 @@
-import 'package:dodal_app/services/feed/response.dart';
-import 'package:dodal_app/services/feed/service.dart';
+import 'package:dodal_app/providers/comment_bloc.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/comment/bottom_text_input.dart';
 import 'package:dodal_app/widgets/comment/comment_box.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CommentScreen extends StatefulWidget {
-  const CommentScreen({super.key, required this.feedId});
-
-  final int feedId;
+  const CommentScreen({super.key});
 
   @override
   State<CommentScreen> createState() => _CommentScreenState();
 }
 
 class _CommentScreenState extends State<CommentScreen> {
-  List<CommentResponse> _list = [];
   TextEditingController textEditingController = TextEditingController();
-
-  _getCommentList() async {
-    final res = await FeedService.getAllComments(feedId: widget.feedId);
-    setState(() {
-      _list = res;
-    });
-  }
-
-  _postComment() async {
-    if (textEditingController.text.isEmpty) return;
-    final res = await FeedService.createComment(
-      feedId: widget.feedId,
-      content: textEditingController.text,
-    );
-    setState(() {
-      _list = res;
-    });
-    textEditingController.clear();
-  }
-
-  Future<void> _removeComment(commentId) async {
-    final res = await FeedService.removeComment(
-      feedId: widget.feedId,
-      commentId: commentId,
-    );
-    setState(() {
-      _list = res;
-    });
-  }
-
-  @override
-  void initState() {
-    _getCommentList();
-    super.initState();
-  }
 
   @override
   void dispose() {
@@ -61,37 +24,58 @@ class _CommentScreenState extends State<CommentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.pop(context, _list.length);
-        return false;
-      },
-      child: Scaffold(
-        appBar: AppBar(title: const Text('댓글')),
-        body: Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16, bottom: 20),
-          child: ListView.separated(
-            separatorBuilder: (context, index) {
-              return Container(
-                height: 1,
-                width: double.infinity,
-                color: AppColors.basicColor2,
-              );
-            },
-            itemCount: _list.length,
-            itemBuilder: (context, index) => CommentBox(
-              comment: _list[index],
-              removeComment: _removeComment,
+    return BlocBuilder<CommentBloc, CommentBlocState>(
+      builder: (context, state) {
+        return WillPopScope(
+          onWillPop: () async {
+            Navigator.pop(context, state.list.length);
+            return false;
+          },
+          child: Scaffold(
+            appBar: AppBar(title: const Text('댓글')),
+            body: Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 20),
+              child: Builder(builder: (context) {
+                switch (state.status) {
+                  case CommentBlocStatus.init:
+                  case CommentBlocStatus.loading:
+                    return const Center(child: CupertinoActivityIndicator());
+                  case CommentBlocStatus.error:
+                    return Center(child: Text(state.errorMessage!));
+                  case CommentBlocStatus.success:
+                    return ListView.separated(
+                      separatorBuilder: (context, index) {
+                        return Container(
+                          height: 1,
+                          width: double.infinity,
+                          color: AppColors.basicColor2,
+                        );
+                      },
+                      itemCount: state.list.length,
+                      itemBuilder: (context, index) => CommentBox(
+                        comment: state.list[index],
+                        removeComment: (commentId) async {
+                          context
+                              .read<CommentBloc>()
+                              .add(RemoveCommentBlocEvent(commentId));
+                        },
+                      ),
+                    );
+                }
+              }),
+            ),
+            bottomSheet: BottomTextInput(
+              controller: textEditingController,
+              postComment: () async {
+                context
+                    .read<CommentBloc>()
+                    .add(SubmitCommentBlocEvent(textEditingController.text));
+                textEditingController.clear();
+              },
             ),
           ),
-        ),
-        bottomSheet: BottomTextInput(
-          controller: textEditingController,
-          postComment: () async {
-            await _postComment();
-          },
-        ),
-      ),
+        );
+      },
     );
   }
 }

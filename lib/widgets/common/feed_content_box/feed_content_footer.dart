@@ -1,4 +1,5 @@
 import 'package:dodal_app/layout/filter_bottom_sheet_layout.dart';
+import 'package:dodal_app/providers/comment_bloc.dart';
 import 'package:dodal_app/screens/comment/main.dart';
 import 'package:dodal_app/screens/report/main.dart';
 import 'package:dodal_app/services/feed/response.dart';
@@ -7,6 +8,7 @@ import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/avatar_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
 class FeedContentFooter extends StatefulWidget {
@@ -151,8 +153,10 @@ class _FeedContentFooterState extends State<FeedContentFooter> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => CommentScreen(
-                                feedId: widget.feedContent.feedId,
+                              builder: (context) => BlocProvider(
+                                create: (context) =>
+                                    CommentBloc(widget.feedContent.feedId),
+                                child: const CommentScreen(),
                               ),
                             ),
                           ).then((value) {

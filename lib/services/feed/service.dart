@@ -89,7 +89,7 @@ class FeedService {
     }
   }
 
-  static createComment({
+  static Future<List<CommentResponse>> createComment({
     required int feedId,
     required String content,
     int? parentId,
@@ -102,9 +102,8 @@ class FeedService {
       return contents
           .map((content) => CommentResponse.fromJson(content))
           .toList();
-    } on DioException catch (error) {
-      ResponseErrorDialog(error);
-      return null;
+    } on DioException {
+      rethrow;
     }
   }
 
