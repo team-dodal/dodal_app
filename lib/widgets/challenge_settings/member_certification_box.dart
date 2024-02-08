@@ -1,6 +1,6 @@
 import 'package:dodal_app/model/certification_code_enum.dart';
 import 'package:dodal_app/model/day_enum.dart';
-import 'package:dodal_app/providers/user_cubit.dart';
+import 'package:dodal_app/providers/user_bloc.dart';
 import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/services/manage_challenge/response.dart';
 import 'package:dodal_app/theme/color.dart';

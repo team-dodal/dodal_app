@@ -1,4 +1,4 @@
-import 'package:dodal_app/providers/user_cubit.dart';
+import 'package:dodal_app/providers/user_bloc.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/image_widget.dart';

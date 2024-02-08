@@ -1,6 +1,6 @@
 import 'package:dodal_app/providers/category_list_bloc.dart';
 import 'package:dodal_app/providers/sign_in_bloc.dart';
-import 'package:dodal_app/providers/user_cubit.dart';
+import 'package:dodal_app/providers/user_bloc.dart';
 import 'package:dodal_app/screens/main_route/main.dart';
 import 'package:dodal_app/screens/sign_in/main.dart';
 import 'package:dodal_app/theme/theme_data.dart';

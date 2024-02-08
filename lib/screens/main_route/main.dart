@@ -5,7 +5,7 @@ import 'package:dodal_app/providers/feed_list_bloc.dart';
 import 'package:dodal_app/providers/my_bookmark_list_cubit.dart';
 import 'package:dodal_app/providers/my_challenge_list_bloc.dart';
 import 'package:dodal_app/providers/notification_list_bloc.dart';
-import 'package:dodal_app/providers/user_cubit.dart';
+import 'package:dodal_app/providers/user_bloc.dart';
 import 'package:dodal_app/screens/bookmark/main.dart';
 import 'package:dodal_app/screens/create_challenge/main.dart';
 import 'package:dodal_app/screens/notification/main.dart';

@@ -4,7 +4,7 @@ import 'package:dodal_app/model/challenge_code_enum.dart';
 import 'package:dodal_app/model/challenge_model.dart';
 import 'package:dodal_app/providers/modify_user_cubit.dart';
 import 'package:dodal_app/providers/nickname_check_bloc.dart';
-import 'package:dodal_app/providers/user_cubit.dart';
+import 'package:dodal_app/providers/user_bloc.dart';
 import 'package:dodal_app/screens/challenge_preview/main.dart';
 import 'package:dodal_app/screens/challenge_route/main.dart';
 import 'package:dodal_app/screens/modify_user/main.dart';

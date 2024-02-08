@@ -1,6 +1,6 @@
 import 'package:dodal_app/providers/modify_user_cubit.dart';
 import 'package:dodal_app/providers/nickname_check_bloc.dart';
-import 'package:dodal_app/providers/user_cubit.dart';
+import 'package:dodal_app/providers/user_bloc.dart';
 import 'package:dodal_app/screens/modify_user/main.dart';
 import 'package:dodal_app/services/user/response.dart';
 import 'package:dodal_app/theme/color.dart';

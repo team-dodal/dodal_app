@@ -16,12 +16,12 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
   }
 
   Future<void> _signIn(SocialSignInEvent event, emit) async {
+    emit(state.copyWith(status: SignInStatus.loading, type: event.type));
     try {
-      emit(state.copyWith(status: SignInStatus.loading, type: event.type));
       final data = await _getSocialIdAndEmail(event.type);
       emit(state.copyWith(id: data.id, email: data.email));
       SignInResponse? res = await UserService.signIn(event.type, data.id);
-      if (res != null && res.isSigned) {
+      if (res != null) {
         secureStorage.write(key: 'accessToken', value: res.accessToken);
         secureStorage.write(key: 'refreshToken', value: res.refreshToken);
         emit(state.copyWith(status: SignInStatus.success, user: res.user));

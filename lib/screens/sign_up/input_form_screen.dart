@@ -1,4 +1,4 @@
-import 'package:dodal_app/providers/create_user_cubit.dart';
+import 'package:dodal_app/providers/sign_up_cubit.dart';
 import 'package:dodal_app/providers/nickname_check_bloc.dart';
 import 'package:dodal_app/widgets/common/create_form_title.dart';
 import 'package:dodal_app/widgets/common/avatar_image.dart';
@@ -31,8 +31,7 @@ class _InputFormScreenState extends State<InputFormScreen> {
 
   @override
   void initState() {
-    CreateUserState signUpData =
-        BlocProvider.of<CreateUserCubit>(context).state;
+    SignUpState signUpData = BlocProvider.of<SignUpCubit>(context).state;
     nicknameController.text = signUpData.nickname;
     contentController.text = signUpData.content;
     super.initState();
@@ -48,7 +47,7 @@ class _InputFormScreenState extends State<InputFormScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreateUserCubit, CreateUserState>(
+    return BlocBuilder<SignUpCubit, SignUpState>(
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(title: const Text('프로필 설정')),
@@ -68,7 +67,7 @@ class _InputFormScreenState extends State<InputFormScreen> {
                     width: 100,
                     height: 100,
                     onChanged: (image) {
-                      context.read<CreateUserCubit>().updateImage(image);
+                      context.read<SignUpCubit>().updateImage(image);
                     },
                     image: state.image,
                   ),
@@ -76,7 +75,7 @@ class _InputFormScreenState extends State<InputFormScreen> {
                   NicknameInput(
                     nicknameController: nicknameController,
                     onApproveNickname: (nickname) {
-                      context.read<CreateUserCubit>().updateNickname(nickname);
+                      context.read<SignUpCubit>().updateNickname(nickname);
                     },
                   ),
                   const SizedBox(height: 40),
@@ -88,7 +87,7 @@ class _InputFormScreenState extends State<InputFormScreen> {
                     maxLength: 50,
                     multiLine: true,
                     onChanged: (value) {
-                      context.read<CreateUserCubit>().updateContent(value);
+                      context.read<SignUpCubit>().updateContent(value);
                     },
                   ),
                 ],

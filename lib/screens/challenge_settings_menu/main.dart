@@ -1,4 +1,4 @@
-import 'package:dodal_app/providers/user_cubit.dart';
+import 'package:dodal_app/providers/user_bloc.dart';
 import 'package:dodal_app/screens/challenge_settings_menu/admin_menu.dart';
 import 'package:dodal_app/screens/challenge_settings_menu/member_menu.dart';
 import 'package:dodal_app/services/challenge/response.dart';

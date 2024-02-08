@@ -1,4 +1,4 @@
-import 'package:dodal_app/providers/user_cubit.dart';
+import 'package:dodal_app/providers/user_bloc.dart';
 import 'package:dodal_app/screens/challenge_notice/room_notice_list_screen.dart';
 import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/theme/color.dart';

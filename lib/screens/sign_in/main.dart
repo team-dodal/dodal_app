@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:dodal_app/model/user_model.dart';
-import 'package:dodal_app/providers/create_user_cubit.dart';
+import 'package:dodal_app/providers/sign_up_cubit.dart';
 import 'package:dodal_app/providers/sign_in_bloc.dart';
-import 'package:dodal_app/providers/user_cubit.dart';
+import 'package:dodal_app/providers/user_bloc.dart';
 import 'package:dodal_app/screens/main_route/main.dart';
 import 'package:dodal_app/screens/sign_up/main.dart';
 import 'package:dodal_app/providers/nickname_check_bloc.dart';
@@ -12,14 +12,14 @@ import 'package:dodal_app/utilities/social_auth.dart';
 import 'package:dodal_app/widgets/common/system_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
 
-  _goMainPage(BuildContext context) {
-    User user = context.read<SignInBloc>().state.user!;
+  _goMainPage(BuildContext context, User user) {
     context.read<UserBloc>().add(UpdateUserBlocEvent(user));
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (ctx) => const MainRoute()),
@@ -27,17 +27,22 @@ class SignInScreen extends StatelessWidget {
     );
   }
 
-  _goSignUpPage(BuildContext context) {
-    SignInState state = context.read<SignInBloc>().state;
+  _goSignUpPage(
+    BuildContext context,
+    String id,
+    String email,
+    SocialType type,
+  ) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (ctx) => MultiBlocProvider(
           providers: [
             BlocProvider(
-              create: (context) => CreateUserCubit(
-                socialId: state.id,
-                email: state.email,
-                socialType: state.type!,
+              create: (context) => SignUpCubit(
+                secureStorage: const FlutterSecureStorage(),
+                socialId: id,
+                email: email,
+                socialType: type,
               ),
             ),
             BlocProvider(
@@ -50,12 +55,12 @@ class SignInScreen extends StatelessWidget {
     );
   }
 
-  _errorModal(BuildContext context) {
+  _errorModal(BuildContext context, String errorMessage) {
     showDialog(
       context: context,
       builder: (_) => SystemDialog(
         title: '로그인에 실패하였습니다',
-        subTitle: context.read<SignInBloc>().state.errorMessage,
+        subTitle: errorMessage,
       ),
     );
   }
@@ -66,13 +71,13 @@ class SignInScreen extends StatelessWidget {
       listener: (context, state) {
         if (state.status == SignInStatus.success) {
           if (state.user != null) {
-            _goMainPage(context);
+            _goMainPage(context, state.user!);
           } else {
-            _goSignUpPage(context);
+            _goSignUpPage(context, state.id, state.email, state.type!);
           }
         }
         if (state.status == SignInStatus.error) {
-          _errorModal(context);
+          _errorModal(context, state.errorMessage!);
         }
       },
       child: Scaffold(

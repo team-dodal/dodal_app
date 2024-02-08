@@ -1,5 +1,5 @@
 import 'package:dodal_app/providers/sign_in_bloc.dart';
-import 'package:dodal_app/providers/user_cubit.dart';
+import 'package:dodal_app/providers/user_bloc.dart';
 import 'package:dodal_app/screens/settings_menu/personal_data_rule_screen.dart';
 import 'package:dodal_app/screens/settings_menu/service_rule_screen.dart';
 import 'package:dodal_app/screens/sign_in/main.dart';

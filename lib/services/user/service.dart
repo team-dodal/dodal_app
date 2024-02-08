@@ -21,8 +21,8 @@ class UserService {
       } else {
         return null;
       }
-    } on DioException catch (error) {
-      ResponseErrorDialog(error);
+    } on DioException {
+      rethrow;
     }
   }
 
@@ -57,9 +57,8 @@ class UserService {
 
       final res = await service.post('/api/v1/users/sign-up', data: data);
       return SignUpResponse.fromJson(res.data['result']);
-    } on DioException catch (err) {
-      ResponseErrorDialog(err, err.response!.data['result']);
-      return null;
+    } on DioException {
+      rethrow;
     }
   }
 
