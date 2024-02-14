@@ -75,7 +75,6 @@ case "$PLATFORM" in
     cp .env.production .env
     deploy_android
     deploy_ios
-    increment_version "$git_last_version"
     cp .env.development .env
     ;;
 esac
