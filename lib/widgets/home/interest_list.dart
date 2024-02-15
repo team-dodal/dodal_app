@@ -1,18 +1,18 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/model/category_model.dart';
-import 'package:dodal_app/model/challenge_code_enum.dart';
 import 'package:dodal_app/model/challenge_model.dart';
+import 'package:dodal_app/providers/custom_feed_list_bloc.dart';
 import 'package:dodal_app/providers/modify_user_cubit.dart';
 import 'package:dodal_app/providers/nickname_check_bloc.dart';
 import 'package:dodal_app/providers/user_bloc.dart';
 import 'package:dodal_app/screens/challenge_preview/main.dart';
 import 'package:dodal_app/screens/challenge_route/main.dart';
 import 'package:dodal_app/screens/modify_user/main.dart';
-import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/challenge_box/list_challenge_box.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -106,17 +106,38 @@ class InterestList extends StatelessWidget {
                   ],
                 ),
               ),
-              ExpandablePageView.builder(
-                itemCount:
-                    context.read<UserBloc>().state.result!.categoryList.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) => InterestCategoryCard(
-                  category: context
-                      .read<UserBloc>()
-                      .state
-                      .result!
-                      .categoryList[index],
-                ),
+              BlocBuilder<CustomFeedListBloc, CustomFeedListState>(
+                builder: (context, state) {
+                  switch (state.status) {
+                    case CustomFeedListStatus.init:
+                    case CustomFeedListStatus.loading:
+                      return const Center(child: CupertinoActivityIndicator());
+                    case CustomFeedListStatus.error:
+                      return Center(child: Text(state.errorMessage!));
+                    case CustomFeedListStatus.success:
+                      return ExpandablePageView.builder(
+                        itemCount: state.interestList.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          print(context
+                              .read<UserBloc>()
+                              .state
+                              .result!
+                              .categoryList[index]
+                              .hashTags);
+
+                          return InterestCategoryCard(
+                            category: context
+                                .read<UserBloc>()
+                                .state
+                                .result!
+                                .categoryList[index],
+                            challenges: state.interestList[index],
+                          );
+                        },
+                      );
+                  }
+                },
               ),
             ],
           ),
@@ -126,40 +147,15 @@ class InterestList extends StatelessWidget {
   }
 }
 
-class InterestCategoryCard extends StatefulWidget {
-  const InterestCategoryCard({super.key, required this.category});
+class InterestCategoryCard extends StatelessWidget {
+  const InterestCategoryCard({
+    super.key,
+    required this.category,
+    required this.challenges,
+  });
 
   final MyCategory category;
-
-  @override
-  State<InterestCategoryCard> createState() => _InterestCategoryCardState();
-}
-
-class _InterestCategoryCardState extends State<InterestCategoryCard> {
-  List<Challenge> _challenges = [];
-  bool _isLoading = true;
-
-  _getChallenges() async {
-    final res = await ChallengeService.getChallengesByCategory(
-      categoryValue: widget.category.value,
-      tagValue: '',
-      conditionCode: ChallengeCodeEnum.interest.index,
-      certCntList: [1, 2, 3, 4, 5, 6, 7],
-      page: 0,
-      pageSize: 3,
-    );
-    if (res == null) return;
-    setState(() {
-      _challenges = res;
-      _isLoading = false;
-    });
-  }
-
-  @override
-  void initState() {
-    _getChallenges();
-    super.initState();
-  }
+  final List<Challenge> challenges;
 
   @override
   Widget build(BuildContext context) {
@@ -184,30 +180,17 @@ class _InterestCategoryCardState extends State<InterestCategoryCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '${widget.category.subName} ${widget.category.name} ${widget.category.emoji}',
+              '${category.subName} ${category.name} ${category.emoji}',
               style: context.body1(fontWeight: FontWeight.bold),
             ),
-            Text(
-              '${widget.category.hashTags[0]} ${widget.category.hashTags[1]}',
-              style: context.body4(color: AppColors.systemGrey1),
+            Row(
+              children: category.hashTags.map((tag) => Text('$tag ')).toList(),
             ),
             Builder(
               builder: (context) {
-                if (_isLoading) {
-                  return Column(
-                    children: [
-                      for (final _ in List.generate(3, (index) => index))
-                        Container(
-                          padding: const EdgeInsets.only(top: 20),
-                          constraints: const BoxConstraints(minHeight: 80),
-                          child: const ListChallengeBoxSkeleton(),
-                        )
-                    ],
-                  );
-                }
                 return Column(
                   children: [
-                    for (final challenge in _challenges)
+                    for (final challenge in challenges)
                       OpenContainer(
                         transitionType: ContainerTransitionType.fadeThrough,
                         closedElevation: 0,

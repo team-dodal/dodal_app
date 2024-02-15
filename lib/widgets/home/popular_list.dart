@@ -1,46 +1,48 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/model/category_model.dart';
-import 'package:dodal_app/model/challenge_code_enum.dart';
 import 'package:dodal_app/model/challenge_model.dart';
 import 'package:dodal_app/providers/category_list_bloc.dart';
 import 'package:dodal_app/providers/challenge_list_bloc.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
+import 'package:dodal_app/providers/custom_feed_list_bloc.dart';
 import 'package:dodal_app/screens/challenge_list/main.dart';
 import 'package:dodal_app/screens/challenge_preview/main.dart';
 import 'package:dodal_app/screens/challenge_route/main.dart';
-import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/challenge_box/grid_challenge_box.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class PopularList extends StatefulWidget {
+class PopularList extends StatelessWidget {
   const PopularList({super.key});
 
-  @override
-  State<PopularList> createState() => _PopularListState();
-}
-
-class _PopularListState extends State<PopularList> {
-  List<Challenge> _challenges = [];
-
-  _getChallenges() async {
-    final res = await ChallengeService.getChallenges(
-      conditionCode: ChallengeCodeEnum.popular.index,
-      page: 0,
-      pageSize: 4,
+  Widget _success(List<Challenge> list) {
+    return GridView.count(
+      crossAxisCount: 2,
+      crossAxisSpacing: 8,
+      mainAxisSpacing: 20,
+      shrinkWrap: true,
+      childAspectRatio: 0.8,
+      physics: const NeverScrollableScrollPhysics(),
+      children: [
+        for (final challenge in list)
+          OpenContainer(
+            transitionType: ContainerTransitionType.fadeThrough,
+            closedElevation: 0,
+            closedBuilder: (context, action) {
+              return Container(
+                  padding: const EdgeInsets.only(top: 20),
+                  constraints: const BoxConstraints(minHeight: 80),
+                  child: GridChallengeBox(challenge: challenge));
+            },
+            openBuilder: (context, action) => challenge.isJoined
+                ? ChallengeRoute(id: challenge.id)
+                : ChallengePreviewScreen(id: challenge.id),
+          )
+      ],
     );
-
-    setState(() {
-      _challenges = res!;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _getChallenges();
   }
 
   @override
@@ -57,29 +59,18 @@ class _PopularListState extends State<PopularList> {
               style: context.headline4(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            GridView.count(
-              crossAxisCount: 2,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 20,
-              shrinkWrap: true,
-              childAspectRatio: 0.8,
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                for (final challenge in _challenges)
-                  OpenContainer(
-                    transitionType: ContainerTransitionType.fadeThrough,
-                    closedElevation: 0,
-                    closedBuilder: (context, action) {
-                      return Container(
-                          padding: const EdgeInsets.only(top: 20),
-                          constraints: const BoxConstraints(minHeight: 80),
-                          child: GridChallengeBox(challenge: challenge));
-                    },
-                    openBuilder: (context, action) => challenge.isJoined
-                        ? ChallengeRoute(id: challenge.id)
-                        : ChallengePreviewScreen(id: challenge.id),
-                  )
-              ],
+            BlocBuilder<CustomFeedListBloc, CustomFeedListState>(
+              builder: (context, state) {
+                switch (state.status) {
+                  case CustomFeedListStatus.init:
+                  case CustomFeedListStatus.loading:
+                    return const Center(child: CupertinoActivityIndicator());
+                  case CustomFeedListStatus.error:
+                    return Text(state.errorMessage!);
+                  case CustomFeedListStatus.success:
+                    return _success(state.popularList);
+                }
+              },
             ),
             const SizedBox(height: 20),
             OutlinedButton(

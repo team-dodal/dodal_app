@@ -1,45 +1,43 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/model/category_model.dart';
-import 'package:dodal_app/model/challenge_code_enum.dart';
 import 'package:dodal_app/model/challenge_model.dart';
 import 'package:dodal_app/providers/category_list_bloc.dart';
 import 'package:dodal_app/providers/challenge_list_bloc.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
+import 'package:dodal_app/providers/custom_feed_list_bloc.dart';
 import 'package:dodal_app/screens/challenge_list/main.dart';
 import 'package:dodal_app/screens/challenge_preview/main.dart';
 import 'package:dodal_app/screens/challenge_route/main.dart';
-import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/challenge_box/recent_challenge_box.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class RecentList extends StatefulWidget {
+class RecentList extends StatelessWidget {
   const RecentList({super.key});
 
-  @override
-  State<RecentList> createState() => _RecentListState();
-}
-
-class _RecentListState extends State<RecentList> {
-  List<Challenge> _challenges = [];
-
-  _getChallenges() async {
-    final res = await ChallengeService.getChallenges(
-      conditionCode: ChallengeCodeEnum.recent.index,
-      page: 0,
-      pageSize: 3,
+  Widget _success(List<Challenge> list) {
+    return Column(
+      children: [
+        for (final challenge in list)
+          OpenContainer(
+            transitionType: ContainerTransitionType.fadeThrough,
+            closedElevation: 0,
+            closedBuilder: (context, action) {
+              return Container(
+                padding: const EdgeInsets.only(top: 20),
+                constraints: const BoxConstraints(minHeight: 80),
+                child: RecentChallengeBox(challenge: challenge),
+              );
+            },
+            openBuilder: (context, action) => challenge.isJoined
+                ? ChallengeRoute(id: challenge.id)
+                : ChallengePreviewScreen(id: challenge.id),
+          ),
+      ],
     );
-    setState(() {
-      _challenges = res!;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _getChallenges();
   }
 
   @override
@@ -57,21 +55,19 @@ class _RecentListState extends State<RecentList> {
             ),
           ),
           const SizedBox(height: 16),
-          for (final challenge in _challenges)
-            OpenContainer(
-              transitionType: ContainerTransitionType.fadeThrough,
-              closedElevation: 0,
-              closedBuilder: (context, action) {
-                return Container(
-                  padding: const EdgeInsets.only(top: 20),
-                  constraints: const BoxConstraints(minHeight: 80),
-                  child: RecentChallengeBox(challenge: challenge),
-                );
-              },
-              openBuilder: (context, action) => challenge.isJoined
-                  ? ChallengeRoute(id: challenge.id)
-                  : ChallengePreviewScreen(id: challenge.id),
-            ),
+          BlocBuilder<CustomFeedListBloc, CustomFeedListState>(
+            builder: (context, state) {
+              switch (state.status) {
+                case CustomFeedListStatus.init:
+                case CustomFeedListStatus.loading:
+                  return const Center(child: CupertinoActivityIndicator());
+                case CustomFeedListStatus.error:
+                  return Center(child: Text(state.errorMessage!));
+                case CustomFeedListStatus.success:
+                  return _success(state.recentList);
+              }
+            },
+          ),
           const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
