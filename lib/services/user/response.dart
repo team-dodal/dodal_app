@@ -1,5 +1,3 @@
-import 'package:dodal_app/model/category_model.dart';
-import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/model/user_model.dart';
 
 class SignUpResponse {
@@ -43,76 +41,40 @@ class SignInResponse {
   }
 }
 
-class UserResponse {
-  final int? userId;
-  final String? nickname;
-  final String? profileUrl;
-  final String? content;
-  final List<Category>? categoryList;
-  final List<Tag>? tagList;
-  final List<ChallengeRoomList>? challengeRoomList;
+class UsersRoomFeedResponse {
+  final List<UsersChallengeRoom> challengeRoomList;
   final int? maxContinueCertCnt;
   final int? totalCertCnt;
 
-  UserResponse({
-    required this.userId,
-    required this.nickname,
-    required this.profileUrl,
-    required this.content,
-    required this.categoryList,
-    required this.tagList,
+  UsersRoomFeedResponse({
     required this.challengeRoomList,
     required this.maxContinueCertCnt,
     required this.totalCertCnt,
   });
 
-  factory UserResponse.fromJson(Map<String, dynamic> data) {
-    List<Category> categoryList = [];
-    List<Tag> tagList = [];
-    List<ChallengeRoomList> challengeRoomList = [];
-    if (data['category_list'] != null) {
-      data['category_list'].forEach((category) {
-        categoryList.add(Category(
-          name: category['name'],
-          subName: category['sub_name'],
-          value: category['value'],
-          emoji: category['emoji'],
-          tags: const [],
-        ));
-      });
-    }
-    if (data['tag_list'] != null) {
-      data['tag_list'].forEach((tag) {
-        tagList.add(Tag(name: tag['name'], value: tag['value']));
-      });
-    }
+  factory UsersRoomFeedResponse.fromJson(Map<String, dynamic> data) {
+    List<UsersChallengeRoom> challengeRoomList = [];
     if (data['challenge_room_list'] != null) {
       data['challenge_room_list'].forEach((challengeRoom) {
-        challengeRoomList.add(ChallengeRoomList.fromJson(challengeRoom));
+        challengeRoomList.add(UsersChallengeRoom.fromJson(challengeRoom));
       });
     }
-    return UserResponse(
-      userId: data['user_id'],
-      nickname: data['nickname'],
-      profileUrl: data['profile_url'],
-      content: data['content'],
+    return UsersRoomFeedResponse(
+      challengeRoomList: challengeRoomList,
       maxContinueCertCnt: data['max_continue_cert_cnt'],
       totalCertCnt: data['total_cert_cnt'],
-      categoryList: categoryList,
-      challengeRoomList: challengeRoomList,
-      tagList: tagList,
     );
   }
 }
 
-class ChallengeRoomList {
+class UsersChallengeRoom {
   final int? roomId;
   final String? title;
 
-  ChallengeRoomList({required this.roomId, required this.title});
+  UsersChallengeRoom({required this.roomId, required this.title});
 
-  factory ChallengeRoomList.fromJson(Map<String, dynamic> json) {
-    return ChallengeRoomList(roomId: json['room_id'], title: json['title']);
+  factory UsersChallengeRoom.fromJson(Map<String, dynamic> json) {
+    return UsersChallengeRoom(roomId: json['room_id'], title: json['title']);
   }
 }
 

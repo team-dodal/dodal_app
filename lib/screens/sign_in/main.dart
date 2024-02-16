@@ -1,8 +1,12 @@
 import 'dart:io';
 import 'package:dodal_app/model/user_model.dart';
+import 'package:dodal_app/providers/custom_feed_list_bloc.dart';
+import 'package:dodal_app/providers/feed_list_bloc.dart';
+import 'package:dodal_app/providers/my_challenge_list_bloc.dart';
 import 'package:dodal_app/providers/sign_up_cubit.dart';
 import 'package:dodal_app/providers/sign_in_bloc.dart';
 import 'package:dodal_app/providers/user_bloc.dart';
+import 'package:dodal_app/providers/user_room_feed_info_bloc.dart';
 import 'package:dodal_app/screens/main_route/main.dart';
 import 'package:dodal_app/screens/sign_up/main.dart';
 import 'package:dodal_app/providers/nickname_check_bloc.dart';
@@ -22,7 +26,21 @@ class SignInScreen extends StatelessWidget {
   _goMainPage(BuildContext context, User user) {
     context.read<UserBloc>().add(UpdateUserBlocEvent(user));
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (ctx) => const MainRoute()),
+      MaterialPageRoute(
+        builder: (ctx) => MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => CustomFeedListBloc(
+                context.read<UserBloc>().state.result!.categoryList,
+              ),
+            ),
+            BlocProvider(create: (context) => FeedListBloc()),
+            BlocProvider(create: (context) => MyChallengeListBloc()),
+            BlocProvider(create: (context) => UserRoomFeedInfoBloc()),
+          ],
+          child: const MainRoute(),
+        ),
+      ),
       (route) => false,
     );
   }

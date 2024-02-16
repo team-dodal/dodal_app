@@ -1,9 +1,15 @@
+import 'package:dodal_app/providers/custom_feed_list_bloc.dart';
+import 'package:dodal_app/providers/feed_list_bloc.dart';
+import 'package:dodal_app/providers/my_challenge_list_bloc.dart';
+import 'package:dodal_app/providers/user_bloc.dart';
+import 'package:dodal_app/providers/user_room_feed_info_bloc.dart';
 import 'package:dodal_app/screens/main_route/main.dart';
 import 'package:dodal_app/screens/report/main.dart';
 import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/widgets/common/system_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MemberMenu extends StatelessWidget {
   const MemberMenu({super.key, required this.challenge});
@@ -34,7 +40,25 @@ class MemberMenu extends StatelessWidget {
                 if (context.mounted) {
                   Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
-                      builder: (context) => const MainRoute(),
+                      builder: (context) => MultiBlocProvider(
+                        providers: [
+                          BlocProvider(
+                            create: (context) => CustomFeedListBloc(
+                              context
+                                  .read<UserBloc>()
+                                  .state
+                                  .result!
+                                  .categoryList,
+                            ),
+                          ),
+                          BlocProvider(create: (context) => FeedListBloc()),
+                          BlocProvider(
+                              create: (context) => MyChallengeListBloc()),
+                          BlocProvider(
+                              create: (context) => UserRoomFeedInfoBloc()),
+                        ],
+                        child: const MainRoute(),
+                      ),
                     ),
                     (route) => route.isFirst,
                   );

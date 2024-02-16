@@ -1,45 +1,30 @@
 import 'package:animations/animations.dart';
+import 'package:dodal_app/providers/calendar_feed_bloc.dart';
 import 'package:dodal_app/services/user/response.dart';
-import 'package:dodal_app/services/user/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/mypage/calendar_marker.dart';
 import 'package:dodal_app/widgets/mypage/my_feed_box.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class Calendar extends StatefulWidget {
-  const Calendar({super.key, required this.roomId});
-
-  final int roomId;
+  const Calendar({super.key});
 
   @override
   State<Calendar> createState() => _CalendarState();
 }
 
 class _CalendarState extends State<Calendar> {
-  DateTime _focusedDay = DateTime.now();
-  List<MyPageCalenderInfo> _feedList = [];
-
-  _requestFeedDate(DateTime focusDay) async {
-    String dateYM = DateFormat('yyyyMM').format(focusDay);
-    final res = await UserService.getFeedListByDate(
-      roomId: widget.roomId,
-      dateYM: dateYM,
-    );
-    if (res == null) return;
-    setState(() {
-      _feedList = res.myPageCalenderInfoList!;
-    });
-  }
-
-  Widget calenderBuilderFunction({
+  Widget _cellBuilder({
     required DateTime day,
     required DateTime focusedDay,
     bool disabled = false,
   }) {
-    List<MyPageCalenderInfo> findList = _feedList
+    final list = context.read<CalendarFeedBloc>().state.feedList;
+    List<MyPageCalenderInfo> findList = list
         .where((element) => element.day == DateFormat('d').format(day))
         .toList();
     bool isInclude = findList.isNotEmpty;
@@ -64,69 +49,56 @@ class _CalendarState extends State<Calendar> {
   }
 
   @override
-  void initState() {
-    _requestFeedDate(_focusedDay);
-    super.initState();
-  }
-
-  @override
-  void didUpdateWidget(covariant Calendar oldWidget) {
-    if (oldWidget.roomId != widget.roomId) {
-      _requestFeedDate(_focusedDay);
-    }
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return TableCalendar(
-      availableGestures: AvailableGestures.none,
-      firstDay: DateTime.utc(2023, 1, 1),
-      lastDay: DateTime.now(),
-      focusedDay: _focusedDay,
-      onPageChanged: (focusedDay) {
-        _requestFeedDate(focusedDay);
-        setState(() {
-          _focusedDay = focusedDay;
-        });
+    return BlocBuilder<CalendarFeedBloc, CalendarFeedState>(
+      builder: (context, state) {
+        return TableCalendar(
+          availableGestures: AvailableGestures.none,
+          firstDay: DateTime.utc(2023, 1, 1),
+          lastDay: DateTime.now(),
+          focusedDay: state.focusedDay,
+          onPageChanged: (focusedDay) {
+            context.read<CalendarFeedBloc>().add(ChangeDateEvent(focusedDay));
+          },
+          locale: 'ko-KR',
+          headerStyle: HeaderStyle(
+            formatButtonVisible: false,
+            titleCentered: true,
+            titleTextStyle: context.body1(fontWeight: FontWeight.bold)!,
+            leftChevronIcon: const Icon(
+              Icons.arrow_back_ios_rounded,
+              color: AppColors.systemGrey2,
+              size: 24,
+            ),
+            rightChevronIcon: const Icon(
+              Icons.arrow_forward_ios_rounded,
+              color: AppColors.systemGrey2,
+              size: 24,
+            ),
+            headerMargin: const EdgeInsets.only(bottom: 4),
+          ),
+          daysOfWeekStyle: DaysOfWeekStyle(
+            weekdayStyle: context.caption()!,
+            weekendStyle: context.caption()!,
+          ),
+          calendarStyle: const CalendarStyle(outsideDaysVisible: false),
+          calendarBuilders: CalendarBuilders(
+            defaultBuilder: (context, day, focusedDay) => _cellBuilder(
+              day: day,
+              focusedDay: focusedDay,
+            ),
+            todayBuilder: (context, day, focusedDay) => _cellBuilder(
+              day: day,
+              focusedDay: focusedDay,
+            ),
+            disabledBuilder: (context, day, focusedDay) => _cellBuilder(
+              day: day,
+              focusedDay: focusedDay,
+              disabled: true,
+            ),
+          ),
+        );
       },
-      locale: 'ko-KR',
-      headerStyle: HeaderStyle(
-        formatButtonVisible: false,
-        titleCentered: true,
-        titleTextStyle: context.body1(fontWeight: FontWeight.bold)!,
-        leftChevronIcon: const Icon(
-          Icons.arrow_back_ios_rounded,
-          color: AppColors.systemGrey2,
-          size: 24,
-        ),
-        rightChevronIcon: const Icon(
-          Icons.arrow_forward_ios_rounded,
-          color: AppColors.systemGrey2,
-          size: 24,
-        ),
-        headerMargin: const EdgeInsets.only(bottom: 4),
-      ),
-      daysOfWeekStyle: DaysOfWeekStyle(
-        weekdayStyle: context.caption()!,
-        weekendStyle: context.caption()!,
-      ),
-      calendarStyle: const CalendarStyle(outsideDaysVisible: false),
-      calendarBuilders: CalendarBuilders(
-        defaultBuilder: (context, day, focusedDay) => calenderBuilderFunction(
-          day: day,
-          focusedDay: focusedDay,
-        ),
-        todayBuilder: (context, day, focusedDay) => calenderBuilderFunction(
-          day: day,
-          focusedDay: focusedDay,
-        ),
-        disabledBuilder: (context, day, focusedDay) => calenderBuilderFunction(
-          day: day,
-          focusedDay: focusedDay,
-          disabled: true,
-        ),
-      ),
     );
   }
 }

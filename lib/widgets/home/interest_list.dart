@@ -56,28 +56,18 @@ class InterestList extends StatelessWidget {
                               builder: (context) => MultiBlocProvider(
                                 providers: [
                                   BlocProvider(
-                                    create: (context) => ModifyUserCubit(
-                                      nickname: context
+                                    create: (context) {
+                                      final state = context
                                           .read<UserBloc>()
                                           .state
-                                          .result!
-                                          .nickname,
-                                      content: context
-                                          .read<UserBloc>()
-                                          .state
-                                          .result!
-                                          .content,
-                                      image: context
-                                          .read<UserBloc>()
-                                          .state
-                                          .result!
-                                          .profileUrl,
-                                      category: context
-                                          .read<UserBloc>()
-                                          .state
-                                          .result!
-                                          .tagList,
-                                    ),
+                                          .result!;
+                                      return ModifyUserCubit(
+                                        nickname: state.nickname,
+                                        content: state.content,
+                                        image: state.profileUrl,
+                                        category: state.tagList,
+                                      );
+                                    },
                                     child: const ModifyUserScreen(),
                                   ),
                                   BlocProvider(
@@ -118,23 +108,14 @@ class InterestList extends StatelessWidget {
                       return ExpandablePageView.builder(
                         itemCount: state.interestList.length,
                         scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          print(context
+                        itemBuilder: (context, index) => InterestCategoryCard(
+                          category: context
                               .read<UserBloc>()
                               .state
                               .result!
-                              .categoryList[index]
-                              .hashTags);
-
-                          return InterestCategoryCard(
-                            category: context
-                                .read<UserBloc>()
-                                .state
-                                .result!
-                                .categoryList[index],
-                            challenges: state.interestList[index],
-                          );
-                        },
+                              .categoryList[index],
+                          challenges: state.interestList[index],
+                        ),
                       );
                   }
                 },

@@ -1,6 +1,12 @@
+import 'dart:ui';
+
 import 'package:dodal_app/providers/category_list_bloc.dart';
+import 'package:dodal_app/providers/custom_feed_list_bloc.dart';
+import 'package:dodal_app/providers/feed_list_bloc.dart';
+import 'package:dodal_app/providers/my_challenge_list_bloc.dart';
 import 'package:dodal_app/providers/sign_in_bloc.dart';
 import 'package:dodal_app/providers/user_bloc.dart';
+import 'package:dodal_app/providers/user_room_feed_info_bloc.dart';
 import 'package:dodal_app/screens/main_route/main.dart';
 import 'package:dodal_app/screens/sign_in/main.dart';
 import 'package:dodal_app/theme/theme_data.dart';
@@ -60,6 +66,7 @@ class _AppState extends State<App> {
         title: '도달',
         theme: lightTheme,
         navigatorKey: navigatorKey,
+        scrollBehavior: CustomScrollBehavior(),
         home: BlocBuilder<UserBloc, UserBlocState>(
           builder: (context, state) {
             switch (state.status) {
@@ -81,7 +88,19 @@ class _AppState extends State<App> {
                     child: const SignInScreen(),
                   );
                 } else {
-                  return const MainRoute();
+                  return MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (context) => CustomFeedListBloc(
+                          context.read<UserBloc>().state.result!.categoryList,
+                        ),
+                      ),
+                      BlocProvider(create: (context) => FeedListBloc()),
+                      BlocProvider(create: (context) => MyChallengeListBloc()),
+                      BlocProvider(create: (context) => UserRoomFeedInfoBloc()),
+                    ],
+                    child: const MainRoute(),
+                  );
                 }
             }
           },
@@ -89,4 +108,10 @@ class _AppState extends State<App> {
       ),
     );
   }
+}
+
+class CustomScrollBehavior extends MaterialScrollBehavior {
+  @override
+  Set<PointerDeviceKind> get dragDevices =>
+      {PointerDeviceKind.touch, PointerDeviceKind.mouse};
 }

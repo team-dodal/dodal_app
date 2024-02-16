@@ -148,14 +148,13 @@ class CustomFeedListState extends Equatable {
     );
   }
 
-  factory CustomFeedListState.init() {
-    return const CustomFeedListState(
-      status: CustomFeedListStatus.init,
-      interestList: [],
-      popularList: [],
-      recentList: [],
-    );
-  }
+  CustomFeedListState.init()
+      : this(
+          status: CustomFeedListStatus.init,
+          interestList: [],
+          popularList: [],
+          recentList: [],
+        );
 
   @override
   List<Object?> get props =>

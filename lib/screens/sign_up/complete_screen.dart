@@ -1,4 +1,8 @@
+import 'package:dodal_app/providers/custom_feed_list_bloc.dart';
+import 'package:dodal_app/providers/feed_list_bloc.dart';
+import 'package:dodal_app/providers/my_challenge_list_bloc.dart';
 import 'package:dodal_app/providers/user_bloc.dart';
+import 'package:dodal_app/providers/user_room_feed_info_bloc.dart';
 import 'package:dodal_app/screens/main_route/main.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
@@ -53,7 +57,21 @@ class CompleteSignUpScreen extends StatelessWidget {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
           onPressed: () {
             Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (ctx) => const MainRoute()),
+              MaterialPageRoute(
+                builder: (ctx) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) => CustomFeedListBloc(
+                        context.read<UserBloc>().state.result!.categoryList,
+                      ),
+                    ),
+                    BlocProvider(create: (context) => FeedListBloc()),
+                    BlocProvider(create: (context) => MyChallengeListBloc()),
+                    BlocProvider(create: (context) => UserRoomFeedInfoBloc()),
+                  ],
+                  child: const MainRoute(),
+                ),
+              ),
               (route) => false,
             );
           },

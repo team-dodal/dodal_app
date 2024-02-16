@@ -2,7 +2,6 @@ import 'package:dodal_app/providers/modify_user_cubit.dart';
 import 'package:dodal_app/providers/nickname_check_bloc.dart';
 import 'package:dodal_app/providers/user_bloc.dart';
 import 'package:dodal_app/screens/modify_user/main.dart';
-import 'package:dodal_app/services/user/response.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/avatar_image.dart';
@@ -12,125 +11,117 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class UserInfoBox extends StatelessWidget {
-  const UserInfoBox({super.key, required this.user, required this.refresh});
+  const UserInfoBox({
+    super.key,
+    required this.totalCertCnt,
+    required this.maxContinueCertCnt,
+  });
 
-  final UserResponse user;
-  final Function() refresh;
+  final int totalCertCnt;
+  final int maxContinueCertCnt;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: AppColors.bgColor2,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    AvatarImage(
-                      image: user.profileUrl,
-                      width: 48,
-                      height: 48,
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      user.nickname!,
-                      style: context.body2(fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(
-                      builder: (ctx) => MultiBlocProvider(
-                        providers: [
-                          BlocProvider(
-                            create: (context) => ModifyUserCubit(
-                              nickname: context
-                                  .read<UserBloc>()
-                                  .state
-                                  .result!
-                                  .nickname,
-                              content: context
-                                  .read<UserBloc>()
-                                  .state
-                                  .result!
-                                  .content,
-                              image: context
-                                  .read<UserBloc>()
-                                  .state
-                                  .result!
-                                  .profileUrl,
-                              category: context
-                                  .read<UserBloc>()
-                                  .state
-                                  .result!
-                                  .tagList,
-                            ),
-                          ),
-                          BlocProvider(
-                            create: (context) => NicknameBloc(
-                              nickname: context
-                                  .read<UserBloc>()
-                                  .state
-                                  .result!
-                                  .nickname,
-                            ),
-                          ),
-                        ],
-                        child: const ModifyUserScreen(),
-                      ),
-                    ))
-                        .then(
-                      (value) {
-                        refresh();
-                      },
-                    );
-                  },
-                  icon: SvgPicture.asset('assets/icons/pencil_icon.svg'),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Text(user.content!, style: context.body4()),
-            const SizedBox(height: 16),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
+    return BlocBuilder<UserBloc, UserBlocState>(builder: (context, state) {
+      return Container(
+        color: AppColors.bgColor2,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  for (final tag in user.tagList!)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 2),
-                      child: SmallTag(
-                        text: tag.name,
-                        backgroundColor: AppColors.orange,
-                        foregroundColor: AppColors.systemWhite,
-                        fontWeight: FontWeight.normal,
+                  Row(
+                    children: [
+                      AvatarImage(
+                        image: state.result!.profileUrl,
+                        width: 48,
+                        height: 48,
                       ),
-                    )
+                      const SizedBox(width: 10),
+                      Text(
+                        state.result!.nickname,
+                        style: context.body2(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (ctx) => MultiBlocProvider(
+                            providers: [
+                              BlocProvider(
+                                create: (context) {
+                                  return ModifyUserCubit(
+                                    nickname: state.result!.nickname,
+                                    content: state.result!.content,
+                                    image: state.result!.profileUrl,
+                                    category: state.result!.tagList,
+                                  );
+                                },
+                              ),
+                              BlocProvider(
+                                create: (context) => NicknameBloc(
+                                  nickname: state.result!.nickname,
+                                ),
+                              ),
+                            ],
+                            child: const ModifyUserScreen(),
+                          ),
+                        ),
+                      );
+                    },
+                    icon: SvgPicture.asset('assets/icons/pencil_icon.svg'),
+                  ),
                 ],
               ),
-            ),
-            const SizedBox(height: 16),
-            ContentCntBox(user: user),
-            const SizedBox(height: 8),
-            SvgPicture.asset('assets/icons/my_page_banner.svg'),
-          ],
+              const SizedBox(height: 10),
+              Text(state.result!.content, style: context.body4()),
+              const SizedBox(height: 16),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    for (final tag in state.result!.tagList)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 2),
+                        child: SmallTag(
+                          text: tag.name,
+                          backgroundColor: AppColors.orange,
+                          foregroundColor: AppColors.systemWhite,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      )
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              const ContentCntBox(
+                totalCertCnt: 0,
+                maxContinueCertCnt: 0,
+              ),
+              const SizedBox(height: 8),
+              SvgPicture.asset('assets/icons/my_page_banner.svg'),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
 class ContentCntBox extends StatelessWidget {
-  const ContentCntBox({super.key, required this.user});
+  const ContentCntBox({
+    super.key,
+    required this.totalCertCnt,
+    required this.maxContinueCertCnt,
+  });
 
-  final UserResponse user;
+  final int totalCertCnt;
+  final int maxContinueCertCnt;
 
   @override
   Widget build(BuildContext context) {
@@ -161,7 +152,7 @@ class ContentCntBox extends StatelessWidget {
                   style: context.caption(),
                 ),
                 Text(
-                  '${user.totalCertCnt}일',
+                  '$totalCertCnt일',
                   style: context.body2(fontWeight: FontWeight.bold),
                 ),
               ],
@@ -180,7 +171,7 @@ class ContentCntBox extends StatelessWidget {
                     style: context.caption(color: AppColors.systemGrey1),
                   ),
                   Text(
-                    '${user.maxContinueCertCnt}일',
+                    '$maxContinueCertCnt일',
                     style: context.body2(fontWeight: FontWeight.bold),
                   ),
                 ],
