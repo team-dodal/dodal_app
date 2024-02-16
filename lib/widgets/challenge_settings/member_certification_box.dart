@@ -1,5 +1,6 @@
 import 'package:dodal_app/model/certification_code_enum.dart';
 import 'package:dodal_app/model/day_enum.dart';
+import 'package:dodal_app/providers/manage_challenge_member_bloc.dart';
 import 'package:dodal_app/providers/user_bloc.dart';
 import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/services/manage_challenge/response.dart';
@@ -11,51 +12,37 @@ import 'package:dodal_app/widgets/common/image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MemberCertificationBox extends StatefulWidget {
+class MemberCertificationBox extends StatelessWidget {
   const MemberCertificationBox({
     super.key,
     required this.user,
     required this.challenge,
-    required this.getUsers,
   });
 
-  final Future<void> Function() getUsers;
   final ChallengeUser user;
   final OneChallengeResponse challenge;
-
-  @override
-  State<MemberCertificationBox> createState() => _MemberCertificationBoxState();
-}
-
-class _MemberCertificationBoxState extends State<MemberCertificationBox> {
-  List<UserWeekCertInfo?> _certList = [];
 
   _showCountBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      builder: (_) => MemberManageBottomSheet(
-        getUsers: widget.getUsers,
-        userId: widget.user.userId,
-        roomId: widget.challenge.id,
+      builder: (_) => BlocProvider.value(
+        value: ManageChallengeMemberBloc(challenge.id),
+        child: MemberManageBottomSheet(
+          userId: user.userId,
+          roomId: challenge.id,
+        ),
       ),
     );
   }
 
-  _createUserCertList() {
-    List<UserWeekCertInfo?> list = List.generate(7, (index) => null);
-    for (final certInfo in widget.user.userWeekCertInfoList!) {
+  List<UserWeekCertInfo?> _createUserCertList() {
+    List<UserWeekCertInfo?> list =
+        List.generate(DayEnum.values.length, (index) => null);
+    for (final certInfo in user.userWeekCertInfoList!) {
       final index = DayEnum.values.indexOf(certInfo.dayCode!);
       list[index] = certInfo;
     }
-    setState(() {
-      _certList = list;
-    });
-  }
-
-  @override
-  void initState() {
-    _createUserCertList();
-    super.initState();
+    return list;
   }
 
   @override
@@ -75,11 +62,11 @@ class _MemberCertificationBoxState extends State<MemberCertificationBox> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.user.nickname,
+                        user.nickname,
                         style: context.body4(fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        '인증 ${widget.user.certSuccessCnt}회 | 인증 실패 ${widget.user.certFailCnt}회',
+                        '인증 ${user.certSuccessCnt}회 | 인증 실패 ${user.certFailCnt}회',
                         style: context.caption(color: AppColors.systemGrey1),
                       ),
                     ],
@@ -89,7 +76,7 @@ class _MemberCertificationBoxState extends State<MemberCertificationBox> {
               Builder(
                 builder: (context) {
                   final state = BlocProvider.of<UserBloc>(context).state.result;
-                  if (state!.id != widget.user.userId) {
+                  if (state!.id != user.userId) {
                     return TextButton(
                       onPressed: () {
                         _showCountBottomSheet(context);
@@ -115,7 +102,10 @@ class _MemberCertificationBoxState extends State<MemberCertificationBox> {
               crossAxisCount: 7,
               crossAxisSpacing: 6,
               physics: const NeverScrollableScrollPhysics(),
-              children: [for (final i in _certList) FeedImageBox(certInfo: i)],
+              children: _createUserCertList()
+                  .map((e) => FeedImageBox(certInfo: e))
+                  .toList(),
+              // [for (final i in list) FeedImageBox(certInfo: i)],
             ),
           )
         ],

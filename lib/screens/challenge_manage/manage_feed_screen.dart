@@ -1,12 +1,14 @@
 import 'package:dodal_app/layout/modal_layout.dart';
+import 'package:dodal_app/providers/manage_challenge_feed_bloc.dart';
 import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/services/manage_challenge/response.dart';
-import 'package:dodal_app/services/manage_challenge/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/challenge_settings/certificate_feed_image.dart';
 import 'package:dodal_app/widgets/common/no_list_context.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class ManageFeedScreen extends StatefulWidget {
@@ -19,61 +21,24 @@ class ManageFeedScreen extends StatefulWidget {
 }
 
 class _ManageFeedScreenState extends State<ManageFeedScreen> {
-  DateTime _date = DateTime.now();
-  Map<String, List<FeedItem>> _itemListByDate = {};
-
-  _request(DateTime date) async {
-    String formattedDate = DateFormat('yyyyMM').format(date);
-
-    final res = await ManageChallengeService.getCertificationList(
-      roomId: widget.challenge.id,
-      dateYM: formattedDate,
+  Widget _header() {
+    return const Column(
+      children: [InformationHeader(), DateChangeHeader()],
     );
-    if (res == null) return;
-    setState(() {
-      _itemListByDate = res;
-    });
   }
 
-  _changeDate(int month) {
-    final changedDate = DateTime(_date.year, _date.month + month, _date.day);
-    if (changedDate.isAfter(DateTime.now())) return;
-    _request(changedDate);
-    _date = changedDate;
-  }
-
-  @override
-  void initState() {
-    _request(_date);
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final Widget header = Column(
-      children: [
-        const InformationHeader(),
-        DateChangeHeader(date: _date, changeHandler: _changeDate),
-      ],
+  Widget _empty() {
+    return const Column(
+      children: [SizedBox(height: 100), NoListContext(title: '피드가 존재하지 않습니다')],
     );
+  }
 
-    if (_itemListByDate.keys.isEmpty) {
-      return Column(
-        children: [
-          header,
-          const SizedBox(height: 100),
-          const NoListContext(title: '피드가 존재하지 않습니다')
-        ],
-      );
-    }
-
+  Widget _success(Map<String, List<FeedItem>> itemListByDate) {
     return ListView.builder(
-      itemCount: _itemListByDate.keys.length + 1,
+      itemCount: itemListByDate.keys.length,
       itemBuilder: (context, index) {
-        if (index == 0) return header;
-
-        final dateKey = _itemListByDate.keys.toList()[index - 1];
-        final feedList = _itemListByDate[dateKey];
+        final dateKey = itemListByDate.keys.toList()[index];
+        final feedList = itemListByDate[dateKey];
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -91,18 +56,38 @@ class _ManageFeedScreenState extends State<ManageFeedScreen> {
               crossAxisSpacing: 3,
               shrinkWrap: true,
               children: [
-                for (final feed in feedList!)
-                  CertificateFeedImage(
-                    feed: feed,
-                    getFeeds: () async {
-                      await _request(_date);
-                    },
-                  )
+                for (final feed in feedList!) CertificateFeedImage(feed: feed)
               ],
             ),
           ],
         );
       },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        _header(),
+        Expanded(
+          child: BlocBuilder<ManageChallengeFeedBloc, ManageChallengeFeedState>(
+            builder: (context, state) {
+              switch (state.status) {
+                case ManageChallengeFeedStatus.init:
+                case ManageChallengeFeedStatus.loading:
+                  return const Center(child: CupertinoActivityIndicator());
+                case ManageChallengeFeedStatus.error:
+                  return Center(child: Text(state.errorMessage!));
+                case ManageChallengeFeedStatus.success:
+                  if (state.itemListByDate.keys.isEmpty) return _empty();
+                  return _success(state.itemListByDate);
+              }
+            },
+          ),
+        ),
+      ],
     );
   }
 }
@@ -184,14 +169,7 @@ class InformationHeader extends StatelessWidget {
 }
 
 class DateChangeHeader extends StatelessWidget {
-  const DateChangeHeader({
-    super.key,
-    required this.changeHandler,
-    required this.date,
-  });
-
-  final void Function(int) changeHandler;
-  final DateTime date;
+  const DateChangeHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -203,20 +181,26 @@ class DateChangeHeader extends StatelessWidget {
         children: [
           IconButton(
             onPressed: () {
-              changeHandler(-1);
+              context.read<ManageChallengeFeedBloc>().add(ChangeMonthEvent(-1));
             },
             icon: const Icon(
               Icons.arrow_back_ios_rounded,
               color: AppColors.systemGrey2,
             ),
           ),
-          Text(
-            DateFormat('yyyy년 MM월').format(date),
-            style: context.body1(),
+          BlocSelector<ManageChallengeFeedBloc, ManageChallengeFeedState,
+              DateTime>(
+            selector: (state) => state.date,
+            builder: (context, state) {
+              return Text(
+                DateFormat('yyyy년 MM월').format(state),
+                style: context.body1(),
+              );
+            },
           ),
           IconButton(
             onPressed: () {
-              changeHandler(1);
+              context.read<ManageChallengeFeedBloc>().add(ChangeMonthEvent(1));
             },
             icon: const Icon(
               Icons.arrow_forward_ios_rounded,

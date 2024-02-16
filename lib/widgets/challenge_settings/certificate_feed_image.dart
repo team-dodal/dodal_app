@@ -1,28 +1,25 @@
 import 'package:dodal_app/model/certification_code_enum.dart';
+import 'package:dodal_app/providers/manage_challenge_feed_bloc.dart';
 import 'package:dodal_app/services/manage_challenge/response.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/image_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'feed_certification_modal.dart';
 
 class CertificateFeedImage extends StatelessWidget {
-  const CertificateFeedImage({
-    super.key,
-    required this.feed,
-    required this.getFeeds,
-  });
+  const CertificateFeedImage({super.key, required this.feed});
 
   final FeedItem feed;
-  final Future<void> Function() getFeeds;
 
   _showFeedModal(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => FeedCertificationModal(
-        feed: feed,
-        getFeeds: getFeeds,
+      builder: (_) => BlocProvider.value(
+        value: context.read<ManageChallengeFeedBloc>(),
+        child: FeedCertificationModal(feed: feed),
       ),
     );
   }

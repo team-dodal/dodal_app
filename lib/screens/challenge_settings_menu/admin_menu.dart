@@ -1,4 +1,6 @@
 import 'package:dodal_app/providers/create_challenge_cubit.dart';
+import 'package:dodal_app/providers/manage_challenge_feed_bloc.dart';
+import 'package:dodal_app/providers/manage_challenge_member_bloc.dart';
 import 'package:dodal_app/screens/challenge_manage/main.dart';
 import 'package:dodal_app/screens/create_challenge/main.dart';
 import 'package:dodal_app/services/challenge/response.dart';
@@ -44,9 +46,21 @@ class AdminMenu extends StatelessWidget {
           onTap: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => ChallengeManageRoute(
-                  index: 0,
-                  challenge: challenge,
+                builder: (context) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) =>
+                          ManageChallengeMemberBloc(challenge.id),
+                    ),
+                    BlocProvider(
+                      create: (context) =>
+                          ManageChallengeFeedBloc(challenge.id),
+                    ),
+                  ],
+                  child: ChallengeManageRoute(
+                    index: 0,
+                    challenge: challenge,
+                  ),
                 ),
               ),
             );
@@ -58,9 +72,21 @@ class AdminMenu extends StatelessWidget {
           onTap: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => ChallengeManageRoute(
-                  index: 1,
-                  challenge: challenge,
+                builder: (context) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) =>
+                          ManageChallengeMemberBloc(challenge.id),
+                    ),
+                    BlocProvider(
+                      create: (context) =>
+                          ManageChallengeFeedBloc(challenge.id),
+                    ),
+                  ],
+                  child: ChallengeManageRoute(
+                    index: 1,
+                    challenge: challenge,
+                  ),
                 ),
               ),
             );

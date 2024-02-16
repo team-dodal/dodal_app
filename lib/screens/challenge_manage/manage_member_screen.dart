@@ -1,51 +1,41 @@
+import 'package:dodal_app/providers/manage_challenge_member_bloc.dart';
 import 'package:dodal_app/services/challenge/response.dart';
-import 'package:dodal_app/services/manage_challenge/response.dart';
-import 'package:dodal_app/services/manage_challenge/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/challenge_settings/member_certification_box.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ManageMemberScreen extends StatefulWidget {
+class ManageMemberScreen extends StatelessWidget {
   const ManageMemberScreen({super.key, required this.challenge});
 
   final OneChallengeResponse challenge;
 
   @override
-  State<ManageMemberScreen> createState() => _ManageMemberScreenState();
-}
-
-class _ManageMemberScreenState extends State<ManageMemberScreen> {
-  List<ChallengeUser> _userList = [];
-
-  Future<void> _getUsers() async {
-    final res =
-        await ManageChallengeService.manageUsers(roomId: widget.challenge.id);
-    setState(() {
-      _userList = res;
-    });
-  }
-
-  @override
-  void initState() {
-    _getUsers();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      separatorBuilder: (context, index) => Container(
-        width: double.infinity,
-        height: 1,
-        color: AppColors.systemGrey3,
-      ),
-      itemCount: _userList.length,
-      itemBuilder: (context, index) {
-        return MemberCertificationBox(
-          user: _userList[index],
-          challenge: widget.challenge,
-          getUsers: _getUsers,
-        );
+    return BlocBuilder<ManageChallengeMemberBloc, ManageChallengeMemberState>(
+      builder: (context, state) {
+        switch (state.status) {
+          case ManageChallengeMemberStatus.init:
+          case ManageChallengeMemberStatus.loading:
+            return const Center(child: CupertinoActivityIndicator());
+          case ManageChallengeMemberStatus.error:
+            return Center(child: Text(state.errorMessage!));
+          case ManageChallengeMemberStatus.success:
+            return ListView.separated(
+              separatorBuilder: (context, index) => Container(
+                width: double.infinity,
+                height: 1,
+                color: AppColors.systemGrey3,
+              ),
+              itemCount: state.result.length,
+              itemBuilder: (context, index) {
+                return MemberCertificationBox(
+                  user: state.result[index],
+                  challenge: challenge,
+                );
+              },
+            );
+        }
       },
     );
   }

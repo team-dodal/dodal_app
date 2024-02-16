@@ -1,19 +1,19 @@
 import 'package:dodal_app/layout/filter_bottom_sheet_layout.dart';
+import 'package:dodal_app/providers/manage_challenge_member_bloc.dart';
 import 'package:dodal_app/screens/report/main.dart';
 import 'package:dodal_app/services/manage_challenge/service.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/system_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MemberManageBottomSheet extends StatelessWidget {
   const MemberManageBottomSheet({
     super.key,
     required this.userId,
     required this.roomId,
-    required this.getUsers,
   });
 
-  final Future<void> Function() getUsers;
   final int userId;
   final int roomId;
 
@@ -62,8 +62,10 @@ class MemberManageBottomSheet extends StatelessWidget {
                 userId: userId,
               );
               if (res == null || !res) return;
-              await getUsers();
               if (!context.mounted) return;
+              context
+                  .read<ManageChallengeMemberBloc>()
+                  .add(LoadManageChallengeMemberEvent());
               showDialog(
                 context: context,
                 builder: (context) => const SystemDialog(

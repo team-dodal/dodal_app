@@ -194,8 +194,8 @@ class ChallengeUser {
       profileUrl: json['profile_url'],
       certSuccessCnt: json['cert_success_cnt'],
       certFailCnt: json['cert_fail_cnt'],
-      userWeekCertInfoList: json['user_cert_per_week_list'] != null
-          ? (json['user_cert_per_week_list'] as List)
+      userWeekCertInfoList: json['user_week_cert_info_list'] != null
+          ? (json['user_week_cert_info_list'] as List)
               .map((weekItem) => UserWeekCertInfo.fromJson(weekItem))
               .toList()
           : [],
