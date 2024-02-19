@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/helper/slide_page_route.dart';
 import 'package:dodal_app/model/certification_code_enum.dart';
+import 'package:dodal_app/providers/challenge_ranking_bloc.dart';
 import 'package:dodal_app/providers/create_feed_bloc.dart';
 import 'package:dodal_app/screens/challenge_route/chat_screen.dart';
 import 'package:dodal_app/screens/challenge_route/home_feed_screen.dart';
@@ -22,7 +23,13 @@ class Route {
 
 List<Route> routeList = [
   Route(name: '홈', screen: (value) => HomeFeedScreen(challenge: value)),
-  Route(name: '랭킹', screen: (value) => RankingScreen(challenge: value)),
+  Route(
+    name: '랭킹',
+    screen: (value) => BlocProvider(
+      create: (context) => ChallengeRankingBloc(value.id),
+      child: RankingScreen(challenge: value),
+    ),
+  ),
   Route(name: '채팅', screen: (value) => const ChatScreen()),
 ];
 

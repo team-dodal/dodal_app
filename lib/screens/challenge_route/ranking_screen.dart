@@ -1,158 +1,140 @@
+import 'package:dodal_app/providers/challenge_ranking_bloc.dart';
 import 'package:dodal_app/services/challenge/response.dart';
-import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/challenge_room/rank_filter_bottom_sheet.dart';
 import 'package:dodal_app/widgets/challenge_room/rank_list_item.dart';
 import 'package:dodal_app/widgets/challenge_room/rank_profile.dart';
 import 'package:dodal_app/widgets/common/filter_button.dart';
 import 'package:dodal_app/widgets/common/no_list_context.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class RankingScreen extends StatefulWidget {
+class RankingScreen extends StatelessWidget {
   const RankingScreen({super.key, required this.challenge});
 
   final OneChallengeResponse challenge;
 
-  @override
-  State<RankingScreen> createState() => _RankingScreenState();
-}
-
-class _RankingScreenState extends State<RankingScreen> {
-  ChallengeRankFilterEnum _code = ChallengeRankFilterEnum.all;
-  List<ChallengeRankResponse?>? _topThreeList;
-  List<ChallengeRankResponse?> _list = [];
-
-  _getRankList(ChallengeRankFilterEnum code) async {
-    final rankList = await ChallengeService.getRanks(
-      id: widget.challenge.id,
-      code: code.index,
-    );
-    if (rankList == null) return;
-    setState(() {
-      _list = rankList;
-      if (rankList.length > 3) {
-        _topThreeList = rankList.sublist(0, 3);
-      }
-    });
-  }
-
-  _showSortBottomSheet() {
+  _showSortBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
       builder: (_) => RankFilterBottomSheet(
         onChange: (value) {
-          setState(() {
-            _code = value;
-          });
-          _getRankList(_code);
+          context.read<ChallengeRankingBloc>().add(ChangeFilterEvent(value));
         },
       ),
     );
   }
 
   @override
-  void initState() {
-    _getRankList(_code);
-    super.initState();
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        BlocSelector<ChallengeRankingBloc, ChallengeRankingState,
+            ChallengeRankFilterEnum>(
+          selector: (state) => state.rankFilter,
+          builder: (context, state) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  FilterButton(
+                    onPressed: () {
+                      _showSortBottomSheet(context);
+                    },
+                    text: state.displayName,
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+        BlocBuilder<ChallengeRankingBloc, ChallengeRankingState>(
+          builder: (context, state) {
+            switch (state.status) {
+              case ChallengeRankingStatus.init:
+              case ChallengeRankingStatus.loading:
+                return const Center(child: CupertinoActivityIndicator());
+              case ChallengeRankingStatus.error:
+                return Center(child: Text(state.errorMessage!));
+              case ChallengeRankingStatus.success:
+                if (state.topThreeList.isEmpty && state.otherList.isEmpty) {
+                  return const Column(
+                    children: [
+                      SizedBox(height: 120),
+                      Center(
+                        child: NoListContext(
+                          title: '아직 인증한 유저가 없습니다.',
+                          subTitle: '먼저 인증을 시작해보세요!',
+                        ),
+                      )
+                    ],
+                  );
+                }
+                int itemCount = state.topThreeList.isNotEmpty
+                    ? state.otherList.length + 1
+                    : state.otherList.length;
+
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: itemCount,
+                    itemBuilder: (context, index) {
+                      if (index == 0 && state.topThreeList.isNotEmpty) {
+                        return TopThreeRank(topThreeList: state.topThreeList);
+                      }
+                      int i = state.topThreeList.isNotEmpty ? index - 1 : index;
+                      int rank =
+                          state.topThreeList.isNotEmpty ? index : index + 1;
+                      return RankListItem(
+                        rank: rank,
+                        userId: state.otherList[i].userId,
+                        profileUrl: state.otherList[i].profileUrl,
+                        nickname: state.otherList[i].nickname,
+                        certCnt: state.otherList[i].certCnt,
+                      );
+                    },
+                  ),
+                );
+            }
+          },
+        )
+      ],
+    );
   }
+}
+
+class TopThreeRank extends StatelessWidget {
+  const TopThreeRank({super.key, required this.topThreeList});
+
+  final List<ChallengeRankResponse?> topThreeList;
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverToBoxAdapter(
-          child: Stack(
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.only(bottom: 24),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    FilterButton(
-                      onPressed: _showSortBottomSheet,
-                      text: _code.displayName,
-                    ),
-                  ],
-                ),
-              ),
-              if (_topThreeList == null && _list.isEmpty)
-                const Column(
-                  children: [
-                    SizedBox(height: 120),
-                    Center(
-                      child: NoListContext(
-                        title: '아직 인증한 유저가 없습니다.',
-                        subTitle: '먼저 인증을 시작해보세요!',
-                      ),
-                    ),
-                  ],
-                ),
-              if (_topThreeList != null)
+              for (final i in [1, 0, 2])
                 Column(
                   children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 24),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Column(
-                            children: [
-                              const SizedBox(height: 50),
-                              RankProfile(
-                                imageUrl: _topThreeList![1]?.profileUrl,
-                                name: _topThreeList![1]?.nickname,
-                                rank: 2,
-                                certCnt: _topThreeList![1]?.certCnt,
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              RankProfile(
-                                imageUrl: _topThreeList![0]?.profileUrl,
-                                name: _topThreeList![0]?.nickname,
-                                rank: 1,
-                                certCnt: _topThreeList![0]?.certCnt,
-                              ),
-                              const SizedBox(height: 50),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              const SizedBox(height: 50),
-                              RankProfile(
-                                imageUrl: _topThreeList![2]?.profileUrl,
-                                name: _topThreeList![2]?.nickname,
-                                rank: 3,
-                                certCnt: _topThreeList![2]?.certCnt,
-                              ),
-                            ],
-                          ),
-                          const Divider(
-                            thickness: 8,
-                            color: AppColors.systemGrey4,
-                          ),
-                        ],
-                      ),
+                    if (i != 0) const SizedBox(height: 50),
+                    RankProfile(
+                      imageUrl: topThreeList[i]?.profileUrl,
+                      name: topThreeList[i]?.nickname,
+                      rank: i + 1,
+                      certCnt: topThreeList[i]?.certCnt,
                     ),
                   ],
                 ),
+              const Divider(thickness: 8, color: AppColors.systemGrey4),
             ],
           ),
         ),
-        if (_list.isNotEmpty)
-          SliverList.builder(
-            itemCount: _list.length,
-            itemBuilder: (context, index) {
-              return RankListItem(
-                rank: index + 1,
-                userId: _list[index]!.userId,
-                profileUrl: _list[index]!.profileUrl,
-                nickname: _list[index]!.nickname,
-                certCnt: _list[index]!.certCnt,
-              );
-            },
-          )
       ],
     );
   }
