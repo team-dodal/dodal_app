@@ -30,7 +30,7 @@ Dio dio([String url = '']) {
         // 엑세스 토큰이 만료되었을때
         if (e.response?.statusCode == 401) {
           final newAccessToken = await requestNewAccessToken();
-          if (newAccessToken == null) return;
+          if (newAccessToken == null) return handler.reject(e);
           await secureStorage.write(key: 'accessToken', value: newAccessToken);
           e.requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
           dynamic requestData = createRequestData(e);

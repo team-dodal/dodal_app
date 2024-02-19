@@ -45,6 +45,39 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
+  _goSignInPage() {
+    navigatorKey.currentState!.pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (ctx) => BlocProvider(
+          create: (context) => SignInBloc(const FlutterSecureStorage()),
+          child: const SignInScreen(),
+        ),
+      ),
+      (route) => false,
+    );
+  }
+
+  _goMainPage() {
+    navigatorKey.currentState!.pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (ctx) => MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => CustomFeedListBloc(
+                context.read<UserBloc>().state.result!.categoryList,
+              ),
+            ),
+            BlocProvider(create: (context) => FeedListBloc()),
+            BlocProvider(create: (context) => MyChallengeListBloc()),
+            BlocProvider(create: (context) => UserRoomFeedInfoBloc()),
+          ],
+          child: const MainRoute(),
+        ),
+      ),
+      (route) => false,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -56,10 +89,11 @@ class _AppState extends State<App> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-            create: (context) => UserBloc(
-                  widget.fcmToken,
-                  const FlutterSecureStorage(),
-                )),
+          create: (context) => UserBloc(
+            widget.fcmToken,
+            const FlutterSecureStorage(),
+          ),
+        ),
         BlocProvider(create: (context) => CategoryListBloc()),
       ],
       child: MaterialApp(
@@ -67,43 +101,22 @@ class _AppState extends State<App> {
         theme: lightTheme,
         navigatorKey: navigatorKey,
         scrollBehavior: CustomScrollBehavior(),
-        home: BlocBuilder<UserBloc, UserBlocState>(
-          builder: (context, state) {
-            switch (state.status) {
-              case UserBlocStatus.init:
-              case UserBlocStatus.loading:
-                return const Scaffold(
-                  body: Center(child: CupertinoActivityIndicator()),
-                );
-              case UserBlocStatus.error:
-                return BlocProvider(
-                  create: (context) => SignInBloc(const FlutterSecureStorage()),
-                  child: const SignInScreen(),
-                );
-              case UserBlocStatus.success:
-                if (state.result == null) {
-                  return BlocProvider(
-                    create: (context) =>
-                        SignInBloc(const FlutterSecureStorage()),
-                    child: const SignInScreen(),
-                  );
-                } else {
-                  return MultiBlocProvider(
-                    providers: [
-                      BlocProvider(
-                        create: (context) => CustomFeedListBloc(
-                          context.read<UserBloc>().state.result!.categoryList,
-                        ),
-                      ),
-                      BlocProvider(create: (context) => FeedListBloc()),
-                      BlocProvider(create: (context) => MyChallengeListBloc()),
-                      BlocProvider(create: (context) => UserRoomFeedInfoBloc()),
-                    ],
-                    child: const MainRoute(),
-                  );
-                }
+        home: BlocListener<UserBloc, UserBlocState>(
+          listener: (context, state) {
+            if (state.status == UserBlocStatus.error) {
+              _goSignInPage();
+            }
+            if (state.status == UserBlocStatus.success) {
+              if (state.result == null) {
+                _goSignInPage();
+              } else {
+                _goMainPage();
+              }
             }
           },
+          child: const Scaffold(
+            body: Center(child: CupertinoActivityIndicator()),
+          ),
         ),
       ),
     );
