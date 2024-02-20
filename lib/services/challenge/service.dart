@@ -31,34 +31,16 @@ class ChallengeService {
       };
 
       if (thumbnailImg != null) {
-        String key = 'thumbnail_img_url';
-        String fileName = 'roomId_${key}_date_${DateTime.now()}';
-        String s3Url = await PresignedS3.upload(
-          uploadUrl: await PresignedS3.getUrl(fileName: fileName),
-          file: thumbnailImg,
-          fileName: fileName,
-        );
-        data[key] = s3Url;
+        data['thumbnail_img_url'] =
+            await PresignedS3.imageUpload(file: thumbnailImg);
       }
       if (certCorrectImg != null) {
-        String key = 'cert_correct_img_url';
-        String fileName = 'roomId_${key}_date_${DateTime.now()}';
-        String s3Url = await PresignedS3.upload(
-          uploadUrl: await PresignedS3.getUrl(fileName: fileName),
-          file: certCorrectImg,
-          fileName: fileName,
-        );
-        data[key] = s3Url;
+        data['cert_correct_img_url'] =
+            await PresignedS3.imageUpload(file: certCorrectImg);
       }
       if (certWrongImg != null) {
-        String key = 'cert_wrong_img_url';
-        String fileName = 'roomId_${key}_date_${DateTime.now()}';
-        String s3Url = await PresignedS3.upload(
-          uploadUrl: await PresignedS3.getUrl(fileName: fileName),
-          file: certWrongImg,
-          fileName: fileName,
-        );
-        data[key] = s3Url;
+        data['cert_wrong_img_url'] =
+            await PresignedS3.imageUpload(file: certWrongImg);
       }
 
       final res = await service.post('/room', data: data);
@@ -99,13 +81,7 @@ class ChallengeService {
         'cert_wrong_img_url'
       ]) {
         if (data[key].runtimeType.toString() == '_File') {
-          String fileName = 'roomId_${id}_${key}_date_${DateTime.now()}';
-          String s3Url = await PresignedS3.upload(
-            uploadUrl: await PresignedS3.getUrl(fileName: fileName),
-            file: thumbnailImg,
-            fileName: fileName,
-          );
-          data[key] = s3Url;
+          data[key] = await PresignedS3.imageUpload(file: thumbnailImg);
         }
       }
 
@@ -294,16 +270,10 @@ class ChallengeService {
     required File image,
   }) async {
     try {
-      final data = {"content": content};
-
-      String fileName =
-          'challengeId_${challengeId}_feedImage_date_${DateTime.now()}';
-      String s3Url = await PresignedS3.upload(
-        uploadUrl: await PresignedS3.getUrl(fileName: fileName),
-        file: image,
-        fileName: fileName,
-      );
-      data['certification_img_url'] = s3Url;
+      final data = {
+        "content": content,
+        'certification_img_url': await PresignedS3.imageUpload(file: image)
+      };
 
       await service.post(
         '/room/$challengeId/certification',

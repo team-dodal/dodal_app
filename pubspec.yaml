@@ -66,6 +66,7 @@ dependencies:
   shimmer: ^3.0.0
   cloud_firestore: ^4.14.0
   bloc_concurrency: ^0.2.4
+  uuid: ^4.2.2
 
 dev_dependencies:
   flutter_test:

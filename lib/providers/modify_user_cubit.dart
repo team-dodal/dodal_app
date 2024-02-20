@@ -12,10 +12,8 @@ class ModifyUserCubit extends Cubit<ModifyUserState> {
   final String content;
   final dynamic image;
   final List<Tag> category;
-  final int userId;
 
   ModifyUserCubit({
-    required this.userId,
     required this.nickname,
     required this.content,
     required this.image,
@@ -55,7 +53,6 @@ class ModifyUserCubit extends Cubit<ModifyUserState> {
     ));
     try {
       User res = await UserService.updateUser(
-        userId: userId,
         nickname: state.nickname,
         profile: state.image,
         content: state.content,

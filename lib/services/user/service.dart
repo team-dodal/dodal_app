@@ -46,12 +46,7 @@ class UserService {
       };
 
       if (profile != null) {
-        String fileName = 'user_userProfile_date_${DateTime.now()}';
-        String s3Url = await PresignedS3.upload(
-          uploadUrl: await PresignedS3.getUrl(fileName: fileName),
-          file: profile,
-          fileName: fileName,
-        );
+        String s3Url = await PresignedS3.imageUpload(file: profile);
         data['profile_url'] = s3Url;
       }
 
@@ -72,7 +67,6 @@ class UserService {
   }
 
   static updateUser({
-    required int userId,
     required String nickname,
     required String content,
     required dynamic profile,
@@ -84,7 +78,7 @@ class UserService {
         s3Url = profile;
       }
       if (profile.runtimeType.toString() == '_File') {
-        s3Url = await PresignedS3.imageUpload(userId: userId, file: profile);
+        s3Url = await PresignedS3.imageUpload(file: profile);
       }
 
       final data = {
