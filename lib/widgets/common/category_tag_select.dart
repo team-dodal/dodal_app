@@ -71,10 +71,6 @@ class CategoryTagSelect extends StatelessWidget {
                                       BorderSide(color: buttonBorderColor(tag)),
                                   backgroundColor: buttonBackgroundColor(tag)),
                               onPressed: () {
-                                // List<Tag> clone = [...selectedList];
-                                // clone.contains(tag)
-                                //     ? clone.remove(tag)
-                                //     : clone.add(tag);
                                 onChange(tag);
                               },
                               child: Text(

@@ -83,7 +83,7 @@ class UserService {
       s3Url = profile;
     }
     if (profile.runtimeType.toString() == '_File') {
-      String fileName = 'user_${nickname}_date_${DateTime.now()}';
+      String fileName = '${nickname}_${DateTime.now()}';
       s3Url = await PresignedS3.upload(
         uploadUrl: await PresignedS3.getUrl(fileName: fileName),
         file: profile,

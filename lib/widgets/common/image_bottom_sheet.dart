@@ -13,7 +13,7 @@ class ImageBottomSheet extends StatefulWidget {
     this.imageDefaultOption = true,
   });
 
-  final Function setImage;
+  final Function(File? image) setImage;
   final bool imageDefaultOption;
 
   @override
@@ -37,10 +37,11 @@ class _ImageBottomSheetState extends State<ImageBottomSheet> {
       File compressedImage = await imageCompress(File(pickedImage.path));
       if (!mounted) return;
       widget.setImage(compressedImage);
-    } catch (err) {
+    } catch (error) {
       showDialog(
-          context: context,
-          builder: (ctx) => const SystemDialog(subTitle: '이 이미지는 사용할 수 없습니다'));
+        context: context,
+        builder: (ctx) => SystemDialog(subTitle: error.toString()),
+      );
     }
   }
 

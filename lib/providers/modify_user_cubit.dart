@@ -84,12 +84,12 @@ class ModifyUserState extends Equatable {
   ModifyUserState copyWith({
     String? nickname,
     String? content,
-    File? image,
+    dynamic image,
     List<Tag>? category,
   }) {
     return ModifyUserState(
       nickname: nickname ?? this.nickname,
-      image: image ?? this.image,
+      image: image,
       content: content ?? this.content,
       category: category ?? this.category,
     );
