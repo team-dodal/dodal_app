@@ -72,38 +72,32 @@ class UserService {
   }
 
   static updateUser({
+    required int userId,
     required String nickname,
     required String content,
     required dynamic profile,
     required List<String> tagList,
-    String? profileUrl,
   }) async {
-    String? s3Url;
-    if (profile.runtimeType is String) {
-      s3Url = profile;
-    }
-    if (profile.runtimeType.toString() == '_File') {
-      String fileName = '${nickname}_${DateTime.now()}';
-      s3Url = await PresignedS3.upload(
-        uploadUrl: await PresignedS3.getUrl(fileName: fileName),
-        file: profile,
-        fileName: fileName,
-      );
-    }
-
-    final data = {
-      "nickname": nickname,
-      "content": content,
-      "tag_list": tagList,
-    };
-    if (s3Url != null) data['profile_url'] = s3Url;
-
     try {
+      String? s3Url;
+      if (profile.runtimeType is String) {
+        s3Url = profile;
+      }
+      if (profile.runtimeType.toString() == '_File') {
+        s3Url = await PresignedS3.imageUpload(userId: userId, file: profile);
+      }
+
+      final data = {
+        "nickname": nickname,
+        "content": content,
+        "tag_list": tagList,
+        "profile_url": s3Url
+      };
+
       final res = await service.patch('/api/v1/users/me', data: data);
       return User.formJson(res.data['result']);
-    } on DioException catch (err) {
-      ResponseErrorDialog(err);
-      return null;
+    } catch (error) {
+      rethrow;
     }
   }
 

@@ -62,6 +62,7 @@ class InterestList extends StatelessWidget {
                                           .state
                                           .result!;
                                       return ModifyUserCubit(
+                                        userId: state.id,
                                         nickname: state.nickname,
                                         content: state.content,
                                         image: state.profileUrl,

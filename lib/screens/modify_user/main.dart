@@ -5,6 +5,7 @@ import 'package:dodal_app/providers/user_bloc.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/common/category_tag_select.dart';
 import 'package:dodal_app/widgets/common/create_form_title.dart';
+import 'package:dodal_app/widgets/common/system_dialog.dart';
 import 'package:dodal_app/widgets/modify_user/input_form_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,9 +21,8 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
   ScrollController scrollController = ScrollController();
   TextEditingController nicknameController = TextEditingController();
   TextEditingController contentController = TextEditingController();
-  bool _isLoading = false;
 
-  _dismissKeyboard() {
+  void _dismissKeyboard() {
     FocusScopeNode currentFocus = FocusScope.of(context);
     if (!currentFocus.hasPrimaryFocus) {
       currentFocus.unfocus();
@@ -33,22 +33,21 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
     if (context.read<NicknameBloc>().state.status != NicknameStatus.success) {
       return true;
     }
-    if (_isLoading) return true;
+    if (context.read<ModifyUserCubit>().state.status ==
+        ModifyUserStatus.loading) return true;
     return false;
   }
 
-  _submit() async {
-    setState(() {
-      _isLoading = true;
-    });
-    User? res = await context.read<ModifyUserCubit>().modifyUser();
-    if (res == null) return;
-    print(res);
-    context.read<UserBloc>().add(UpdateUserBlocEvent(res));
-    setState(() {
-      _isLoading = false;
-    });
+  void _success(User user) async {
+    context.read<UserBloc>().add(UpdateUserBlocEvent(user));
     Navigator.of(context).pop();
+  }
+
+  void _error(String errorMessage) async {
+    showDialog(
+      context: context,
+      builder: (context) => SystemDialog(subTitle: errorMessage),
+    );
   }
 
   @override
@@ -69,15 +68,27 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ModifyUserCubit, ModifyUserState>(
+    return BlocConsumer<ModifyUserCubit, ModifyUserState>(
+      listener: (context, state) {
+        if (state.status == ModifyUserStatus.success) {
+          _success(state.response!);
+        }
+        if (state.status == ModifyUserStatus.error) {
+          _error(state.errorMessage!);
+        }
+      },
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
             title: const Text('프로필 설정'),
             actions: [
               TextButton(
-                onPressed: _submitButtonDisabled() ? null : _submit,
-                child: _isLoading
+                onPressed: _submitButtonDisabled()
+                    ? null
+                    : () {
+                        context.read<ModifyUserCubit>().modifyUser();
+                      },
+                child: state.status == ModifyUserStatus.loading
                     ? const CircularProgressIndicator()
                     : const Text('저장'),
               ),

@@ -10,8 +10,7 @@ class PresignedS3 {
       final res = await service.get('/api/v1/img/url/$fileName');
       return res.data['result'];
     } catch (error) {
-      print(error);
-      return null;
+      rethrow;
     }
   }
 
@@ -29,14 +28,45 @@ class PresignedS3 {
         options: Options(
           headers: {
             Headers.contentLengthHeader: file.length(),
-            Headers.contentTypeHeader: 'image/jpg'
+            Headers.contentTypeHeader: 'image/jpeg',
           },
         ),
       );
       return '$s3Url/$fileName';
     } catch (error) {
-      print(error);
-      return null;
+      rethrow;
+    }
+  }
+
+  static Future<String> imageUpload({
+    required int userId,
+    required File file,
+  }) async {
+    final service = dio();
+    String fileName = 'user_${userId}_date_${DateTime.now()}';
+    String s3Url = dotenv.get('S3_URL');
+    String presignedUrl;
+    try {
+      final res = await service.get('/api/v1/img/url/$fileName');
+      presignedUrl = res.data['result'];
+    } catch (error) {
+      throw Exception('Failed to get presigned url');
+    }
+
+    try {
+      await service.put(
+        presignedUrl,
+        data: await file.readAsBytes(),
+        options: Options(
+          headers: {
+            Headers.contentLengthHeader: file.length(),
+            Headers.contentTypeHeader: 'image/jpeg',
+          },
+        ),
+      );
+      return '$s3Url/$fileName';
+    } catch (error) {
+      throw Exception('Failed to upload image');
     }
   }
 }

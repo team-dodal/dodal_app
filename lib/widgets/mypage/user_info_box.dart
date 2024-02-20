@@ -56,6 +56,7 @@ class UserInfoBox extends StatelessWidget {
                               BlocProvider(
                                 create: (context) {
                                   return ModifyUserCubit(
+                                    userId: state.result!.id,
                                     nickname: state.result!.nickname,
                                     content: state.result!.content,
                                     image: state.result!.profileUrl,
