@@ -1,3 +1,4 @@
+import 'package:dodal_app/providers/challenge_notice_list_bloc.dart';
 import 'package:dodal_app/providers/user_bloc.dart';
 import 'package:dodal_app/screens/challenge_notice/room_notice_list_screen.dart';
 import 'package:dodal_app/services/challenge/response.dart';
@@ -17,10 +18,16 @@ class NoticeBox extends StatelessWidget {
     final user = BlocProvider.of<UserBloc>(context).state.result;
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => RoomNoticeListScreen(
-          id: challenge.id,
-          isAdmin: challenge.hostId == user!.id,
-          openIndex: openIndex,
+        builder: (context) => BlocProvider(
+          create: (context) => ChallengeNoticeListBloc(
+            roomId: challenge.id,
+            targetIndex: openIndex,
+          ),
+          child: RoomNoticeListScreen(
+            id: challenge.id,
+            isAdmin: challenge.hostId == user!.id,
+            openIndex: openIndex,
+          ),
         ),
       ),
     );

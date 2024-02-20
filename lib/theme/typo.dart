@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 extension TypoExtension on BuildContext {
-  TextStyle? headline({
+  TextStyle headline({
     bool? inherit,
     Color? color,
     Color? backgroundColor,
@@ -58,7 +58,7 @@ extension TypoExtension on BuildContext {
             package: package,
             overflow: overflow,
           );
-  TextStyle? headline2({
+  TextStyle headline2({
     bool? inherit,
     Color? color,
     Color? backgroundColor,
@@ -114,7 +114,7 @@ extension TypoExtension on BuildContext {
             package: package,
             overflow: overflow,
           );
-  TextStyle? headline3({
+  TextStyle headline3({
     bool? inherit,
     Color? color,
     Color? backgroundColor,
@@ -170,7 +170,7 @@ extension TypoExtension on BuildContext {
             package: package,
             overflow: overflow,
           );
-  TextStyle? headline4({
+  TextStyle headline4({
     bool? inherit,
     Color? color,
     Color? backgroundColor,
@@ -226,7 +226,7 @@ extension TypoExtension on BuildContext {
             package: package,
             overflow: overflow,
           );
-  TextStyle? body1({
+  TextStyle body1({
     bool? inherit,
     Color? color,
     Color? backgroundColor,
@@ -282,7 +282,7 @@ extension TypoExtension on BuildContext {
             package: package,
             overflow: overflow,
           );
-  TextStyle? body2({
+  TextStyle body2({
     bool? inherit,
     Color? color,
     Color? backgroundColor,
@@ -338,7 +338,7 @@ extension TypoExtension on BuildContext {
             package: package,
             overflow: overflow,
           );
-  TextStyle? body3({
+  TextStyle body3({
     bool? inherit,
     Color? color,
     Color? backgroundColor,
@@ -394,7 +394,7 @@ extension TypoExtension on BuildContext {
             package: package,
             overflow: overflow,
           );
-  TextStyle? body4({
+  TextStyle body4({
     bool? inherit,
     Color? color,
     Color? backgroundColor,
@@ -450,7 +450,7 @@ extension TypoExtension on BuildContext {
             package: package,
             overflow: overflow,
           );
-  TextStyle? caption({
+  TextStyle caption({
     bool? inherit,
     Color? color,
     Color? backgroundColor,

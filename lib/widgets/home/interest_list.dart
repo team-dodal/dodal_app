@@ -11,6 +11,7 @@ import 'package:dodal_app/screens/modify_user/main.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/challenge_box/list_challenge_box.dart';
+import 'package:dodal_app/widgets/common/no_list_context.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -167,40 +168,49 @@ class InterestCategoryCard extends StatelessWidget {
             Row(
               children: category.hashTags.map((tag) => Text('$tag ')).toList(),
             ),
-            Builder(
-              builder: (context) {
-                return Column(
-                  children: [
-                    for (final challenge in challenges)
-                      OpenContainer(
-                        transitionType: ContainerTransitionType.fadeThrough,
-                        closedElevation: 0,
-                        closedBuilder: (context, action) {
-                          return Container(
-                            padding: const EdgeInsets.only(top: 20),
-                            constraints: const BoxConstraints(minHeight: 80),
-                            child: ListChallengeBox(
-                              id: challenge.id,
-                              title: challenge.title,
-                              thumbnailImg: challenge.thumbnailImg,
-                              tag: challenge.tag,
-                              adminProfile: challenge.adminProfile,
-                              adminNickname: challenge.adminNickname,
-                              recruitCnt: challenge.recruitCnt,
-                              userCnt: challenge.userCnt,
-                              certCnt: challenge.certCnt,
-                              isBookmarked: challenge.isBookmarked,
-                            ),
-                          );
-                        },
-                        openBuilder: (context, action) => challenge.isJoined
-                            ? ChallengeRoute(id: challenge.id)
-                            : ChallengePreviewScreen(id: challenge.id),
-                      )
-                  ],
-                );
-              },
-            ),
+            if (challenges.isEmpty)
+              const Column(
+                children: [
+                  SizedBox(height: 20),
+                  Center(
+                    child: NoListContext(
+                      title: '해당 카테고리에 도전이 없어요 😢',
+                      subTitle: '다른 카테고리를 확인해보세요!',
+                    ),
+                  ),
+                ],
+              ),
+            if (challenges.isNotEmpty)
+              Column(
+                children: [
+                  for (final challenge in challenges)
+                    OpenContainer(
+                      transitionType: ContainerTransitionType.fadeThrough,
+                      closedElevation: 0,
+                      closedBuilder: (context, action) {
+                        return Container(
+                          padding: const EdgeInsets.only(top: 20),
+                          constraints: const BoxConstraints(minHeight: 80),
+                          child: ListChallengeBox(
+                            id: challenge.id,
+                            title: challenge.title,
+                            thumbnailImg: challenge.thumbnailImg,
+                            tag: challenge.tag,
+                            adminProfile: challenge.adminProfile,
+                            adminNickname: challenge.adminNickname,
+                            recruitCnt: challenge.recruitCnt,
+                            userCnt: challenge.userCnt,
+                            certCnt: challenge.certCnt,
+                            isBookmarked: challenge.isBookmarked,
+                          ),
+                        );
+                      },
+                      openBuilder: (context, action) => challenge.isJoined
+                          ? ChallengeRoute(id: challenge.id)
+                          : ChallengePreviewScreen(id: challenge.id),
+                    )
+                ],
+              ),
           ],
         ),
       ),

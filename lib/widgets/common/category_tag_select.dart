@@ -25,9 +25,9 @@ class CategoryTagSelect extends StatelessWidget {
     Color buttonBackgroundColor(tag) =>
         selectedList.contains(tag) ? AppColors.lightOrange : AppColors.bgColor1;
     TextStyle buttonTextStyle(tag) => selectedList.contains(tag)
-        ? context.body4(color: AppColors.orange, fontWeight: FontWeight.bold)!
+        ? context.body4(color: AppColors.orange, fontWeight: FontWeight.bold)
         : context.body4(
-            color: AppColors.systemGrey1, fontWeight: FontWeight.w500)!;
+            color: AppColors.systemGrey1, fontWeight: FontWeight.w500);
 
     return BlocBuilder<CategoryListBloc, CategoryListState>(
       builder: (context, state) {
