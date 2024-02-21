@@ -165,7 +165,7 @@ class AdminList extends StatelessWidget {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (ctx) => BlocProvider(
-                  create: (context) => CreateChallengeCubit(),
+                  create: (context) => CreateChallengeBloc(),
                   child: const CreateChallengeScreen(),
                 ),
               ),

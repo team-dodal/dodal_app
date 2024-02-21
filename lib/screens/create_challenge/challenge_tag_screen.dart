@@ -11,10 +11,8 @@ class ChallengeTagScreen extends StatefulWidget {
     required this.steps,
     required this.step,
     required this.nextStep,
-    required this.isUpdate,
   });
 
-  final bool isUpdate;
   final int steps, step;
   final void Function() nextStep;
 
@@ -33,39 +31,40 @@ class _ChallengeTagScreenState extends State<ChallengeTagScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreateChallengeCubit, CreateChallenge>(
-        builder: (context, state) {
-      return Scaffold(
-        appBar: AppBar(title: Text(widget.isUpdate ? '도전 수정하기' : '도전 만들기')),
-        body: SingleChildScrollView(
-          controller: scrollController,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 16, 20, 100),
-            child: Column(
-              children: [
-                CreateFormTitle(
-                  title: '도전 주제를 선택해 주세요!',
-                  steps: widget.steps,
-                  currentStep: widget.step,
-                ),
-                const SizedBox(height: 40),
-                CategoryTagSelect(
-                    selectedList:
-                        state.tagValue != null ? [state.tagValue!] : [],
-                    onChange: (value) {
-                      context
-                          .read<CreateChallengeCubit>()
-                          .updateData(tagValue: value);
-                    }),
-              ],
+    return BlocBuilder<CreateChallengeBloc, CreateChallengeState>(
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(title: Text(state.isUpdate ? '도전 수정하기' : '도전 만들기')),
+          body: SingleChildScrollView(
+            controller: scrollController,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 100),
+              child: Column(
+                children: [
+                  CreateFormTitle(
+                    title: '도전 주제를 선택해 주세요!',
+                    steps: widget.steps,
+                    currentStep: widget.step,
+                  ),
+                  const SizedBox(height: 40),
+                  CategoryTagSelect(
+                      selectedList:
+                          state.tagValue != null ? [state.tagValue!] : [],
+                      onChange: (value) {
+                        context
+                            .read<CreateChallengeBloc>()
+                            .add(ChangeTagEvent(value));
+                      }),
+                ],
+              ),
             ),
           ),
-        ),
-        bottomSheet: SubmitButton(
-          onPress: state.tagValue != null ? widget.nextStep : null,
-          title: '다음',
-        ),
-      );
-    });
+          bottomSheet: SubmitButton(
+            onPress: state.tagValue != null ? widget.nextStep : null,
+            title: '다음',
+          ),
+        );
+      },
+    );
   }
 }

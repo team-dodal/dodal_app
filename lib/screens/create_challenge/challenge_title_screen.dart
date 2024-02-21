@@ -14,10 +14,8 @@ class ChallengeTitleScreen extends StatefulWidget {
     required this.steps,
     required this.step,
     required this.nextStep,
-    required this.isUpdate,
   });
 
-  final bool isUpdate;
   final int steps, step;
   final void Function() nextStep;
 
@@ -32,15 +30,15 @@ class _ChallengeTitleScreenState extends State<ChallengeTitleScreen> {
   TextEditingController headCountController = TextEditingController();
 
   _isSubmitAble() {
-    final state = BlocProvider.of<CreateChallengeCubit>(context).state;
-    if (state.title == null || state.title == '') return false;
-    if (state.content == null || state.content == '') return false;
+    final state = BlocProvider.of<CreateChallengeBloc>(context).state;
+    if (state.title.isEmpty) return false;
+    if (state.content.isEmpty) return false;
     if (state.recruitCnt == null || state.recruitCnt! < 1) return false;
     return true;
   }
 
   _submit() {
-    final state = BlocProvider.of<CreateChallengeCubit>(context).state;
+    final state = BlocProvider.of<CreateChallengeBloc>(context).state;
     if (state.recruitCnt! < 5) {
       showDialog(
         context: context,
@@ -53,9 +51,9 @@ class _ChallengeTitleScreenState extends State<ChallengeTitleScreen> {
 
   @override
   void initState() {
-    final state = BlocProvider.of<CreateChallengeCubit>(context).state;
-    titleController.text = state.title ?? '';
-    contentController.text = state.content ?? '';
+    final state = BlocProvider.of<CreateChallengeBloc>(context).state;
+    titleController.text = state.title;
+    contentController.text = state.content;
     headCountController.text =
         state.recruitCnt != null ? '${state.recruitCnt}' : '';
     super.initState();
@@ -71,10 +69,10 @@ class _ChallengeTitleScreenState extends State<ChallengeTitleScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreateChallengeCubit, CreateChallenge>(
+    return BlocBuilder<CreateChallengeBloc, CreateChallengeState>(
         builder: (context, state) {
       return Scaffold(
-        appBar: AppBar(title: Text(widget.isUpdate ? '도전 수정하기' : '도전 만들기')),
+        appBar: AppBar(title: Text(state.isUpdate ? '도전 수정하기' : '도전 만들기')),
         body: SingleChildScrollView(
           controller: scrollController,
           child: Padding(
@@ -97,8 +95,8 @@ class _ChallengeTitleScreenState extends State<ChallengeTitleScreen> {
                   textInputAction: TextInputAction.next,
                   onChanged: (value) {
                     context
-                        .read<CreateChallengeCubit>()
-                        .updateData(title: value);
+                        .read<CreateChallengeBloc>()
+                        .add(ChangeTitleEvent(value));
                   },
                 ),
                 const SizedBox(height: 32),
@@ -106,8 +104,8 @@ class _ChallengeTitleScreenState extends State<ChallengeTitleScreen> {
                   image: state.thumbnailImg,
                   onChange: (image) {
                     context
-                        .read<CreateChallengeCubit>()
-                        .updateData(thumbnailImg: image);
+                        .read<CreateChallengeBloc>()
+                        .add(ChangeThumbnailImgEvent(image));
                   },
                 ),
                 const SizedBox(height: 32),
@@ -122,8 +120,8 @@ class _ChallengeTitleScreenState extends State<ChallengeTitleScreen> {
                   textInputAction: TextInputAction.next,
                   onChanged: (value) {
                     context
-                        .read<CreateChallengeCubit>()
-                        .updateData(content: value);
+                        .read<CreateChallengeBloc>()
+                        .add(ChangeContentEvent(value));
                   },
                 ),
                 const SizedBox(height: 32),
@@ -136,8 +134,8 @@ class _ChallengeTitleScreenState extends State<ChallengeTitleScreen> {
                   onChanged: (value) {
                     try {
                       context
-                          .read<CreateChallengeCubit>()
-                          .updateData(recruitCnt: int.parse(value));
+                          .read<CreateChallengeBloc>()
+                          .add(ChangeRecruitCntEvent(int.parse(value)));
                     } catch (err) {}
                   },
                 ),

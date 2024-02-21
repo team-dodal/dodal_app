@@ -107,7 +107,7 @@ class _MainRouteState extends State<MainRoute> {
                 IconButton(
                   onPressed: () {
                     _handleActionBtn(BlocProvider(
-                      create: (context) => CreateChallengeCubit(),
+                      create: (context) => CreateChallengeBloc(),
                       child: const CreateChallengeScreen(),
                     ));
                   },

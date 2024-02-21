@@ -16,36 +16,34 @@ class ChallengePreviewScreen extends StatelessWidget {
     required this.step,
     required this.steps,
     required this.nextStep,
-    required this.isUpdate,
   });
 
-  final bool isUpdate;
   final int step, steps;
   final void Function() nextStep;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: BlocBuilder<CreateChallengeCubit, CreateChallenge>(
-          builder: (context, challenge) {
-        return SingleChildScrollView(
+    return BlocBuilder<CreateChallengeBloc, CreateChallengeState>(
+        builder: (context, state) {
+      return Scaffold(
+        appBar: AppBar(),
+        body: SingleChildScrollView(
           padding: const EdgeInsets.only(bottom: 100),
           child: Column(
             children: [
               ImageWidget(
-                image: challenge.thumbnailImg,
+                image: state.thumbnailImg,
                 width: double.infinity,
                 height: 200,
               ),
               RoomInfoBox(
-                title: challenge.title!,
-                tagName: challenge.tagValue!.name,
+                title: state.title,
+                tagName: state.tagValue!.name,
                 adminProfile: context.read<UserBloc>().state.result!.profileUrl,
                 adminNickname: context.read<UserBloc>().state.result!.nickname,
-                certCnt: challenge.certCnt!,
+                certCnt: state.certCnt,
                 curMember: 1,
-                maxMember: challenge.recruitCnt!,
+                maxMember: state.recruitCnt,
               ),
               const Divider(thickness: 8, color: AppColors.systemGrey4),
               Container(
@@ -57,11 +55,12 @@ class ChallengePreviewScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('저희의 도전을 소개해요',
-                        style: context.body1(fontWeight: FontWeight.bold)),
+                    Text(
+                      '저희의 도전을 소개해요',
+                      style: context.body1(fontWeight: FontWeight.bold),
+                    ),
                     const SizedBox(height: 8),
-                    if (challenge.content != null)
-                      Text(challenge.content!, style: context.body2()),
+                    Text(state.content, style: context.body2()),
                   ],
                 ),
               ),
@@ -75,14 +74,15 @@ class ChallengePreviewScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('이렇게 인증해요',
-                        style: context.body1(fontWeight: FontWeight.bold)),
+                    Text(
+                      '이렇게 인증해요',
+                      style: context.body1(fontWeight: FontWeight.bold),
+                    ),
                     const SizedBox(height: 8),
-                    if (challenge.content != null)
-                      Text(
-                        challenge.certContent!,
-                        style: context.body2(),
-                      ),
+                    Text(
+                      state.certContent,
+                      style: context.body2(),
+                    ),
                   ],
                 ),
               ),
@@ -99,18 +99,18 @@ class ChallengePreviewScreen extends StatelessWidget {
                     Row(
                       children: [
                         Expanded(
-                          child: challenge.certCorrectImg != null
+                          child: state.certCorrectImg != null
                               ? CertificateImageInput(
-                                  image: challenge.certCorrectImg,
+                                  image: state.certCorrectImg,
                                   certOption: CertOption.correct,
                                 )
                               : const SizedBox(),
                         ),
                         const SizedBox(width: 8),
                         Expanded(
-                          child: challenge.certWrongImg != null
+                          child: state.certWrongImg != null
                               ? CertificateImageInput(
-                                  image: challenge.certWrongImg,
+                                  image: state.certWrongImg,
                                   certOption: CertOption.wrong,
                                 )
                               : const SizedBox(),
@@ -122,12 +122,13 @@ class ChallengePreviewScreen extends StatelessWidget {
               ),
             ],
           ),
-        );
-      }),
-      bottomSheet: SubmitButton(
-        onPress: nextStep,
-        title: isUpdate ? '도전 수정하기' : '도전 생성하기',
-      ),
-    );
+        ),
+        bottomSheet: SubmitButton(
+          onPress:
+              state.status == CreateChallengeStatus.loading ? null : nextStep,
+          title: state.isUpdate ? '도전 수정하기' : '도전 생성하기',
+        ),
+      );
+    });
   }
 }

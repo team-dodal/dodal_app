@@ -23,7 +23,8 @@ class AdminMenu extends StatelessWidget {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => BlocProvider(
-                  create: (context) => CreateChallengeCubit(
+                  create: (context) => CreateChallengeBloc(
+                    roomId: challenge.id,
                     title: challenge.title,
                     content: challenge.content,
                     certContent: challenge.certContent,
@@ -34,7 +35,7 @@ class AdminMenu extends StatelessWidget {
                     recruitCnt: challenge.recruitCnt,
                     certCnt: challenge.certCnt,
                   ),
-                  child: CreateChallengeScreen(roomId: challenge.id),
+                  child: const CreateChallengeScreen(),
                 ),
               ),
             );

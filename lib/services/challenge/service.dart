@@ -32,22 +32,21 @@ class ChallengeService {
 
       if (thumbnailImg != null) {
         data['thumbnail_img_url'] =
-            await PresignedS3.imageUpload(file: thumbnailImg);
+            await PresignedS3.create(file: thumbnailImg);
       }
       if (certCorrectImg != null) {
         data['cert_correct_img_url'] =
-            await PresignedS3.imageUpload(file: certCorrectImg);
+            await PresignedS3.create(file: certCorrectImg);
       }
       if (certWrongImg != null) {
         data['cert_wrong_img_url'] =
-            await PresignedS3.imageUpload(file: certWrongImg);
+            await PresignedS3.create(file: certWrongImg);
       }
 
       final res = await service.post('/room', data: data);
       return res.data['result'];
-    } on DioException catch (err) {
-      ResponseErrorDialog(err);
-      return null;
+    } catch (err) {
+      rethrow;
     }
   }
 
@@ -75,21 +74,21 @@ class ChallengeService {
         'cert_correct_img_url': certCorrectImg,
         'cert_wrong_img_url': certWrongImg,
       };
+      print(data);
       for (var key in [
         'thumbnail_img_url',
         'cert_correct_img_url',
         'cert_wrong_img_url'
       ]) {
         if (data[key].runtimeType.toString() == '_File') {
-          data[key] = await PresignedS3.imageUpload(file: thumbnailImg);
+          data[key] = await PresignedS3.create(file: data[key]);
         }
       }
-
+      print(data);
       service.patch('/room/$id', data: data);
       return true;
-    } on DioException catch (err) {
-      ResponseErrorDialog(err);
-      return null;
+    } catch (err) {
+      rethrow;
     }
   }
 
@@ -272,7 +271,7 @@ class ChallengeService {
     try {
       final data = {
         "content": content,
-        'certification_img_url': await PresignedS3.imageUpload(file: image)
+        'certification_img_url': await PresignedS3.create(file: image)
       };
 
       await service.post(

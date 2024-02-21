@@ -3,106 +3,13 @@ import 'package:dodal_app/services/challenge/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CreateChallenge {
-  String? title, content, certContent;
-  dynamic thumbnailImg, certCorrectImg, certWrongImg;
-  int? recruitCnt, certCnt;
-  Tag? tagValue;
-
-  CreateChallenge({
-    required this.title,
-    required this.content,
-    required this.certContent,
-    required this.tagValue,
-    required this.thumbnailImg,
-    required this.certCorrectImg,
-    required this.certWrongImg,
-    required this.recruitCnt,
-    required this.certCnt,
-  });
-
-  copyWith({
-    String? title,
-    String? content,
-    String? certContent,
-    Tag? tagValue,
-    dynamic thumbnailImg,
-    dynamic certCorrectImg,
-    dynamic certWrongImg,
-    int? recruitCnt,
-    int? certCnt,
-  }) {
-    return CreateChallenge(
-      title: title ?? this.title,
-      content: content ?? this.content,
-      certContent: certContent ?? this.certContent,
-      tagValue: tagValue ?? this.tagValue,
-      thumbnailImg: thumbnailImg ?? this.thumbnailImg,
-      certCorrectImg: certCorrectImg ?? this.certCorrectImg,
-      certWrongImg: certWrongImg ?? this.certWrongImg,
-      recruitCnt: recruitCnt ?? this.recruitCnt,
-      certCnt: certCnt ?? this.certCnt,
-    );
-  }
-}
-
-class CreateChallengeCubit extends Cubit<CreateChallenge> {
-  CreateChallengeCubit({
-    String? title,
-    String? content,
-    String? certContent,
-    Tag? tagValue,
-    String? thumbnailImg,
-    String? certCorrectImg,
-    String? certWrongImg,
-    int? recruitCnt,
-    int? certCnt,
-  }) : super(
-          CreateChallenge(
-            title: title ?? '',
-            content: content ?? '',
-            certContent: certContent ?? '',
-            tagValue: tagValue,
-            thumbnailImg: thumbnailImg,
-            certCorrectImg: certCorrectImg,
-            certWrongImg: certWrongImg,
-            recruitCnt: recruitCnt,
-            certCnt: certCnt ?? 1,
-          ),
-        );
-
-  updateData({
-    String? title,
-    String? content,
-    String? certContent,
-    Tag? tagValue,
-    dynamic thumbnailImg,
-    dynamic certCorrectImg,
-    dynamic certWrongImg,
-    int? recruitCnt,
-    int? certCnt,
-  }) {
-    final updatedState = state.copyWith(
-      title: title,
-      content: content,
-      certContent: certContent,
-      tagValue: tagValue,
-      thumbnailImg: thumbnailImg,
-      certCorrectImg: certCorrectImg,
-      certWrongImg: certWrongImg,
-      recruitCnt: recruitCnt,
-      certCnt: certCnt,
-    );
-
-    emit(updatedState);
-  }
-}
-
 enum CreateChallengeStatus { init, loading, success, error }
 
 class CreateChallengeBloc
     extends Bloc<CreateChallengeEvent, CreateChallengeState> {
+  final int? roomId;
   CreateChallengeBloc({
+    this.roomId,
     String? title,
     String? content,
     String? certContent,
@@ -113,125 +20,99 @@ class CreateChallengeBloc
     int? certCnt,
     Tag? tagValue,
   }) : super(
-          title != null
-              ? CreateChallengeState.updateInit(
-                  title,
-                  content!,
-                  certContent!,
-                  thumbnailImg,
-                  certCorrectImg,
-                  certWrongImg,
-                  recruitCnt!,
-                  certCnt!,
-                  tagValue!,
-                )
-              : const CreateChallengeState.createInit(),
+          CreateChallengeState.init(
+            isUpdate: roomId != null,
+            title: title,
+            content: content,
+            certContent: certContent,
+            thumbnailImg: thumbnailImg,
+            certCorrectImg: certCorrectImg,
+            certWrongImg: certWrongImg,
+            recruitCnt: recruitCnt,
+            certCnt: certCnt,
+            tagValue: tagValue,
+          ),
         ) {
     on<SubmitCreateChallengeEvent>(_submit);
-    on<ChangeTitleEvent>(_changeTitle);
-    on<ChangeContentEvent>(_changeContent);
-    on<ChangeTagEvent>(_changeTag);
-    on<ChangeRecruitCntEvent>(_changeRecruitCnt);
-    on<ChangeCertCntEvent>(_changeCertCnt);
-    on<ChangeCertContentEvent>(_changeCertContent);
-    on<ChangeThumbnailImgEvent>(_changeThumbnail);
-    on<ChangeCertCorrectImgEvent>(_changeCertCorrectImg);
-    on<ChangeCertWrongImgImgEvent>(_changeCertWrongImg);
-  }
-
-  void _changeTitle(ChangeTitleEvent event, emit) {
-    emit(state.copyWith(title: event.title));
-  }
-
-  void _changeContent(ChangeContentEvent event, emit) {
-    emit(state.copyWith(content: event.content));
-  }
-
-  void _changeTag(ChangeTagEvent event, emit) {
-    emit(state.copyWith(tagValue: event.tag));
-  }
-
-  void _changeRecruitCnt(ChangeRecruitCntEvent event, emit) {
-    emit(state.copyWith(recruitCnt: event.recruitCnt));
-  }
-
-  void _changeCertCnt(ChangeCertCntEvent event, emit) {
-    emit(state.copyWith(certCnt: event.certCnt));
-  }
-
-  void _changeCertContent(ChangeCertContentEvent event, emit) {
-    emit(state.copyWith(certContent: event.certContent));
-  }
-
-  void _changeThumbnail(ChangeThumbnailImgEvent event, emit) {
-    emit(state.copyWith(thumbnailImg: event.thumbnailImg));
-  }
-
-  void _changeCertCorrectImg(ChangeCertCorrectImgEvent event, emit) {
-    emit(state.copyWith(certCorrectImg: event.certCorrectImg));
-  }
-
-  void _changeCertWrongImg(ChangeCertWrongImgImgEvent event, emit) {
-    emit(state.copyWith(certWrongImg: event.certWrongImg));
+    on<ChangeTitleEvent>((ChangeTitleEvent event, emit) {
+      emit(state.copyWith(title: event.title));
+    });
+    on<ChangeContentEvent>((ChangeContentEvent event, emit) {
+      emit(state.copyWith(content: event.content));
+    });
+    on<ChangeTagEvent>((ChangeTagEvent event, emit) {
+      emit(state.copyWith(tagValue: event.tag));
+    });
+    on<ChangeRecruitCntEvent>((ChangeRecruitCntEvent event, emit) {
+      emit(state.copyWith(recruitCnt: event.recruitCnt));
+    });
+    on<ChangeCertCntEvent>((ChangeCertCntEvent event, emit) {
+      emit(state.copyWith(certCnt: event.certCnt));
+    });
+    on<ChangeCertContentEvent>((ChangeCertContentEvent event, emit) {
+      emit(state.copyWith(certContent: event.certContent));
+    });
+    on<ChangeThumbnailImgEvent>((ChangeThumbnailImgEvent event, emit) {
+      emit(state.copyWith(thumbnailImg: event.thumbnailImg));
+    });
+    on<ChangeCertCorrectImgEvent>((ChangeCertCorrectImgEvent event, emit) {
+      emit(state.copyWith(certCorrectImg: event.certCorrectImg));
+    });
+    on<ChangeCertWrongImgEvent>((ChangeCertWrongImgEvent event, emit) {
+      emit(state.copyWith(certWrongImg: event.certWrongImg));
+    });
   }
 
   Future<void> _submit(SubmitCreateChallengeEvent event, emit) async {
     emit(state.copyWith(status: CreateChallengeStatus.loading));
-    late bool res;
-    if (state.isUpdate) {
-      res = await _update(event.roomId!);
-    } else {
-      res = await _create();
+    try {
+      state.isUpdate ? await _update() : await _create();
+      emit(state.copyWith(status: CreateChallengeStatus.success));
+    } catch (error) {
+      emit(
+        state.copyWith(
+          status: CreateChallengeStatus.error,
+          errorMessage: '챌린지 생성에 실패하였습니다.',
+        ),
+      );
     }
-    emit(
-      state.copyWith(
-          status: res
-              ? CreateChallengeStatus.success
-              : CreateChallengeStatus.error),
-    );
   }
 
-  Future<bool> _update(int roomId) async {
-    final res = await ChallengeService.updateChallenge(
-      id: roomId,
+  Future<void> _update() async {
+    await ChallengeService.updateChallenge(
+      id: roomId!,
       title: state.title,
       content: state.content,
       tagValue: state.tagValue!.value,
-      recruitCnt: state.recruitCnt!,
-      certCnt: state.certCnt!,
+      recruitCnt: state.recruitCnt,
+      certCnt: state.certCnt,
       certContent: state.certContent,
       thumbnailImg: state.thumbnailImg,
       certCorrectImg: state.certCorrectImg,
       certWrongImg: state.certWrongImg,
     );
-    if (res == null) return false;
-    return true;
   }
 
-  Future<bool> _create() async {
-    final res = await ChallengeService.createChallenge(
+  Future<void> _create() async {
+    await ChallengeService.createChallenge(
       title: state.title,
       content: state.content,
       thumbnailImg: state.thumbnailImg,
       tagValue: state.tagValue!.value,
-      recruitCnt: state.recruitCnt!,
-      certCnt: state.certCnt!,
+      recruitCnt: state.recruitCnt,
+      certCnt: state.certCnt,
       certContent: state.certContent,
       certCorrectImg: state.certCorrectImg,
       certWrongImg: state.certWrongImg,
     );
-    if (res == null) return false;
-    return true;
   }
 }
 
 abstract class CreateChallengeEvent extends Equatable {}
 
 class SubmitCreateChallengeEvent extends CreateChallengeEvent {
-  final int? roomId;
-  SubmitCreateChallengeEvent(this.roomId);
   @override
-  List<Object?> get props => [roomId];
+  List<Object?> get props => [];
 }
 
 class ChangeTitleEvent extends CreateChallengeEvent {
@@ -290,9 +171,9 @@ class ChangeCertCorrectImgEvent extends CreateChallengeEvent {
   List<Object?> get props => [certCorrectImg];
 }
 
-class ChangeCertWrongImgImgEvent extends CreateChallengeEvent {
+class ChangeCertWrongImgEvent extends CreateChallengeEvent {
   final dynamic certWrongImg;
-  ChangeCertWrongImgImgEvent(this.certWrongImg);
+  ChangeCertWrongImgEvent(this.certWrongImg);
   @override
   List<Object?> get props => [certWrongImg];
 }
@@ -307,8 +188,8 @@ class CreateChallengeState extends Equatable {
   final dynamic thumbnailImg;
   final dynamic certCorrectImg;
   final dynamic certWrongImg;
-  final int? recruitCnt;
-  final int? certCnt;
+  final int recruitCnt;
+  final int certCnt;
   final Tag? tagValue;
 
   const CreateChallengeState({
@@ -326,42 +207,28 @@ class CreateChallengeState extends Equatable {
     required this.tagValue,
   });
 
-  const CreateChallengeState.createInit()
-      : this(
+  const CreateChallengeState.init({
+    required bool isUpdate,
+    required String? title,
+    required String? content,
+    required String? certContent,
+    required dynamic thumbnailImg,
+    required dynamic certCorrectImg,
+    required dynamic certWrongImg,
+    required int? recruitCnt,
+    required int? certCnt,
+    required Tag? tagValue,
+  }) : this(
           status: CreateChallengeStatus.init,
-          isUpdate: false,
-          title: '',
-          content: '',
-          certContent: '',
-          thumbnailImg: null,
-          certCorrectImg: null,
-          certWrongImg: null,
-          recruitCnt: 0,
-          certCnt: 0,
-          tagValue: null,
-        );
-
-  const CreateChallengeState.updateInit(
-    String title,
-    String content,
-    String certContent,
-    dynamic thumbnailImg,
-    dynamic certCorrectImg,
-    dynamic certWrongImg,
-    int recruitCnt,
-    int certCnt,
-    Tag tagValue,
-  ) : this(
-          status: CreateChallengeStatus.init,
-          isUpdate: true,
-          title: title,
-          content: content,
-          certContent: certContent,
+          isUpdate: isUpdate,
+          title: title ?? '',
+          content: content ?? '',
+          certContent: certContent ?? '',
           thumbnailImg: thumbnailImg,
           certCorrectImg: certCorrectImg,
           certWrongImg: certWrongImg,
-          recruitCnt: recruitCnt,
-          certCnt: certCnt,
+          recruitCnt: recruitCnt ?? 0,
+          certCnt: certCnt ?? 1,
           tagValue: tagValue,
         );
 

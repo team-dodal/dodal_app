@@ -88,7 +88,7 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (ctx) => BlocProvider(
-                                create: (context) => CreateChallengeCubit(),
+                                create: (context) => CreateChallengeBloc(),
                                 child: const CreateChallengeScreen(),
                               ),
                             ),

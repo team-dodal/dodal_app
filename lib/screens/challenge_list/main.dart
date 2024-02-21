@@ -73,7 +73,7 @@ class _ChallengeListScreenState extends State<ChallengeListScreen> {
         onButtonPress: () {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (ctx) => BlocProvider(
-              create: (context) => CreateChallengeCubit(),
+              create: (context) => CreateChallengeBloc(),
               child: const CreateChallengeScreen(),
             ),
           ));
@@ -141,7 +141,7 @@ class _ChallengeListScreenState extends State<ChallengeListScreen> {
               Navigator.of(context).push(
                 SlidePageRoute(
                   screen: BlocProvider(
-                    create: (context) => CreateChallengeCubit(),
+                    create: (context) => CreateChallengeBloc(),
                     child: const CreateChallengeScreen(),
                   ),
                 ),

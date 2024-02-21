@@ -46,7 +46,7 @@ class UserService {
       };
 
       if (profile != null) {
-        String s3Url = await PresignedS3.imageUpload(file: profile);
+        String s3Url = await PresignedS3.create(file: profile);
         data['profile_url'] = s3Url;
       }
 
@@ -78,7 +78,7 @@ class UserService {
         s3Url = profile;
       }
       if (profile.runtimeType.toString() == '_File') {
-        s3Url = await PresignedS3.imageUpload(file: profile);
+        s3Url = await PresignedS3.create(file: profile);
       }
 
       final data = {
