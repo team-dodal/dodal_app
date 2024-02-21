@@ -147,7 +147,6 @@ class _ChallengeRouteState extends State<ChallengeRoute>
                         ),
                       ),
                     );
-                    setState(() {});
                   };
                   break;
               }

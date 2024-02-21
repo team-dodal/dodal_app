@@ -51,11 +51,16 @@ class BookmarkScreen extends StatelessWidget {
   }
 
   Widget _empty() {
-    return const Center(
-      child: NoListContext(
-        title: '북마크한 모임이 없습니다',
-        subTitle: '마음에 드는 모임을 찾아보세요!',
-      ),
+    return const Column(
+      children: [
+        SizedBox(height: 100),
+        Center(
+          child: NoListContext(
+            title: '북마크한 모임이 없습니다',
+            subTitle: '마음에 드는 모임을 찾아보세요!',
+          ),
+        ),
+      ],
     );
   }
 

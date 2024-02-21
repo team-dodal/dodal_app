@@ -74,7 +74,6 @@ class ChallengeService {
         'cert_correct_img_url': certCorrectImg,
         'cert_wrong_img_url': certWrongImg,
       };
-      print(data);
       for (var key in [
         'thumbnail_img_url',
         'cert_correct_img_url',
@@ -84,7 +83,6 @@ class ChallengeService {
           data[key] = await PresignedS3.create(file: data[key]);
         }
       }
-      print(data);
       service.patch('/room/$id', data: data);
       return true;
     } catch (err) {
