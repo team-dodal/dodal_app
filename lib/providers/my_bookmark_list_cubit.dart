@@ -7,23 +7,29 @@ enum MyBookmarkListStatus { init, loading, success, error }
 
 class MyBookmarkListCubit extends Cubit<MyBookmarkListState> {
   MyBookmarkListCubit() : super(MyBookmarkListState.init()) {
-    _loadData();
+    loadData();
   }
 
-  _loadData() async {
+  loadData() async {
     emit(state.copyWith(status: MyBookmarkListStatus.loading));
-    final list = await ChallengeService.getBookmarkList();
-    if (list != null) {
-      emit(state.copyWith(
-        status: MyBookmarkListStatus.success,
-        result: list,
-      ));
-    } else {
+    List<Challenge>? res = await ChallengeService.getBookmarkList();
+    if (res == null) {
       emit(state.copyWith(
         status: MyBookmarkListStatus.error,
         errorMessage: '데이터를 불러오는데 실패하였습니다.',
       ));
+      return;
     }
+    emit(state.copyWith(
+      status: MyBookmarkListStatus.success,
+      result: res,
+    ));
+  }
+
+  removeItem(int roomId) {
+    List<Challenge> list = [...state.result];
+    list.removeWhere((e) => e.id == roomId);
+    emit(state.copyWith(result: list));
   }
 }
 

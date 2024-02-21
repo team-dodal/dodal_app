@@ -162,6 +162,7 @@ class ChallengeService {
       List<Challenge> result = (res.data['result'] as List)
           .map((item) => Challenge.fromJson(item))
           .toList();
+
       return result;
     } on DioException catch (error) {
       ResponseErrorDialog(error);
@@ -169,7 +170,8 @@ class ChallengeService {
     }
   }
 
-  static bookmark({required int roomId, required bool value}) async {
+  static Future<bool> bookmark(
+      {required int roomId, required bool value}) async {
     try {
       if (value) {
         await service.post('/room/$roomId/bookmark');
@@ -178,9 +180,8 @@ class ChallengeService {
         await service.delete('/room/$roomId/bookmark');
         return false;
       }
-    } on DioException catch (error) {
-      ResponseErrorDialog(error);
-      return null;
+    } catch (error) {
+      rethrow;
     }
   }
 

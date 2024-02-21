@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/model/category_model.dart';
 import 'package:dodal_app/model/challenge_model.dart';
+import 'package:dodal_app/providers/bookmark_bloc.dart';
 import 'package:dodal_app/providers/custom_feed_list_bloc.dart';
 import 'package:dodal_app/providers/modify_user_cubit.dart';
 import 'package:dodal_app/providers/nickname_check_bloc.dart';
@@ -191,17 +192,21 @@ class InterestCategoryCard extends StatelessWidget {
                         return Container(
                           padding: const EdgeInsets.only(top: 20),
                           constraints: const BoxConstraints(minHeight: 80),
-                          child: ListChallengeBox(
-                            id: challenge.id,
-                            title: challenge.title,
-                            thumbnailImg: challenge.thumbnailImg,
-                            tag: challenge.tag,
-                            adminProfile: challenge.adminProfile,
-                            adminNickname: challenge.adminNickname,
-                            recruitCnt: challenge.recruitCnt,
-                            userCnt: challenge.userCnt,
-                            certCnt: challenge.certCnt,
-                            isBookmarked: challenge.isBookmarked,
+                          child: BlocProvider(
+                            create: (context) => BookmarkBloc(
+                              roomId: challenge.id,
+                              isBookmarked: challenge.isBookmarked,
+                            ),
+                            child: ListChallengeBox(
+                              title: challenge.title,
+                              thumbnailImg: challenge.thumbnailImg,
+                              tag: challenge.tag,
+                              adminProfile: challenge.adminProfile,
+                              adminNickname: challenge.adminNickname,
+                              recruitCnt: challenge.recruitCnt,
+                              userCnt: challenge.userCnt,
+                              certCnt: challenge.certCnt,
+                            ),
                           ),
                         );
                       },

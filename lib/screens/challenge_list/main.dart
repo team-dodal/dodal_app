@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/helper/slide_page_route.dart';
 import 'package:dodal_app/model/challenge_model.dart';
+import 'package:dodal_app/providers/bookmark_bloc.dart';
 import 'package:dodal_app/providers/challenge_list_bloc.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/providers/create_challenge_cubit.dart';
@@ -40,17 +41,21 @@ class _ChallengeListScreenState extends State<ChallengeListScreen> {
             closedBuilder: (context, action) {
               return InkWell(
                 onTap: action,
-                child: ListChallengeBox(
-                  id: challenges[index].id,
-                  title: challenges[index].title,
-                  tag: challenges[index].tag,
-                  thumbnailImg: challenges[index].thumbnailImg,
-                  adminProfile: challenges[index].adminProfile,
-                  adminNickname: challenges[index].adminNickname,
-                  userCnt: challenges[index].userCnt,
-                  certCnt: challenges[index].certCnt,
-                  recruitCnt: challenges[index].recruitCnt,
-                  isBookmarked: challenges[index].isBookmarked,
+                child: BlocProvider(
+                  create: (context) => BookmarkBloc(
+                    roomId: challenges[index].id,
+                    isBookmarked: challenges[index].isBookmarked,
+                  ),
+                  child: ListChallengeBox(
+                    title: challenges[index].title,
+                    tag: challenges[index].tag,
+                    thumbnailImg: challenges[index].thumbnailImg,
+                    adminProfile: challenges[index].adminProfile,
+                    adminNickname: challenges[index].adminNickname,
+                    userCnt: challenges[index].userCnt,
+                    certCnt: challenges[index].certCnt,
+                    recruitCnt: challenges[index].recruitCnt,
+                  ),
                 ),
               );
             },

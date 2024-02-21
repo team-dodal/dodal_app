@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/model/challenge_model.dart';
+import 'package:dodal_app/providers/bookmark_bloc.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/providers/create_challenge_cubit.dart';
 import 'package:dodal_app/screens/challenge_preview/main.dart';
@@ -111,17 +112,21 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
                           closedBuilder: (context, action) {
                             return InkWell(
                               onTap: action,
-                              child: ListChallengeBox(
-                                id: item.id,
-                                title: item.title,
-                                tag: item.tag,
-                                thumbnailImg: item.thumbnailImg,
-                                adminProfile: item.adminProfile,
-                                adminNickname: item.adminNickname,
-                                userCnt: item.userCnt,
-                                certCnt: item.certCnt,
-                                recruitCnt: item.recruitCnt,
-                                isBookmarked: item.isBookmarked,
+                              child: BlocProvider(
+                                create: (context) => BookmarkBloc(
+                                  roomId: item.id,
+                                  isBookmarked: item.isBookmarked,
+                                ),
+                                child: ListChallengeBox(
+                                  title: item.title,
+                                  tag: item.tag,
+                                  thumbnailImg: item.thumbnailImg,
+                                  adminProfile: item.adminProfile,
+                                  adminNickname: item.adminNickname,
+                                  userCnt: item.userCnt,
+                                  certCnt: item.certCnt,
+                                  recruitCnt: item.recruitCnt,
+                                ),
                               ),
                             );
                           },

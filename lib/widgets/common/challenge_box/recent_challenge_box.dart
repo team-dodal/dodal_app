@@ -1,8 +1,10 @@
 import 'package:dodal_app/model/challenge_model.dart';
+import 'package:dodal_app/providers/bookmark_bloc.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/challenge_box/list_challenge_box.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RecentChallengeBox extends StatelessWidget {
   const RecentChallengeBox({super.key, required this.challenge});
@@ -28,16 +30,21 @@ class RecentChallengeBox extends StatelessWidget {
         ),
         child: Column(
           children: [
-            ListChallengeBox(
-              id: challenge.id,
-              title: challenge.title,
-              thumbnailImg: challenge.thumbnailImg,
-              tag: challenge.tag,
-              adminProfile: challenge.adminProfile,
-              adminNickname: challenge.adminNickname,
-              recruitCnt: challenge.recruitCnt,
-              userCnt: challenge.userCnt,
-              certCnt: challenge.certCnt,
+            BlocProvider(
+              create: (context) => BookmarkBloc(
+                roomId: challenge.id,
+                isBookmarked: challenge.isBookmarked,
+              ),
+              child: ListChallengeBox(
+                title: challenge.title,
+                thumbnailImg: challenge.thumbnailImg,
+                tag: challenge.tag,
+                adminProfile: challenge.adminProfile,
+                adminNickname: challenge.adminNickname,
+                recruitCnt: challenge.recruitCnt,
+                userCnt: challenge.userCnt,
+                certCnt: challenge.certCnt,
+              ),
             ),
             const SizedBox(height: 12),
             Container(

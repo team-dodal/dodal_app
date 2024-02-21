@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/model/category_model.dart';
 import 'package:dodal_app/model/challenge_model.dart';
+import 'package:dodal_app/providers/bookmark_bloc.dart';
 import 'package:dodal_app/providers/category_list_bloc.dart';
 import 'package:dodal_app/providers/challenge_list_bloc.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
@@ -33,9 +34,16 @@ class PopularList extends StatelessWidget {
             closedElevation: 0,
             closedBuilder: (context, action) {
               return Container(
-                  padding: const EdgeInsets.only(top: 20),
-                  constraints: const BoxConstraints(minHeight: 80),
-                  child: GridChallengeBox(challenge: challenge));
+                padding: const EdgeInsets.only(top: 20),
+                constraints: const BoxConstraints(minHeight: 80),
+                child: BlocProvider(
+                  create: (context) => BookmarkBloc(
+                    roomId: challenge.id,
+                    isBookmarked: challenge.isBookmarked,
+                  ),
+                  child: GridChallengeBox(challenge: challenge),
+                ),
+              );
             },
             openBuilder: (context, action) => challenge.isJoined
                 ? ChallengeRoute(id: challenge.id)

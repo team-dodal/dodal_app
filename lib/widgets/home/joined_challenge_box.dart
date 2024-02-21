@@ -1,8 +1,10 @@
 import 'package:dodal_app/model/tag_model.dart';
+import 'package:dodal_app/providers/bookmark_bloc.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/challenge_box/list_challenge_box.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math' as math;
 
@@ -49,16 +51,21 @@ class JoinedChallengeBox extends StatelessWidget {
           ]),
       child: Column(
         children: [
-          ListChallengeBox(
-            id: id,
-            title: title,
-            thumbnailImg: thumbnailImg,
-            tag: tag,
-            adminProfile: adminProfile,
-            adminNickname: adminNickname,
-            recruitCnt: recruitCnt,
-            userCnt: userCnt,
-            certCnt: certCnt,
+          BlocProvider(
+            create: (context) => BookmarkBloc(
+              roomId: id,
+              isBookmarked: false,
+            ),
+            child: ListChallengeBox(
+              title: title,
+              thumbnailImg: thumbnailImg,
+              tag: tag,
+              adminProfile: adminProfile,
+              adminNickname: adminNickname,
+              recruitCnt: recruitCnt,
+              userCnt: userCnt,
+              certCnt: certCnt,
+            ),
           ),
           const SizedBox(height: 12),
           Container(
