@@ -1,5 +1,6 @@
 import 'package:dodal_app/layout/modal_layout.dart';
 import 'package:dodal_app/providers/manage_challenge_feed_bloc.dart';
+import 'package:dodal_app/providers/manage_challenge_member_bloc.dart';
 import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/services/manage_challenge/response.dart';
 import 'package:dodal_app/theme/color.dart';
@@ -72,7 +73,15 @@ class _ManageFeedScreenState extends State<ManageFeedScreen> {
       children: [
         _header(),
         Expanded(
-          child: BlocBuilder<ManageChallengeFeedBloc, ManageChallengeFeedState>(
+          child:
+              BlocConsumer<ManageChallengeFeedBloc, ManageChallengeFeedState>(
+            listener: (context, state) {
+              if (state.status == ManageChallengeFeedStatus.success) {
+                context
+                    .read<ManageChallengeMemberBloc>()
+                    .add(LoadManageChallengeMemberEvent());
+              }
+            },
             builder: (context, state) {
               switch (state.status) {
                 case ManageChallengeFeedStatus.init:
