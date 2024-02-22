@@ -2,6 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:dodal_app/helper/slide_page_route.dart';
 import 'package:dodal_app/model/challenge_model.dart';
 import 'package:dodal_app/providers/bookmark_bloc.dart';
+import 'package:dodal_app/providers/challenge_info_bloc.dart';
 import 'package:dodal_app/providers/challenge_list_bloc.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/providers/create_challenge_cubit.dart';
@@ -58,8 +59,10 @@ class _ChallengeListScreenState extends State<ChallengeListScreen> {
                 ),
               );
             },
-            openBuilder: (context, action) =>
-                ChallengeRoute(id: challenges[index].id),
+            openBuilder: (context, action) => BlocProvider(
+              create: (context) => ChallengeInfoBloc(challenges[index].id),
+              child: const ChallengeRoute(),
+            ),
           ),
         );
       },

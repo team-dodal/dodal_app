@@ -120,15 +120,10 @@ class ChallengeService {
     return result;
   }
 
-  static Future<OneChallengeResponse?> getChallengeOne(
+  static Future<OneChallengeResponse> getChallengeOne(
       {required int challengeId}) async {
-    try {
-      final res = await service.get('/rooms/$challengeId');
-      return OneChallengeResponse.fromJson(res.data['result']);
-    } on DioException catch (error) {
-      ResponseErrorDialog(error);
-      return null;
-    }
+    final res = await service.get('/rooms/$challengeId');
+    return OneChallengeResponse.fromJson(res.data['result']);
   }
 
   static Future<List<Challenge>> getBookmarkList() async {
@@ -150,14 +145,8 @@ class ChallengeService {
     }
   }
 
-  static join({required int challengeId}) async {
-    try {
-      await service.post('/rooms/$challengeId/join');
-      return true;
-    } on DioException catch (error) {
-      ResponseErrorDialog(error);
-      return false;
-    }
+  static Future<void> join({required int challengeId}) async {
+    await service.post('/rooms/$challengeId/join');
   }
 
   static out({required int challengeId}) async {
@@ -183,16 +172,11 @@ class ChallengeService {
 
   static Future<List<ChallengeRoomNoticeResponse>?> getNoticeList(
       {required int roomId}) async {
-    try {
-      final res = await service.get('/room/$roomId/noti');
-      final List<dynamic> result = res.data['result'];
-      return result
-          .map((notice) => ChallengeRoomNoticeResponse.fromJson(notice))
-          .toList();
-    } on DioException catch (error) {
-      ResponseErrorDialog(error);
-      return null;
-    }
+    final res = await service.get('/room/$roomId/noti');
+    final List<dynamic> result = res.data['result'];
+    return result
+        .map((notice) => ChallengeRoomNoticeResponse.fromJson(notice))
+        .toList();
   }
 
   static updateNotice({
@@ -244,29 +228,25 @@ class ChallengeService {
     return result.map((e) => ChallengeRankResponse.fromJson(e)).toList();
   }
 
-  static Future<List<Challenge>?> getChallengesByKeyword({
+  static Future<List<Challenge>> getChallengesByKeyword({
     required String word,
     required int conditionCode,
     required List<int> certCntList,
     required int page,
     required int pageSize,
   }) async {
-    try {
-      String requestUrl = '/room/search?';
-      requestUrl += 'word=$word&';
-      requestUrl += 'condition_code=$conditionCode&';
-      for (final certCnt in certCntList) {
-        requestUrl += 'cert_cnt_list=$certCnt&';
-      }
-      requestUrl += 'page=$page&page_size=$pageSize';
-      final res = await service.get(requestUrl);
-      List<dynamic> contents = res.data['result']['content'];
-      List<Challenge> result =
-          contents.map((item) => Challenge.fromJson(item)).toList();
-      return result;
-    } on DioException catch (error) {
-      ResponseErrorDialog(error);
-      return null;
+    String requestUrl = '/room/search?';
+    requestUrl += 'word=$word&';
+    requestUrl += 'condition_code=$conditionCode&';
+    for (final certCnt in certCntList) {
+      requestUrl += 'cert_cnt_list=$certCnt&';
     }
+    requestUrl += 'page=$page&page_size=$pageSize';
+    final res = await service.get(requestUrl);
+
+    List<dynamic> contents = res.data['result']['content'];
+    List<Challenge> result =
+        contents.map((item) => Challenge.fromJson(item)).toList();
+    return result;
   }
 }

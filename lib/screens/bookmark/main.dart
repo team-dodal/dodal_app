@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/providers/bookmark_bloc.dart';
+import 'package:dodal_app/providers/challenge_info_bloc.dart';
 import 'package:dodal_app/providers/my_bookmark_list_cubit.dart';
 import 'package:dodal_app/screens/challenge_route/main.dart';
 import 'package:dodal_app/widgets/common/challenge_box/grid_challenge_box.dart';
@@ -41,7 +42,10 @@ class BookmarkScreen extends StatelessWidget {
                 ),
               );
             },
-            openBuilder: (context, action) => ChallengeRoute(id: challenge.id),
+            openBuilder: (context, action) => BlocProvider(
+              create: (context) => ChallengeInfoBloc(challenge.id),
+              child: const ChallengeRoute(),
+            ),
           ),
       ],
     );

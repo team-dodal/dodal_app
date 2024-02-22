@@ -1,9 +1,7 @@
 import 'package:dodal_app/helper/slide_page_route.dart';
 import 'package:dodal_app/providers/bookmark_bloc.dart';
-import 'package:dodal_app/screens/challenge_route/main.dart';
+import 'package:dodal_app/providers/challenge_info_bloc.dart';
 import 'package:dodal_app/screens/challenge_settings_menu/main.dart';
-import 'package:dodal_app/services/challenge/response.dart';
-import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/challenge_preview/feed_img_content.dart';
@@ -15,23 +13,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChallengePreviewScreen extends StatelessWidget {
-  const ChallengePreviewScreen({super.key, required this.challenge});
-
-  final OneChallengeResponse challenge;
-
-  _join(BuildContext context) async {
-    final res = await ChallengeService.join(challengeId: challenge.id);
-    if (res) {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-            builder: (context) => ChallengeRoute(id: challenge.id)),
-        (route) => route.isFirst,
-      );
-    }
-  }
+  const ChallengePreviewScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final challenge = context.read<ChallengeInfoBloc>().state.result!;
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -48,7 +34,7 @@ class ChallengePreviewScreen extends StatelessWidget {
           )
         ],
       ),
-      body: PreviewScreen(challenge: challenge),
+      body: const PreviewScreen(),
       bottomSheet: BlocProvider(
         create: (context) => BookmarkBloc(
           roomId: challenge.id,
@@ -57,7 +43,7 @@ class ChallengePreviewScreen extends StatelessWidget {
         child: ChallengeBottomSheet(
           buttonText: '도전 참여하기',
           onPress: () {
-            _join(context);
+            context.read<ChallengeInfoBloc>().add(JoinChallengeEvent());
           },
         ),
       ),
@@ -66,15 +52,11 @@ class ChallengePreviewScreen extends StatelessWidget {
 }
 
 class PreviewScreen extends StatelessWidget {
-  const PreviewScreen({
-    super.key,
-    required this.challenge,
-  });
-
-  final OneChallengeResponse challenge;
+  const PreviewScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final challenge = context.read<ChallengeInfoBloc>().state.result!;
     return SingleChildScrollView(
       padding: const EdgeInsets.only(bottom: 100),
       child: Column(

@@ -1,3 +1,4 @@
+import 'package:dodal_app/providers/challenge_info_bloc.dart';
 import 'package:dodal_app/providers/create_feed_bloc.dart';
 import 'package:dodal_app/screens/challenge_route/main.dart';
 import 'package:dodal_app/services/challenge/response.dart';
@@ -55,7 +56,10 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ChallengeRoute(id: widget.challenge.id),
+                  builder: (context) => BlocProvider(
+                    create: (context) => ChallengeInfoBloc(widget.challenge.id),
+                    child: const ChallengeRoute(),
+                  ),
                 ),
                 (route) => route.isFirst,
               );

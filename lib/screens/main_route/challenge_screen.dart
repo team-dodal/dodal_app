@@ -1,4 +1,5 @@
 import 'package:animations/animations.dart';
+import 'package:dodal_app/providers/challenge_info_bloc.dart';
 import 'package:dodal_app/providers/create_challenge_cubit.dart';
 import 'package:dodal_app/providers/my_challenge_list_bloc.dart';
 import 'package:dodal_app/screens/challenge_route/main.dart';
@@ -93,7 +94,10 @@ class JoinedList extends StatelessWidget {
         return InkWell(
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ChallengeRoute(id: list[index].id),
+              builder: (context) => BlocProvider(
+                create: (context) => ChallengeInfoBloc(list[index].id),
+                child: const ChallengeRoute(),
+              ),
             ));
           },
           child: JoinedChallengeBox(
@@ -186,8 +190,10 @@ class AdminList extends StatelessWidget {
         return InkWell(
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ChallengeRoute(
-                id: list[index].challengeRoomId,
+              builder: (context) => BlocProvider(
+                create: (context) =>
+                    ChallengeInfoBloc(list[index].challengeRoomId),
+                child: const ChallengeRoute(),
               ),
             ));
           },

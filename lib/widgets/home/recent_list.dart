@@ -2,6 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:dodal_app/model/category_model.dart';
 import 'package:dodal_app/model/challenge_model.dart';
 import 'package:dodal_app/providers/category_list_bloc.dart';
+import 'package:dodal_app/providers/challenge_info_bloc.dart';
 import 'package:dodal_app/providers/challenge_list_bloc.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/providers/custom_feed_list_bloc.dart';
@@ -31,7 +32,10 @@ class RecentList extends StatelessWidget {
                 child: RecentChallengeBox(challenge: challenge),
               );
             },
-            openBuilder: (context, action) => ChallengeRoute(id: challenge.id),
+            openBuilder: (context, action) => BlocProvider(
+              create: (context) => ChallengeInfoBloc(challenge.id),
+              child: const ChallengeRoute(),
+            ),
           ),
       ],
     );
