@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/model/challenge_model.dart';
 import 'package:dodal_app/providers/bookmark_bloc.dart';
+import 'package:dodal_app/providers/challenge_info_bloc.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/providers/create_challenge_cubit.dart';
 import 'package:dodal_app/screens/challenge_route/main.dart';
@@ -32,20 +33,23 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
 
   _request(int pageKey) async {
     final state = BlocProvider.of<ChallengeListFilterCubit>(context).state;
-    List<Challenge>? res = await ChallengeService.getChallengesByKeyword(
-      word: widget.word,
-      conditionCode: state.condition.index,
-      certCntList: state.certCntList,
-      page: pageKey,
-      pageSize: pageSize,
-    );
-    if (res == null) return;
-    final isLastPage = res.length < pageSize;
-    if (isLastPage) {
-      pagingController.appendLastPage(res);
-    } else {
-      final nextPageKey = pageKey + res.length;
-      pagingController.appendPage(res, nextPageKey);
+    try {
+      List<Challenge> res = await ChallengeService.getChallengesByKeyword(
+        word: widget.word,
+        conditionCode: state.condition.index,
+        certCntList: state.certCntList,
+        page: pageKey,
+        pageSize: pageSize,
+      );
+      final isLastPage = res.length < pageSize;
+      if (isLastPage) {
+        pagingController.appendLastPage(res);
+      } else {
+        final nextPageKey = pageKey + res.length;
+        pagingController.appendPage(res, nextPageKey);
+      }
+    } catch (error) {
+      pagingController.error = error;
     }
   }
 
@@ -129,8 +133,10 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
                               ),
                             );
                           },
-                          openBuilder: (context, action) =>
-                              ChallengeRoute(id: item.id),
+                          openBuilder: (context, action) => BlocProvider(
+                            create: (context) => ChallengeInfoBloc(item.id),
+                            child: const ChallengeRoute(),
+                          ),
                         ),
                       )
                     ],
