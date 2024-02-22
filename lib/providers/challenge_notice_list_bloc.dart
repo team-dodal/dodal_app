@@ -27,7 +27,7 @@ class ChallengeNoticeListBloc
     } catch (error) {
       emit(state.copyWith(
         status: ChallengeNoticeListStatus.error,
-        errorMessage: error.toString(),
+        errorMessage: '에러가 발생하였습니다.',
       ));
     }
   }

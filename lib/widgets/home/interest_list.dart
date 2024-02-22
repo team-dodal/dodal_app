@@ -6,7 +6,6 @@ import 'package:dodal_app/providers/custom_feed_list_bloc.dart';
 import 'package:dodal_app/providers/modify_user_cubit.dart';
 import 'package:dodal_app/providers/nickname_check_bloc.dart';
 import 'package:dodal_app/providers/user_bloc.dart';
-import 'package:dodal_app/screens/challenge_preview/main.dart';
 import 'package:dodal_app/screens/challenge_route/main.dart';
 import 'package:dodal_app/screens/modify_user/main.dart';
 import 'package:dodal_app/theme/color.dart';
@@ -210,9 +209,8 @@ class InterestCategoryCard extends StatelessWidget {
                           ),
                         );
                       },
-                      openBuilder: (context, action) => challenge.isJoined
-                          ? ChallengeRoute(id: challenge.id)
-                          : ChallengePreviewScreen(id: challenge.id),
+                      openBuilder: (context, action) =>
+                          ChallengeRoute(id: challenge.id),
                     )
                 ],
               ),

@@ -1,10 +1,12 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/helper/slide_page_route.dart';
 import 'package:dodal_app/model/certification_code_enum.dart';
+import 'package:dodal_app/providers/bookmark_bloc.dart';
 import 'package:dodal_app/providers/challenge_ranking_bloc.dart';
 import 'package:dodal_app/providers/create_feed_bloc.dart';
 import 'package:dodal_app/screens/challenge_route/chat_screen.dart';
 import 'package:dodal_app/screens/challenge_route/home_feed_screen.dart';
+import 'package:dodal_app/screens/challenge_route/preview_screen.dart';
 import 'package:dodal_app/screens/challenge_route/ranking_screen.dart';
 import 'package:dodal_app/screens/create_feed/main.dart';
 import 'package:dodal_app/screens/challenge_settings_menu/main.dart';
@@ -86,6 +88,11 @@ class _ChallengeRouteState extends State<ChallengeRoute>
         body: const Center(child: CircularProgressIndicator()),
       );
     }
+
+    if (!_challenge!.isJoin) {
+      return ChallengePreviewScreen(challenge: _challenge!);
+    }
+
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -150,11 +157,15 @@ class _ChallengeRouteState extends State<ChallengeRoute>
                   };
                   break;
               }
-              return ChallengeBottomSheet(
-                buttonText: text,
-                roomId: _challenge!.id,
-                bookmarked: _challenge!.isBookmarked,
-                onPress: onPress,
+              return BlocProvider(
+                create: (context) => BookmarkBloc(
+                  roomId: _challenge!.id,
+                  isBookmarked: _challenge!.isBookmarked,
+                ),
+                child: ChallengeBottomSheet(
+                  buttonText: text,
+                  onPress: onPress,
+                ),
               );
             })
           : null,

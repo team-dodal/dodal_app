@@ -29,13 +29,20 @@ Dio dio([String url = '']) {
       onError: (DioException e, ErrorInterceptorHandler handler) async {
         // 엑세스 토큰이 만료되었을때
         if (e.response?.statusCode == 401) {
-          final newAccessToken = await requestNewAccessToken();
-          if (newAccessToken == null) return handler.reject(e);
-          await secureStorage.write(key: 'accessToken', value: newAccessToken);
-          e.requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
-          dynamic requestData = createRequestData(e);
-          final clonedRequest = await createCloneRequest(dio, e, requestData);
-          return handler.resolve(clonedRequest);
+          try {
+            final newAccessToken = await requestNewAccessToken();
+            await secureStorage.write(
+              key: 'accessToken',
+              value: newAccessToken,
+            );
+            e.requestOptions.headers['Authorization'] =
+                'Bearer $newAccessToken';
+            FormData requestData = createRequestData(e);
+            final clonedRequest = await createCloneRequest(dio, e, requestData);
+            return handler.resolve(clonedRequest);
+          } catch (error) {
+            return handler.reject(e);
+          }
         }
         return handler.next(e);
       },
@@ -45,21 +52,15 @@ Dio dio([String url = '']) {
   return dio;
 }
 
-requestNewAccessToken() async {
-  try {
-    Dio service = await refreshDio();
-    final res = await service.post('/api/v1/users/access-token');
-
-    return res.data['result']['access_token'];
-  } catch (err) {
-    return null;
-  }
+Future<String> requestNewAccessToken() async {
+  Dio service = await refreshDio();
+  final res = await service.post('/api/v1/users/access-token');
+  return res.data['result']['access_token'];
 }
 
-createRequestData(DioException e) {
-  late dynamic requestData;
+FormData createRequestData(DioException e) {
+  FormData requestData = FormData();
   if (e.requestOptions.data is FormData) {
-    FormData requestData = FormData();
     requestData.fields.addAll(e.requestOptions.data.fields);
 
     for (final entry in e.requestOptions.data.files) {
@@ -75,7 +76,11 @@ createRequestData(DioException e) {
   return requestData;
 }
 
-createCloneRequest(Dio dio, DioException e, requestData) async {
+Future<Response> createCloneRequest(
+  Dio dio,
+  DioException e,
+  requestData,
+) async {
   return await dio.request(
     e.requestOptions.path,
     options: Options(

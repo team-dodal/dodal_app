@@ -17,11 +17,15 @@ class NotificationListBloc
 
   Future<void> _loadData(LoadNotificationListEvent event, emit) async {
     emit(state.copyWith(status: NotificationListStatus.loading));
-    final res = await AlarmService.getAllAlarmList(userId: userId);
-    if (res == null) {
-      emit(state.copyWith(errorMessage: '에러가 발생했습니다.'));
+    try {
+      final res = await AlarmService.getAllAlarmList(userId: userId);
+      emit(state.copyWith(status: NotificationListStatus.success, list: res));
+    } catch (error) {
+      emit(state.copyWith(
+        status: NotificationListStatus.error,
+        errorMessage: '데이터를 불러오는데 실패하였습니다.',
+      ));
     }
-    emit(state.copyWith(status: NotificationListStatus.success, list: res));
   }
 
   Future<void> _clearData(ClearNotificationListEvent event, emit) async {

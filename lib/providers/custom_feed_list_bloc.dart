@@ -31,46 +31,44 @@ class CustomFeedListBloc
 
   _onLoadInterestList(LoadInterestListEvent event, emit) async {
     emit(state.copyWith(status: CustomFeedListStatus.loading));
-    List<List<Challenge>> list = [...state.interestList];
-    for (final category in categories) {
-      final res = await ChallengeService.getChallengesByCategory(
-        categoryValue: category.value,
-        tagValue: '',
-        conditionCode: ChallengeCodeEnum.interest.index,
-        certCntList: [1, 2, 3, 4, 5, 6, 7],
-        page: 0,
-        pageSize: 3,
-      );
-      if (res != null) {
+    try {
+      List<List<Challenge>> list = [...state.interestList];
+      for (final category in categories) {
+        final res = await ChallengeService.getChallengesByCategory(
+          categoryValue: category.value,
+          tagValue: '',
+          conditionCode: ChallengeCodeEnum.interest.index,
+          certCntList: [1, 2, 3, 4, 5, 6, 7],
+          page: 0,
+          pageSize: 3,
+        );
         list.add(res);
-      } else {
-        emit(state.copyWith(
-          status: CustomFeedListStatus.error,
-          errorMessage: 'Failed to load interest list',
-        ));
-        return;
       }
+      emit(state.copyWith(
+        status: CustomFeedListStatus.success,
+        interestList: list,
+      ));
+    } catch (error) {
+      emit(state.copyWith(
+        status: CustomFeedListStatus.error,
+        errorMessage: 'Failed to load interest list',
+      ));
     }
-    emit(state.copyWith(
-      status: CustomFeedListStatus.success,
-      interestList: list,
-    ));
   }
 
   _onLoadPopularList(LoadPopularListEvent event, emit) async {
     emit(state.copyWith(status: CustomFeedListStatus.loading));
-    final res = await ChallengeService.getChallenges(
-      conditionCode: ChallengeCodeEnum.popular.index,
-      page: 0,
-      pageSize: 4,
-    );
-
-    if (res != null) {
+    try {
+      final res = await ChallengeService.getChallenges(
+        conditionCode: ChallengeCodeEnum.popular.index,
+        page: 0,
+        pageSize: 4,
+      );
       emit(state.copyWith(
         status: CustomFeedListStatus.success,
         popularList: res,
       ));
-    } else {
+    } catch (error) {
       emit(state.copyWith(
         status: CustomFeedListStatus.error,
         errorMessage: 'Failed to load popular list',
@@ -80,18 +78,17 @@ class CustomFeedListBloc
 
   _onLoadRecentList(LoadRecentListEvent event, emit) async {
     emit(state.copyWith(status: CustomFeedListStatus.loading));
-    final res = await ChallengeService.getChallenges(
-      conditionCode: ChallengeCodeEnum.recent.index,
-      page: 0,
-      pageSize: 3,
-    );
-
-    if (res != null) {
+    try {
+      final res = await ChallengeService.getChallenges(
+        conditionCode: ChallengeCodeEnum.recent.index,
+        page: 0,
+        pageSize: 3,
+      );
       emit(state.copyWith(
         status: CustomFeedListStatus.success,
         recentList: res,
       ));
-    } else {
+    } catch (error) {
       emit(state.copyWith(
         status: CustomFeedListStatus.error,
         errorMessage: 'Failed to load recent list',

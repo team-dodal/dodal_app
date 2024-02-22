@@ -76,10 +76,7 @@ class SignInScreen extends StatelessWidget {
   _errorModal(BuildContext context, String errorMessage) {
     showDialog(
       context: context,
-      builder: (_) => SystemDialog(
-        title: '로그인에 실패하였습니다',
-        subTitle: errorMessage,
-      ),
+      builder: (_) => SystemDialog(subTitle: errorMessage),
     );
   }
 

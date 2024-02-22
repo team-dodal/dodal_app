@@ -67,7 +67,7 @@ class ModifyUserCubit extends Cubit<ModifyUserState> {
       emit(state.copyWith(
         status: ModifyUserStatus.error,
         image: state.image,
-        errorMessage: error.toString(),
+        errorMessage: '에러가 발생하였습니다.',
       ));
       rethrow;
     }

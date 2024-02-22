@@ -31,7 +31,7 @@ class CalendarFeedBloc extends Bloc<CalendarFeedEvent, CalendarFeedState> {
     } catch (error) {
       emit(state.copyWith(
         status: CalendarFeedStatus.error,
-        errorMessage: error.toString(),
+        errorMessage: '에러가 발생하였습니다.',
       ));
     }
   }

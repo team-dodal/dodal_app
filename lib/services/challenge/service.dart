@@ -9,7 +9,7 @@ import 'package:dodal_app/services/common/presigned_s3.dart';
 class ChallengeService {
   static final service = dio('/api/v1/challenge');
 
-  static createChallenge({
+  static Future<void> createChallenge({
     required String title,
     required String content,
     required String tagValue,
@@ -20,37 +20,30 @@ class ChallengeService {
     required File? certCorrectImg,
     required File? certWrongImg,
   }) async {
-    try {
-      final data = {
-        'title': title,
-        'content': content,
-        'tag_value': tagValue,
-        'recruit_cnt': recruitCnt,
-        'cert_cnt': certCnt,
-        'cert_content': certContent,
-      };
+    final data = {
+      'title': title,
+      'content': content,
+      'tag_value': tagValue,
+      'recruit_cnt': recruitCnt,
+      'cert_cnt': certCnt,
+      'cert_content': certContent,
+    };
 
-      if (thumbnailImg != null) {
-        data['thumbnail_img_url'] =
-            await PresignedS3.create(file: thumbnailImg);
-      }
-      if (certCorrectImg != null) {
-        data['cert_correct_img_url'] =
-            await PresignedS3.create(file: certCorrectImg);
-      }
-      if (certWrongImg != null) {
-        data['cert_wrong_img_url'] =
-            await PresignedS3.create(file: certWrongImg);
-      }
-
-      final res = await service.post('/room', data: data);
-      return res.data['result'];
-    } catch (err) {
-      rethrow;
+    if (thumbnailImg != null) {
+      data['thumbnail_img_url'] = await PresignedS3.create(file: thumbnailImg);
     }
+    if (certCorrectImg != null) {
+      data['cert_correct_img_url'] =
+          await PresignedS3.create(file: certCorrectImg);
+    }
+    if (certWrongImg != null) {
+      data['cert_wrong_img_url'] = await PresignedS3.create(file: certWrongImg);
+    }
+
+    await service.post('/room', data: data);
   }
 
-  static updateChallenge({
+  static Future<void> updateChallenge({
     required int id,
     required String title,
     required String content,
@@ -62,55 +55,45 @@ class ChallengeService {
     dynamic certCorrectImg,
     dynamic certWrongImg,
   }) async {
-    try {
-      final data = {
-        "tag_value": tagValue,
-        "title": title,
-        "content": content,
-        "recruit_cnt": recruitCnt,
-        "cert_cnt": certCnt,
-        "cert_content": certContent,
-        'thumbnail_img_url': thumbnailImg,
-        'cert_correct_img_url': certCorrectImg,
-        'cert_wrong_img_url': certWrongImg,
-      };
-      for (var key in [
-        'thumbnail_img_url',
-        'cert_correct_img_url',
-        'cert_wrong_img_url'
-      ]) {
-        if (data[key].runtimeType.toString() == '_File') {
-          data[key] = await PresignedS3.create(file: data[key]);
-        }
+    final data = {
+      "tag_value": tagValue,
+      "title": title,
+      "content": content,
+      "recruit_cnt": recruitCnt,
+      "cert_cnt": certCnt,
+      "cert_content": certContent,
+      'thumbnail_img_url': thumbnailImg,
+      'cert_correct_img_url': certCorrectImg,
+      'cert_wrong_img_url': certWrongImg,
+    };
+    for (var key in [
+      'thumbnail_img_url',
+      'cert_correct_img_url',
+      'cert_wrong_img_url'
+    ]) {
+      if (data[key].runtimeType.toString() == '_File') {
+        data[key] = await PresignedS3.create(file: data[key]);
       }
-      service.patch('/room/$id', data: data);
-      return true;
-    } catch (err) {
-      rethrow;
     }
+    service.patch('/room/$id', data: data);
   }
 
-  static Future<List<Challenge>?> getChallenges({
+  static Future<List<Challenge>> getChallenges({
     required int conditionCode,
     required int page,
     required int pageSize,
   }) async {
-    try {
-      String requestUrl = '/rooms?';
-      requestUrl += 'condition=$conditionCode&';
-      requestUrl += 'page=$page&page_size=$pageSize';
-      final res = await service.get(requestUrl);
-      List<dynamic> contents = res.data['result']['content'];
-      List<Challenge> result =
-          contents.map((item) => Challenge.fromJson(item)).toList();
-      return result;
-    } on DioException catch (error) {
-      ResponseErrorDialog(error);
-      return null;
-    }
+    String requestUrl = '/rooms?';
+    requestUrl += 'condition=$conditionCode&';
+    requestUrl += 'page=$page&page_size=$pageSize';
+    final res = await service.get(requestUrl);
+    List<dynamic> contents = res.data['result']['content'];
+    List<Challenge> result =
+        contents.map((item) => Challenge.fromJson(item)).toList();
+    return result;
   }
 
-  static Future<List<Challenge>?> getChallengesByCategory({
+  static Future<List<Challenge>> getChallengesByCategory({
     String? categoryValue,
     String? tagValue,
     required int conditionCode,
@@ -118,28 +101,23 @@ class ChallengeService {
     required int page,
     required int pageSize,
   }) async {
-    try {
-      String requestUrl = '/rooms/category?';
-      if (categoryValue != null) {
-        requestUrl += 'category_value=$categoryValue&';
-      }
-      if (tagValue != null) {
-        requestUrl += 'tag_value=$tagValue&';
-      }
-      requestUrl += 'condition_code=$conditionCode&';
-      for (final certCnt in certCntList) {
-        requestUrl += 'cert_cnt_list=$certCnt&';
-      }
-      requestUrl += 'page=$page&page_size=$pageSize';
-      final res = await service.get(requestUrl);
-      List<dynamic> contents = res.data['result']['content'];
-      List<Challenge> result =
-          contents.map((item) => Challenge.fromJson(item)).toList();
-      return result;
-    } on DioException catch (error) {
-      ResponseErrorDialog(error);
-      return null;
+    String requestUrl = '/rooms/category?';
+    if (categoryValue != null) {
+      requestUrl += 'category_value=$categoryValue&';
     }
+    if (tagValue != null) {
+      requestUrl += 'tag_value=$tagValue&';
+    }
+    requestUrl += 'condition_code=$conditionCode&';
+    for (final certCnt in certCntList) {
+      requestUrl += 'cert_cnt_list=$certCnt&';
+    }
+    requestUrl += 'page=$page&page_size=$pageSize';
+    final res = await service.get(requestUrl);
+    List<dynamic> contents = res.data['result']['content'];
+    List<Challenge> result =
+        contents.map((item) => Challenge.fromJson(item)).toList();
+    return result;
   }
 
   static Future<OneChallengeResponse?> getChallengeOne(
@@ -153,33 +131,22 @@ class ChallengeService {
     }
   }
 
-  static Future<List<Challenge>?> getBookmarkList() async {
-    try {
-      final res = await service.get('/room/bookmarks');
-
-      List<Challenge> result = (res.data['result'] as List)
-          .map((item) => Challenge.fromJson(item))
-          .toList();
-
-      return result;
-    } on DioException catch (error) {
-      ResponseErrorDialog(error);
-      return null;
-    }
+  static Future<List<Challenge>> getBookmarkList() async {
+    final res = await service.get('/room/bookmarks');
+    List<Challenge> result = (res.data['result'] as List)
+        .map((item) => Challenge.fromJson(item))
+        .toList();
+    return result;
   }
 
   static Future<bool> bookmark(
       {required int roomId, required bool value}) async {
-    try {
-      if (value) {
-        await service.post('/room/$roomId/bookmark');
-        return true;
-      } else {
-        await service.delete('/room/$roomId/bookmark');
-        return false;
-      }
-    } catch (error) {
-      rethrow;
+    if (value) {
+      await service.post('/room/$roomId/bookmark');
+      return true;
+    } else {
+      await service.delete('/room/$roomId/bookmark');
+      return false;
     }
   }
 
@@ -203,21 +170,15 @@ class ChallengeService {
     }
   }
 
-  static createNotice({
+  static Future<void> createNotice({
     required int roomId,
     required String title,
     required String content,
   }) async {
-    try {
-      await service.post(
-        '/room/$roomId/noti',
-        data: {"title": title, "content": content},
-      );
-      return true;
-    } on DioException catch (error) {
-      ResponseErrorDialog(error);
-      return false;
-    }
+    await service.post(
+      '/room/$roomId/noti',
+      data: {"title": title, "content": content},
+    );
   }
 
   static Future<List<ChallengeRoomNoticeResponse>?> getNoticeList(
@@ -262,41 +223,25 @@ class ChallengeService {
     }
   }
 
-  static Future<bool> createFeed({
+  static Future<void> createFeed({
     required int challengeId,
     required String content,
     required File image,
   }) async {
-    try {
-      final data = {
-        "content": content,
-        'certification_img_url': await PresignedS3.create(file: image)
-      };
-
-      await service.post(
-        '/room/$challengeId/certification',
-        data: data,
-      );
-      return true;
-    } on DioException catch (error) {
-      ResponseErrorDialog(error);
-      return false;
-    }
+    final data = {
+      "content": content,
+      'certification_img_url': await PresignedS3.create(file: image)
+    };
+    await service.post('/room/$challengeId/certification', data: data);
   }
 
-  static Future<List<ChallengeRankResponse>?> getRanks({
+  static Future<List<ChallengeRankResponse>> getRanks({
     required int id,
     required int code,
   }) async {
-    try {
-      final res = await service.get('/room/$id/rank?code=$code');
-      List<dynamic> result = res.data['result'];
-
-      return result.map((e) => ChallengeRankResponse.fromJson(e)).toList();
-    } on DioException catch (error) {
-      ResponseErrorDialog(error);
-      return null;
-    }
+    final res = await service.get('/room/$id/rank?code=$code');
+    List<dynamic> result = res.data['result'];
+    return result.map((e) => ChallengeRankResponse.fromJson(e)).toList();
   }
 
   static Future<List<Challenge>?> getChallengesByKeyword({

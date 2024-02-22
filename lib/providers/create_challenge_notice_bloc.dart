@@ -30,7 +30,7 @@ class CreateChallengeNoticeBloc
     } catch (error) {
       emit(state.copyWith(
         status: CreateChallengeNoticeStatus.error,
-        errorMessage: error.toString(),
+        errorMessage: '에러가 발생하였습니다.',
       ));
     }
   }

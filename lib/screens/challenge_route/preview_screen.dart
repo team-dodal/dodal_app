@@ -1,4 +1,5 @@
 import 'package:dodal_app/helper/slide_page_route.dart';
+import 'package:dodal_app/providers/bookmark_bloc.dart';
 import 'package:dodal_app/screens/challenge_route/main.dart';
 import 'package:dodal_app/screens/challenge_settings_menu/main.dart';
 import 'package:dodal_app/services/challenge/response.dart';
@@ -11,61 +12,35 @@ import 'package:dodal_app/widgets/common/image_widget.dart';
 import 'package:dodal_app/widgets/common/room_info_box.dart';
 import 'package:dodal_app/widgets/create_challenge/certificate_image_input.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ChallengePreviewScreen extends StatefulWidget {
-  const ChallengePreviewScreen({super.key, required this.id});
+class ChallengePreviewScreen extends StatelessWidget {
+  const ChallengePreviewScreen({super.key, required this.challenge});
 
-  final int id;
+  final OneChallengeResponse challenge;
 
-  @override
-  State<ChallengePreviewScreen> createState() => _ChallengePreviewScreenState();
-}
-
-class _ChallengePreviewScreenState extends State<ChallengePreviewScreen> {
-  OneChallengeResponse? _challenge;
-
-  _join() async {
-    final res = await ChallengeService.join(challengeId: widget.id);
+  _join(BuildContext context) async {
+    final res = await ChallengeService.join(challengeId: challenge.id);
     if (res) {
-      if (!mounted) return;
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => ChallengeRoute(id: widget.id)),
+        MaterialPageRoute(
+            builder: (context) => ChallengeRoute(id: challenge.id)),
         (route) => route.isFirst,
       );
     }
   }
 
-  _getChallenge() async {
-    final res = await ChallengeService.getChallengeOne(challengeId: widget.id);
-    setState(() {
-      _challenge = res;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _getChallenge();
-  }
-
   @override
   Widget build(BuildContext context) {
-    if (_challenge == null) {
-      return Scaffold(
-        appBar: AppBar(),
-        body: const Center(child: CircularProgressIndicator()),
-      );
-    }
     return Scaffold(
       appBar: AppBar(
         actions: [
           IconButton(
             onPressed: () {
-              if (_challenge == null) return;
               Navigator.push(
                 context,
                 SlidePageRoute(
-                  screen: GroupSettingsMenuScreen(challenge: _challenge!),
+                  screen: GroupSettingsMenuScreen(challenge: challenge),
                 ),
               );
             },
@@ -73,12 +48,18 @@ class _ChallengePreviewScreenState extends State<ChallengePreviewScreen> {
           )
         ],
       ),
-      body: PreviewScreen(challenge: _challenge!),
-      bottomSheet: ChallengeBottomSheet(
-        roomId: _challenge!.id,
-        buttonText: '도전 참여하기',
-        bookmarked: _challenge!.isBookmarked,
-        onPress: _join,
+      body: PreviewScreen(challenge: challenge),
+      bottomSheet: BlocProvider(
+        create: (context) => BookmarkBloc(
+          roomId: challenge.id,
+          isBookmarked: challenge.isBookmarked,
+        ),
+        child: ChallengeBottomSheet(
+          buttonText: '도전 참여하기',
+          onPress: () {
+            _join(context);
+          },
+        ),
       ),
     );
   }

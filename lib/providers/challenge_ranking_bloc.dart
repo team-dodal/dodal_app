@@ -17,28 +17,27 @@ class ChallengeRankingBloc
 
   _requestRanking(LoadRankingEvent event, emit) async {
     emit(state.copyWith(status: ChallengeRankingStatus.loading));
-    final res = await ChallengeService.getRanks(
-      id: challengeId,
-      code: state.rankFilter.index,
-    );
-    if (res == null) {
+    try {
+      final res = await ChallengeService.getRanks(
+        id: challengeId,
+        code: state.rankFilter.index,
+      );
+      if (res.length <= 3) {
+        emit(state.copyWith(
+          status: ChallengeRankingStatus.success,
+          otherList: res,
+        ));
+      } else {
+        emit(state.copyWith(
+          status: ChallengeRankingStatus.success,
+          topThreeList: res.sublist(0, 3),
+          otherList: res,
+        ));
+      }
+    } catch (error) {
       emit(state.copyWith(
         status: ChallengeRankingStatus.error,
         errorMessage: '랭킹을 불러오는데 실패했습니다.',
-      ));
-      return;
-    }
-
-    if (res.length <= 3) {
-      emit(state.copyWith(
-        status: ChallengeRankingStatus.success,
-        otherList: res,
-      ));
-    } else {
-      emit(state.copyWith(
-        status: ChallengeRankingStatus.success,
-        topThreeList: res.sublist(0, 3),
-        otherList: res,
       ));
     }
   }

@@ -7,7 +7,6 @@ import 'package:dodal_app/providers/challenge_list_bloc.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/providers/custom_feed_list_bloc.dart';
 import 'package:dodal_app/screens/challenge_list/main.dart';
-import 'package:dodal_app/screens/challenge_preview/main.dart';
 import 'package:dodal_app/screens/challenge_route/main.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
@@ -45,9 +44,7 @@ class PopularList extends StatelessWidget {
                 ),
               );
             },
-            openBuilder: (context, action) => challenge.isJoined
-                ? ChallengeRoute(id: challenge.id)
-                : ChallengePreviewScreen(id: challenge.id),
+            openBuilder: (context, action) => ChallengeRoute(id: challenge.id),
           )
       ],
     );

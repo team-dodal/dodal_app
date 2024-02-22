@@ -23,7 +23,7 @@ class CommentBloc extends Bloc<CommentBlocEvent, CommentBlocState> {
     } catch (error) {
       emit(state.copyWith(
         status: CommentBlocStatus.error,
-        errorMessage: error.toString(),
+        errorMessage: '데이터를 불러오는 도중. 에러가 발생하였습니다.',
       ));
     }
   }
@@ -39,7 +39,7 @@ class CommentBloc extends Bloc<CommentBlocEvent, CommentBlocState> {
     } catch (error) {
       emit(state.copyWith(
         status: CommentBlocStatus.error,
-        errorMessage: error.toString(),
+        errorMessage: '에러가 발생하였습니다.',
       ));
     }
   }
@@ -56,7 +56,7 @@ class CommentBloc extends Bloc<CommentBlocEvent, CommentBlocState> {
     } catch (error) {
       emit(state.copyWith(
         status: CommentBlocStatus.error,
-        errorMessage: error.toString(),
+        errorMessage: '에러가 발생하였습니다.',
       ));
     }
   }

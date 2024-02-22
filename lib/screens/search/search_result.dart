@@ -3,7 +3,6 @@ import 'package:dodal_app/model/challenge_model.dart';
 import 'package:dodal_app/providers/bookmark_bloc.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/providers/create_challenge_cubit.dart';
-import 'package:dodal_app/screens/challenge_preview/main.dart';
 import 'package:dodal_app/screens/challenge_route/main.dart';
 import 'package:dodal_app/screens/create_challenge/main.dart';
 import 'package:dodal_app/screens/search/main.dart';
@@ -130,9 +129,8 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
                               ),
                             );
                           },
-                          openBuilder: (context, action) => item.isJoined
-                              ? ChallengeRoute(id: item.id)
-                              : ChallengePreviewScreen(id: item.id),
+                          openBuilder: (context, action) =>
+                              ChallengeRoute(id: item.id),
                         ),
                       )
                     ],

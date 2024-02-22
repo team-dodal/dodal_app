@@ -60,7 +60,7 @@ class SignUpCubit extends Cubit<SignUpState> {
     } catch (error) {
       emit(state.copyWith(
         status: SignUpStatus.error,
-        errorMessage: error.toString(),
+        errorMessage: '에러가 발생하였습니다.',
       ));
     }
   }

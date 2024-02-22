@@ -31,7 +31,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     } catch (error) {
       emit(state.copyWith(
         status: SignInStatus.error,
-        errorMessage: error.toString(),
+        errorMessage: '로그인에 실패하였습니다.',
       ));
     }
   }

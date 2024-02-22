@@ -10,20 +10,20 @@ class MyBookmarkListCubit extends Cubit<MyBookmarkListState> {
     loadData();
   }
 
-  loadData() async {
+  Future<void> loadData() async {
     emit(state.copyWith(status: MyBookmarkListStatus.loading));
-    List<Challenge>? res = await ChallengeService.getBookmarkList();
-    if (res == null) {
+    try {
+      List<Challenge>? res = await ChallengeService.getBookmarkList();
+      emit(state.copyWith(
+        status: MyBookmarkListStatus.success,
+        result: res,
+      ));
+    } catch (error) {
       emit(state.copyWith(
         status: MyBookmarkListStatus.error,
         errorMessage: '데이터를 불러오는데 실패하였습니다.',
       ));
-      return;
     }
-    emit(state.copyWith(
-      status: MyBookmarkListStatus.success,
-      result: res,
-    ));
   }
 
   removeItem(int roomId) {

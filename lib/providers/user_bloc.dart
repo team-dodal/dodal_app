@@ -15,7 +15,9 @@ class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
     this.secureStorage,
   ) : super(const UserBlocState.init()) {
     on<LoadUserBlocEvent>(_loadData);
-    on<UpdateUserBlocEvent>(_updateUser);
+    on<UpdateUserBlocEvent>((event, emit) {
+      emit(state.copyWith(result: event.user));
+    });
     on<ClearUserBlocEvent>(_clearUser);
     add(LoadUserBlocEvent(fcmToken));
   }
@@ -28,7 +30,7 @@ class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
         status: UserBlocStatus.success,
         result: res,
       ));
-      await _postFcmToken(event.fcmToken);
+      await UserService.updateFcmToken(fcmToken);
     } catch (error) {
       emit(state.copyWith(
         status: UserBlocStatus.error,
@@ -37,17 +39,9 @@ class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
     }
   }
 
-  _updateUser(UpdateUserBlocEvent event, emit) async {
-    emit(state.copyWith(result: event.user));
-  }
-
   _clearUser(ClearUserBlocEvent event, emit) async {
     await secureStorage.deleteAll();
     emit(const UserBlocState.init());
-  }
-
-  _postFcmToken(String fcmToken) async {
-    await UserService.updateFcmToken(fcmToken);
   }
 }
 

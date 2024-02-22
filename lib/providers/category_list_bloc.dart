@@ -14,15 +14,14 @@ class CategoryListBloc extends Bloc<CategoryListEvent, CategoryListState> {
 
   Future<void> _loadCategoryList(LoadCategoryListEvent event, emit) async {
     emit(state.copyWith(status: CategoryListStatus.loading));
-    List<Category>? res = await CategoryService.getAllCategories();
-
-    if (res == null) {
+    try {
+      List<Category> res = await CategoryService.getAllCategories();
+      emit(state.copyWith(status: CategoryListStatus.loaded, result: res));
+    } catch (error) {
       emit(state.copyWith(
         status: CategoryListStatus.error,
         errorMessage: '카테고리를 불러오는데 실패했습니다.',
       ));
-    } else {
-      emit(state.copyWith(status: CategoryListStatus.loaded, result: res));
     }
   }
 }
