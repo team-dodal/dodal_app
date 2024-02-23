@@ -16,18 +16,18 @@ class ManageChallengeMemberBloc
 
   Future<void> _loadManageChallengeMemberEvent(event, emit) async {
     emit(state.copyWith(status: ManageChallengeMemberStatus.loading));
-    final res = await ManageChallengeService.manageUsers(roomId: roomId);
-    if (res == null) {
+    try {
+      final res = await ManageChallengeService.manageUsers(roomId: roomId);
+      emit(state.copyWith(
+        status: ManageChallengeMemberStatus.success,
+        result: res,
+      ));
+    } catch (error) {
       emit(state.copyWith(
         status: ManageChallengeMemberStatus.error,
         errorMessage: '에러가 발생했습니다.',
       ));
-      return;
     }
-    emit(state.copyWith(
-      status: ManageChallengeMemberStatus.success,
-      result: res,
-    ));
   }
 }
 

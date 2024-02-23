@@ -16,13 +16,13 @@ class MyChallengeListBloc
 
   _loadJoinedList(LoadJoinedListEvent event, emit) async {
     emit(state.copyWith(status: MyChallengeListStatus.loading));
-    final res = await ManageChallengeService.joinedChallenges();
-    if (res != null) {
+    try {
+      final res = await ManageChallengeService.joinedChallenges();
       emit(state.copyWith(
         status: MyChallengeListStatus.success,
         joinedList: res,
       ));
-    } else {
+    } catch (error) {
       emit(state.copyWith(
         status: MyChallengeListStatus.error,
         errorMessage: '불러오는 도중 에러가 발생하였습니다',
@@ -32,13 +32,13 @@ class MyChallengeListBloc
 
   _loadAdminList(LoadAdminListEvent event, emit) async {
     emit(state.copyWith(status: MyChallengeListStatus.loading));
-    final res = await ManageChallengeService.hostChallenges();
-    if (res != null) {
+    try {
+      final res = await ManageChallengeService.hostChallenges();
       emit(state.copyWith(
         status: MyChallengeListStatus.success,
         adminList: res,
       ));
-    } else {
+    } catch (error) {
       emit(state.copyWith(
         status: MyChallengeListStatus.error,
         errorMessage: '불러오는 도중 에러가 발생하였습니다',

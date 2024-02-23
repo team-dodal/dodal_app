@@ -6,70 +6,49 @@ import 'package:dodal_app/services/manage_challenge/response.dart';
 class ManageChallengeService {
   static final service = dio();
 
-  static Future<List<JoinedChallengesResponse>?> joinedChallenges() async {
-    try {
-      final res = await service.get('/api/v1/users/me/challenges/user');
-      List<dynamic> result = res.data['result'];
-      List<JoinedChallengesResponse> list = result
-          .map((item) => JoinedChallengesResponse.fromJson(item))
-          .toList();
-      return list;
-    } on DioException catch (error) {
-      ResponseErrorDialog(error);
-      return null;
-    }
+  static Future<List<JoinedChallengesResponse>> joinedChallenges() async {
+    final res = await service.get('/api/v1/users/me/challenges/user');
+    List<dynamic> result = res.data['result'];
+    List<JoinedChallengesResponse> list =
+        result.map((item) => JoinedChallengesResponse.fromJson(item)).toList();
+    return list;
   }
 
   static Future<List<HostChallengesResponse>?> hostChallenges() async {
-    try {
-      final res = await service.get('/api/v1/users/me/challenges/host');
-      List<dynamic> result = res.data['result'];
-      List<HostChallengesResponse> list =
-          result.map((item) => HostChallengesResponse.fromJson(item)).toList();
-      return list;
-    } on DioException catch (error) {
-      ResponseErrorDialog(error);
-      return null;
-    }
+    final res = await service.get('/api/v1/users/me/challenges/host');
+    List<dynamic> result = res.data['result'];
+    List<HostChallengesResponse> list =
+        result.map((item) => HostChallengesResponse.fromJson(item)).toList();
+    return list;
   }
 
   static manageUsers({required int roomId}) async {
-    try {
-      final res =
-          await service.get('/api/v1/users/me/challenges/manage/$roomId/users');
-      List<dynamic> result = res.data['result'];
-      List<ChallengeUser> list =
-          result.map((item) => ChallengeUser.fromJson(item)).toList();
-      return list;
-    } on DioException catch (error) {
-      ResponseErrorDialog(error);
-      return null;
-    }
+    final res =
+        await service.get('/api/v1/users/me/challenges/manage/$roomId/users');
+    List<dynamic> result = res.data['result'];
+    List<ChallengeUser> list =
+        result.map((item) => ChallengeUser.fromJson(item)).toList();
+    return list;
   }
 
-  static Future<Map<String, List<FeedItem>>?> getCertificationList({
+  static Future<Map<String, List<FeedItem>>> getCertificationList({
     required int roomId,
     required String dateYM,
   }) async {
-    try {
-      final res = await service.get(
-          '/api/v1/users/me/challenges/manage/$roomId/certifications?date_ym=$dateYM');
+    final res = await service.get(
+        '/api/v1/users/me/challenges/manage/$roomId/certifications?date_ym=$dateYM');
 
-      Map<String, dynamic> result = res.data['result'];
-      Map<String, List<FeedItem>> feedListByDateMap = {};
+    Map<String, dynamic> result = res.data['result'];
+    Map<String, List<FeedItem>> feedListByDateMap = {};
 
-      for (final dateString in result.keys) {
-        List<FeedItem> feedList = (result[dateString] as List<dynamic>)
-            .map((e) => FeedItem.fromJson(e))
-            .toList();
-        feedListByDateMap[dateString] = feedList;
-      }
-
-      return feedListByDateMap;
-    } on DioException catch (error) {
-      ResponseErrorDialog(error);
-      return null;
+    for (final dateString in result.keys) {
+      List<FeedItem> feedList = (result[dateString] as List<dynamic>)
+          .map((e) => FeedItem.fromJson(e))
+          .toList();
+      feedListByDateMap[dateString] = feedList;
     }
+
+    return feedListByDateMap;
   }
 
   static approveOrRejectFeed({
@@ -77,15 +56,8 @@ class ManageChallengeService {
     required int feedId,
     required bool confirmValue,
   }) async {
-    try {
-      await service.patch(
-          '/api/v1/users/me/challenges/manage/$roomId/certifications/$feedId?confirm_yn=${confirmValue ? 'Y' : 'N'}');
-
-      return true;
-    } on DioException catch (error) {
-      ResponseErrorDialog(error);
-      return null;
-    }
+    await service.patch(
+        '/api/v1/users/me/challenges/manage/$roomId/certifications/$feedId?confirm_yn=${confirmValue ? 'Y' : 'N'}');
   }
 
   static handOverAdmin({

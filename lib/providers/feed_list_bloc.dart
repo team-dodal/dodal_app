@@ -14,27 +14,25 @@ class FeedListBloc extends Bloc<FeedListEvent, FeedListState> {
   }
 
   _load(LoadFeedListEvent event, emit) async {
-    if (state.status == FeedListStatus.loading ||
-        state.status == FeedListStatus.error) {
-      return;
-    }
+    if (state.status == FeedListStatus.loading) return;
+    if (state.status == FeedListStatus.error) return;
     if (state.isLastPage) return;
     emit(state.copyWith(status: FeedListStatus.loading));
-    List<FeedContentResponse>? res = await FeedService.getAllFeeds(
-      page: state.currentPage,
-      pageSize: pageSize,
-    );
-    if (res == null) {
-      emit(state.copyWith(
-        status: FeedListStatus.error,
-        errorMessage: '불러오는 도중 에러가 발생하였습니다.',
-      ));
-    } else {
+    try {
+      List<FeedContentResponse> res = await FeedService.getAllFeeds(
+        page: state.currentPage,
+        pageSize: pageSize,
+      );
       emit(state.copyWith(
         status: FeedListStatus.success,
         list: [...state.list, ...res],
         currentPage: state.currentPage + 1,
         isLastPage: res.length < pageSize,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: FeedListStatus.error,
+        errorMessage: '불러오는 도중 에러가 발생하였습니다.',
       ));
     }
   }

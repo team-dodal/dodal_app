@@ -6,22 +6,17 @@ import 'package:dodal_app/services/feed/response.dart';
 class FeedService {
   static final service = dio();
 
-  static Future<List<FeedContentResponse>?> getAllFeeds({
+  static Future<List<FeedContentResponse>> getAllFeeds({
     required int page,
     required int pageSize,
   }) async {
-    try {
-      final res =
-          await service.get('/api/v1/feeds?page=$page&page_size=$pageSize');
-      List<dynamic> contents = res.data['result']['content'];
-      List<FeedContentResponse> result = contents
-          .map((content) => FeedContentResponse.fromJson(content))
-          .toList();
-      return result;
-    } on DioException catch (error) {
-      ResponseErrorDialog(error);
-      return null;
-    }
+    final res =
+        await service.get('/api/v1/feeds?page=$page&page_size=$pageSize');
+    List<dynamic> contents = res.data['result']['content'];
+    List<FeedContentResponse> result = contents
+        .map((content) => FeedContentResponse.fromJson(content))
+        .toList();
+    return result;
   }
 
   static Future<List<FeedContentResponse>?> getFeedsByRoomId({

@@ -19,21 +19,21 @@ class ManageChallengeFeedBloc
 
   _requestCertList(RequestCertFeedListEvent event, emit) async {
     emit(state.copyWith(status: ManageChallengeFeedStatus.loading));
-    final res = await ManageChallengeService.getCertificationList(
-      roomId: challengeId,
-      dateYM: DateFormat('yyyyMM').format(state.date),
-    );
-    if (res == null) {
+    try {
+      final res = await ManageChallengeService.getCertificationList(
+        roomId: challengeId,
+        dateYM: DateFormat('yyyyMM').format(state.date),
+      );
+      emit(state.copyWith(
+        status: ManageChallengeFeedStatus.success,
+        itemListByDate: res,
+      ));
+    } catch (error) {
       emit(state.copyWith(
         status: ManageChallengeFeedStatus.error,
         errorMessage: '에러가 발생하였습니다.',
       ));
-      return;
     }
-    emit(state.copyWith(
-      status: ManageChallengeFeedStatus.success,
-      itemListByDate: res,
-    ));
   }
 
   _changeMonth(ChangeMonthEvent event, emit) async {
@@ -48,13 +48,19 @@ class ManageChallengeFeedBloc
   }
 
   _approveOrReject(ApproveOrRejectEvent event, emit) async {
-    final res = await ManageChallengeService.approveOrRejectFeed(
-      roomId: challengeId,
-      feedId: event.feedId,
-      confirmValue: event.approve,
-    );
-    if (res == null) return;
-    add(RequestCertFeedListEvent());
+    try {
+      await ManageChallengeService.approveOrRejectFeed(
+        roomId: challengeId,
+        feedId: event.feedId,
+        confirmValue: event.approve,
+      );
+      add(RequestCertFeedListEvent());
+    } catch (error) {
+      emit(state.copyWith(
+        status: ManageChallengeFeedStatus.error,
+        errorMessage: '에러가 발생하였습니다.',
+      ));
+    }
   }
 }
 

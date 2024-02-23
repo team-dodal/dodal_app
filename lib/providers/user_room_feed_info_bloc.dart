@@ -15,23 +15,23 @@ class UserRoomFeedInfoBloc
 
   Future<void> _getUserRoomFeedInfo(RequestUserInfoEvent event, emit) async {
     emit(state.copyWith(status: UserRoomFeedInfoStatus.loading));
-    final res = await UserService.getUsersRoomFeed();
-    if (res == null) {
+    try {
+      final res = await UserService.getUsersRoomFeed();
+      emit(state.copyWith(
+        status: UserRoomFeedInfoStatus.success,
+        challengeList: res.challengeRoomList,
+        selectedId: res.challengeRoomList.isNotEmpty
+            ? res.challengeRoomList[0].roomId
+            : null,
+        totalCertCnt: res.totalCertCnt,
+        maxContinueCertCnt: res.maxContinueCertCnt,
+      ));
+    } catch (error) {
       emit(state.copyWith(
         status: UserRoomFeedInfoStatus.error,
         errorMessage: '서버와의 통신에 실패했습니다',
       ));
-      return;
     }
-    emit(state.copyWith(
-      status: UserRoomFeedInfoStatus.success,
-      challengeList: res.challengeRoomList,
-      selectedId: res.challengeRoomList.isNotEmpty
-          ? res.challengeRoomList[0].roomId
-          : null,
-      totalCertCnt: res.totalCertCnt,
-      maxContinueCertCnt: res.maxContinueCertCnt,
-    ));
   }
 
   _changeSelectedRoomId(ChangeSelectedRoomIdEvent event, emit) async {

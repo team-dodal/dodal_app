@@ -1,7 +1,5 @@
 import 'dart:io';
-import 'package:dio/dio.dart';
 import 'package:dodal_app/model/user_model.dart';
-import 'package:dodal_app/services/common/error_dialog.dart';
 import 'package:dodal_app/services/common/main.dart';
 import 'package:dodal_app/services/common/presigned_s3.dart';
 import 'package:dodal_app/services/user/response.dart';
@@ -11,18 +9,14 @@ class UserService {
   static final service = dio();
 
   static signIn(SocialType socialType, String socialId) async {
-    try {
-      final res = await service.post('/api/v1/users/sign-in',
-          data: {"social_type": socialType.name, "social_id": socialId});
+    final res = await service.post('/api/v1/users/sign-in',
+        data: {"social_type": socialType.name, "social_id": socialId});
 
-      final isSigned = res.data['result']['is_signed'] == 'true';
-      if (isSigned) {
-        return SignInResponse.fromJson(res.data['result']);
-      } else {
-        return null;
-      }
-    } on DioException {
-      rethrow;
+    final isSigned = res.data['result']['is_signed'] == 'true';
+    if (isSigned) {
+      return SignInResponse.fromJson(res.data['result']);
+    } else {
+      return null;
     }
   }
 
@@ -35,35 +29,27 @@ class UserService {
     required String content,
     required List<String?> category,
   }) async {
-    try {
-      final data = {
-        "social_type": socialType.name,
-        "social_id": socialId,
-        "email": email,
-        "nickname": nickname,
-        "content": content,
-        "tag_list": category,
-      };
+    final data = {
+      "social_type": socialType.name,
+      "social_id": socialId,
+      "email": email,
+      "nickname": nickname,
+      "content": content,
+      "tag_list": category,
+    };
 
-      if (profile != null) {
-        String s3Url = await PresignedS3.create(file: profile);
-        data['profile_url'] = s3Url;
-      }
-
-      final res = await service.post('/api/v1/users/sign-up', data: data);
-      return SignUpResponse.fromJson(res.data['result']);
-    } on DioException {
-      rethrow;
+    if (profile != null) {
+      String s3Url = await PresignedS3.create(file: profile);
+      data['profile_url'] = s3Url;
     }
+
+    final res = await service.post('/api/v1/users/sign-up', data: data);
+    return SignUpResponse.fromJson(res.data['result']);
   }
 
   static Future<User?> user() async {
-    try {
-      final res = await service.get('/api/v1/users/me');
-      return User.formJson(res.data['result']);
-    } on DioException {
-      rethrow;
-    }
+    final res = await service.get('/api/v1/users/me');
+    return User.formJson(res.data['result']);
   }
 
   static updateUser({
@@ -72,63 +58,41 @@ class UserService {
     required dynamic profile,
     required List<String> tagList,
   }) async {
-    try {
-      String? s3Url;
-      if (profile.runtimeType is String) {
-        s3Url = profile;
-      }
-      if (profile.runtimeType.toString() == '_File') {
-        s3Url = await PresignedS3.create(file: profile);
-      }
-
-      final data = {
-        "nickname": nickname,
-        "content": content,
-        "tag_list": tagList,
-        "profile_url": s3Url
-      };
-
-      final res = await service.patch('/api/v1/users/me', data: data);
-      return User.formJson(res.data['result']);
-    } catch (error) {
-      rethrow;
+    String? s3Url;
+    if (profile.runtimeType is String) {
+      s3Url = profile;
     }
+    if (profile.runtimeType.toString() == '_File') {
+      s3Url = await PresignedS3.create(file: profile);
+    }
+
+    final data = {
+      "nickname": nickname,
+      "content": content,
+      "tag_list": tagList,
+      "profile_url": s3Url
+    };
+
+    final res = await service.patch('/api/v1/users/me', data: data);
+    return User.formJson(res.data['result']);
   }
 
   static updateFcmToken(String token) async {
-    try {
-      await service.post('/api/v1/users/fcm-token', data: {'fcm_token': token});
-    } on DioException catch (err) {
-      ResponseErrorDialog(err);
-    }
+    await service.post('/api/v1/users/fcm-token', data: {'fcm_token': token});
   }
 
   static checkNickName(String nickname) async {
-    try {
-      await service.get('/api/v1/users/nickname/$nickname');
-      return true;
-    } on DioException catch (err) {
-      ResponseErrorDialog(err, '사용할 수 없는 닉네임 입니다.');
-      return false;
-    }
+    await service.get('/api/v1/users/nickname/$nickname');
+    return true;
   }
 
   static removeUser() async {
-    try {
-      await service.delete('/api/v1/users/me');
-    } on DioException catch (err) {
-      ResponseErrorDialog(err);
-    }
+    await service.delete('/api/v1/users/me');
   }
 
-  static Future<UsersRoomFeedResponse?> getUsersRoomFeed() async {
-    try {
-      final res = await service.get('/api/v1/users/my-page');
-      return UsersRoomFeedResponse.fromJson(res.data['result']);
-    } on DioException catch (err) {
-      ResponseErrorDialog(err);
-      return null;
-    }
+  static Future<UsersRoomFeedResponse> getUsersRoomFeed() async {
+    final res = await service.get('/api/v1/users/my-page');
+    return UsersRoomFeedResponse.fromJson(res.data['result']);
   }
 
   static Future<FeedListByDateResponse> getFeedListByDate({

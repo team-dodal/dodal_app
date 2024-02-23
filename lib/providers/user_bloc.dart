@@ -19,6 +19,7 @@ class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
       emit(state.copyWith(result: event.user));
     });
     on<ClearUserBlocEvent>(_clearUser);
+    on<RemoveUserBlocEvent>(_removeUser);
     add(LoadUserBlocEvent(fcmToken));
   }
 
@@ -43,6 +44,19 @@ class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
     await secureStorage.deleteAll();
     emit(const UserBlocState.init());
   }
+
+  _removeUser(RemoveUserBlocEvent event, emit) async {
+    try {
+      await UserService.removeUser();
+      await secureStorage.deleteAll();
+      emit(const UserBlocState.init());
+    } catch (error) {
+      emit(state.copyWith(
+        status: UserBlocStatus.error,
+        errorMessage: '회원 탈퇴에 실패하였습니다.',
+      ));
+    }
+  }
 }
 
 abstract class UserBlocEvent extends Equatable {}
@@ -62,6 +76,11 @@ class UpdateUserBlocEvent extends UserBlocEvent {
 }
 
 class ClearUserBlocEvent extends UserBlocEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class RemoveUserBlocEvent extends UserBlocEvent {
   @override
   List<Object?> get props => [];
 }

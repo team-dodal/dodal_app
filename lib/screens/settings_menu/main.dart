@@ -3,7 +3,6 @@ import 'package:dodal_app/providers/user_bloc.dart';
 import 'package:dodal_app/screens/settings_menu/personal_data_rule_screen.dart';
 import 'package:dodal_app/screens/settings_menu/service_rule_screen.dart';
 import 'package:dodal_app/screens/sign_in/main.dart';
-import 'package:dodal_app/services/user/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/common/system_dialog.dart';
 import 'package:flutter/material.dart';
@@ -72,12 +71,8 @@ class _SettingsMenuScreenState extends State<SettingsMenuScreen> {
           SystemDialogButton(
             text: '확인',
             color: AppColors.danger,
-            onPressed: () async {
-              await UserService.removeUser();
-              await secureStorage.deleteAll();
-              if (!mounted) return;
-              context.read<UserBloc>().add(ClearUserBlocEvent());
-
+            onPressed: () {
+              context.read<UserBloc>().add(RemoveUserBlocEvent());
               if (!mounted) return;
               Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(
