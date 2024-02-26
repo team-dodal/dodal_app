@@ -93,10 +93,7 @@ class MyPageScreen extends StatelessWidget {
         builder: (context, state) {
           return Column(
             children: [
-              UserInfoBox(
-                totalCertCnt: state.totalCertCnt,
-                maxContinueCertCnt: state.maxContinueCertCnt,
-              ),
+              const UserInfoBox(),
               Builder(
                 builder: (context) {
                   switch (state.status) {

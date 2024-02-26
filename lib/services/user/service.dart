@@ -59,7 +59,7 @@ class UserService {
     required List<String> tagList,
   }) async {
     String? s3Url;
-    if (profile.runtimeType is String) {
+    if (profile.runtimeType.toString() == 'String') {
       s3Url = profile;
     }
     if (profile.runtimeType.toString() == '_File') {

@@ -28,7 +28,10 @@ class PresignedS3 {
         url,
         data: file.openRead(),
         options: Options(
-          headers: {Headers.contentLengthHeader: len},
+          headers: {
+            Headers.contentLengthHeader: len,
+            'Content-Type': 'image/jpeg',
+          },
         ),
       );
       return url;

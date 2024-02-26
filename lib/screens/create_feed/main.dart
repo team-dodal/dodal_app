@@ -109,7 +109,6 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
 
   bool _buttonDisabled() {
     if (context.read<CreateFeedBloc>().state.image == null) return true;
-    if (context.read<CreateFeedBloc>().state.content.isEmpty) return true;
     if (context.read<CreateFeedBloc>().state.status ==
         CreateFeedStatus.loading) {
       return true;

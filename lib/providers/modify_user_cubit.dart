@@ -28,11 +28,11 @@ class ModifyUserCubit extends Cubit<ModifyUserState> {
         );
 
   updateNickname(String nickname) {
-    emit(state.copyWith(nickname: nickname));
+    emit(state.copyWith(nickname: nickname, image: state.image));
   }
 
   updateContent(String content) {
-    emit(state.copyWith(content: content));
+    emit(state.copyWith(content: content, image: state.image));
   }
 
   updateImage(File? image) {
@@ -43,14 +43,11 @@ class ModifyUserCubit extends Cubit<ModifyUserState> {
     List<Tag> cloneList = [...state.category];
     bool isSelected = cloneList.contains(tag);
     isSelected ? cloneList.remove(tag) : cloneList.add(tag);
-    emit(state.copyWith(category: cloneList));
+    emit(state.copyWith(category: cloneList, image: state.image));
   }
 
   Future<void> modifyUser() async {
-    emit(state.copyWith(
-      status: ModifyUserStatus.loading,
-      image: state.image,
-    ));
+    emit(state.copyWith(status: ModifyUserStatus.loading, image: state.image));
     try {
       User res = await UserService.updateUser(
         nickname: state.nickname,
@@ -60,14 +57,14 @@ class ModifyUserCubit extends Cubit<ModifyUserState> {
       );
       emit(state.copyWith(
         status: ModifyUserStatus.success,
-        image: state.image,
         response: res,
+        image: state.image,
       ));
     } catch (error) {
       emit(state.copyWith(
         status: ModifyUserStatus.error,
-        image: state.image,
         errorMessage: '에러가 발생하였습니다.',
+        image: state.image,
       ));
       rethrow;
     }
