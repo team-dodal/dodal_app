@@ -1,3 +1,4 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/providers/feed_list_bloc.dart';
 import 'package:dodal_app/services/feed/response.dart';
 import 'package:dodal_app/theme/color.dart';
@@ -60,16 +61,16 @@ class _FeedScreenState extends State<FeedScreen> {
     return BlocBuilder<FeedListBloc, FeedListState>(
       builder: (context, state) {
         switch (state.status) {
-          case FeedListStatus.init:
+          case CommonStatus.init:
             return const Center(child: CupertinoActivityIndicator());
-          case FeedListStatus.loading:
-          case FeedListStatus.success:
+          case CommonStatus.loading:
+          case CommonStatus.loaded:
             if (state.list.isEmpty) {
               return _empty();
             } else {
               return _success(state.list);
             }
-          case FeedListStatus.error:
+          case CommonStatus.error:
             return Center(child: Text(state.errorMessage!));
         }
       },

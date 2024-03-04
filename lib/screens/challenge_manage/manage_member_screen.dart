@@ -1,3 +1,4 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/providers/manage_challenge_feed_bloc.dart';
 import 'package:dodal_app/providers/manage_challenge_member_bloc.dart';
 import 'package:dodal_app/services/challenge/response.dart';
@@ -15,7 +16,7 @@ class ManageMemberScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<ManageChallengeMemberBloc, ManageChallengeMemberState>(
       listener: (context, state) {
-        if (state.status == ManageChallengeMemberStatus.success) {
+        if (state.status == CommonStatus.loaded) {
           context
               .read<ManageChallengeFeedBloc>()
               .add(RequestCertFeedListEvent());
@@ -23,12 +24,12 @@ class ManageMemberScreen extends StatelessWidget {
       },
       builder: (context, state) {
         switch (state.status) {
-          case ManageChallengeMemberStatus.init:
-          case ManageChallengeMemberStatus.loading:
+          case CommonStatus.init:
+          case CommonStatus.loading:
             return const Center(child: CupertinoActivityIndicator());
-          case ManageChallengeMemberStatus.error:
+          case CommonStatus.error:
             return Center(child: Text(state.errorMessage!));
-          case ManageChallengeMemberStatus.success:
+          case CommonStatus.loaded:
             return ListView.separated(
               separatorBuilder: (context, index) => Container(
                 width: double.infinity,

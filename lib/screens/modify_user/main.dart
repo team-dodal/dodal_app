@@ -1,3 +1,4 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/providers/modify_user_cubit.dart';
 import 'package:dodal_app/providers/nickname_check_bloc.dart';
@@ -30,11 +31,12 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
   }
 
   bool _submitButtonDisabled() {
-    if (context.read<NicknameBloc>().state.status != NicknameStatus.success) {
+    if (context.read<NicknameBloc>().state.status != CommonStatus.loaded) {
       return true;
     }
-    if (context.read<ModifyUserCubit>().state.status ==
-        ModifyUserStatus.loading) return true;
+    if (context.read<ModifyUserCubit>().state.status == CommonStatus.loading) {
+      return true;
+    }
     return false;
   }
 
@@ -70,10 +72,10 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<ModifyUserCubit, ModifyUserState>(
       listener: (context, state) {
-        if (state.status == ModifyUserStatus.success) {
+        if (state.status == CommonStatus.loaded) {
           _success(state.response!);
         }
-        if (state.status == ModifyUserStatus.error) {
+        if (state.status == CommonStatus.error) {
           _error(state.errorMessage!);
         }
       },
@@ -88,7 +90,7 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
                     : () {
                         context.read<ModifyUserCubit>().modifyUser();
                       },
-                child: state.status == ModifyUserStatus.loading
+                child: state.status == CommonStatus.loading
                     ? const CircularProgressIndicator()
                     : const Text('저장'),
               ),

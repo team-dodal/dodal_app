@@ -1,3 +1,4 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/providers/create_challenge_notice_bloc.dart';
 import 'package:dodal_app/widgets/common/input/text_input.dart';
 import 'package:dodal_app/widgets/common/system_dialog.dart';
@@ -46,10 +47,10 @@ class _CreateNoticeScreenState extends State<CreateNoticeScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<CreateChallengeNoticeBloc, CreateChallengeNoticeState>(
       listener: (context, state) {
-        if (state.status == CreateChallengeNoticeStatus.error) {
+        if (state.status == CommonStatus.error) {
           _error();
         }
-        if (state.status == CreateChallengeNoticeStatus.success) {
+        if (state.status == CommonStatus.loaded) {
           Navigator.pop(context);
         }
       },

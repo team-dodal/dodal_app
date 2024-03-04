@@ -1,4 +1,5 @@
 import 'package:dodal_app/model/category_model.dart';
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/providers/category_list_bloc.dart';
 import 'package:dodal_app/theme/color.dart';
@@ -31,10 +32,10 @@ class CategoryTagSelect extends StatelessWidget {
 
     return BlocBuilder<CategoryListBloc, CategoryListState>(
       builder: (context, state) {
-        if (state.status == CategoryListStatus.error) {
+        if (state.status == CommonStatus.error) {
           return Center(child: Text(state.errorMessage!));
         }
-        if (state.status == CategoryListStatus.loaded) {
+        if (state.status == CommonStatus.loaded) {
           return Column(
             children: [
               for (Category category in state.result)

@@ -1,9 +1,8 @@
 import 'package:dodal_app/model/challenge_model.dart';
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/services/challenge/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-enum MyBookmarkListStatus { init, loading, success, error }
 
 class MyBookmarkListCubit extends Cubit<MyBookmarkListState> {
   MyBookmarkListCubit() : super(MyBookmarkListState.init()) {
@@ -11,16 +10,16 @@ class MyBookmarkListCubit extends Cubit<MyBookmarkListState> {
   }
 
   Future<void> loadData() async {
-    emit(state.copyWith(status: MyBookmarkListStatus.loading));
+    emit(state.copyWith(status: CommonStatus.loading));
     try {
       List<Challenge>? res = await ChallengeService.getBookmarkList();
       emit(state.copyWith(
-        status: MyBookmarkListStatus.success,
+        status: CommonStatus.loaded,
         result: res,
       ));
     } catch (error) {
       emit(state.copyWith(
-        status: MyBookmarkListStatus.error,
+        status: CommonStatus.error,
         errorMessage: '데이터를 불러오는데 실패하였습니다.',
       ));
     }
@@ -34,7 +33,7 @@ class MyBookmarkListCubit extends Cubit<MyBookmarkListState> {
 }
 
 class MyBookmarkListState extends Equatable {
-  final MyBookmarkListStatus status;
+  final CommonStatus status;
   final List<Challenge> result;
   final String? errorMessage;
 
@@ -44,11 +43,10 @@ class MyBookmarkListState extends Equatable {
     this.errorMessage,
   });
 
-  MyBookmarkListState.init()
-      : this(status: MyBookmarkListStatus.init, result: []);
+  MyBookmarkListState.init() : this(status: CommonStatus.init, result: []);
 
   MyBookmarkListState copyWith({
-    MyBookmarkListStatus? status,
+    CommonStatus? status,
     List<Challenge>? result,
     String? errorMessage,
   }) {

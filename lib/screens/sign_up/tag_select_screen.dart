@@ -1,3 +1,4 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/providers/sign_up_cubit.dart';
 import 'package:dodal_app/theme/color.dart';
@@ -25,10 +26,10 @@ class TagSelectScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<SignUpCubit, SignUpState>(
       listener: (context, state) {
-        if (state.status == SignUpStatus.success) {
+        if (state.status == CommonStatus.loaded) {
           success(state.result!);
         }
-        if (state.status == SignUpStatus.error) {
+        if (state.status == CommonStatus.error) {
           error(state.errorMessage!);
         }
       },

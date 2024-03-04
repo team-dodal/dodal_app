@@ -1,8 +1,7 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/services/challenge/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-enum CreateChallengeNoticeStatus { init, loading, success, error }
 
 class CreateChallengeNoticeBloc
     extends Bloc<CreateChallengeNoticeEvent, CreateChallengeNoticeState> {
@@ -19,17 +18,17 @@ class CreateChallengeNoticeBloc
   }
 
   Future<void> _create(CreateChallengeNoticeEvent event, emit) async {
-    emit(state.copyWith(status: CreateChallengeNoticeStatus.loading));
+    emit(state.copyWith(status: CommonStatus.loading));
     try {
       await ChallengeService.createNotice(
         roomId: roomId,
         title: state.title,
         content: state.content,
       );
-      emit(state.copyWith(status: CreateChallengeNoticeStatus.success));
+      emit(state.copyWith(status: CommonStatus.loaded));
     } catch (error) {
       emit(state.copyWith(
-        status: CreateChallengeNoticeStatus.error,
+        status: CommonStatus.error,
         errorMessage: '에러가 발생하였습니다.',
       ));
     }
@@ -58,7 +57,7 @@ class ChangeContentEvent extends CreateChallengeNoticeEvent {
 }
 
 class CreateChallengeNoticeState extends Equatable {
-  final CreateChallengeNoticeStatus status;
+  final CommonStatus status;
   final String? errorMessage;
   final String title;
   final String content;
@@ -72,14 +71,14 @@ class CreateChallengeNoticeState extends Equatable {
 
   const CreateChallengeNoticeState.init()
       : this(
-          status: CreateChallengeNoticeStatus.init,
+          status: CommonStatus.init,
           title: '',
           content: '',
           errorMessage: null,
         );
 
   CreateChallengeNoticeState copyWith({
-    CreateChallengeNoticeStatus? status,
+    CommonStatus? status,
     String? errorMessage,
     String? title,
     String? content,

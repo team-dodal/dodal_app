@@ -1,11 +1,10 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/services/feed/response.dart';
 import 'package:dodal_app/services/feed/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 const pageSize = 10;
-
-enum FeedListStatus { init, loading, success, error }
 
 class FeedListBloc extends Bloc<FeedListEvent, FeedListState> {
   FeedListBloc() : super(FeedListState.init()) {
@@ -14,24 +13,24 @@ class FeedListBloc extends Bloc<FeedListEvent, FeedListState> {
   }
 
   _load(LoadFeedListEvent event, emit) async {
-    if (state.status == FeedListStatus.loading) return;
-    if (state.status == FeedListStatus.error) return;
+    if (state.status == CommonStatus.loading) return;
+    if (state.status == CommonStatus.error) return;
     if (state.isLastPage) return;
-    emit(state.copyWith(status: FeedListStatus.loading));
+    emit(state.copyWith(status: CommonStatus.loading));
     try {
       List<FeedContentResponse> res = await FeedService.getAllFeeds(
         page: state.currentPage,
         pageSize: pageSize,
       );
       emit(state.copyWith(
-        status: FeedListStatus.success,
+        status: CommonStatus.loaded,
         list: [...state.list, ...res],
         currentPage: state.currentPage + 1,
         isLastPage: res.length < pageSize,
       ));
     } catch (e) {
       emit(state.copyWith(
-        status: FeedListStatus.error,
+        status: CommonStatus.error,
         errorMessage: '불러오는 도중 에러가 발생하였습니다.',
       ));
     }
@@ -46,7 +45,7 @@ class LoadFeedListEvent extends FeedListEvent {
 }
 
 class FeedListState extends Equatable {
-  final FeedListStatus status;
+  final CommonStatus status;
   final List<FeedContentResponse> list;
   final String? errorMessage;
   final int currentPage;
@@ -62,14 +61,14 @@ class FeedListState extends Equatable {
 
   FeedListState.init()
       : this(
-          status: FeedListStatus.init,
+          status: CommonStatus.init,
           list: [],
           currentPage: 0,
           isLastPage: false,
         );
 
   FeedListState copyWith({
-    FeedListStatus? status,
+    CommonStatus? status,
     List<FeedContentResponse>? list,
     String? errorMessage,
     int? currentPage,

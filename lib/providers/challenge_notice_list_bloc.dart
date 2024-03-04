@@ -1,9 +1,8 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/services/challenge/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-enum ChallengeNoticeListStatus { init, loading, success, error }
 
 class ChallengeNoticeListBloc
     extends Bloc<ChallengeNoticeListEvent, ChallengeNoticeListState> {
@@ -17,16 +16,16 @@ class ChallengeNoticeListBloc
   }
 
   Future<void> _load(LoadChallengeNoticeListEvent event, emit) async {
-    emit(state.copyWith(status: ChallengeNoticeListStatus.loading));
+    emit(state.copyWith(status: CommonStatus.loading));
     try {
       final noticeList = await ChallengeService.getNoticeList(roomId: roomId);
       emit(state.copyWith(
-        status: ChallengeNoticeListStatus.success,
+        status: CommonStatus.loaded,
         noticeList: noticeList,
       ));
     } catch (error) {
       emit(state.copyWith(
-        status: ChallengeNoticeListStatus.error,
+        status: CommonStatus.error,
         errorMessage: '에러가 발생하였습니다.',
       ));
     }
@@ -58,7 +57,7 @@ class ChangeTargetIndexEvent extends ChallengeNoticeListEvent {
 }
 
 class ChallengeNoticeListState extends Equatable {
-  final ChallengeNoticeListStatus status;
+  final CommonStatus status;
   final List<ChallengeRoomNoticeResponse> noticeList;
   final List<int> openIndexList;
   final String? errorMessage;
@@ -72,13 +71,13 @@ class ChallengeNoticeListState extends Equatable {
 
   ChallengeNoticeListState.init(int? targetIndex)
       : this(
-          status: ChallengeNoticeListStatus.init,
+          status: CommonStatus.init,
           noticeList: [],
           openIndexList: targetIndex != null ? [targetIndex] : [],
         );
 
   ChallengeNoticeListState copyWith({
-    ChallengeNoticeListStatus? status,
+    CommonStatus? status,
     List<ChallengeRoomNoticeResponse>? noticeList,
     List<int>? openIndexList,
     String? errorMessage,

@@ -1,9 +1,8 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/services/user/response.dart';
 import 'package:dodal_app/services/user/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-enum UserRoomFeedInfoStatus { init, loading, success, error }
 
 class UserRoomFeedInfoBloc
     extends Bloc<UserRoomFeedInfoEvent, UserRoomFeedInfoState> {
@@ -14,11 +13,11 @@ class UserRoomFeedInfoBloc
   }
 
   Future<void> _getUserRoomFeedInfo(RequestUserInfoEvent event, emit) async {
-    emit(state.copyWith(status: UserRoomFeedInfoStatus.loading));
+    emit(state.copyWith(status: CommonStatus.loading));
     try {
       final res = await UserService.getUsersRoomFeed();
       emit(state.copyWith(
-        status: UserRoomFeedInfoStatus.success,
+        status: CommonStatus.loaded,
         challengeList: res.challengeRoomList,
         selectedId: res.challengeRoomList.isNotEmpty
             ? res.challengeRoomList[0].roomId
@@ -28,17 +27,17 @@ class UserRoomFeedInfoBloc
       ));
     } catch (error) {
       emit(state.copyWith(
-        status: UserRoomFeedInfoStatus.error,
+        status: CommonStatus.error,
         errorMessage: '서버와의 통신에 실패했습니다',
       ));
     }
   }
 
   _changeSelectedRoomId(ChangeSelectedRoomIdEvent event, emit) async {
-    emit(state.copyWith(status: UserRoomFeedInfoStatus.loading));
+    emit(state.copyWith(status: CommonStatus.loading));
     await Future.delayed(const Duration(milliseconds: 200));
     emit(state.copyWith(
-      status: UserRoomFeedInfoStatus.success,
+      status: CommonStatus.loaded,
       selectedId: event.roomId,
     ));
   }
@@ -59,7 +58,7 @@ class ChangeSelectedRoomIdEvent extends UserRoomFeedInfoEvent {
 }
 
 class UserRoomFeedInfoState extends Equatable {
-  final UserRoomFeedInfoStatus status;
+  final CommonStatus status;
   final String? errorMessage;
   final List<UsersChallengeRoom> challengeList;
   final int? selectedId;
@@ -77,7 +76,7 @@ class UserRoomFeedInfoState extends Equatable {
 
   UserRoomFeedInfoState.init()
       : this(
-          status: UserRoomFeedInfoStatus.init,
+          status: CommonStatus.init,
           challengeList: [],
           selectedId: null,
           totalCertCnt: 0,
@@ -85,7 +84,7 @@ class UserRoomFeedInfoState extends Equatable {
         );
 
   UserRoomFeedInfoState copyWith({
-    UserRoomFeedInfoStatus? status,
+    CommonStatus? status,
     String? errorMessage,
     List<UsersChallengeRoom>? challengeList,
     int? selectedId,

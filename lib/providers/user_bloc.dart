@@ -1,10 +1,9 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/services/user/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
-enum UserBlocStatus { init, loading, success, error }
 
 class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
   String fcmToken;
@@ -24,17 +23,17 @@ class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
   }
 
   _loadData(LoadUserBlocEvent event, emit) async {
-    emit(state.copyWith(status: UserBlocStatus.loading));
+    emit(state.copyWith(status: CommonStatus.loading));
     try {
       User? res = await UserService.user();
       emit(state.copyWith(
-        status: UserBlocStatus.success,
+        status: CommonStatus.loaded,
         result: res,
       ));
       await UserService.updateFcmToken(fcmToken);
     } catch (error) {
       emit(state.copyWith(
-        status: UserBlocStatus.error,
+        status: CommonStatus.error,
         errorMessage: '유저 정보를 불러오는데에 실패하였습니다.',
       ));
     }
@@ -52,7 +51,7 @@ class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
       emit(const UserBlocState.init());
     } catch (error) {
       emit(state.copyWith(
-        status: UserBlocStatus.error,
+        status: CommonStatus.error,
         errorMessage: '회원 탈퇴에 실패하였습니다.',
       ));
     }
@@ -86,7 +85,7 @@ class RemoveUserBlocEvent extends UserBlocEvent {
 }
 
 class UserBlocState extends Equatable {
-  final UserBlocStatus status;
+  final CommonStatus status;
   final User? result;
   final String? errorMessage;
 
@@ -96,10 +95,10 @@ class UserBlocState extends Equatable {
     this.errorMessage,
   });
 
-  const UserBlocState.init() : this(status: UserBlocStatus.init, result: null);
+  const UserBlocState.init() : this(status: CommonStatus.init, result: null);
 
   UserBlocState copyWith({
-    UserBlocStatus? status,
+    CommonStatus? status,
     User? result,
     String? errorMessage,
   }) {

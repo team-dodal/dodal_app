@@ -1,3 +1,4 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/providers/nickname_check_bloc.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
@@ -19,7 +20,7 @@ class NicknameInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<NicknameBloc, NicknameState>(
       listener: (context, state) {
-        if (state.status == NicknameStatus.success) {
+        if (state.status == CommonStatus.loaded) {
           onApproveNickname(state.nickname);
         }
       },
@@ -45,7 +46,7 @@ class NicknameInput extends StatelessWidget {
                     vertical: 8,
                   ),
                 ),
-                onPressed: state.status == NicknameStatus.success
+                onPressed: state.status == CommonStatus.loaded
                     ? null
                     : () {
                         context.read<NicknameBloc>().add(CheckNicknameEvent());
@@ -54,12 +55,12 @@ class NicknameInput extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 6),
-            if (state.status == NicknameStatus.success)
+            if (state.status == CommonStatus.loaded)
               Text(
                 '중복 확인 완료되었습니다.',
                 style: context.caption(color: AppColors.success),
               ),
-            if (state.status == NicknameStatus.error)
+            if (state.status == CommonStatus.error)
               Text(
                 state.errorMessage!,
                 style: context.caption(color: AppColors.danger),

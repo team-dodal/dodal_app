@@ -1,4 +1,5 @@
 import 'package:dodal_app/model/category_model.dart';
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/providers/calendar_feed_bloc.dart';
 import 'package:dodal_app/providers/category_list_bloc.dart';
 import 'package:dodal_app/providers/challenge_list_bloc.dart';
@@ -97,13 +98,13 @@ class MyPageScreen extends StatelessWidget {
               Builder(
                 builder: (context) {
                   switch (state.status) {
-                    case UserRoomFeedInfoStatus.init:
+                    case CommonStatus.init:
                       return const Center(child: CupertinoActivityIndicator());
-                    case UserRoomFeedInfoStatus.loading:
+                    case CommonStatus.loading:
                       return const Center(child: CupertinoActivityIndicator());
-                    case UserRoomFeedInfoStatus.error:
+                    case CommonStatus.error:
                       return Center(child: Text(state.errorMessage!));
-                    case UserRoomFeedInfoStatus.success:
+                    case CommonStatus.loaded:
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 20),
                         child: Builder(

@@ -1,3 +1,4 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/providers/bookmark_bloc.dart';
 import 'package:dodal_app/theme/color.dart';
@@ -57,10 +58,10 @@ class _ListChallengeBoxState extends State<ListChallengeBox> {
   Widget build(BuildContext context) {
     return BlocConsumer<BookmarkBloc, BookmarkState>(
       listener: (context, state) {
-        if (state.status == BookmarkStatus.success) {
+        if (state.status == CommonStatus.loaded) {
           success(context, state);
         }
-        if (state.status == BookmarkStatus.error) {
+        if (state.status == CommonStatus.error) {
           error(context, state.errorMessage!);
         }
       },

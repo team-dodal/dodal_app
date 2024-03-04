@@ -1,3 +1,4 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/providers/notification_list_bloc.dart';
 import 'package:dodal_app/services/alarm/response.dart';
 import 'package:dodal_app/theme/color.dart';
@@ -28,7 +29,7 @@ class NotiFicationScreen extends StatelessWidget {
       ),
       body: BlocBuilder<NotificationListBloc, NotificationListState>(
         builder: (context, state) {
-          if (state.status == NotificationListStatus.success) {
+          if (state.status == CommonStatus.loaded) {
             if (state.list.isEmpty) {
               return const Column(
                 children: [

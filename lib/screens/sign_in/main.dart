@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/providers/custom_feed_list_bloc.dart';
 import 'package:dodal_app/providers/feed_list_bloc.dart';
@@ -84,14 +85,14 @@ class SignInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<SignInBloc, SignInState>(
       listener: (context, state) {
-        if (state.status == SignInStatus.success) {
+        if (state.status == CommonStatus.loaded) {
           if (state.user != null) {
             _goMainPage(context, state.user!);
           } else {
             _goSignUpPage(context, state.id, state.email, state.type!);
           }
         }
-        if (state.status == SignInStatus.error) {
+        if (state.status == CommonStatus.error) {
           _errorModal(context, state.errorMessage!);
         }
       },

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/services/user/response.dart';
@@ -7,8 +8,6 @@ import 'package:dodal_app/utilities/social_auth.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
-enum SignUpStatus { init, loading, success, error }
 
 class SignUpCubit extends Cubit<SignUpState> {
   final FlutterSecureStorage secureStorage;
@@ -43,7 +42,7 @@ class SignUpCubit extends Cubit<SignUpState> {
   }
 
   signUp() async {
-    emit(state.copyWith(status: SignUpStatus.loading));
+    emit(state.copyWith(status: CommonStatus.loading));
     try {
       SignUpResponse res = await UserService.signUp(
         socialType: socialType,
@@ -56,10 +55,10 @@ class SignUpCubit extends Cubit<SignUpState> {
       );
       await secureStorage.write(key: 'accessToken', value: res.accessToken);
       await secureStorage.write(key: 'refreshToken', value: res.refreshToken);
-      emit(state.copyWith(status: SignUpStatus.success, result: res.user));
+      emit(state.copyWith(status: CommonStatus.loaded, result: res.user));
     } catch (error) {
       emit(state.copyWith(
-        status: SignUpStatus.error,
+        status: CommonStatus.error,
         errorMessage: '에러가 발생하였습니다.',
       ));
     }
@@ -67,7 +66,7 @@ class SignUpCubit extends Cubit<SignUpState> {
 }
 
 class SignUpState extends Equatable {
-  final SignUpStatus status;
+  final CommonStatus status;
   final String? errorMessage;
   final User? result;
   final String nickname;
@@ -87,7 +86,7 @@ class SignUpState extends Equatable {
 
   SignUpState.init()
       : this(
-          status: SignUpStatus.init,
+          status: CommonStatus.init,
           result: null,
           nickname: '',
           image: null,
@@ -96,7 +95,7 @@ class SignUpState extends Equatable {
         );
 
   SignUpState copyWith({
-    SignUpStatus? status,
+    CommonStatus? status,
     String? errorMessage,
     User? result,
     String? nickname,

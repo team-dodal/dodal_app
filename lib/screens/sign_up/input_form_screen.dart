@@ -1,3 +1,4 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/providers/sign_up_cubit.dart';
 import 'package:dodal_app/providers/nickname_check_bloc.dart';
 import 'package:dodal_app/widgets/common/create_form_title.dart';
@@ -98,9 +99,8 @@ class _InputFormScreenState extends State<InputFormScreen> {
               builder: (context, state) {
             return SubmitButton(
               title: '다음',
-              onPress: state.status == NicknameStatus.success
-                  ? widget.nextStep
-                  : null,
+              onPress:
+                  state.status == CommonStatus.loaded ? widget.nextStep : null,
             );
           }),
         );

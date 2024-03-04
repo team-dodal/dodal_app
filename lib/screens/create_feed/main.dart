@@ -1,3 +1,4 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/providers/challenge_info_bloc.dart';
 import 'package:dodal_app/providers/create_feed_bloc.dart';
 import 'package:dodal_app/screens/challenge_route/main.dart';
@@ -109,8 +110,7 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
 
   bool _buttonDisabled() {
     if (context.read<CreateFeedBloc>().state.image == null) return true;
-    if (context.read<CreateFeedBloc>().state.status ==
-        CreateFeedStatus.loading) {
+    if (context.read<CreateFeedBloc>().state.status == CommonStatus.loading) {
       return true;
     }
     return false;
@@ -126,10 +126,10 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<CreateFeedBloc, CreateFeedState>(
       listener: (context, state) {
-        if (state.status == CreateFeedStatus.success) {
+        if (state.status == CommonStatus.loaded) {
           _successAlert();
         }
-        if (state.status == CreateFeedStatus.error) {
+        if (state.status == CommonStatus.error) {
           _errorAlert(state.errorMessage!);
         }
       },
@@ -172,7 +172,7 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
           ),
           bottomSheet: FeedBottomSheet(
             onPress: _buttonDisabled() ? null : _handleSubmit,
-            child: state.status == CreateFeedStatus.loading
+            child: state.status == CommonStatus.loading
                 ? const CupertinoActivityIndicator()
                 : Text(
                     '인증하기',

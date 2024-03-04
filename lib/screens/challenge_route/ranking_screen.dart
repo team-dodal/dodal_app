@@ -1,3 +1,4 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/providers/challenge_ranking_bloc.dart';
 import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/theme/color.dart';
@@ -54,12 +55,12 @@ class RankingScreen extends StatelessWidget {
         BlocBuilder<ChallengeRankingBloc, ChallengeRankingState>(
           builder: (context, state) {
             switch (state.status) {
-              case ChallengeRankingStatus.init:
-              case ChallengeRankingStatus.loading:
+              case CommonStatus.init:
+              case CommonStatus.loading:
                 return const Center(child: CupertinoActivityIndicator());
-              case ChallengeRankingStatus.error:
+              case CommonStatus.error:
                 return Center(child: Text(state.errorMessage!));
-              case ChallengeRankingStatus.success:
+              case CommonStatus.loaded:
                 if (state.topThreeList.isEmpty && state.otherList.isEmpty) {
                   return const Column(
                     children: [

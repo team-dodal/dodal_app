@@ -1,11 +1,10 @@
 import 'dart:io';
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/services/user/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-enum ModifyUserStatus { init, loading, success, error }
 
 class ModifyUserCubit extends Cubit<ModifyUserState> {
   final String nickname;
@@ -47,7 +46,7 @@ class ModifyUserCubit extends Cubit<ModifyUserState> {
   }
 
   Future<void> modifyUser() async {
-    emit(state.copyWith(status: ModifyUserStatus.loading, image: state.image));
+    emit(state.copyWith(status: CommonStatus.loading, image: state.image));
     try {
       User res = await UserService.updateUser(
         nickname: state.nickname,
@@ -56,13 +55,13 @@ class ModifyUserCubit extends Cubit<ModifyUserState> {
         tagList: state.category.map((e) => e.value as String).toList(),
       );
       emit(state.copyWith(
-        status: ModifyUserStatus.success,
+        status: CommonStatus.loaded,
         response: res,
         image: state.image,
       ));
     } catch (error) {
       emit(state.copyWith(
-        status: ModifyUserStatus.error,
+        status: CommonStatus.error,
         errorMessage: '에러가 발생하였습니다.',
         image: state.image,
       ));
@@ -72,7 +71,7 @@ class ModifyUserCubit extends Cubit<ModifyUserState> {
 }
 
 class ModifyUserState extends Equatable {
-  final ModifyUserStatus status;
+  final CommonStatus status;
   final User? response;
   final String nickname;
   final String content;
@@ -96,7 +95,7 @@ class ModifyUserState extends Equatable {
     required dynamic image,
     required List<Tag> category,
   }) : this(
-          status: ModifyUserStatus.init,
+          status: CommonStatus.init,
           nickname: nickname,
           content: content,
           image: image,
@@ -104,7 +103,7 @@ class ModifyUserState extends Equatable {
         );
 
   ModifyUserState copyWith({
-    ModifyUserStatus? status,
+    CommonStatus? status,
     String? nickname,
     String? content,
     dynamic image,

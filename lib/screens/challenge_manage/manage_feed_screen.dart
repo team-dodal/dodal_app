@@ -1,4 +1,5 @@
 import 'package:dodal_app/layout/modal_layout.dart';
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/providers/manage_challenge_feed_bloc.dart';
 import 'package:dodal_app/providers/manage_challenge_member_bloc.dart';
 import 'package:dodal_app/services/challenge/response.dart';
@@ -76,7 +77,7 @@ class _ManageFeedScreenState extends State<ManageFeedScreen> {
           child:
               BlocConsumer<ManageChallengeFeedBloc, ManageChallengeFeedState>(
             listener: (context, state) {
-              if (state.status == ManageChallengeFeedStatus.success) {
+              if (state.status == CommonStatus.loaded) {
                 context
                     .read<ManageChallengeMemberBloc>()
                     .add(LoadManageChallengeMemberEvent());
@@ -84,12 +85,12 @@ class _ManageFeedScreenState extends State<ManageFeedScreen> {
             },
             builder: (context, state) {
               switch (state.status) {
-                case ManageChallengeFeedStatus.init:
-                case ManageChallengeFeedStatus.loading:
+                case CommonStatus.init:
+                case CommonStatus.loading:
                   return const Center(child: CupertinoActivityIndicator());
-                case ManageChallengeFeedStatus.error:
+                case CommonStatus.error:
                   return Center(child: Text(state.errorMessage!));
-                case ManageChallengeFeedStatus.success:
+                case CommonStatus.loaded:
                   if (state.itemListByDate.keys.isEmpty) return _empty();
                   return _success(state.itemListByDate);
               }

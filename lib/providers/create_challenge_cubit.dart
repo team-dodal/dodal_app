@@ -1,9 +1,8 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/services/challenge/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-enum CreateChallengeStatus { init, loading, success, error }
 
 class CreateChallengeBloc
     extends Bloc<CreateChallengeEvent, CreateChallengeState> {
@@ -64,14 +63,14 @@ class CreateChallengeBloc
   }
 
   Future<void> _submit(SubmitCreateChallengeEvent event, emit) async {
-    emit(state.copyWith(status: CreateChallengeStatus.loading));
+    emit(state.copyWith(status: CommonStatus.loading));
     try {
       state.isUpdate ? await _update() : await _create();
-      emit(state.copyWith(status: CreateChallengeStatus.success));
+      emit(state.copyWith(status: CommonStatus.loaded));
     } catch (error) {
       emit(
         state.copyWith(
-          status: CreateChallengeStatus.error,
+          status: CommonStatus.error,
           errorMessage: '챌린지 생성에 실패하였습니다.',
         ),
       );
@@ -179,7 +178,7 @@ class ChangeCertWrongImgEvent extends CreateChallengeEvent {
 }
 
 class CreateChallengeState extends Equatable {
-  final CreateChallengeStatus status;
+  final CommonStatus status;
   final String? errorMessage;
   final bool isUpdate;
   final String title;
@@ -219,7 +218,7 @@ class CreateChallengeState extends Equatable {
     required int? certCnt,
     required Tag? tagValue,
   }) : this(
-          status: CreateChallengeStatus.init,
+          status: CommonStatus.init,
           isUpdate: isUpdate,
           title: title ?? '',
           content: content ?? '',
@@ -233,7 +232,7 @@ class CreateChallengeState extends Equatable {
         );
 
   CreateChallengeState copyWith({
-    CreateChallengeStatus? status,
+    CommonStatus? status,
     String? errorMessage,
     String? title,
     String? content,

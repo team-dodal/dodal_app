@@ -2,11 +2,10 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:dodal_app/model/category_model.dart';
 import 'package:dodal_app/model/challenge_code_enum.dart';
 import 'package:dodal_app/model/challenge_model.dart';
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/services/challenge/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-enum CustomFeedListStatus { init, loading, success, error }
 
 class CustomFeedListBloc
     extends Bloc<CustomFeedListEvent, CustomFeedListState> {
@@ -30,7 +29,7 @@ class CustomFeedListBloc
   }
 
   _onLoadInterestList(LoadInterestListEvent event, emit) async {
-    emit(state.copyWith(status: CustomFeedListStatus.loading));
+    emit(state.copyWith(status: CommonStatus.loading));
     try {
       List<List<Challenge>> list = [...state.interestList];
       for (final category in categories) {
@@ -45,19 +44,19 @@ class CustomFeedListBloc
         list.add(res);
       }
       emit(state.copyWith(
-        status: CustomFeedListStatus.success,
+        status: CommonStatus.loaded,
         interestList: list,
       ));
     } catch (error) {
       emit(state.copyWith(
-        status: CustomFeedListStatus.error,
+        status: CommonStatus.error,
         errorMessage: 'Failed to load interest list',
       ));
     }
   }
 
   _onLoadPopularList(LoadPopularListEvent event, emit) async {
-    emit(state.copyWith(status: CustomFeedListStatus.loading));
+    emit(state.copyWith(status: CommonStatus.loading));
     try {
       final res = await ChallengeService.getChallenges(
         conditionCode: ChallengeCodeEnum.popular.index,
@@ -65,19 +64,19 @@ class CustomFeedListBloc
         pageSize: 4,
       );
       emit(state.copyWith(
-        status: CustomFeedListStatus.success,
+        status: CommonStatus.loaded,
         popularList: res,
       ));
     } catch (error) {
       emit(state.copyWith(
-        status: CustomFeedListStatus.error,
+        status: CommonStatus.error,
         errorMessage: 'Failed to load popular list',
       ));
     }
   }
 
   _onLoadRecentList(LoadRecentListEvent event, emit) async {
-    emit(state.copyWith(status: CustomFeedListStatus.loading));
+    emit(state.copyWith(status: CommonStatus.loading));
     try {
       final res = await ChallengeService.getChallenges(
         conditionCode: ChallengeCodeEnum.recent.index,
@@ -85,12 +84,12 @@ class CustomFeedListBloc
         pageSize: 3,
       );
       emit(state.copyWith(
-        status: CustomFeedListStatus.success,
+        status: CommonStatus.loaded,
         recentList: res,
       ));
     } catch (error) {
       emit(state.copyWith(
-        status: CustomFeedListStatus.error,
+        status: CommonStatus.error,
         errorMessage: 'Failed to load recent list',
       ));
     }
@@ -115,14 +114,14 @@ class LoadRecentListEvent extends CustomFeedListEvent {
 }
 
 class CustomFeedListState extends Equatable {
-  final CustomFeedListStatus status;
+  final CommonStatus status;
   final List<List<Challenge>> interestList;
   final List<Challenge> popularList;
   final List<Challenge> recentList;
   final String? errorMessage;
 
   const CustomFeedListState({
-    this.status = CustomFeedListStatus.init,
+    this.status = CommonStatus.init,
     this.interestList = const [],
     this.popularList = const [],
     this.recentList = const [],
@@ -130,7 +129,7 @@ class CustomFeedListState extends Equatable {
   });
 
   CustomFeedListState copyWith({
-    CustomFeedListStatus? status,
+    CommonStatus? status,
     List<List<Challenge>>? interestList,
     List<Challenge>? popularList,
     List<Challenge>? recentList,
@@ -147,7 +146,7 @@ class CustomFeedListState extends Equatable {
 
   CustomFeedListState.init()
       : this(
-          status: CustomFeedListStatus.init,
+          status: CommonStatus.init,
           interestList: [],
           popularList: [],
           recentList: [],

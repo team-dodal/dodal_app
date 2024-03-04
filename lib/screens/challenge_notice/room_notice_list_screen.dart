@@ -1,3 +1,4 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/providers/challenge_notice_list_bloc.dart';
 import 'package:dodal_app/providers/create_challenge_notice_bloc.dart';
 import 'package:dodal_app/screens/challenge_notice/create_notice_screen.dart';
@@ -123,12 +124,12 @@ class _RoomNoticeListScreenState extends State<RoomNoticeListScreen> {
       body: BlocBuilder<ChallengeNoticeListBloc, ChallengeNoticeListState>(
         builder: (context, state) {
           switch (state.status) {
-            case ChallengeNoticeListStatus.init:
-            case ChallengeNoticeListStatus.loading:
+            case CommonStatus.init:
+            case CommonStatus.loading:
               return const Center(child: CupertinoActivityIndicator());
-            case ChallengeNoticeListStatus.error:
+            case CommonStatus.error:
               return Center(child: Text(state.errorMessage!));
-            case ChallengeNoticeListStatus.success:
+            case CommonStatus.loaded:
               if (state.noticeList.isEmpty) {
                 return _empty();
               }

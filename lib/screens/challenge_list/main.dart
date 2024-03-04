@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/helper/slide_page_route.dart';
 import 'package:dodal_app/model/challenge_model.dart';
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/providers/bookmark_bloc.dart';
 import 'package:dodal_app/providers/challenge_info_bloc.dart';
 import 'package:dodal_app/providers/challenge_list_bloc.dart';
@@ -170,16 +171,16 @@ class _ChallengeListScreenState extends State<ChallengeListScreen> {
         child: BlocBuilder<ChallengeListBloc, ChallengeListState>(
           builder: (context, state) {
             switch (state.status) {
-              case ChallengeListStatus.init:
+              case CommonStatus.init:
                 return const Center(child: CupertinoActivityIndicator());
-              case ChallengeListStatus.loading:
-              case ChallengeListStatus.success:
+              case CommonStatus.loading:
+              case CommonStatus.loaded:
                 if (state.result.isEmpty) {
                   return _empty();
                 } else {
                   return _challengeList(state.result);
                 }
-              case ChallengeListStatus.error:
+              case CommonStatus.error:
                 return Center(child: Text(state.errorMessage!));
             }
           },

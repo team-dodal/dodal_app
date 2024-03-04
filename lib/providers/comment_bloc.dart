@@ -1,9 +1,8 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/services/feed/response.dart';
 import 'package:dodal_app/services/feed/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-enum CommentBlocStatus { init, loading, success, error }
 
 class CommentBloc extends Bloc<CommentBlocEvent, CommentBlocState> {
   final int feedId;
@@ -16,29 +15,29 @@ class CommentBloc extends Bloc<CommentBlocEvent, CommentBlocState> {
   }
 
   Future<void> _loadCommentList(LoadListCommentBlocEvent event, emit) async {
-    emit(state.copyWith(status: CommentBlocStatus.loading));
+    emit(state.copyWith(status: CommonStatus.loading));
     try {
       final res = await FeedService.getAllComments(feedId: feedId);
-      emit(state.copyWith(status: CommentBlocStatus.success, list: res));
+      emit(state.copyWith(status: CommonStatus.loaded, list: res));
     } catch (error) {
       emit(state.copyWith(
-        status: CommentBlocStatus.error,
+        status: CommonStatus.error,
         errorMessage: '데이터를 불러오는 도중. 에러가 발생하였습니다.',
       ));
     }
   }
 
   Future<void> _removeComment(RemoveCommentBlocEvent event, emit) async {
-    emit(state.copyWith(status: CommentBlocStatus.loading));
+    emit(state.copyWith(status: CommonStatus.loading));
     try {
       final res = await FeedService.removeComment(
         feedId: feedId,
         commentId: event.commentId,
       );
-      emit(state.copyWith(status: CommentBlocStatus.success, list: res));
+      emit(state.copyWith(status: CommonStatus.loaded, list: res));
     } catch (error) {
       emit(state.copyWith(
-        status: CommentBlocStatus.error,
+        status: CommonStatus.error,
         errorMessage: '에러가 발생하였습니다.',
       ));
     }
@@ -46,16 +45,16 @@ class CommentBloc extends Bloc<CommentBlocEvent, CommentBlocState> {
 
   Future<void> _submitComment(SubmitCommentBlocEvent event, emit) async {
     if (event.text.isEmpty) return;
-    emit(state.copyWith(status: CommentBlocStatus.loading));
+    emit(state.copyWith(status: CommonStatus.loading));
     try {
       final res = await FeedService.createComment(
         feedId: feedId,
         content: event.text,
       );
-      emit(state.copyWith(status: CommentBlocStatus.success, list: res));
+      emit(state.copyWith(status: CommonStatus.loaded, list: res));
     } catch (error) {
       emit(state.copyWith(
-        status: CommentBlocStatus.error,
+        status: CommonStatus.error,
         errorMessage: '에러가 발생하였습니다.',
       ));
     }
@@ -84,7 +83,7 @@ class SubmitCommentBlocEvent extends CommentBlocEvent {
 }
 
 class CommentBlocState extends Equatable {
-  final CommentBlocStatus status;
+  final CommonStatus status;
   final String? errorMessage;
   final List<CommentResponse> list;
 
@@ -96,12 +95,12 @@ class CommentBlocState extends Equatable {
 
   CommentBlocState.init()
       : this(
-          status: CommentBlocStatus.init,
+          status: CommonStatus.init,
           list: [],
         );
 
   CommentBlocState copyWith({
-    CommentBlocStatus? status,
+    CommonStatus? status,
     String? errorMessage,
     List<CommentResponse>? list,
   }) {

@@ -1,4 +1,5 @@
 import 'package:animations/animations.dart';
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/providers/bookmark_bloc.dart';
 import 'package:dodal_app/providers/challenge_info_bloc.dart';
 import 'package:dodal_app/providers/my_bookmark_list_cubit.dart';
@@ -72,12 +73,12 @@ class BookmarkScreen extends StatelessWidget {
       body: BlocBuilder<MyBookmarkListCubit, MyBookmarkListState>(
         builder: (context, state) {
           switch (state.status) {
-            case MyBookmarkListStatus.init:
-            case MyBookmarkListStatus.loading:
+            case CommonStatus.init:
+            case CommonStatus.loading:
               return const Center(child: CupertinoActivityIndicator());
-            case MyBookmarkListStatus.error:
+            case CommonStatus.error:
               return Center(child: Text(state.errorMessage!));
-            case MyBookmarkListStatus.success:
+            case CommonStatus.loaded:
               if (state.result.isEmpty) {
                 return _empty();
               } else {

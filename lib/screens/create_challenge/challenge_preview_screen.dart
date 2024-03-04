@@ -1,3 +1,4 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/providers/create_challenge_cubit.dart';
 import 'package:dodal_app/providers/user_bloc.dart';
 import 'package:dodal_app/theme/color.dart';
@@ -124,8 +125,7 @@ class ChallengePreviewScreen extends StatelessWidget {
           ),
         ),
         bottomSheet: SubmitButton(
-          onPress:
-              state.status == CreateChallengeStatus.loading ? null : nextStep,
+          onPress: state.status == CommonStatus.loading ? null : nextStep,
           title: state.isUpdate ? '도전 수정하기' : '도전 생성하기',
         ),
       );

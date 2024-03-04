@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/helper/slide_page_route.dart';
 import 'package:dodal_app/model/certification_code_enum.dart';
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/providers/bookmark_bloc.dart';
 import 'package:dodal_app/providers/challenge_info_bloc.dart';
 import 'package:dodal_app/providers/challenge_ranking_bloc.dart';
@@ -90,18 +91,18 @@ class _ChallengeRouteState extends State<ChallengeRoute>
     return BlocBuilder<ChallengeInfoBloc, ChallengeInfoState>(
       builder: (context, state) {
         switch (state.status) {
-          case ChallengeInfoStatus.init:
-          case ChallengeInfoStatus.loading:
+          case CommonStatus.init:
+          case CommonStatus.loading:
             return Scaffold(
               appBar: AppBar(),
               body: const Center(child: CupertinoActivityIndicator()),
             );
-          case ChallengeInfoStatus.error:
+          case CommonStatus.error:
             return Scaffold(
               appBar: AppBar(),
               body: Center(child: Text(state.errorMessage!)),
             );
-          case ChallengeInfoStatus.success:
+          case CommonStatus.loaded:
             final challenge = state.result!;
             if (!challenge.isJoin) {
               return const ChallengePreviewScreen();

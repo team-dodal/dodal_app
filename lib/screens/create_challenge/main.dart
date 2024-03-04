@@ -1,3 +1,4 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/providers/create_challenge_cubit.dart';
 import 'package:dodal_app/screens/create_challenge/challenge_content_screen.dart';
 import 'package:dodal_app/screens/create_challenge/challenge_preview_screen.dart';
@@ -41,10 +42,10 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
   Widget build(BuildContext context) {
     return BlocListener<CreateChallengeBloc, CreateChallengeState>(
       listener: (context, state) {
-        if (state.status == CreateChallengeStatus.error) {
+        if (state.status == CommonStatus.error) {
           _error(state.errorMessage!);
         }
-        if (state.status == CreateChallengeStatus.success) {
+        if (state.status == CommonStatus.loaded) {
           _success(state.isUpdate);
         }
       },

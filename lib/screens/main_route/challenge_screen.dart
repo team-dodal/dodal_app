@@ -1,4 +1,5 @@
 import 'package:animations/animations.dart';
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/providers/challenge_info_bloc.dart';
 import 'package:dodal_app/providers/create_challenge_cubit.dart';
 import 'package:dodal_app/providers/my_challenge_list_bloc.dart';
@@ -122,10 +123,10 @@ class JoinedList extends StatelessWidget {
     return BlocBuilder<MyChallengeListBloc, MyChallengeListState>(
       builder: (context, state) {
         switch (state.status) {
-          case MyChallengeListStatus.init:
-          case MyChallengeListStatus.loading:
+          case CommonStatus.init:
+          case CommonStatus.loading:
             return const Center(child: CupertinoActivityIndicator());
-          case MyChallengeListStatus.success:
+          case CommonStatus.loaded:
             return Column(
               mainAxisSize: MainAxisSize.max,
               children: [
@@ -146,7 +147,7 @@ class JoinedList extends StatelessWidget {
                 ),
               ],
             );
-          case MyChallengeListStatus.error:
+          case CommonStatus.error:
             return Center(child: Text(state.errorMessage!));
         }
       },
@@ -219,10 +220,10 @@ class AdminList extends StatelessWidget {
     return BlocBuilder<MyChallengeListBloc, MyChallengeListState>(
       builder: (context, state) {
         switch (state.status) {
-          case MyChallengeListStatus.init:
-          case MyChallengeListStatus.loading:
+          case CommonStatus.init:
+          case CommonStatus.loading:
             return const Center(child: CupertinoActivityIndicator());
-          case MyChallengeListStatus.success:
+          case CommonStatus.loaded:
             return Column(
               mainAxisSize: MainAxisSize.max,
               children: [
@@ -243,7 +244,7 @@ class AdminList extends StatelessWidget {
                 ),
               ],
             );
-          case MyChallengeListStatus.error:
+          case CommonStatus.error:
             return Center(child: Text(state.errorMessage!));
         }
       },

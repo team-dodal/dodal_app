@@ -1,10 +1,9 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/services/user/response.dart';
 import 'package:dodal_app/services/user/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-
-enum CalendarFeedStatus { init, loading, success, error }
 
 class CalendarFeedBloc extends Bloc<CalendarFeedEvent, CalendarFeedState> {
   final int roomId;
@@ -15,7 +14,7 @@ class CalendarFeedBloc extends Bloc<CalendarFeedEvent, CalendarFeedState> {
 
   Future<void> _changeDate(ChangeDateEvent event, emit) async {
     emit(state.copyWith(
-      status: CalendarFeedStatus.loading,
+      status: CommonStatus.loading,
       focusedDay: event.date,
       feedList: [],
     ));
@@ -25,12 +24,12 @@ class CalendarFeedBloc extends Bloc<CalendarFeedEvent, CalendarFeedState> {
         dateYM: DateFormat('yyyyMM').format(event.date),
       );
       emit(state.copyWith(
-        status: CalendarFeedStatus.success,
+        status: CommonStatus.loaded,
         feedList: res.myPageCalenderInfoList,
       ));
     } catch (error) {
       emit(state.copyWith(
-        status: CalendarFeedStatus.error,
+        status: CommonStatus.error,
         errorMessage: '에러가 발생하였습니다.',
       ));
     }
@@ -47,7 +46,7 @@ class ChangeDateEvent extends CalendarFeedEvent {
 }
 
 class CalendarFeedState extends Equatable {
-  final CalendarFeedStatus status;
+  final CommonStatus status;
   final String? errorMessage;
   final int? roomId;
   final DateTime focusedDay;
@@ -63,14 +62,14 @@ class CalendarFeedState extends Equatable {
 
   CalendarFeedState.init()
       : this(
-          status: CalendarFeedStatus.init,
+          status: CommonStatus.init,
           roomId: null,
           focusedDay: DateTime.now(),
           feedList: [],
         );
 
   CalendarFeedState copyWith({
-    CalendarFeedStatus? status,
+    CommonStatus? status,
     String? errorMessage,
     int? roomId,
     DateTime? focusedDay,

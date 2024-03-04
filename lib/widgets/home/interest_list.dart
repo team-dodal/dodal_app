@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/model/category_model.dart';
 import 'package:dodal_app/model/challenge_model.dart';
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/providers/bookmark_bloc.dart';
 import 'package:dodal_app/providers/challenge_info_bloc.dart';
 import 'package:dodal_app/providers/custom_feed_list_bloc.dart';
@@ -101,12 +102,12 @@ class InterestList extends StatelessWidget {
               BlocBuilder<CustomFeedListBloc, CustomFeedListState>(
                 builder: (context, state) {
                   switch (state.status) {
-                    case CustomFeedListStatus.init:
-                    case CustomFeedListStatus.loading:
+                    case CommonStatus.init:
+                    case CommonStatus.loading:
                       return const Center(child: CupertinoActivityIndicator());
-                    case CustomFeedListStatus.error:
+                    case CommonStatus.error:
                       return Center(child: Text(state.errorMessage!));
-                    case CustomFeedListStatus.success:
+                    case CommonStatus.loaded:
                       return ExpandablePageView.builder(
                         itemCount: state.interestList.length,
                         scrollDirection: Axis.horizontal,

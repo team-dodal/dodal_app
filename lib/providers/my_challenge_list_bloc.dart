@@ -1,9 +1,8 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/services/manage_challenge/response.dart';
 import 'package:dodal_app/services/manage_challenge/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-enum MyChallengeListStatus { init, loading, success, error }
 
 class MyChallengeListBloc
     extends Bloc<MyChallengeListEvent, MyChallengeListState> {
@@ -15,32 +14,32 @@ class MyChallengeListBloc
   }
 
   _loadJoinedList(LoadJoinedListEvent event, emit) async {
-    emit(state.copyWith(status: MyChallengeListStatus.loading));
+    emit(state.copyWith(status: CommonStatus.loading));
     try {
       final res = await ManageChallengeService.joinedChallenges();
       emit(state.copyWith(
-        status: MyChallengeListStatus.success,
+        status: CommonStatus.loaded,
         joinedList: res,
       ));
     } catch (error) {
       emit(state.copyWith(
-        status: MyChallengeListStatus.error,
+        status: CommonStatus.error,
         errorMessage: '불러오는 도중 에러가 발생하였습니다',
       ));
     }
   }
 
   _loadAdminList(LoadAdminListEvent event, emit) async {
-    emit(state.copyWith(status: MyChallengeListStatus.loading));
+    emit(state.copyWith(status: CommonStatus.loading));
     try {
       final res = await ManageChallengeService.hostChallenges();
       emit(state.copyWith(
-        status: MyChallengeListStatus.success,
+        status: CommonStatus.loaded,
         adminList: res,
       ));
     } catch (error) {
       emit(state.copyWith(
-        status: MyChallengeListStatus.error,
+        status: CommonStatus.error,
         errorMessage: '불러오는 도중 에러가 발생하였습니다',
       ));
     }
@@ -60,7 +59,7 @@ class LoadAdminListEvent extends MyChallengeListEvent {
 }
 
 class MyChallengeListState extends Equatable {
-  final MyChallengeListStatus status;
+  final CommonStatus status;
   final String? errorMessage;
   final List<JoinedChallengesResponse> joinedList;
   final List<HostChallengesResponse> adminList;
@@ -74,13 +73,13 @@ class MyChallengeListState extends Equatable {
 
   MyChallengeListState.init()
       : this(
-          status: MyChallengeListStatus.init,
+          status: CommonStatus.init,
           joinedList: [],
           adminList: [],
         );
 
   MyChallengeListState copyWith({
-    MyChallengeListStatus? status,
+    CommonStatus? status,
     String? errorMessage,
     List<JoinedChallengesResponse>? joinedList,
     List<HostChallengesResponse>? adminList,

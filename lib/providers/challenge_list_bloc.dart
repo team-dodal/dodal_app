@@ -1,12 +1,11 @@
 import 'package:dodal_app/model/category_model.dart';
 import 'package:dodal_app/model/challenge_model.dart';
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/services/challenge/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-enum ChallengeListStatus { init, loading, success, error }
 
 const pageSize = 20;
 
@@ -32,12 +31,12 @@ class ChallengeListBloc extends Bloc<ChallengeListEvent, ChallengeListState> {
   }
 
   Future<void> _loadData(LoadChallengeListEvent event, emit) async {
-    if (state.status == ChallengeListStatus.loading ||
-        state.status == ChallengeListStatus.error) {
+    if (state.status == CommonStatus.loading ||
+        state.status == CommonStatus.error) {
       return;
     }
     if (state.isLastPage) return;
-    emit(state.copyWith(status: ChallengeListStatus.loading));
+    emit(state.copyWith(status: CommonStatus.loading));
     final res = await ChallengeService.getChallengesByCategory(
       categoryValue: event.category.value,
       tagValue: event.tag.value,
@@ -49,14 +48,14 @@ class ChallengeListBloc extends Bloc<ChallengeListEvent, ChallengeListState> {
     if (res == null) {
       emit(
         state.copyWith(
-          status: ChallengeListStatus.error,
+          status: CommonStatus.error,
           errorMessage: '불러오는 도중 에러가 발생하였습니다.',
         ),
       );
     } else {
       emit(
         state.copyWith(
-          status: ChallengeListStatus.success,
+          status: CommonStatus.loaded,
           result: [...state.result, ...res],
           currentPage: state.currentPage + 1,
           isLastPage: res.length < pageSize,
@@ -89,7 +88,7 @@ class ResetChallengeListEvent extends ChallengeListEvent {
 }
 
 class ChallengeListState extends Equatable {
-  final ChallengeListStatus status;
+  final CommonStatus status;
   final String? errorMessage;
   final List<Challenge> result;
   final int currentPage;
@@ -106,13 +105,13 @@ class ChallengeListState extends Equatable {
   ChallengeListState.init()
       : this(
           result: [],
-          status: ChallengeListStatus.init,
+          status: CommonStatus.init,
           currentPage: 0,
           isLastPage: false,
         );
 
   ChallengeListState copyWith({
-    ChallengeListStatus? status,
+    CommonStatus? status,
     String? errorMessage,
     List<Challenge>? result,
     int? currentPage,

@@ -1,8 +1,7 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/services/user/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-enum NicknameStatus { init, loading, success, error }
 
 class NicknameBloc extends Bloc<NicknameEvent, NicknameState> {
   final String? nickname;
@@ -13,8 +12,8 @@ class NicknameBloc extends Bloc<NicknameEvent, NicknameState> {
   }
 
   _changeNickname(ChangeNicknameEvent event, emit) {
-    if (state.status == NicknameStatus.success) {
-      emit(state.copyWith(status: NicknameStatus.init));
+    if (state.status == CommonStatus.loaded) {
+      emit(state.copyWith(status: CommonStatus.init));
     }
     emit(state.copyWith(nickname: event.nickname));
   }
@@ -22,17 +21,17 @@ class NicknameBloc extends Bloc<NicknameEvent, NicknameState> {
   _checkNickname(NicknameEvent event, emit) async {
     if (state.nickname.isEmpty) {
       emit(state.copyWith(
-        status: NicknameStatus.error,
+        status: CommonStatus.error,
         errorMessage: '닉네임을 입력해주세요!',
       ));
     }
-    emit(state.copyWith(status: NicknameStatus.loading));
+    emit(state.copyWith(status: CommonStatus.loading));
     bool res = await UserService.checkNickName(state.nickname);
     if (res) {
-      emit(state.copyWith(status: NicknameStatus.success));
+      emit(state.copyWith(status: CommonStatus.loaded));
     } else {
       emit(state.copyWith(
-        status: NicknameStatus.error,
+        status: CommonStatus.error,
         errorMessage: '사용할 수 없는 닉네임입니다!',
       ));
     }
@@ -54,7 +53,7 @@ class CheckNicknameEvent extends NicknameEvent {
 }
 
 class NicknameState extends Equatable {
-  final NicknameStatus status;
+  final CommonStatus status;
   final String nickname;
   final String? errorMessage;
 
@@ -66,13 +65,12 @@ class NicknameState extends Equatable {
 
   const NicknameState.init(String? nickname)
       : this(
-          status:
-              nickname == null ? NicknameStatus.init : NicknameStatus.success,
+          status: nickname == null ? CommonStatus.init : CommonStatus.loaded,
           nickname: nickname ?? '',
         );
 
   NicknameState copyWith({
-    NicknameStatus? status,
+    CommonStatus? status,
     String? nickname,
     String? errorMessage,
   }) {

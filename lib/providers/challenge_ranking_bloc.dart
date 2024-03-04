@@ -1,10 +1,9 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/widgets/challenge_room/rank_filter_bottom_sheet.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-enum ChallengeRankingStatus { init, loading, success, error }
 
 class ChallengeRankingBloc
     extends Bloc<ChallengeRankingEvent, ChallengeRankingState> {
@@ -16,7 +15,7 @@ class ChallengeRankingBloc
   }
 
   _requestRanking(LoadRankingEvent event, emit) async {
-    emit(state.copyWith(status: ChallengeRankingStatus.loading));
+    emit(state.copyWith(status: CommonStatus.loading));
     try {
       final res = await ChallengeService.getRanks(
         id: challengeId,
@@ -24,19 +23,19 @@ class ChallengeRankingBloc
       );
       if (res.length <= 3) {
         emit(state.copyWith(
-          status: ChallengeRankingStatus.success,
+          status: CommonStatus.loaded,
           otherList: res,
         ));
       } else {
         emit(state.copyWith(
-          status: ChallengeRankingStatus.success,
+          status: CommonStatus.loaded,
           topThreeList: res.sublist(0, 3),
           otherList: res,
         ));
       }
     } catch (error) {
       emit(state.copyWith(
-        status: ChallengeRankingStatus.error,
+        status: CommonStatus.error,
         errorMessage: '랭킹을 불러오는데 실패했습니다.',
       ));
     }
@@ -63,7 +62,7 @@ class ChangeFilterEvent extends ChallengeRankingEvent {
 }
 
 class ChallengeRankingState extends Equatable {
-  final ChallengeRankingStatus status;
+  final CommonStatus status;
   final String? errorMessage;
   final List<ChallengeRankResponse> topThreeList;
   final List<ChallengeRankResponse> otherList;
@@ -79,14 +78,14 @@ class ChallengeRankingState extends Equatable {
 
   ChallengeRankingState.init()
       : this(
-          status: ChallengeRankingStatus.init,
+          status: CommonStatus.init,
           topThreeList: [],
           otherList: [],
           rankFilter: ChallengeRankFilterEnum.all,
         );
 
   ChallengeRankingState copyWith({
-    ChallengeRankingStatus? status,
+    CommonStatus? status,
     String? errorMessage,
     List<ChallengeRankResponse>? topThreeList,
     List<ChallengeRankResponse>? otherList,

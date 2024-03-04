@@ -1,3 +1,4 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/services/user/response.dart';
 import 'package:dodal_app/services/user/service.dart';
@@ -5,8 +6,6 @@ import 'package:dodal_app/utilities/social_auth.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
-enum SignInStatus { init, loading, success, error }
 
 class SignInBloc extends Bloc<SignInEvent, SignInState> {
   final FlutterSecureStorage secureStorage;
@@ -16,7 +15,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
   }
 
   Future<void> _signIn(SocialSignInEvent event, emit) async {
-    emit(state.copyWith(status: SignInStatus.loading, type: event.type));
+    emit(state.copyWith(status: CommonStatus.loading, type: event.type));
     try {
       final data = await _getSocialIdAndEmail(event.type);
       emit(state.copyWith(id: data.id, email: data.email));
@@ -24,13 +23,13 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
       if (res != null) {
         secureStorage.write(key: 'accessToken', value: res.accessToken);
         secureStorage.write(key: 'refreshToken', value: res.refreshToken);
-        emit(state.copyWith(status: SignInStatus.success, user: res.user));
+        emit(state.copyWith(status: CommonStatus.loaded, user: res.user));
       } else {
-        emit(state.copyWith(status: SignInStatus.success));
+        emit(state.copyWith(status: CommonStatus.loaded));
       }
     } catch (error) {
       emit(state.copyWith(
-        status: SignInStatus.error,
+        status: CommonStatus.error,
         errorMessage: '로그인에 실패하였습니다.',
       ));
     }
@@ -70,7 +69,7 @@ class SocialSignInEvent extends SignInEvent {
 }
 
 class SignInState extends Equatable {
-  final SignInStatus status;
+  final CommonStatus status;
   final String? errorMessage;
   final String id;
   final String email;
@@ -88,7 +87,7 @@ class SignInState extends Equatable {
 
   const SignInState.init()
       : this(
-          status: SignInStatus.init,
+          status: CommonStatus.init,
           id: '',
           email: '',
           user: null,
@@ -96,7 +95,7 @@ class SignInState extends Equatable {
         );
 
   SignInState copyWith({
-    SignInStatus? status,
+    CommonStatus? status,
     String? errorMessage,
     String? id,
     String? email,

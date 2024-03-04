@@ -1,10 +1,9 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/services/manage_challenge/response.dart';
 import 'package:dodal_app/services/manage_challenge/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-
-enum ManageChallengeFeedStatus { init, loading, success, error }
 
 class ManageChallengeFeedBloc
     extends Bloc<ManageChallengeFeedEvent, ManageChallengeFeedState> {
@@ -18,19 +17,19 @@ class ManageChallengeFeedBloc
   }
 
   _requestCertList(RequestCertFeedListEvent event, emit) async {
-    emit(state.copyWith(status: ManageChallengeFeedStatus.loading));
+    emit(state.copyWith(status: CommonStatus.loading));
     try {
       final res = await ManageChallengeService.getCertificationList(
         roomId: challengeId,
         dateYM: DateFormat('yyyyMM').format(state.date),
       );
       emit(state.copyWith(
-        status: ManageChallengeFeedStatus.success,
+        status: CommonStatus.loaded,
         itemListByDate: res,
       ));
     } catch (error) {
       emit(state.copyWith(
-        status: ManageChallengeFeedStatus.error,
+        status: CommonStatus.error,
         errorMessage: '에러가 발생하였습니다.',
       ));
     }
@@ -57,7 +56,7 @@ class ManageChallengeFeedBloc
       add(RequestCertFeedListEvent());
     } catch (error) {
       emit(state.copyWith(
-        status: ManageChallengeFeedStatus.error,
+        status: CommonStatus.error,
         errorMessage: '에러가 발생하였습니다.',
       ));
     }
@@ -90,7 +89,7 @@ class ApproveOrRejectEvent extends ManageChallengeFeedEvent {
 }
 
 class ManageChallengeFeedState extends Equatable {
-  final ManageChallengeFeedStatus status;
+  final CommonStatus status;
   final DateTime date;
   final Map<String, List<FeedItem>> itemListByDate;
   final String? errorMessage;
@@ -104,13 +103,13 @@ class ManageChallengeFeedState extends Equatable {
 
   ManageChallengeFeedState.init()
       : this(
-          status: ManageChallengeFeedStatus.init,
+          status: CommonStatus.init,
           itemListByDate: const {},
           date: DateTime.now(),
         );
 
   ManageChallengeFeedState copyWith({
-    ManageChallengeFeedStatus? status,
+    CommonStatus? status,
     DateTime? date,
     Map<String, List<FeedItem>>? itemListByDate,
     String? errorMessage,

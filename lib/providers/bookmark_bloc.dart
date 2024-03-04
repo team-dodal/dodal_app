@@ -1,8 +1,7 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/services/challenge/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-enum BookmarkStatus { initial, loading, success, error }
 
 class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
   final int roomId;
@@ -16,14 +15,14 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
     on<ChangeBookmarkEvent>(_onChangeBookmark);
   }
   _onChangeBookmark(ChangeBookmarkEvent event, emit) async {
-    emit(state.copyWith(status: BookmarkStatus.loading));
+    emit(state.copyWith(status: CommonStatus.loading));
     try {
       bool res = await ChallengeService.bookmark(
         roomId: roomId,
         value: !state.isBookmarked,
       );
       emit(state.copyWith(
-        status: BookmarkStatus.success,
+        status: CommonStatus.loaded,
         isBookmarked: res,
       ));
       if (successCallback != null) {
@@ -31,7 +30,7 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
       }
     } catch (error) {
       emit(state.copyWith(
-        status: BookmarkStatus.error,
+        status: CommonStatus.error,
         errorMessage: '북마크 변경에 실패했습니다.',
       ));
     }
@@ -46,7 +45,7 @@ class ChangeBookmarkEvent extends BookmarkEvent {
 }
 
 class BookmarkState extends Equatable {
-  final BookmarkStatus status;
+  final CommonStatus status;
   final String? errorMessage;
   final bool isBookmarked;
 
@@ -58,12 +57,12 @@ class BookmarkState extends Equatable {
 
   const BookmarkState.init(bool isBookmarked)
       : this(
-          status: BookmarkStatus.initial,
+          status: CommonStatus.init,
           isBookmarked: isBookmarked,
         );
 
   BookmarkState copyWith({
-    BookmarkStatus? status,
+    CommonStatus? status,
     String? errorMessage,
     bool? isBookmarked,
   }) {

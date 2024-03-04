@@ -1,9 +1,8 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/services/manage_challenge/response.dart';
 import 'package:dodal_app/services/manage_challenge/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-enum ManageChallengeMemberStatus { init, loading, success, error }
 
 class ManageChallengeMemberBloc
     extends Bloc<ManageChallengeMemberEvent, ManageChallengeMemberState> {
@@ -15,16 +14,16 @@ class ManageChallengeMemberBloc
   }
 
   Future<void> _loadManageChallengeMemberEvent(event, emit) async {
-    emit(state.copyWith(status: ManageChallengeMemberStatus.loading));
+    emit(state.copyWith(status: CommonStatus.loading));
     try {
       final res = await ManageChallengeService.manageUsers(roomId: roomId);
       emit(state.copyWith(
-        status: ManageChallengeMemberStatus.success,
+        status: CommonStatus.loaded,
         result: res,
       ));
     } catch (error) {
       emit(state.copyWith(
-        status: ManageChallengeMemberStatus.error,
+        status: CommonStatus.error,
         errorMessage: '에러가 발생했습니다.',
       ));
     }
@@ -39,7 +38,7 @@ class LoadManageChallengeMemberEvent extends ManageChallengeMemberEvent {
 }
 
 class ManageChallengeMemberState extends Equatable {
-  final ManageChallengeMemberStatus status;
+  final CommonStatus status;
   final List<ChallengeUser> result;
   final String? errorMessage;
 
@@ -51,12 +50,12 @@ class ManageChallengeMemberState extends Equatable {
 
   ManageChallengeMemberState.init()
       : this(
-          status: ManageChallengeMemberStatus.init,
+          status: CommonStatus.init,
           result: [],
         );
 
   ManageChallengeMemberState copyWith({
-    ManageChallengeMemberStatus? status,
+    CommonStatus? status,
     List<ChallengeUser>? result,
     String? errorMessage,
   }) {

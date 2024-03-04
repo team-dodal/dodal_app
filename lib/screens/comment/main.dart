@@ -1,3 +1,4 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/providers/comment_bloc.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/comment/bottom_text_input.dart';
@@ -37,12 +38,12 @@ class _CommentScreenState extends State<CommentScreen> {
               padding: const EdgeInsets.only(left: 16, right: 16, bottom: 20),
               child: Builder(builder: (context) {
                 switch (state.status) {
-                  case CommentBlocStatus.init:
-                  case CommentBlocStatus.loading:
+                  case CommonStatus.init:
+                  case CommonStatus.loading:
                     return const Center(child: CupertinoActivityIndicator());
-                  case CommentBlocStatus.error:
+                  case CommonStatus.error:
                     return Center(child: Text(state.errorMessage!));
-                  case CommentBlocStatus.success:
+                  case CommonStatus.loaded:
                     return ListView.separated(
                       separatorBuilder: (context, index) {
                         return Container(

@@ -1,9 +1,8 @@
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/services/alarm/response.dart';
 import 'package:dodal_app/services/alarm/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-enum NotificationListStatus { init, loading, success, error }
 
 class NotificationListBloc
     extends Bloc<NotificationListEvent, NotificationListState> {
@@ -16,13 +15,13 @@ class NotificationListBloc
   }
 
   Future<void> _loadData(LoadNotificationListEvent event, emit) async {
-    emit(state.copyWith(status: NotificationListStatus.loading));
+    emit(state.copyWith(status: CommonStatus.loading));
     try {
       final res = await AlarmService.getAllAlarmList(userId: userId);
-      emit(state.copyWith(status: NotificationListStatus.success, list: res));
+      emit(state.copyWith(status: CommonStatus.loaded, list: res));
     } catch (error) {
       emit(state.copyWith(
-        status: NotificationListStatus.error,
+        status: CommonStatus.error,
         errorMessage: '데이터를 불러오는데 실패하였습니다.',
       ));
     }
@@ -30,7 +29,7 @@ class NotificationListBloc
 
   Future<void> _clearData(ClearNotificationListEvent event, emit) async {
     if (state.list.isEmpty) return;
-    emit(state.copyWith(status: NotificationListStatus.success, list: []));
+    emit(state.copyWith(status: CommonStatus.loaded, list: []));
     await AlarmService.deleteAllAlarmList(userId: userId);
   }
 }
@@ -48,7 +47,7 @@ class ClearNotificationListEvent extends NotificationListEvent {
 }
 
 class NotificationListState extends Equatable {
-  final NotificationListStatus status;
+  final CommonStatus status;
   final List<AlarmResponse> list;
   final String? errorMessage;
 
@@ -61,11 +60,11 @@ class NotificationListState extends Equatable {
   NotificationListState.init()
       : this(
           list: [],
-          status: NotificationListStatus.init,
+          status: CommonStatus.init,
         );
 
   NotificationListState copyWith({
-    NotificationListStatus? status,
+    CommonStatus? status,
     List<AlarmResponse>? list,
     String? errorMessage,
   }) {

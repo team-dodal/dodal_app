@@ -1,10 +1,9 @@
 import 'package:dodal_app/model/category_model.dart';
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/services/category/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-enum CategoryListStatus { init, loading, loaded, error }
 
 class CategoryListBloc extends Bloc<CategoryListEvent, CategoryListState> {
   CategoryListBloc() : super(CategoryListState.init()) {
@@ -13,13 +12,13 @@ class CategoryListBloc extends Bloc<CategoryListEvent, CategoryListState> {
   }
 
   Future<void> _loadCategoryList(LoadCategoryListEvent event, emit) async {
-    emit(state.copyWith(status: CategoryListStatus.loading));
+    emit(state.copyWith(status: CommonStatus.loading));
     try {
       List<Category> res = await CategoryService.getAllCategories();
-      emit(state.copyWith(status: CategoryListStatus.loaded, result: res));
+      emit(state.copyWith(status: CommonStatus.loaded, result: res));
     } catch (error) {
       emit(state.copyWith(
-        status: CategoryListStatus.error,
+        status: CommonStatus.error,
         errorMessage: '카테고리를 불러오는데 실패했습니다.',
       ));
     }
@@ -34,7 +33,7 @@ class LoadCategoryListEvent extends CategoryListEvent {
 }
 
 class CategoryListState extends Equatable {
-  final CategoryListStatus status;
+  final CommonStatus status;
   final List<Category> result;
   final String? errorMessage;
 
@@ -44,10 +43,10 @@ class CategoryListState extends Equatable {
     this.errorMessage,
   });
 
-  CategoryListState.init() : this(status: CategoryListStatus.init, result: []);
+  CategoryListState.init() : this(status: CommonStatus.init, result: []);
 
   CategoryListState copyWith({
-    CategoryListStatus? status,
+    CommonStatus? status,
     List<Category>? result,
     String? errorMessage,
   }) {

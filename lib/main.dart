@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/providers/category_list_bloc.dart';
 import 'package:dodal_app/providers/custom_feed_list_bloc.dart';
 import 'package:dodal_app/providers/feed_list_bloc.dart';
@@ -103,10 +104,10 @@ class _AppState extends State<App> {
         scrollBehavior: CustomScrollBehavior(),
         home: BlocListener<UserBloc, UserBlocState>(
           listener: (context, state) {
-            if (state.status == UserBlocStatus.error) {
+            if (state.status == CommonStatus.error) {
               _goSignInPage();
             }
-            if (state.status == UserBlocStatus.success) {
+            if (state.status == CommonStatus.loaded) {
               if (state.result == null) {
                 _goSignInPage();
               } else {

@@ -1,13 +1,12 @@
 import 'dart:io';
 
+import 'package:dodal_app/model/status_enum.dart';
 import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/utilities/add_watermark.dart';
 import 'package:dodal_app/utilities/image_compress.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-enum CreateFeedStatus { init, loading, success, error }
 
 class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState> {
   CreateFeedBloc() : super(const CreateFeedState.init()) {
@@ -27,7 +26,7 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState> {
   Future<void> _submitFeed(SubmitCreateFeedEvent event, emit) async {
     if (state.image == null) return;
     try {
-      emit(state.copyWith(status: CreateFeedStatus.loading));
+      emit(state.copyWith(status: CommonStatus.loading));
       final file = await captureCreateImage(event.frameKey);
       if (file == null) return;
       final compressedFile = await imageCompress(file);
@@ -37,10 +36,10 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState> {
         content: state.content,
         image: compressedFile,
       );
-      emit(state.copyWith(status: CreateFeedStatus.success));
+      emit(state.copyWith(status: CommonStatus.loaded));
     } catch (err) {
       emit(state.copyWith(
-        status: CreateFeedStatus.error,
+        status: CommonStatus.error,
         errorMessage: '피드 생성에 실패하였습니다.',
       ));
     }
@@ -72,7 +71,7 @@ class SubmitCreateFeedEvent extends CreateFeedEvent {
 }
 
 class CreateFeedState extends Equatable {
-  final CreateFeedStatus status;
+  final CommonStatus status;
   final File? image;
   final String content;
   final String? errorMessage;
@@ -86,13 +85,13 @@ class CreateFeedState extends Equatable {
 
   const CreateFeedState.init()
       : this(
-          status: CreateFeedStatus.init,
+          status: CommonStatus.init,
           image: null,
           content: '',
         );
 
   CreateFeedState copyWith({
-    CreateFeedStatus? status,
+    CommonStatus? status,
     File? image,
     String? content,
     String? errorMessage,
