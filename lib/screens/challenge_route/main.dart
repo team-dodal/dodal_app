@@ -59,7 +59,9 @@ class _ChallengeRouteState extends State<ChallengeRoute>
       SlidePageRoute(
         screen: GroupSettingsMenuScreen(challenge: challenge),
       ),
-    );
+    ).then((value) {
+      context.read<ChallengeInfoBloc>().add(LoadChallengeInfoEvent());
+    });
   }
 
   void _certificateFeed(OneChallengeResponse challenge) {
@@ -71,7 +73,11 @@ class _ChallengeRouteState extends State<ChallengeRoute>
           child: CreateFeedScreen(challenge: challenge),
         ),
       ),
-    );
+    ).then((isNeedRefresh) {
+      if (isNeedRefresh == true) {
+        context.read<ChallengeInfoBloc>().add(LoadChallengeInfoEvent());
+      }
+    });
   }
 
   @override

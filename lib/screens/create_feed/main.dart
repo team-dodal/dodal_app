@@ -1,7 +1,5 @@
 import 'package:dodal_app/model/status_enum.dart';
-import 'package:dodal_app/providers/challenge_info_bloc.dart';
 import 'package:dodal_app/providers/create_feed_bloc.dart';
-import 'package:dodal_app/screens/challenge_route/main.dart';
 import 'package:dodal_app/services/challenge/response.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
@@ -46,34 +44,24 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
     );
   }
 
-  _successAlert() {
-    showDialog(
+  _successAlert() async {
+    await showDialog(
       context: context,
       builder: (ctx) => SystemDialog(
         subTitle: '피드가 성공적으로 업로드되었습니다.',
         children: [
           ElevatedButton(
-            onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => BlocProvider(
-                    create: (context) => ChallengeInfoBloc(widget.challenge.id),
-                    child: const ChallengeRoute(),
-                  ),
-                ),
-                (route) => route.isFirst,
-              );
-            },
+            onPressed: Navigator.of(context).pop,
             child: const Text('확인'),
           )
         ],
       ),
     );
+    Navigator.of(context).pop(true);
   }
 
-  _errorAlert(String errorMessage) {
-    showDialog(
+  _errorAlert(String errorMessage) async {
+    await showDialog(
       context: context,
       builder: (ctx) => SystemDialog(subTitle: errorMessage),
     );

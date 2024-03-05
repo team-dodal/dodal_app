@@ -42,7 +42,7 @@ class _ModifyUserScreenState extends State<ModifyUserScreen> {
 
   void _success(User user) async {
     context.read<UserBloc>().add(UpdateUserBlocEvent(user));
-    Navigator.of(context).pop();
+    Navigator.of(context).pop(true);
   }
 
   void _error(String errorMessage) async {

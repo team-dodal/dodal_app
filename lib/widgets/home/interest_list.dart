@@ -108,15 +108,13 @@ class InterestList extends StatelessWidget {
                     case CommonStatus.error:
                       return Center(child: Text(state.errorMessage!));
                     case CommonStatus.loaded:
+                      List<MyCategory> categories =
+                          context.read<UserBloc>().state.result!.categoryList;
                       return ExpandablePageView.builder(
-                        itemCount: state.interestList.length,
+                        itemCount: categories.length,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) => InterestCategoryCard(
-                          category: context
-                              .read<UserBloc>()
-                              .state
-                              .result!
-                              .categoryList[index],
+                          category: categories[index],
                           challenges: state.interestList[index],
                         ),
                       );

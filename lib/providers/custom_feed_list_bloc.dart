@@ -45,7 +45,7 @@ class CustomFeedListBloc
       }
       emit(state.copyWith(
         status: CommonStatus.loaded,
-        interestList: list,
+        interestList: list.toSet().toList(),
       ));
     } catch (error) {
       emit(state.copyWith(

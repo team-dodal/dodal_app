@@ -1,4 +1,5 @@
 import 'package:dodal_app/model/user_model.dart';
+import 'package:dodal_app/providers/custom_feed_list_bloc.dart';
 import 'package:dodal_app/providers/modify_user_cubit.dart';
 import 'package:dodal_app/providers/nickname_check_bloc.dart';
 import 'package:dodal_app/providers/user_bloc.dart';
@@ -46,7 +47,8 @@ class UserInfoBox extends StatelessWidget {
                     ),
                     IconButton(
                       onPressed: () {
-                        Navigator.of(context).push(
+                        Navigator.of(context)
+                            .push(
                           MaterialPageRoute(
                             builder: (ctx) => MultiBlocProvider(
                               providers: [
@@ -69,6 +71,15 @@ class UserInfoBox extends StatelessWidget {
                               child: const ModifyUserScreen(),
                             ),
                           ),
+                        )
+                            .then(
+                          (isNeedRefresh) {
+                            if (isNeedRefresh == true) {
+                              context
+                                  .read<CustomFeedListBloc>()
+                                  .add(LoadInterestListEvent());
+                            }
+                          },
                         );
                       },
                       icon: SvgPicture.asset('assets/icons/pencil_icon.svg'),
