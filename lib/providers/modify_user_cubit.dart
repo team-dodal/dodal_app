@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/model/user_model.dart';
-import 'package:dodal_app/services/user/service.dart';
+import 'package:dodal_app/repositories/user_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -48,7 +48,7 @@ class ModifyUserCubit extends Cubit<ModifyUserState> {
   Future<void> modifyUser() async {
     emit(state.copyWith(status: CommonStatus.loading, image: state.image));
     try {
-      User res = await UserService.updateUser(
+      User res = await UserRepository.updateUser(
         nickname: state.nickname,
         profile: state.image,
         content: state.content,

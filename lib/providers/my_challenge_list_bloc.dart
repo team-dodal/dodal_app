@@ -1,7 +1,7 @@
 import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/model/host_challenge_model.dart';
 import 'package:dodal_app/model/joined_challenge_model.dart';
-import 'package:dodal_app/services/manage_challenge/service.dart';
+import 'package:dodal_app/repositories/manage_challenge_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,7 +17,7 @@ class MyChallengeListBloc
   _loadJoinedList(LoadJoinedListEvent event, emit) async {
     emit(state.copyWith(status: CommonStatus.loading));
     try {
-      final res = await ManageChallengeService.joinedChallenges();
+      final res = await ManageChallengeRepository.joinedChallenges();
       emit(state.copyWith(
         status: CommonStatus.loaded,
         joinedList: res,
@@ -33,7 +33,7 @@ class MyChallengeListBloc
   _loadAdminList(LoadAdminListEvent event, emit) async {
     emit(state.copyWith(status: CommonStatus.loading));
     try {
-      final res = await ManageChallengeService.hostChallenges();
+      final res = await ManageChallengeRepository.hostChallenges();
       emit(state.copyWith(
         status: CommonStatus.loaded,
         adminList: res,

@@ -6,7 +6,7 @@ import 'package:dodal_app/providers/user_room_feed_info_bloc.dart';
 import 'package:dodal_app/screens/main_route/main.dart';
 import 'package:dodal_app/screens/report/main.dart';
 import 'package:dodal_app/model/challenge_detail_model.dart';
-import 'package:dodal_app/services/challenge/service.dart';
+import 'package:dodal_app/repositories/challenge_repository.dart';
 import 'package:dodal_app/widgets/common/system_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,7 +35,7 @@ class MemberMenu extends StatelessWidget {
               text: '나가기',
               onPressed: () async {
                 final res =
-                    await ChallengeService.out(challengeId: challenge.id);
+                    await ChallengeRepository.out(challengeId: challenge.id);
                 if (!res) return;
                 if (context.mounted) {
                   Navigator.of(context).pushAndRemoveUntil(

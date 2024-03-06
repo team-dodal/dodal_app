@@ -1,6 +1,6 @@
 import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/model/challenge_detail_model.dart';
-import 'package:dodal_app/services/challenge/service.dart';
+import 'package:dodal_app/repositories/challenge_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,7 +16,7 @@ class ChallengeInfoBloc extends Bloc<ChallengeInfoEvent, ChallengeInfoState> {
     emit(state.copyWith(status: CommonStatus.loading));
     try {
       final result =
-          await ChallengeService.getChallengeOne(challengeId: challengeId);
+          await ChallengeRepository.getChallengeOne(challengeId: challengeId);
       emit(state.copyWith(
         status: CommonStatus.loaded,
         result: result,
@@ -32,7 +32,7 @@ class ChallengeInfoBloc extends Bloc<ChallengeInfoEvent, ChallengeInfoState> {
   Future<void> _join(JoinChallengeEvent event, emit) async {
     emit(state.copyWith(status: CommonStatus.loading));
     try {
-      await ChallengeService.join(challengeId: challengeId);
+      await ChallengeRepository.join(challengeId: challengeId);
     } catch (error) {
       emit(state.copyWith(
         status: CommonStatus.error,

@@ -1,6 +1,6 @@
 import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/model/tag_model.dart';
-import 'package:dodal_app/services/challenge/service.dart';
+import 'package:dodal_app/repositories/challenge_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -78,7 +78,7 @@ class CreateChallengeBloc
   }
 
   Future<void> _update() async {
-    await ChallengeService.updateChallenge(
+    await ChallengeRepository.updateChallenge(
       id: roomId!,
       title: state.title,
       content: state.content,
@@ -93,7 +93,7 @@ class CreateChallengeBloc
   }
 
   Future<void> _create() async {
-    await ChallengeService.createChallenge(
+    await ChallengeRepository.createChallenge(
       title: state.title,
       content: state.content,
       thumbnailImg: state.thumbnailImg,

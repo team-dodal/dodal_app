@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dodal_app/enum/status_enum.dart';
-import 'package:dodal_app/services/challenge/service.dart';
+import 'package:dodal_app/repositories/challenge_repository.dart';
 import 'package:dodal_app/utilities/add_watermark.dart';
 import 'package:dodal_app/utilities/image_compress.dart';
 import 'package:equatable/equatable.dart';
@@ -31,7 +31,7 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState> {
       if (file == null) return;
       final compressedFile = await imageCompress(file);
 
-      await ChallengeService.createFeed(
+      await ChallengeRepository.createFeed(
         challengeId: event.challengeId,
         content: state.content,
         image: compressedFile,

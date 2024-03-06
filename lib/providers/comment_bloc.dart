@@ -1,6 +1,6 @@
 import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/model/comment_model.dart';
-import 'package:dodal_app/services/feed/service.dart';
+import 'package:dodal_app/repositories/feed_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,7 +17,7 @@ class CommentBloc extends Bloc<CommentBlocEvent, CommentBlocState> {
   Future<void> _loadCommentList(LoadListCommentBlocEvent event, emit) async {
     emit(state.copyWith(status: CommonStatus.loading));
     try {
-      final res = await FeedService.getAllComments(feedId: feedId);
+      final res = await FeedRepository.getAllComments(feedId: feedId);
       emit(state.copyWith(status: CommonStatus.loaded, list: res));
     } catch (error) {
       emit(state.copyWith(
@@ -30,7 +30,7 @@ class CommentBloc extends Bloc<CommentBlocEvent, CommentBlocState> {
   Future<void> _removeComment(RemoveCommentBlocEvent event, emit) async {
     emit(state.copyWith(status: CommonStatus.loading));
     try {
-      final res = await FeedService.removeComment(
+      final res = await FeedRepository.removeComment(
         feedId: feedId,
         commentId: event.commentId,
       );
@@ -47,7 +47,7 @@ class CommentBloc extends Bloc<CommentBlocEvent, CommentBlocState> {
     if (event.text.isEmpty) return;
     emit(state.copyWith(status: CommonStatus.loading));
     try {
-      final res = await FeedService.createComment(
+      final res = await FeedRepository.createComment(
         feedId: feedId,
         content: event.text,
       );

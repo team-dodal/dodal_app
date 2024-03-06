@@ -1,6 +1,6 @@
 import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/model/feed_content_model.dart';
-import 'package:dodal_app/services/feed/service.dart';
+import 'package:dodal_app/repositories/feed_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,7 +18,7 @@ class FeedListBloc extends Bloc<FeedListEvent, FeedListState> {
     if (state.isLastPage) return;
     emit(state.copyWith(status: CommonStatus.loading));
     try {
-      List<FeedContent> res = await FeedService.getAllFeeds(
+      List<FeedContent> res = await FeedRepository.getAllFeeds(
         page: state.currentPage,
         pageSize: pageSize,
       );

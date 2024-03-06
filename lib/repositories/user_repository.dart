@@ -3,11 +3,11 @@ import 'package:dodal_app/model/authentication_model.dart';
 import 'package:dodal_app/model/user_calendar_data_model.dart';
 import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/model/users_rooms_info_model.dart';
-import 'package:dodal_app/services/common/main.dart';
-import 'package:dodal_app/services/common/presigned_s3.dart';
+import 'package:dodal_app/repositories/common/main.dart';
+import 'package:dodal_app/repositories/presigned_url_repository.dart';
 import 'package:dodal_app/utilities/social_auth.dart';
 
-class UserService {
+class UserRepository {
   static final service = dio();
 
   static signIn(SocialType socialType, String socialId) async {
@@ -41,7 +41,7 @@ class UserService {
     };
 
     if (profile != null) {
-      String s3Url = await PresignedS3.create(file: profile);
+      String s3Url = await PresignedUrlRepository.create(file: profile);
       data['profile_url'] = s3Url;
     }
 
@@ -65,7 +65,7 @@ class UserService {
       s3Url = profile;
     }
     if (profile.runtimeType.toString() == '_File') {
-      s3Url = await PresignedS3.create(file: profile);
+      s3Url = await PresignedUrlRepository.create(file: profile);
     }
 
     final data = {

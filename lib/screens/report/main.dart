@@ -1,5 +1,5 @@
 import 'package:dodal_app/providers/user_bloc.dart';
-import 'package:dodal_app/services/common/firestore.dart';
+import 'package:dodal_app/repositories/firestore_repository.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/input/text_input.dart';
@@ -35,7 +35,7 @@ class _ReportScreenState extends State<ReportScreen> {
   TextEditingController textEditingController = TextEditingController();
 
   void _report() async {
-    final res = await FireStoreService.reportUser(
+    final res = await FireStoreRepository.reportUser(
       userId: context.read<UserBloc>().state.result!.id,
       userName: context.read<UserBloc>().state.result!.nickname,
       reason: _reportValue!.title,

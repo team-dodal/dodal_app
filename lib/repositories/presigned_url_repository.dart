@@ -1,13 +1,13 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:dodal_app/services/common/main.dart';
+import 'package:dodal_app/repositories/common/main.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:uuid/uuid.dart';
 
 Uuid uuid = const Uuid();
 String s3Url = dotenv.get('S3_URL');
 
-class PresignedS3 {
+class PresignedUrlRepository {
   static Future<String> create({required File file}) async {
     Dio service = dio();
     String fileName = uuid.v4();

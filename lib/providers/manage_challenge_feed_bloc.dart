@@ -1,6 +1,6 @@
 import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/model/members_feed_model.dart';
-import 'package:dodal_app/services/manage_challenge/service.dart';
+import 'package:dodal_app/repositories/manage_challenge_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -19,7 +19,7 @@ class ManageChallengeFeedBloc
   _requestCertList(RequestCertFeedListEvent event, emit) async {
     emit(state.copyWith(status: CommonStatus.loading));
     try {
-      final res = await ManageChallengeService.getCertificationList(
+      final res = await ManageChallengeRepository.getCertificationList(
         roomId: challengeId,
         dateYM: DateFormat('yyyyMM').format(state.date),
       );
@@ -48,7 +48,7 @@ class ManageChallengeFeedBloc
 
   _approveOrReject(ApproveOrRejectEvent event, emit) async {
     try {
-      await ManageChallengeService.approveOrRejectFeed(
+      await ManageChallengeRepository.approveOrRejectFeed(
         roomId: challengeId,
         feedId: event.feedId,
         confirmValue: event.approve,

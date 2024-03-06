@@ -3,7 +3,7 @@ import 'package:dodal_app/providers/comment_bloc.dart';
 import 'package:dodal_app/screens/comment/main.dart';
 import 'package:dodal_app/screens/report/main.dart';
 import 'package:dodal_app/model/feed_content_model.dart';
-import 'package:dodal_app/services/feed/service.dart';
+import 'package:dodal_app/repositories/feed_repository.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/avatar_image.dart';
@@ -22,7 +22,7 @@ class FeedContentFooter extends StatefulWidget {
 
 class _FeedContentFooterState extends State<FeedContentFooter> {
   like(bool value) async {
-    final res = await FeedService.feedLike(
+    final res = await FeedRepository.feedLike(
       feedId: widget.feedContent.feedId,
       value: value,
     );

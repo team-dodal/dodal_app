@@ -1,5 +1,5 @@
 import 'package:dodal_app/model/feed_content_model.dart';
-import 'package:dodal_app/services/feed/service.dart';
+import 'package:dodal_app/repositories/feed_repository.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/common/feed_content_box/continue_cert_box.dart';
 import 'package:dodal_app/widgets/common/feed_content_box/feed_content_footer.dart';
@@ -28,7 +28,7 @@ class _ChallengeFeedScreenState extends State<ChallengeFeedScreen> {
       PagingController(firstPageKey: 0);
 
   _request(int pageKey) async {
-    List<FeedContent>? res = await FeedService.getFeedsByRoomId(
+    List<FeedContent>? res = await FeedRepository.getFeedsByRoomId(
       page: pageKey,
       pageSize: pageSize,
       roomId: widget.roomId,

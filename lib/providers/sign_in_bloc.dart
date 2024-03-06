@@ -1,7 +1,7 @@
 import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/model/authentication_model.dart';
 import 'package:dodal_app/model/user_model.dart';
-import 'package:dodal_app/services/user/service.dart';
+import 'package:dodal_app/repositories/user_repository.dart';
 import 'package:dodal_app/utilities/social_auth.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,7 +19,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     try {
       final data = await _getSocialIdAndEmail(event.type);
       emit(state.copyWith(id: data.id, email: data.email));
-      Authentication? res = await UserService.signIn(event.type, data.id);
+      Authentication? res = await UserRepository.signIn(event.type, data.id);
       if (res != null) {
         secureStorage.write(key: 'accessToken', value: res.accessToken);
         secureStorage.write(key: 'refreshToken', value: res.refreshToken);

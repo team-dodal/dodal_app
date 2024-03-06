@@ -1,5 +1,5 @@
 import 'package:dodal_app/enum/status_enum.dart';
-import 'package:dodal_app/services/challenge/service.dart';
+import 'package:dodal_app/repositories/challenge_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,7 +17,7 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
   _onChangeBookmark(ChangeBookmarkEvent event, emit) async {
     emit(state.copyWith(status: CommonStatus.loading));
     try {
-      bool res = await ChallengeService.bookmark(
+      bool res = await ChallengeRepository.bookmark(
         roomId: roomId,
         value: !state.isBookmarked,
       );

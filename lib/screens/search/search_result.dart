@@ -7,7 +7,7 @@ import 'package:dodal_app/providers/create_challenge_cubit.dart';
 import 'package:dodal_app/screens/challenge_route/main.dart';
 import 'package:dodal_app/screens/create_challenge/main.dart';
 import 'package:dodal_app/screens/search/main.dart';
-import 'package:dodal_app/services/challenge/service.dart';
+import 'package:dodal_app/repositories/challenge_repository.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/challenge_list/filter_top_bar.dart';
@@ -34,7 +34,7 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
   _request(int pageKey) async {
     final state = BlocProvider.of<ChallengeListFilterCubit>(context).state;
     try {
-      List<Challenge> res = await ChallengeService.getChallengesByKeyword(
+      List<Challenge> res = await ChallengeRepository.getChallengesByKeyword(
         word: widget.word,
         conditionCode: state.condition.index,
         certCntList: state.certCntList,

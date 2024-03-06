@@ -3,7 +3,7 @@ import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/model/authentication_model.dart';
 import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/model/user_model.dart';
-import 'package:dodal_app/services/user/service.dart';
+import 'package:dodal_app/repositories/user_repository.dart';
 import 'package:dodal_app/utilities/social_auth.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,7 +44,7 @@ class SignUpCubit extends Cubit<SignUpState> {
   signUp() async {
     emit(state.copyWith(status: CommonStatus.loading));
     try {
-      Authentication res = await UserService.signUp(
+      Authentication res = await UserRepository.signUp(
         socialType: socialType,
         socialId: socialId,
         email: email,

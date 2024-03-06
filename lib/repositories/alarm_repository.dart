@@ -1,7 +1,7 @@
 import 'package:dodal_app/model/alarm_content_model.dart';
-import 'package:dodal_app/services/common/main.dart';
+import 'package:dodal_app/repositories/common/main.dart';
 
-class AlarmService {
+class AlarmRepository {
   static final service = dio('/api/v1/alarm');
 
   static Future<List<AlarmContent>> getAllAlarmList({

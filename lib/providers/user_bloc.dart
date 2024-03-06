@@ -1,6 +1,6 @@
 import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/model/user_model.dart';
-import 'package:dodal_app/services/user/service.dart';
+import 'package:dodal_app/repositories/user_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -25,12 +25,12 @@ class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
   _loadData(LoadUserBlocEvent event, emit) async {
     emit(state.copyWith(status: CommonStatus.loading));
     try {
-      User? res = await UserService.user();
+      User? res = await UserRepository.user();
       emit(state.copyWith(
         status: CommonStatus.loaded,
         result: res,
       ));
-      await UserService.updateFcmToken(fcmToken);
+      await UserRepository.updateFcmToken(fcmToken);
     } catch (error) {
       emit(state.copyWith(
         status: CommonStatus.error,
@@ -46,7 +46,7 @@ class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
 
   _removeUser(RemoveUserBlocEvent event, emit) async {
     try {
-      await UserService.removeUser();
+      await UserRepository.removeUser();
       await secureStorage.deleteAll();
       emit(const UserBlocState.init());
     } catch (error) {

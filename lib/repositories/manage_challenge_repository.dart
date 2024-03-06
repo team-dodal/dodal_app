@@ -3,10 +3,10 @@ import 'package:dodal_app/model/challenge_member_model.dart';
 import 'package:dodal_app/model/host_challenge_model.dart';
 import 'package:dodal_app/model/joined_challenge_model.dart';
 import 'package:dodal_app/model/members_feed_model.dart';
-import 'package:dodal_app/services/common/error_dialog.dart';
-import 'package:dodal_app/services/common/main.dart';
+import 'package:dodal_app/repositories/common/error_dialog.dart';
+import 'package:dodal_app/repositories/common/main.dart';
 
-class ManageChallengeService {
+class ManageChallengeRepository {
   static final service = dio();
 
   static Future<List<JoinedChallenge>> joinedChallenges() async {

@@ -1,5 +1,5 @@
 import 'package:dodal_app/enum/status_enum.dart';
-import 'package:dodal_app/services/user/service.dart';
+import 'package:dodal_app/repositories/user_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -26,7 +26,7 @@ class NicknameBloc extends Bloc<NicknameEvent, NicknameState> {
       ));
     }
     emit(state.copyWith(status: CommonStatus.loading));
-    bool res = await UserService.checkNickName(state.nickname);
+    bool res = await UserRepository.checkNickName(state.nickname);
     if (res) {
       emit(state.copyWith(status: CommonStatus.loaded));
     } else {

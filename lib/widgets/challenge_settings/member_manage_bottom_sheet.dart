@@ -1,7 +1,7 @@
 import 'package:dodal_app/layout/filter_bottom_sheet_layout.dart';
 import 'package:dodal_app/providers/manage_challenge_member_bloc.dart';
 import 'package:dodal_app/screens/report/main.dart';
-import 'package:dodal_app/services/manage_challenge/service.dart';
+import 'package:dodal_app/repositories/manage_challenge_repository.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/system_dialog.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +18,7 @@ class MemberManageBottomSheet extends StatelessWidget {
   final int roomId;
 
   handOverAdmin(BuildContext context) async {
-    final res = await ManageChallengeService.handOverAdmin(
+    final res = await ManageChallengeRepository.handOverAdmin(
       roomId: roomId,
       userId: userId,
     );
@@ -57,7 +57,7 @@ class MemberManageBottomSheet extends StatelessWidget {
             text: '내보내기',
             onPressed: () async {
               Navigator.pop(context);
-              final res = await ManageChallengeService.banishUser(
+              final res = await ManageChallengeRepository.banishUser(
                 roomId: roomId,
                 userId: userId,
               );

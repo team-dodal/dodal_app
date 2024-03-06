@@ -3,7 +3,7 @@ import 'package:dodal_app/enum/challenge_code_enum.dart';
 import 'package:dodal_app/model/category_model.dart';
 import 'package:dodal_app/model/challenge_model.dart';
 import 'package:dodal_app/enum/status_enum.dart';
-import 'package:dodal_app/services/challenge/service.dart';
+import 'package:dodal_app/repositories/challenge_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,7 +33,7 @@ class CustomFeedListBloc
     try {
       List<List<Challenge>> list = [...state.interestList];
       for (final category in categories) {
-        final res = await ChallengeService.getChallengesByCategory(
+        final res = await ChallengeRepository.getChallengesByCategory(
           categoryValue: category.value,
           tagValue: '',
           conditionCode: ChallengeCodeEnum.interest.index,
@@ -58,7 +58,7 @@ class CustomFeedListBloc
   _onLoadPopularList(LoadPopularListEvent event, emit) async {
     emit(state.copyWith(status: CommonStatus.loading));
     try {
-      final res = await ChallengeService.getChallenges(
+      final res = await ChallengeRepository.getChallenges(
         conditionCode: ChallengeCodeEnum.popular.index,
         page: 0,
         pageSize: 4,
@@ -78,7 +78,7 @@ class CustomFeedListBloc
   _onLoadRecentList(LoadRecentListEvent event, emit) async {
     emit(state.copyWith(status: CommonStatus.loading));
     try {
-      final res = await ChallengeService.getChallenges(
+      final res = await ChallengeRepository.getChallenges(
         conditionCode: ChallengeCodeEnum.recent.index,
         page: 0,
         pageSize: 3,

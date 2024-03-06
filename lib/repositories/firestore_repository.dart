@@ -6,7 +6,7 @@ final user = <String, dynamic>{
   "born": 1815
 };
 
-class FireStoreService {
+class FireStoreRepository {
   static final db = FirebaseFirestore.instance;
 
   static Future<bool> reportUser({

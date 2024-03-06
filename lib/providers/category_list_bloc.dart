@@ -1,7 +1,7 @@
 import 'package:dodal_app/model/category_model.dart';
 import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/model/tag_model.dart';
-import 'package:dodal_app/services/category/service.dart';
+import 'package:dodal_app/repositories/category_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,7 +14,7 @@ class CategoryListBloc extends Bloc<CategoryListEvent, CategoryListState> {
   Future<void> _loadCategoryList(LoadCategoryListEvent event, emit) async {
     emit(state.copyWith(status: CommonStatus.loading));
     try {
-      List<Category> res = await CategoryService.getAllCategories();
+      List<Category> res = await CategoryRepository.getAllCategories();
       emit(state.copyWith(status: CommonStatus.loaded, result: res));
     } catch (error) {
       emit(state.copyWith(

@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:dodal_app/model/comment_model.dart';
-import 'package:dodal_app/services/common/error_dialog.dart';
-import 'package:dodal_app/services/common/main.dart';
+import 'package:dodal_app/repositories/common/error_dialog.dart';
+import 'package:dodal_app/repositories/common/main.dart';
 import 'package:dodal_app/model/feed_content_model.dart';
 
-class FeedService {
+class FeedRepository {
   static final service = dio();
 
   static Future<List<FeedContent>> getAllFeeds({

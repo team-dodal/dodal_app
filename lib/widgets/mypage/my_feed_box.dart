@@ -1,5 +1,5 @@
 import 'package:dodal_app/model/feed_content_model.dart';
-import 'package:dodal_app/services/feed/service.dart';
+import 'package:dodal_app/repositories/feed_repository.dart';
 import 'package:dodal_app/widgets/common/feed_content_box/feed_content_footer.dart';
 import 'package:dodal_app/widgets/common/image_widget.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +16,7 @@ class MyFeedBox extends StatelessWidget {
         title: const Text('내가 쓴 글'),
       ),
       body: FutureBuilder(
-        future: FeedService.getOneFeedById(feedId: feedId),
+        future: FeedRepository.getOneFeedById(feedId: feedId),
         builder: (context, state) {
           if (state.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());

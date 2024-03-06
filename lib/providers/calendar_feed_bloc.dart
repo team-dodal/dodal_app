@@ -1,6 +1,6 @@
 import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/model/user_calendar_data_model.dart';
-import 'package:dodal_app/services/user/service.dart';
+import 'package:dodal_app/repositories/user_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -19,7 +19,7 @@ class CalendarFeedBloc extends Bloc<CalendarFeedEvent, CalendarFeedState> {
       feedList: [],
     ));
     try {
-      List<UserCalendarData> res = await UserService.getFeedListByDate(
+      List<UserCalendarData> res = await UserRepository.getFeedListByDate(
         roomId: roomId,
         dateYM: DateFormat('yyyyMM').format(event.date),
       );

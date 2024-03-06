@@ -1,6 +1,6 @@
 import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/model/users_rooms_info_model.dart';
-import 'package:dodal_app/services/user/service.dart';
+import 'package:dodal_app/repositories/user_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,7 +15,7 @@ class UserRoomFeedInfoBloc
   Future<void> _getUserRoomFeedInfo(RequestUserInfoEvent event, emit) async {
     emit(state.copyWith(status: CommonStatus.loading));
     try {
-      final res = await UserService.getUsersRoomFeed();
+      final res = await UserRepository.getUsersRoomFeed();
       emit(state.copyWith(
         status: CommonStatus.loaded,
         challengeList: res.challengeRoomList,

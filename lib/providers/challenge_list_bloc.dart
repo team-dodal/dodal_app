@@ -3,7 +3,7 @@ import 'package:dodal_app/model/challenge_model.dart';
 import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
-import 'package:dodal_app/services/challenge/service.dart';
+import 'package:dodal_app/repositories/challenge_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -37,7 +37,7 @@ class ChallengeListBloc extends Bloc<ChallengeListEvent, ChallengeListState> {
     }
     if (state.isLastPage) return;
     emit(state.copyWith(status: CommonStatus.loading));
-    final res = await ChallengeService.getChallengesByCategory(
+    final res = await ChallengeRepository.getChallengesByCategory(
       categoryValue: event.category.value,
       tagValue: event.tag.value,
       conditionCode: event.condition.index,

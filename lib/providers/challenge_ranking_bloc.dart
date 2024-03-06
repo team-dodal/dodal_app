@@ -1,6 +1,6 @@
 import 'package:dodal_app/model/challenge_rank_model.dart';
 import 'package:dodal_app/enum/status_enum.dart';
-import 'package:dodal_app/services/challenge/service.dart';
+import 'package:dodal_app/repositories/challenge_repository.dart';
 import 'package:dodal_app/widgets/challenge_room/rank_filter_bottom_sheet.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +17,7 @@ class ChallengeRankingBloc
   _requestRanking(LoadRankingEvent event, emit) async {
     emit(state.copyWith(status: CommonStatus.loading));
     try {
-      final res = await ChallengeService.getRanks(
+      final res = await ChallengeRepository.getRanks(
         id: challengeId,
         code: state.rankFilter.index,
       );

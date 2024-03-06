@@ -4,11 +4,11 @@ import 'package:dodal_app/model/challenge_model.dart';
 import 'package:dodal_app/model/challenge_notice_model.dart';
 import 'package:dodal_app/model/challenge_rank_model.dart';
 import 'package:dodal_app/model/challenge_detail_model.dart';
-import 'package:dodal_app/services/common/error_dialog.dart';
-import 'package:dodal_app/services/common/main.dart';
-import 'package:dodal_app/services/common/presigned_s3.dart';
+import 'package:dodal_app/repositories/common/error_dialog.dart';
+import 'package:dodal_app/repositories/common/main.dart';
+import 'package:dodal_app/repositories/presigned_url_repository.dart';
 
-class ChallengeService {
+class ChallengeRepository {
   static final service = dio('/api/v1/challenge');
 
   static Future<void> createChallenge({
@@ -32,14 +32,16 @@ class ChallengeService {
     };
 
     if (thumbnailImg != null) {
-      data['thumbnail_img_url'] = await PresignedS3.create(file: thumbnailImg);
+      data['thumbnail_img_url'] =
+          await PresignedUrlRepository.create(file: thumbnailImg);
     }
     if (certCorrectImg != null) {
       data['cert_correct_img_url'] =
-          await PresignedS3.create(file: certCorrectImg);
+          await PresignedUrlRepository.create(file: certCorrectImg);
     }
     if (certWrongImg != null) {
-      data['cert_wrong_img_url'] = await PresignedS3.create(file: certWrongImg);
+      data['cert_wrong_img_url'] =
+          await PresignedUrlRepository.create(file: certWrongImg);
     }
 
     await service.post('/room', data: data);
@@ -74,7 +76,7 @@ class ChallengeService {
       'cert_wrong_img_url'
     ]) {
       if (data[key].runtimeType.toString() == '_File') {
-        data[key] = await PresignedS3.create(file: data[key]);
+        data[key] = await PresignedUrlRepository.create(file: data[key]);
       }
     }
     service.patch('/room/$id', data: data);
@@ -214,7 +216,7 @@ class ChallengeService {
   }) async {
     final data = {
       "content": content,
-      'certification_img_url': await PresignedS3.create(file: image)
+      'certification_img_url': await PresignedUrlRepository.create(file: image)
     };
     await service.post('/room/$challengeId/certification', data: data);
   }

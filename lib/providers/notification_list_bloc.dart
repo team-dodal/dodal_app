@@ -1,6 +1,6 @@
 import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/model/alarm_content_model.dart';
-import 'package:dodal_app/services/alarm/service.dart';
+import 'package:dodal_app/repositories/alarm_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,7 +17,7 @@ class NotificationListBloc
   Future<void> _loadData(LoadNotificationListEvent event, emit) async {
     emit(state.copyWith(status: CommonStatus.loading));
     try {
-      final res = await AlarmService.getAllAlarmList(userId: userId);
+      final res = await AlarmRepository.getAllAlarmList(userId: userId);
       emit(state.copyWith(status: CommonStatus.loaded, list: res));
     } catch (error) {
       emit(state.copyWith(
@@ -30,7 +30,7 @@ class NotificationListBloc
   Future<void> _clearData(ClearNotificationListEvent event, emit) async {
     if (state.list.isEmpty) return;
     emit(state.copyWith(status: CommonStatus.loaded, list: []));
-    await AlarmService.deleteAllAlarmList(userId: userId);
+    await AlarmRepository.deleteAllAlarmList(userId: userId);
   }
 }
 
