@@ -28,7 +28,7 @@ ChallengeDetail _$ChallengeDetailFromJson(Map<String, dynamic> json) =>
       isBookmarked: ChallengeDetail.isTrue(json['bookmark_yn'] as String?),
       isJoin: ChallengeDetail.isTrue(json['join_yn'] as String?),
       todayCertCode:
-          ChallengeDetail.parseCertCode(json['today_cert_code'] as String),
+          ChallengeDetail.parseCertCode(json['today_cert_code'] as String?),
       accuseCnt: json['accuse_cnt'] as int,
       noticeTitle: json['notice_title'] as String?,
       noticeContent: json['notice_content'] as String?,
@@ -59,7 +59,7 @@ Map<String, dynamic> _$ChallengeDetailToJson(ChallengeDetail instance) =>
       'bookmark_cnt': instance.bookmarkCnt,
       'bookmark_yn': instance.isBookmarked,
       'join_yn': instance.isJoin,
-      'today_cert_code': _$CertCodeEnumMap[instance.todayCertCode]!,
+      'today_cert_code': _$CertCodeEnumMap[instance.todayCertCode],
       'accuse_cnt': instance.accuseCnt,
       'notice_title': instance.noticeTitle,
       'notice_content': instance.noticeContent,

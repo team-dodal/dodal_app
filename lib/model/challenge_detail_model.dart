@@ -45,7 +45,7 @@ class ChallengeDetail extends Equatable {
   @JsonKey(name: 'join_yn', fromJson: isTrue)
   final bool isJoin;
   @JsonKey(name: 'today_cert_code', fromJson: parseCertCode)
-  final CertCode todayCertCode;
+  final CertCode? todayCertCode;
   @JsonKey(name: 'accuse_cnt')
   final int accuseCnt;
   @JsonKey(name: 'notice_title')
@@ -96,7 +96,8 @@ class ChallengeDetail extends Equatable {
   Map<String, dynamic> toJson() => _$ChallengeDetailToJson(this);
 
   static isTrue(String? value) => value == 'Y';
-  static parseCertCode(String value) => CertCode.values[int.parse(value)];
+  static parseCertCode(String? value) =>
+      value != null ? CertCode.values[int.parse(value)] : null;
   static createUserCertListByJsonList(List? list) =>
       (list ?? []).map((e) => UserCertPerWeek.fromJson(e)).toList();
 
