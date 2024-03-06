@@ -1,5 +1,5 @@
-import 'package:dodal_app/model/status_enum.dart';
-import 'package:dodal_app/services/challenge/response.dart';
+import 'package:dodal_app/model/challenge_rank_model.dart';
+import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/widgets/challenge_room/rank_filter_bottom_sheet.dart';
 import 'package:equatable/equatable.dart';
@@ -64,8 +64,8 @@ class ChangeFilterEvent extends ChallengeRankingEvent {
 class ChallengeRankingState extends Equatable {
   final CommonStatus status;
   final String? errorMessage;
-  final List<ChallengeRankResponse> topThreeList;
-  final List<ChallengeRankResponse> otherList;
+  final List<ChallengeRank> topThreeList;
+  final List<ChallengeRank> otherList;
   final ChallengeRankFilterEnum rankFilter;
 
   const ChallengeRankingState({
@@ -87,8 +87,8 @@ class ChallengeRankingState extends Equatable {
   ChallengeRankingState copyWith({
     CommonStatus? status,
     String? errorMessage,
-    List<ChallengeRankResponse>? topThreeList,
-    List<ChallengeRankResponse>? otherList,
+    List<ChallengeRank>? topThreeList,
+    List<ChallengeRank>? otherList,
     ChallengeRankFilterEnum? rankFilter,
   }) {
     return ChallengeRankingState(

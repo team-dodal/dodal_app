@@ -1,7 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/model/category_model.dart';
 import 'package:dodal_app/model/challenge_model.dart';
-import 'package:dodal_app/model/status_enum.dart';
+import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/providers/bookmark_bloc.dart';
 import 'package:dodal_app/providers/challenge_info_bloc.dart';
 import 'package:dodal_app/providers/custom_feed_list_bloc.dart';
@@ -108,7 +108,7 @@ class InterestList extends StatelessWidget {
                     case CommonStatus.error:
                       return Center(child: Text(state.errorMessage!));
                     case CommonStatus.loaded:
-                      List<MyCategory> categories =
+                      List<Category> categories =
                           context.read<UserBloc>().state.result!.categoryList;
                       return ExpandablePageView.builder(
                         itemCount: categories.length,
@@ -136,7 +136,7 @@ class InterestCategoryCard extends StatelessWidget {
     required this.challenges,
   });
 
-  final MyCategory category;
+  final Category category;
   final List<Challenge> challenges;
 
   @override

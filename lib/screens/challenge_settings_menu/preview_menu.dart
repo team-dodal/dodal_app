@@ -1,5 +1,5 @@
 import 'package:dodal_app/screens/report/main.dart';
-import 'package:dodal_app/services/challenge/response.dart';
+import 'package:dodal_app/model/challenge_detail_model.dart';
 import 'package:flutter/material.dart';
 
 class PreviewMenu extends StatelessWidget {
@@ -8,7 +8,7 @@ class PreviewMenu extends StatelessWidget {
     required this.challenge,
   });
 
-  final OneChallengeResponse challenge;
+  final ChallengeDetail challenge;
 
   @override
   Widget build(BuildContext context) {

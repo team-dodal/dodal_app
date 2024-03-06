@@ -1,12 +1,12 @@
 import 'package:dodal_app/model/category_model.dart';
-import 'package:dodal_app/model/status_enum.dart';
+import 'package:dodal_app/enum/status_enum.dart';
+import 'package:dodal_app/model/users_rooms_info_model.dart';
 import 'package:dodal_app/providers/calendar_feed_bloc.dart';
 import 'package:dodal_app/providers/category_list_bloc.dart';
 import 'package:dodal_app/providers/challenge_list_bloc.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/providers/user_room_feed_info_bloc.dart';
 import 'package:dodal_app/screens/challenge_list/main.dart';
-import 'package:dodal_app/services/user/response.dart';
 import 'package:dodal_app/widgets/common/input/select_input.dart';
 import 'package:dodal_app/widgets/common/no_list_context.dart';
 import 'package:dodal_app/widgets/mypage/calendar.dart';
@@ -74,9 +74,9 @@ class MyPageScreen extends StatelessWidget {
                   .add(ChangeSelectedRoomIdEvent(value.value));
             },
             list: list
-                .map((room) => Select(label: room.title!, value: room.roomId))
+                .map((room) => Select(label: room.title, value: room.roomId))
                 .toList(),
-            value: Select(label: selected.title!, value: selected.roomId),
+            value: Select(label: selected.title, value: selected.roomId),
           ),
         ),
         BlocProvider(

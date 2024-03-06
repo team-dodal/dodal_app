@@ -1,6 +1,6 @@
 import 'package:dodal_app/model/category_model.dart';
 import 'package:dodal_app/model/challenge_model.dart';
-import 'package:dodal_app/model/status_enum.dart';
+import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/providers/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/services/challenge/service.dart';

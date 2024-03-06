@@ -1,4 +1,4 @@
-import 'package:dodal_app/model/status_enum.dart';
+import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/providers/nickname_check_bloc.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';

@@ -1,7 +1,7 @@
 import 'package:animations/animations.dart';
+import 'package:dodal_app/enum/certification_code_enum.dart';
 import 'package:dodal_app/helper/slide_page_route.dart';
-import 'package:dodal_app/model/certification_code_enum.dart';
-import 'package:dodal_app/model/status_enum.dart';
+import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/providers/bookmark_bloc.dart';
 import 'package:dodal_app/providers/challenge_info_bloc.dart';
 import 'package:dodal_app/providers/challenge_ranking_bloc.dart';
@@ -12,7 +12,7 @@ import 'package:dodal_app/screens/challenge_route/preview_screen.dart';
 import 'package:dodal_app/screens/challenge_route/ranking_screen.dart';
 import 'package:dodal_app/screens/create_feed/main.dart';
 import 'package:dodal_app/screens/challenge_settings_menu/main.dart';
-import 'package:dodal_app/services/challenge/response.dart';
+import 'package:dodal_app/model/challenge_detail_model.dart';
 import 'package:dodal_app/widgets/challenge_room/challenge_bottom_sheet.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,7 +21,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Route extends Equatable {
   final String name;
-  final Widget Function(OneChallengeResponse challenge) screen;
+  final Widget Function(ChallengeDetail challenge) screen;
 
   const Route({required this.name, required this.screen});
 
@@ -53,7 +53,7 @@ class _ChallengeRouteState extends State<ChallengeRoute>
   int _currentIndex = 0;
   late TabController _tabController;
 
-  void _routeMenuScreen(OneChallengeResponse challenge) {
+  void _routeMenuScreen(ChallengeDetail challenge) {
     Navigator.push(
       context,
       SlidePageRoute(
@@ -64,7 +64,7 @@ class _ChallengeRouteState extends State<ChallengeRoute>
     });
   }
 
-  void _certificateFeed(OneChallengeResponse challenge) {
+  void _certificateFeed(ChallengeDetail challenge) {
     Navigator.push(
       context,
       MaterialPageRoute(

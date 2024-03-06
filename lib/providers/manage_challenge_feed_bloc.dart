@@ -1,5 +1,5 @@
-import 'package:dodal_app/model/status_enum.dart';
-import 'package:dodal_app/services/manage_challenge/response.dart';
+import 'package:dodal_app/enum/status_enum.dart';
+import 'package:dodal_app/model/members_feed_model.dart';
 import 'package:dodal_app/services/manage_challenge/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -91,7 +91,7 @@ class ApproveOrRejectEvent extends ManageChallengeFeedEvent {
 class ManageChallengeFeedState extends Equatable {
   final CommonStatus status;
   final DateTime date;
-  final Map<String, List<FeedItem>> itemListByDate;
+  final Map<String, List<MembersFeed>> itemListByDate;
   final String? errorMessage;
 
   const ManageChallengeFeedState({
@@ -111,7 +111,7 @@ class ManageChallengeFeedState extends Equatable {
   ManageChallengeFeedState copyWith({
     CommonStatus? status,
     DateTime? date,
-    Map<String, List<FeedItem>>? itemListByDate,
+    Map<String, List<MembersFeed>>? itemListByDate,
     String? errorMessage,
   }) {
     return ManageChallengeFeedState(

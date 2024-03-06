@@ -1,4 +1,4 @@
-import 'package:dodal_app/services/feed/response.dart';
+import 'package:dodal_app/model/feed_content_model.dart';
 import 'package:dodal_app/services/feed/service.dart';
 import 'package:dodal_app/widgets/common/feed_content_box/feed_content_footer.dart';
 import 'package:dodal_app/widgets/common/image_widget.dart';
@@ -24,7 +24,7 @@ class MyFeedBox extends StatelessWidget {
           if (state.data == null) {
             return const SizedBox();
           }
-          FeedContentResponse feed = state.data!;
+          FeedContent feed = state.data!;
           return Column(
             children: [
               AspectRatio(

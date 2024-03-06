@@ -1,7 +1,7 @@
-import 'package:dodal_app/model/status_enum.dart';
+import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/providers/manage_challenge_feed_bloc.dart';
 import 'package:dodal_app/providers/manage_challenge_member_bloc.dart';
-import 'package:dodal_app/services/challenge/response.dart';
+import 'package:dodal_app/model/challenge_detail_model.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/challenge_settings/member_certification_box.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class ManageMemberScreen extends StatelessWidget {
   const ManageMemberScreen({super.key, required this.challenge});
 
-  final OneChallengeResponse challenge;
+  final ChallengeDetail challenge;
 
   @override
   Widget build(BuildContext context) {

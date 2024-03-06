@@ -1,5 +1,5 @@
-import 'package:dodal_app/model/status_enum.dart';
-import 'package:dodal_app/services/user/response.dart';
+import 'package:dodal_app/enum/status_enum.dart';
+import 'package:dodal_app/model/user_calendar_data_model.dart';
 import 'package:dodal_app/services/user/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,13 +19,13 @@ class CalendarFeedBloc extends Bloc<CalendarFeedEvent, CalendarFeedState> {
       feedList: [],
     ));
     try {
-      FeedListByDateResponse res = await UserService.getFeedListByDate(
+      List<UserCalendarData> res = await UserService.getFeedListByDate(
         roomId: roomId,
         dateYM: DateFormat('yyyyMM').format(event.date),
       );
       emit(state.copyWith(
         status: CommonStatus.loaded,
-        feedList: res.myPageCalenderInfoList,
+        feedList: res,
       ));
     } catch (error) {
       emit(state.copyWith(
@@ -50,7 +50,7 @@ class CalendarFeedState extends Equatable {
   final String? errorMessage;
   final int? roomId;
   final DateTime focusedDay;
-  final List<MyPageCalenderInfo> feedList;
+  final List<UserCalendarData> feedList;
 
   const CalendarFeedState({
     required this.status,
@@ -73,7 +73,7 @@ class CalendarFeedState extends Equatable {
     String? errorMessage,
     int? roomId,
     DateTime? focusedDay,
-    List<MyPageCalenderInfo>? feedList,
+    List<UserCalendarData>? feedList,
   }) {
     return CalendarFeedState(
       status: status ?? this.status,

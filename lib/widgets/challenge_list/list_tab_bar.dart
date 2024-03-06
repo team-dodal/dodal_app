@@ -72,7 +72,7 @@ class _ListTabBarState extends State<ListTabBar> with TickerProviderStateMixin {
                   builder: (context) {
                     return Row(
                       children: [
-                        for (final tag in state.category.tags)
+                        for (final tag in state.category.tags!)
                           Padding(
                             padding: const EdgeInsets.symmetric(
                               vertical: 16,

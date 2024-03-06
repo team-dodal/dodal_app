@@ -1,5 +1,5 @@
 import 'package:animations/animations.dart';
-import 'package:dodal_app/services/challenge/response.dart';
+import 'package:dodal_app/model/challenge_detail_model.dart';
 import 'package:flutter/material.dart';
 
 import 'manage_feed_screen.dart';
@@ -7,7 +7,7 @@ import 'manage_member_screen.dart';
 
 class Route {
   final String name;
-  final Widget Function(OneChallengeResponse) screen;
+  final Widget Function(ChallengeDetail) screen;
 
   Route({required this.name, required this.screen});
 }
@@ -30,7 +30,7 @@ class ChallengeManageRoute extends StatefulWidget {
     required this.challenge,
   });
 
-  final OneChallengeResponse challenge;
+  final ChallengeDetail challenge;
   final int index;
 
   @override

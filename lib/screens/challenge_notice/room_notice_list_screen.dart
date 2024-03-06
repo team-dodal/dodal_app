@@ -1,4 +1,4 @@
-import 'package:dodal_app/model/status_enum.dart';
+import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/providers/challenge_notice_list_bloc.dart';
 import 'package:dodal_app/providers/create_challenge_notice_bloc.dart';
 import 'package:dodal_app/screens/challenge_notice/create_notice_screen.dart';

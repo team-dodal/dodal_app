@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'package:dodal_app/model/authentication_model.dart';
+import 'package:dodal_app/model/user_calendar_data_model.dart';
 import 'package:dodal_app/model/user_model.dart';
+import 'package:dodal_app/model/users_rooms_info_model.dart';
 import 'package:dodal_app/services/common/main.dart';
 import 'package:dodal_app/services/common/presigned_s3.dart';
-import 'package:dodal_app/services/user/response.dart';
 import 'package:dodal_app/utilities/social_auth.dart';
 
 class UserService {
@@ -14,7 +16,7 @@ class UserService {
 
     final isSigned = res.data['result']['is_signed'] == 'true';
     if (isSigned) {
-      return SignInResponse.fromJson(res.data['result']);
+      return Authentication.fromJson(res.data['result']);
     } else {
       return null;
     }
@@ -44,12 +46,12 @@ class UserService {
     }
 
     final res = await service.post('/api/v1/users/sign-up', data: data);
-    return SignUpResponse.fromJson(res.data['result']);
+    return Authentication.fromJson(res.data['result']);
   }
 
   static Future<User?> user() async {
     final res = await service.get('/api/v1/users/me');
-    return User.formJson(res.data['result']);
+    return User.fromJson(res.data['result']);
   }
 
   static updateUser({
@@ -74,7 +76,7 @@ class UserService {
     };
 
     final res = await service.patch('/api/v1/users/me', data: data);
-    return User.formJson(res.data['result']);
+    return User.fromJson(res.data['result']);
   }
 
   static updateFcmToken(String token) async {
@@ -90,18 +92,20 @@ class UserService {
     await service.delete('/api/v1/users/me');
   }
 
-  static Future<UsersRoomFeedResponse> getUsersRoomFeed() async {
+  static Future<UsersRoomsInfo> getUsersRoomFeed() async {
     final res = await service.get('/api/v1/users/my-page');
-    return UsersRoomFeedResponse.fromJson(res.data['result']);
+    return UsersRoomsInfo.fromJson(res.data['result']);
   }
 
-  static Future<FeedListByDateResponse> getFeedListByDate({
+  static Future<List<UserCalendarData>> getFeedListByDate({
     required int roomId,
     required String dateYM,
   }) async {
     final res = await service.get(
       '/api/v1/users/my-page/challenge-room/$roomId?date_ym=$dateYM',
     );
-    return FeedListByDateResponse.fromJson(res.data['result']);
+    return (res.data['result']['my_page_calender_info_list'] as List)
+        .map((data) => UserCalendarData.fromJson(data))
+        .toList();
   }
 }

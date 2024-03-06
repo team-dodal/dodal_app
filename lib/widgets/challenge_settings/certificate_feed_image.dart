@@ -1,6 +1,6 @@
-import 'package:dodal_app/model/certification_code_enum.dart';
+import 'package:dodal_app/enum/certification_code_enum.dart';
+import 'package:dodal_app/model/members_feed_model.dart';
 import 'package:dodal_app/providers/manage_challenge_feed_bloc.dart';
-import 'package:dodal_app/services/manage_challenge/response.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/image_widget.dart';
@@ -12,7 +12,7 @@ import 'feed_certification_modal.dart';
 class CertificateFeedImage extends StatelessWidget {
   const CertificateFeedImage({super.key, required this.feed});
 
-  final FeedItem feed;
+  final MembersFeed feed;
 
   _showFeedModal(BuildContext context) {
     showDialog(

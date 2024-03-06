@@ -1,7 +1,7 @@
 import 'package:dodal_app/layout/modal_layout.dart';
-import 'package:dodal_app/model/certification_code_enum.dart';
+import 'package:dodal_app/enum/certification_code_enum.dart';
+import 'package:dodal_app/model/members_feed_model.dart';
 import 'package:dodal_app/providers/manage_challenge_feed_bloc.dart';
-import 'package:dodal_app/services/manage_challenge/response.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/avatar_image.dart';
@@ -12,7 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class FeedCertificationModal extends StatelessWidget {
   const FeedCertificationModal({super.key, required this.feed});
 
-  final FeedItem feed;
+  final MembersFeed feed;
 
   _request(BuildContext context, bool value) {
     context.read<ManageChallengeFeedBloc>().add(

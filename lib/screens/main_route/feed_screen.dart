@@ -1,6 +1,6 @@
-import 'package:dodal_app/model/status_enum.dart';
+import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/providers/feed_list_bloc.dart';
-import 'package:dodal_app/services/feed/response.dart';
+import 'package:dodal_app/model/feed_content_model.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/common/feed_content_box/main.dart';
 import 'package:dodal_app/widgets/common/no_list_context.dart';
@@ -27,7 +27,7 @@ class _FeedScreenState extends State<FeedScreen> {
     );
   }
 
-  Widget _success(List<FeedContentResponse> list) {
+  Widget _success(List<FeedContent> list) {
     return ListView.separated(
       controller: scrollController,
       separatorBuilder: (context, index) => const Divider(

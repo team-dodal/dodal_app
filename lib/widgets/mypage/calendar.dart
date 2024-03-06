@@ -1,6 +1,6 @@
 import 'package:animations/animations.dart';
+import 'package:dodal_app/model/user_calendar_data_model.dart';
 import 'package:dodal_app/providers/calendar_feed_bloc.dart';
-import 'package:dodal_app/services/user/response.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/mypage/calendar_marker.dart';
@@ -24,7 +24,7 @@ class _CalendarState extends State<Calendar> {
     bool disabled = false,
   }) {
     final list = context.read<CalendarFeedBloc>().state.feedList;
-    List<MyPageCalenderInfo> findList = list
+    List<UserCalendarData> findList = list
         .where((element) => element.day == DateFormat('d').format(day))
         .toList();
     bool isInclude = findList.isNotEmpty;
@@ -64,7 +64,7 @@ class _CalendarState extends State<Calendar> {
           headerStyle: HeaderStyle(
             formatButtonVisible: false,
             titleCentered: true,
-            titleTextStyle: context.body1(fontWeight: FontWeight.bold)!,
+            titleTextStyle: context.body1(fontWeight: FontWeight.bold),
             leftChevronIcon: const Icon(
               Icons.arrow_back_ios_rounded,
               color: AppColors.systemGrey2,
@@ -78,8 +78,8 @@ class _CalendarState extends State<Calendar> {
             headerMargin: const EdgeInsets.only(bottom: 4),
           ),
           daysOfWeekStyle: DaysOfWeekStyle(
-            weekdayStyle: context.caption()!,
-            weekendStyle: context.caption()!,
+            weekdayStyle: context.caption(),
+            weekendStyle: context.caption(),
           ),
           calendarStyle: const CalendarStyle(outsideDaysVisible: false),
           calendarBuilders: CalendarBuilders(

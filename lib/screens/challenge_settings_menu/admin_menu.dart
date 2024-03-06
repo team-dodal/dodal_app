@@ -3,14 +3,14 @@ import 'package:dodal_app/providers/manage_challenge_feed_bloc.dart';
 import 'package:dodal_app/providers/manage_challenge_member_bloc.dart';
 import 'package:dodal_app/screens/challenge_manage/main.dart';
 import 'package:dodal_app/screens/create_challenge/main.dart';
-import 'package:dodal_app/services/challenge/response.dart';
+import 'package:dodal_app/model/challenge_detail_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AdminMenu extends StatelessWidget {
   const AdminMenu({super.key, required this.challenge});
 
-  final OneChallengeResponse challenge;
+  final ChallengeDetail challenge;
 
   @override
   Widget build(BuildContext context) {

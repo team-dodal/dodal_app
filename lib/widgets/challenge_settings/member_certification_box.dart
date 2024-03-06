@@ -1,9 +1,9 @@
-import 'package:dodal_app/model/certification_code_enum.dart';
-import 'package:dodal_app/model/day_enum.dart';
+import 'package:dodal_app/enum/certification_code_enum.dart';
+import 'package:dodal_app/enum/day_enum.dart';
+import 'package:dodal_app/model/challenge_member_model.dart';
 import 'package:dodal_app/providers/manage_challenge_member_bloc.dart';
 import 'package:dodal_app/providers/user_bloc.dart';
-import 'package:dodal_app/services/challenge/response.dart';
-import 'package:dodal_app/services/manage_challenge/response.dart';
+import 'package:dodal_app/model/challenge_detail_model.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/challenge_settings/member_manage_bottom_sheet.dart';
@@ -19,8 +19,8 @@ class MemberCertificationBox extends StatelessWidget {
     required this.challenge,
   });
 
-  final ChallengeUser user;
-  final OneChallengeResponse challenge;
+  final ChallengeMember user;
+  final ChallengeDetail challenge;
 
   _showCountBottomSheet(BuildContext context) {
     showModalBottomSheet(
@@ -35,11 +35,11 @@ class MemberCertificationBox extends StatelessWidget {
     );
   }
 
-  List<UserWeekCertInfo?> _createUserCertList() {
-    List<UserWeekCertInfo?> list =
+  List<ChallengeMemberCert?> _createUserCertList() {
+    List<ChallengeMemberCert?> list =
         List.generate(DayEnum.values.length, (index) => null);
-    for (final certInfo in user.userWeekCertInfoList!) {
-      final index = DayEnum.values.indexOf(certInfo.dayCode!);
+    for (final certInfo in user.userWeekCertInfoList) {
+      final index = DayEnum.values.indexOf(certInfo.dayCode);
       list[index] = certInfo;
     }
     return list;
@@ -117,7 +117,7 @@ class MemberCertificationBox extends StatelessWidget {
 class FeedImageBox extends StatelessWidget {
   const FeedImageBox({super.key, required this.certInfo});
 
-  final UserWeekCertInfo? certInfo;
+  final ChallengeMemberCert? certInfo;
 
   @override
   Widget build(BuildContext context) {

@@ -23,7 +23,7 @@ class ChallengeListFilterCubit extends Cubit<ChallengeListFilterState> {
   }
 
   void updateCategory({required Category category}) {
-    emit(state.copyWith(category: category, tag: category.tags[0]));
+    emit(state.copyWith(category: category, tag: category.tags![0]));
   }
 
   void updateTag({required Tag tag}) {
@@ -56,7 +56,7 @@ class ChallengeListFilterState extends Equatable {
   ChallengeListFilterState.init(Category category)
       : this(
           category: category,
-          tag: category.tags[0],
+          tag: category.tags![0],
           condition: ConditionEnum.popularity,
           certCntList: const [1, 2, 3, 4, 5, 6, 7],
         );

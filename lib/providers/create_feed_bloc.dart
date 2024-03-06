@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:dodal_app/model/status_enum.dart';
+import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/services/challenge/service.dart';
 import 'package:dodal_app/utilities/add_watermark.dart';
 import 'package:dodal_app/utilities/image_compress.dart';

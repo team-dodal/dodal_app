@@ -1,7 +1,7 @@
 import 'package:dodal_app/providers/user_bloc.dart';
 import 'package:dodal_app/screens/challenge_settings_menu/admin_menu.dart';
 import 'package:dodal_app/screens/challenge_settings_menu/member_menu.dart';
-import 'package:dodal_app/services/challenge/response.dart';
+import 'package:dodal_app/model/challenge_detail_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,7 +11,7 @@ class GroupSettingsMenuScreen extends StatelessWidget {
     required this.challenge,
   });
 
-  final OneChallengeResponse challenge;
+  final ChallengeDetail challenge;
 
   @override
   Widget build(BuildContext context) {

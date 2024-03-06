@@ -1,6 +1,7 @@
-import 'package:dodal_app/model/status_enum.dart';
+import 'package:dodal_app/model/challenge_rank_model.dart';
+import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/providers/challenge_ranking_bloc.dart';
-import 'package:dodal_app/services/challenge/response.dart';
+import 'package:dodal_app/model/challenge_detail_model.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/challenge_room/rank_filter_bottom_sheet.dart';
 import 'package:dodal_app/widgets/challenge_room/rank_list_item.dart';
@@ -14,7 +15,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class RankingScreen extends StatelessWidget {
   const RankingScreen({super.key, required this.challenge});
 
-  final OneChallengeResponse challenge;
+  final ChallengeDetail challenge;
 
   _showSortBottomSheet(BuildContext context) {
     showModalBottomSheet(
@@ -109,7 +110,7 @@ class RankingScreen extends StatelessWidget {
 class TopThreeRank extends StatelessWidget {
   const TopThreeRank({super.key, required this.topThreeList});
 
-  final List<ChallengeRankResponse?> topThreeList;
+  final List<ChallengeRank?> topThreeList;
 
   @override
   Widget build(BuildContext context) {

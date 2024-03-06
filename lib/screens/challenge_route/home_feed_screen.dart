@@ -1,5 +1,5 @@
 import 'package:dodal_app/screens/challenge_route/challenge_feed_screen.dart';
-import 'package:dodal_app/services/challenge/response.dart';
+import 'package:dodal_app/model/challenge_detail_model.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/challenge_preview/feed_img_content.dart';
@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 class HomeFeedScreen extends StatelessWidget {
   const HomeFeedScreen({super.key, required this.challenge});
 
-  final OneChallengeResponse challenge;
+  final ChallengeDetail challenge;
 
   @override
   Widget build(BuildContext context) {

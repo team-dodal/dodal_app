@@ -1,5 +1,5 @@
-import 'package:dodal_app/model/status_enum.dart';
-import 'package:dodal_app/services/challenge/response.dart';
+import 'package:dodal_app/enum/status_enum.dart';
+import 'package:dodal_app/model/challenge_detail_model.dart';
 import 'package:dodal_app/services/challenge/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -59,7 +59,7 @@ class JoinChallengeEvent extends ChallengeInfoEvent {
 class ChallengeInfoState extends Equatable {
   final CommonStatus status;
   final String? errorMessage;
-  final OneChallengeResponse? result;
+  final ChallengeDetail? result;
 
   const ChallengeInfoState({
     required this.status,
@@ -76,7 +76,7 @@ class ChallengeInfoState extends Equatable {
   ChallengeInfoState copyWith({
     CommonStatus? status,
     String? errorMessage,
-    OneChallengeResponse? result,
+    ChallengeDetail? result,
   }) {
     return ChallengeInfoState(
       status: status ?? this.status,

@@ -1,5 +1,5 @@
 import 'package:dodal_app/model/category_model.dart';
-import 'package:dodal_app/model/status_enum.dart';
+import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/providers/category_list_bloc.dart';
 import 'package:dodal_app/theme/color.dart';
@@ -55,7 +55,7 @@ class CategoryTagSelect extends StatelessWidget {
                     const SizedBox(height: 5),
                     Wrap(
                       children: [
-                        for (Tag tag in category.tags)
+                        for (Tag tag in category.tags!)
                           Padding(
                             padding: const EdgeInsets.only(right: 4),
                             child: OutlinedButton(

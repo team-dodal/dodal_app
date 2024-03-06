@@ -1,4 +1,4 @@
-import 'package:dodal_app/services/feed/response.dart';
+import 'package:dodal_app/model/feed_content_model.dart';
 import 'package:dodal_app/widgets/common/image_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +9,7 @@ import 'feed_content_header.dart';
 class FeedContentBox extends StatelessWidget {
   const FeedContentBox({super.key, required this.feedContent});
 
-  final FeedContentResponse feedContent;
+  final FeedContent feedContent;
 
   @override
   Widget build(BuildContext context) {

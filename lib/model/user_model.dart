@@ -1,29 +1,27 @@
 import 'package:dodal_app/model/category_model.dart';
 import 'package:dodal_app/model/tag_model.dart';
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-List<Tag> parseTag(List<dynamic> tagList) =>
-    tagList.map((e) => Tag(name: e['name'], value: e['value'])).toList();
+part 'user_model.g.dart';
 
-List<MyCategory> parseCategory(List<dynamic> categoryList) => categoryList
-    .map((e) => MyCategory(
-          name: e['name'],
-          subName: e['sub_name'],
-          value: e['value'],
-          emoji: e['emoji'],
-          hashTags: e['hash_tags'],
-        ))
-    .toList();
-
+@JsonSerializable()
 class User extends Equatable {
+  @JsonKey(name: 'user_id')
   final int id;
   final String email;
   final String nickname;
   final String content;
+  @JsonKey(name: 'social_type')
   final String socialType;
+  @JsonKey(name: 'profile_url')
   final String? profileUrl;
-  final DateTime? registerAt;
-  final List<MyCategory> categoryList;
+  @JsonKey(name: 'register_at', fromJson: DateTime.parse)
+  final DateTime registerAt;
+  @JsonKey(
+      name: 'category_list', fromJson: Category.createCategoryListByJsonList)
+  final List<Category> categoryList;
+  @JsonKey(name: 'tag_list', fromJson: Tag.createTagListByJsonList)
   final List<Tag> tagList;
 
   const User({
@@ -38,29 +36,19 @@ class User extends Equatable {
     required this.tagList,
   });
 
-  factory User.formJson(Map<String, dynamic> data) {
-    return User(
-      id: data['user_id'],
-      email: data['email'],
-      nickname: data['nickname'],
-      content: data['content'],
-      profileUrl: data['profile_url'],
-      registerAt: DateTime.parse(data['register_at']),
-      socialType: data['social_type'],
-      categoryList: parseCategory(data['category_list']),
-      tagList: parseTag(data['tag_list']),
-    );
-  }
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UserToJson(this);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         id,
         email,
         nickname,
         content,
+        profileUrl,
+        registerAt,
         socialType,
-        profileUrl.toString(),
-        registerAt.toString(),
         categoryList,
         tagList,
       ];

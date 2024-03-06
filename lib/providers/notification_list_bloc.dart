@@ -1,5 +1,5 @@
-import 'package:dodal_app/model/status_enum.dart';
-import 'package:dodal_app/services/alarm/response.dart';
+import 'package:dodal_app/enum/status_enum.dart';
+import 'package:dodal_app/model/alarm_content_model.dart';
 import 'package:dodal_app/services/alarm/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,7 +48,7 @@ class ClearNotificationListEvent extends NotificationListEvent {
 
 class NotificationListState extends Equatable {
   final CommonStatus status;
-  final List<AlarmResponse> list;
+  final List<AlarmContent> list;
   final String? errorMessage;
 
   const NotificationListState({
@@ -65,7 +65,7 @@ class NotificationListState extends Equatable {
 
   NotificationListState copyWith({
     CommonStatus? status,
-    List<AlarmResponse>? list,
+    List<AlarmContent>? list,
     String? errorMessage,
   }) {
     return NotificationListState(

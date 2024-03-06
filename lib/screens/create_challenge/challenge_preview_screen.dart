@@ -1,4 +1,4 @@
-import 'package:dodal_app/model/status_enum.dart';
+import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/providers/create_challenge_cubit.dart';
 import 'package:dodal_app/providers/user_bloc.dart';
 import 'package:dodal_app/theme/color.dart';

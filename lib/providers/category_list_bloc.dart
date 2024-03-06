@@ -1,5 +1,5 @@
 import 'package:dodal_app/model/category_model.dart';
-import 'package:dodal_app/model/status_enum.dart';
+import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/model/tag_model.dart';
 import 'package:dodal_app/services/category/service.dart';
 import 'package:equatable/equatable.dart';
@@ -58,12 +58,12 @@ class CategoryListState extends Equatable {
   }
 
   List<Category> categoryListForFilter() {
-    Category allCategory = Category(
+    Category allCategory = const Category(
       name: '전체',
       subName: '',
       value: null,
       emoji: '',
-      tags: const [],
+      tags: [],
     );
     Tag allTag = const Tag(name: '전체', value: null);
     return [allCategory, ...result]
@@ -73,7 +73,7 @@ class CategoryListState extends Equatable {
             subName: category.subName,
             value: category.value,
             emoji: category.emoji,
-            tags: [allTag, ...category.tags],
+            tags: [allTag, ...category.tags!],
           ),
         )
         .toList();

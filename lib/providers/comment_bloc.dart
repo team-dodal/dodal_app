@@ -1,5 +1,5 @@
-import 'package:dodal_app/model/status_enum.dart';
-import 'package:dodal_app/services/feed/response.dart';
+import 'package:dodal_app/enum/status_enum.dart';
+import 'package:dodal_app/model/comment_model.dart';
 import 'package:dodal_app/services/feed/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

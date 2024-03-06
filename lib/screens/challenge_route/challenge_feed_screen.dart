@@ -1,4 +1,4 @@
-import 'package:dodal_app/services/feed/response.dart';
+import 'package:dodal_app/model/feed_content_model.dart';
 import 'package:dodal_app/services/feed/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/common/feed_content_box/continue_cert_box.dart';
@@ -24,11 +24,11 @@ class ChallengeFeedScreen extends StatefulWidget {
 
 class _ChallengeFeedScreenState extends State<ChallengeFeedScreen> {
   static const pageSize = 10;
-  final PagingController<int, FeedContentResponse> pagingController =
+  final PagingController<int, FeedContent> pagingController =
       PagingController(firstPageKey: 0);
 
   _request(int pageKey) async {
-    List<FeedContentResponse>? res = await FeedService.getFeedsByRoomId(
+    List<FeedContent>? res = await FeedService.getFeedsByRoomId(
       page: pageKey,
       pageSize: pageSize,
       roomId: widget.roomId,
@@ -76,7 +76,7 @@ class _ChallengeFeedScreenState extends State<ChallengeFeedScreen> {
               ],
             );
           },
-          itemBuilder: (context, FeedContentResponse item, index) {
+          itemBuilder: (context, FeedContent item, index) {
             return Container(
               child: Column(
                 children: [

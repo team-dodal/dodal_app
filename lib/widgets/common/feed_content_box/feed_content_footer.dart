@@ -2,7 +2,7 @@ import 'package:dodal_app/layout/filter_bottom_sheet_layout.dart';
 import 'package:dodal_app/providers/comment_bloc.dart';
 import 'package:dodal_app/screens/comment/main.dart';
 import 'package:dodal_app/screens/report/main.dart';
-import 'package:dodal_app/services/feed/response.dart';
+import 'package:dodal_app/model/feed_content_model.dart';
 import 'package:dodal_app/services/feed/service.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
@@ -14,7 +14,7 @@ import 'package:flutter_svg/svg.dart';
 class FeedContentFooter extends StatefulWidget {
   const FeedContentFooter({super.key, required this.feedContent});
 
-  final FeedContentResponse feedContent;
+  final FeedContent feedContent;
 
   @override
   State<FeedContentFooter> createState() => _FeedContentFooterState();
@@ -28,10 +28,12 @@ class _FeedContentFooterState extends State<FeedContentFooter> {
     );
     if (res == null) return;
     setState(() {
-      widget.feedContent.likeYn = value;
-      widget.feedContent.likeCnt = value
-          ? widget.feedContent.likeCnt + 1
-          : widget.feedContent.likeCnt - 1;
+      widget.feedContent.copyWith(
+        likeYn: value,
+        likeCnt: value
+            ? widget.feedContent.likeCnt + 1
+            : widget.feedContent.likeCnt - 1,
+      );
     });
   }
 
@@ -161,7 +163,7 @@ class _FeedContentFooterState extends State<FeedContentFooter> {
                             ),
                           ).then((value) {
                             setState(() {
-                              widget.feedContent.commentCnt = value;
+                              widget.feedContent.copyWith(commentCnt: value);
                             });
                           });
                         },

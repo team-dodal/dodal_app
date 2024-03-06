@@ -1,5 +1,6 @@
-import 'package:dodal_app/model/status_enum.dart';
-import 'package:dodal_app/services/manage_challenge/response.dart';
+import 'package:dodal_app/enum/status_enum.dart';
+import 'package:dodal_app/model/host_challenge_model.dart';
+import 'package:dodal_app/model/joined_challenge_model.dart';
 import 'package:dodal_app/services/manage_challenge/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,8 +62,8 @@ class LoadAdminListEvent extends MyChallengeListEvent {
 class MyChallengeListState extends Equatable {
   final CommonStatus status;
   final String? errorMessage;
-  final List<JoinedChallengesResponse> joinedList;
-  final List<HostChallengesResponse> adminList;
+  final List<JoinedChallenge> joinedList;
+  final List<HostChallenge> adminList;
 
   const MyChallengeListState({
     required this.status,
@@ -81,8 +82,8 @@ class MyChallengeListState extends Equatable {
   MyChallengeListState copyWith({
     CommonStatus? status,
     String? errorMessage,
-    List<JoinedChallengesResponse>? joinedList,
-    List<HostChallengesResponse>? adminList,
+    List<JoinedChallenge>? joinedList,
+    List<HostChallenge>? adminList,
   }) {
     return MyChallengeListState(
       status: status ?? this.status,

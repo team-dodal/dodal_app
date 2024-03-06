@@ -1,5 +1,5 @@
-import 'package:dodal_app/model/status_enum.dart';
-import 'package:dodal_app/services/manage_challenge/response.dart';
+import 'package:dodal_app/enum/status_enum.dart';
+import 'package:dodal_app/model/challenge_member_model.dart';
 import 'package:dodal_app/services/manage_challenge/service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,7 +39,7 @@ class LoadManageChallengeMemberEvent extends ManageChallengeMemberEvent {
 
 class ManageChallengeMemberState extends Equatable {
   final CommonStatus status;
-  final List<ChallengeUser> result;
+  final List<ChallengeMember> result;
   final String? errorMessage;
 
   const ManageChallengeMemberState({
@@ -56,7 +56,7 @@ class ManageChallengeMemberState extends Equatable {
 
   ManageChallengeMemberState copyWith({
     CommonStatus? status,
-    List<ChallengeUser>? result,
+    List<ChallengeMember>? result,
     String? errorMessage,
   }) {
     return ManageChallengeMemberState(

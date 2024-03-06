@@ -1,6 +1,6 @@
 import 'package:dodal_app/providers/challenge_info_bloc.dart';
 import 'package:dodal_app/screens/challenge_route/main.dart';
-import 'package:dodal_app/services/feed/response.dart';
+import 'package:dodal_app/model/feed_content_model.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/small_tag.dart';
@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class FeedContentHeader extends StatelessWidget {
   const FeedContentHeader({super.key, required this.feedContent});
 
-  final FeedContentResponse feedContent;
+  final FeedContent feedContent;
 
   @override
   Widget build(BuildContext context) {

@@ -1,9 +1,9 @@
 import 'package:dodal_app/layout/modal_layout.dart';
-import 'package:dodal_app/model/status_enum.dart';
+import 'package:dodal_app/enum/status_enum.dart';
+import 'package:dodal_app/model/members_feed_model.dart';
 import 'package:dodal_app/providers/manage_challenge_feed_bloc.dart';
 import 'package:dodal_app/providers/manage_challenge_member_bloc.dart';
-import 'package:dodal_app/services/challenge/response.dart';
-import 'package:dodal_app/services/manage_challenge/response.dart';
+import 'package:dodal_app/model/challenge_detail_model.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/challenge_settings/certificate_feed_image.dart';
@@ -16,7 +16,7 @@ import 'package:intl/intl.dart';
 class ManageFeedScreen extends StatefulWidget {
   const ManageFeedScreen({super.key, required this.challenge});
 
-  final OneChallengeResponse challenge;
+  final ChallengeDetail challenge;
 
   @override
   State<ManageFeedScreen> createState() => _ManageFeedScreenState();
@@ -35,7 +35,7 @@ class _ManageFeedScreenState extends State<ManageFeedScreen> {
     );
   }
 
-  Widget _success(Map<String, List<FeedItem>> itemListByDate) {
+  Widget _success(Map<String, List<MembersFeed>> itemListByDate) {
     return ListView.builder(
       itemCount: itemListByDate.keys.length,
       itemBuilder: (context, index) {

@@ -1,5 +1,5 @@
-import 'package:dodal_app/model/day_enum.dart';
-import 'package:dodal_app/services/challenge/response.dart';
+import 'package:dodal_app/enum/day_enum.dart';
+import 'package:dodal_app/model/challenge_detail_model.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/avatar_image.dart';
@@ -47,7 +47,7 @@ class CurrentCertificationBox extends StatelessWidget {
                   Builder(
                     builder: (context) {
                       final contains = userWeekList
-                          .where((element) => element.day == day)
+                          .where((element) => element.dayCode == day)
                           .toList();
                       final content = contains.isNotEmpty ? contains[0] : null;
 
@@ -84,7 +84,7 @@ class DayCircle extends StatelessWidget {
     return Stack(
       children: [
         AvatarImage(
-          image: content?.certImgUrl,
+          image: content?.certImageUrl,
           width: double.infinity,
           height: double.infinity,
         ),

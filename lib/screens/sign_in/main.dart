@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:dodal_app/model/status_enum.dart';
+import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/providers/custom_feed_list_bloc.dart';
 import 'package:dodal_app/providers/feed_list_bloc.dart';

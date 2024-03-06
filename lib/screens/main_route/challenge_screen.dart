@@ -1,11 +1,12 @@
 import 'package:animations/animations.dart';
-import 'package:dodal_app/model/status_enum.dart';
+import 'package:dodal_app/enum/status_enum.dart';
+import 'package:dodal_app/model/host_challenge_model.dart';
+import 'package:dodal_app/model/joined_challenge_model.dart';
 import 'package:dodal_app/providers/challenge_info_bloc.dart';
 import 'package:dodal_app/providers/create_challenge_cubit.dart';
 import 'package:dodal_app/providers/my_challenge_list_bloc.dart';
 import 'package:dodal_app/screens/challenge_route/main.dart';
 import 'package:dodal_app/screens/create_challenge/main.dart';
-import 'package:dodal_app/services/manage_challenge/response.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/common/no_list_context.dart';
 import 'package:dodal_app/widgets/home/admin_challenge_box.dart';
@@ -85,7 +86,7 @@ class JoinedList extends StatelessWidget {
     );
   }
 
-  Widget _list(List<JoinedChallengesResponse> list) {
+  Widget _list(List<JoinedChallenge> list) {
     return ListView.separated(
       itemCount: list.length,
       separatorBuilder: (context, index) {
@@ -181,7 +182,7 @@ class AdminList extends StatelessWidget {
     );
   }
 
-  Widget _list(List<HostChallengesResponse> list) {
+  Widget _list(List<HostChallenge> list) {
     return ListView.separated(
       itemCount: list.length,
       separatorBuilder: (context, index) {

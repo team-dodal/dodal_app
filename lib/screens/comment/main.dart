@@ -1,4 +1,4 @@
-import 'package:dodal_app/model/status_enum.dart';
+import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/providers/comment_bloc.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/widgets/comment/bottom_text_input.dart';

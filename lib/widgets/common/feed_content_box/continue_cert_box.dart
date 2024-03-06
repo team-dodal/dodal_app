@@ -1,4 +1,4 @@
-import 'package:dodal_app/services/feed/response.dart';
+import 'package:dodal_app/model/feed_content_model.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class ContinueCertBox extends StatelessWidget {
   const ContinueCertBox({super.key, required this.feedContent});
 
-  final FeedContentResponse feedContent;
+  final FeedContent feedContent;
 
   @override
   Widget build(BuildContext context) {

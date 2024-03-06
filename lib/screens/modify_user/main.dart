@@ -1,4 +1,4 @@
-import 'package:dodal_app/model/status_enum.dart';
+import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/model/user_model.dart';
 import 'package:dodal_app/providers/modify_user_cubit.dart';
 import 'package:dodal_app/providers/nickname_check_bloc.dart';

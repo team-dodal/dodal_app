@@ -1,67 +1,94 @@
 import 'package:dodal_app/model/tag_model.dart';
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'challenge_model.g.dart';
+
+@JsonSerializable()
 class Challenge extends Equatable {
+  @JsonKey(name: 'challenge_room_id')
   final int id;
+  @JsonKey(name: 'host_id')
   final int adminId;
+  @JsonKey(name: 'host_nickname')
   final String adminNickname;
+  @JsonKey(name: 'host_profile_url')
   final String? adminProfile;
   final String title;
   final String content;
+  @JsonKey(name: 'cert_cnt')
   final int certCnt;
+  @JsonKey(name: 'thumbnail_img_url')
   final String? thumbnailImg;
+  @JsonKey(name: 'recruit_cnt')
   final int recruitCnt;
+  @JsonKey(name: 'user_cnt')
   final int userCnt;
-  final int? bookmarkCnt;
+  @JsonKey(name: 'bookmark_cnt')
+  final int bookmarkCnt;
+  @JsonKey(name: 'bookmark_yn', fromJson: isTrue, defaultValue: 0)
   final bool isBookmarked;
+  @JsonKey(name: 'join_yn', fromJson: isTrue)
   final bool isJoined;
-  final DateTime? registeredAt;
+  @JsonKey(name: 'registered_at', fromJson: DateTime.parse)
+  final DateTime registeredAt;
+  @JsonKey(name: 'category_name')
   final String categoryName;
+  @JsonKey(name: 'category_value')
   final String categoryValue;
-  final Tag tag;
+  @JsonKey(name: 'tag_name')
+  final dynamic tagName;
+  @JsonKey(name: 'tag_value')
+  final dynamic tagValue;
+  Tag get tag => Tag(name: tagName, value: tagValue);
 
-  Challenge.fromJson(Map<String, dynamic> data)
-      : id = data['challenge_room_id'],
-        adminId = data['host_id'],
-        adminNickname = data['host_nickname'],
-        adminProfile = data['host_profile_url'],
-        title = data['title'],
-        content = data['content'],
-        certCnt = data['cert_cnt'],
-        thumbnailImg = data['thumbnail_img_url'],
-        recruitCnt = data['recruit_cnt'],
-        userCnt = data['user_cnt'],
-        bookmarkCnt = data['bookmark_cnt'],
-        isBookmarked = data['bookmark_yn'] == 'Y',
-        isJoined = data['join_yn'] == 'Y',
-        registeredAt = data['registered_at'] != null
-            ? DateTime.parse(data['registered_at'])
-            : null,
-        categoryName = data['category_name'],
-        categoryValue = data['category_value'],
-        tag = Tag(name: data['tag_name'], value: data['tag_value']);
+  const Challenge({
+    required this.id,
+    required this.adminId,
+    required this.adminNickname,
+    required this.adminProfile,
+    required this.title,
+    required this.content,
+    required this.certCnt,
+    required this.thumbnailImg,
+    required this.recruitCnt,
+    required this.userCnt,
+    required this.bookmarkCnt,
+    required this.isBookmarked,
+    required this.isJoined,
+    required this.registeredAt,
+    required this.categoryName,
+    required this.categoryValue,
+    required this.tagName,
+    required this.tagValue,
+  });
+
+  factory Challenge.fromJson(Map<String, dynamic> json) =>
+      _$ChallengeFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ChallengeToJson(this);
+
+  static isTrue(value) => value == 'Y';
 
   @override
-  bool get stringify => true;
-
-  @override
-  List<Object> get props => [
+  List<Object?> get props => [
         id,
         adminId,
         adminNickname,
-        adminProfile.toString(),
+        adminProfile,
         title,
         content,
         certCnt,
-        thumbnailImg.toString(),
+        thumbnailImg,
         recruitCnt,
         userCnt,
-        bookmarkCnt.toString(),
+        bookmarkCnt,
         isBookmarked,
         isJoined,
-        registeredAt.toString(),
+        registeredAt,
         categoryName,
         categoryValue,
-        tag,
+        tagName,
+        tagValue
       ];
 }

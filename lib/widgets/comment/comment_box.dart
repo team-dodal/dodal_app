@@ -1,7 +1,7 @@
 import 'package:dodal_app/layout/filter_bottom_sheet_layout.dart';
+import 'package:dodal_app/model/comment_model.dart';
 import 'package:dodal_app/providers/user_bloc.dart';
 import 'package:dodal_app/screens/report/main.dart';
-import 'package:dodal_app/services/feed/response.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/avatar_image.dart';

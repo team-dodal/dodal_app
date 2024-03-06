@@ -1,7 +1,7 @@
 import 'package:dodal_app/providers/challenge_notice_list_bloc.dart';
 import 'package:dodal_app/providers/user_bloc.dart';
 import 'package:dodal_app/screens/challenge_notice/room_notice_list_screen.dart';
-import 'package:dodal_app/services/challenge/response.dart';
+import 'package:dodal_app/model/challenge_detail_model.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +12,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class NoticeBox extends StatelessWidget {
   const NoticeBox({super.key, required this.challenge});
 
-  final OneChallengeResponse challenge;
+  final ChallengeDetail challenge;
 
   _goNoticeScreen(BuildContext context, int? openIndex) {
     final user = BlocProvider.of<UserBloc>(context).state.result;

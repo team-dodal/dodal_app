@@ -1,6 +1,6 @@
-import 'package:dodal_app/model/status_enum.dart';
+import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/providers/create_feed_bloc.dart';
-import 'package:dodal_app/services/challenge/response.dart';
+import 'package:dodal_app/model/challenge_detail_model.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/image_bottom_sheet.dart';
@@ -15,7 +15,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class CreateFeedScreen extends StatefulWidget {
   const CreateFeedScreen({super.key, required this.challenge});
 
-  final OneChallengeResponse challenge;
+  final ChallengeDetail challenge;
 
   @override
   State<CreateFeedScreen> createState() => _CreateFeedScreenState();

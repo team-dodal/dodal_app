@@ -1,24 +1,27 @@
 import 'package:dio/dio.dart';
+import 'package:dodal_app/model/challenge_member_model.dart';
+import 'package:dodal_app/model/host_challenge_model.dart';
+import 'package:dodal_app/model/joined_challenge_model.dart';
+import 'package:dodal_app/model/members_feed_model.dart';
 import 'package:dodal_app/services/common/error_dialog.dart';
 import 'package:dodal_app/services/common/main.dart';
-import 'package:dodal_app/services/manage_challenge/response.dart';
 
 class ManageChallengeService {
   static final service = dio();
 
-  static Future<List<JoinedChallengesResponse>> joinedChallenges() async {
+  static Future<List<JoinedChallenge>> joinedChallenges() async {
     final res = await service.get('/api/v1/users/me/challenges/user');
     List<dynamic> result = res.data['result'];
-    List<JoinedChallengesResponse> list =
-        result.map((item) => JoinedChallengesResponse.fromJson(item)).toList();
+    List<JoinedChallenge> list =
+        result.map((item) => JoinedChallenge.fromJson(item)).toList();
     return list;
   }
 
-  static Future<List<HostChallengesResponse>?> hostChallenges() async {
+  static Future<List<HostChallenge>?> hostChallenges() async {
     final res = await service.get('/api/v1/users/me/challenges/host');
     List<dynamic> result = res.data['result'];
-    List<HostChallengesResponse> list =
-        result.map((item) => HostChallengesResponse.fromJson(item)).toList();
+    List<HostChallenge> list =
+        result.map((item) => HostChallenge.fromJson(item)).toList();
     return list;
   }
 
@@ -26,12 +29,12 @@ class ManageChallengeService {
     final res =
         await service.get('/api/v1/users/me/challenges/manage/$roomId/users');
     List<dynamic> result = res.data['result'];
-    List<ChallengeUser> list =
-        result.map((item) => ChallengeUser.fromJson(item)).toList();
+    List<ChallengeMember> list =
+        result.map((item) => ChallengeMember.fromJson(item)).toList();
     return list;
   }
 
-  static Future<Map<String, List<FeedItem>>> getCertificationList({
+  static Future<Map<String, List<MembersFeed>>> getCertificationList({
     required int roomId,
     required String dateYM,
   }) async {
@@ -39,11 +42,11 @@ class ManageChallengeService {
         '/api/v1/users/me/challenges/manage/$roomId/certifications?date_ym=$dateYM');
 
     Map<String, dynamic> result = res.data['result'];
-    Map<String, List<FeedItem>> feedListByDateMap = {};
+    Map<String, List<MembersFeed>> feedListByDateMap = {};
 
     for (final dateString in result.keys) {
-      List<FeedItem> feedList = (result[dateString] as List<dynamic>)
-          .map((e) => FeedItem.fromJson(e))
+      List<MembersFeed> feedList = (result[dateString] as List<dynamic>)
+          .map((e) => MembersFeed.fromJson(e))
           .toList();
       feedListByDateMap[dateString] = feedList;
     }

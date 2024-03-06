@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dodal_app/model/challenge_model.dart';
-import 'package:dodal_app/services/challenge/response.dart';
+import 'package:dodal_app/model/challenge_notice_model.dart';
+import 'package:dodal_app/model/challenge_rank_model.dart';
+import 'package:dodal_app/model/challenge_detail_model.dart';
 import 'package:dodal_app/services/common/error_dialog.dart';
 import 'package:dodal_app/services/common/main.dart';
 import 'package:dodal_app/services/common/presigned_s3.dart';
@@ -83,10 +85,12 @@ class ChallengeService {
     required int page,
     required int pageSize,
   }) async {
-    String requestUrl = '/rooms?';
-    requestUrl += 'condition=$conditionCode&';
-    requestUrl += 'page=$page&page_size=$pageSize';
-    final res = await service.get(requestUrl);
+    Map<String, dynamic> queries = {
+      'condition': conditionCode,
+      'page': page,
+      'page_size': pageSize,
+    };
+    final res = await service.get('/rooms', queryParameters: queries);
     List<dynamic> contents = res.data['result']['content'];
     List<Challenge> result =
         contents.map((item) => Challenge.fromJson(item)).toList();
@@ -101,29 +105,27 @@ class ChallengeService {
     required int page,
     required int pageSize,
   }) async {
-    String requestUrl = '/rooms/category?';
-    if (categoryValue != null) {
-      requestUrl += 'category_value=$categoryValue&';
-    }
-    if (tagValue != null) {
-      requestUrl += 'tag_value=$tagValue&';
-    }
-    requestUrl += 'condition_code=$conditionCode&';
+    Map<String, dynamic> queries = {
+      'category_value': categoryValue,
+      'tag_value': tagValue,
+      'condition_code': conditionCode,
+      'page': page,
+      'page_size': pageSize,
+    };
     for (final certCnt in certCntList) {
-      requestUrl += 'cert_cnt_list=$certCnt&';
+      queries['cert_cnt_list'] = certCnt;
     }
-    requestUrl += 'page=$page&page_size=$pageSize';
-    final res = await service.get(requestUrl);
+    final res = await service.get('/rooms/category', queryParameters: queries);
     List<dynamic> contents = res.data['result']['content'];
     List<Challenge> result =
         contents.map((item) => Challenge.fromJson(item)).toList();
     return result;
   }
 
-  static Future<OneChallengeResponse> getChallengeOne(
+  static Future<ChallengeDetail> getChallengeOne(
       {required int challengeId}) async {
     final res = await service.get('/rooms/$challengeId');
-    return OneChallengeResponse.fromJson(res.data['result']);
+    return ChallengeDetail.fromJson(res.data['result']);
   }
 
   static Future<List<Challenge>> getBookmarkList() async {
@@ -170,13 +172,11 @@ class ChallengeService {
     );
   }
 
-  static Future<List<ChallengeRoomNoticeResponse>?> getNoticeList(
+  static Future<List<ChallengeNotice>?> getNoticeList(
       {required int roomId}) async {
     final res = await service.get('/room/$roomId/noti');
     final List<dynamic> result = res.data['result'];
-    return result
-        .map((notice) => ChallengeRoomNoticeResponse.fromJson(notice))
-        .toList();
+    return result.map((notice) => ChallengeNotice.fromJson(notice)).toList();
   }
 
   static updateNotice({
@@ -219,13 +219,13 @@ class ChallengeService {
     await service.post('/room/$challengeId/certification', data: data);
   }
 
-  static Future<List<ChallengeRankResponse>> getRanks({
+  static Future<List<ChallengeRank>> getRanks({
     required int id,
     required int code,
   }) async {
     final res = await service.get('/room/$id/rank?code=$code');
     List<dynamic> result = res.data['result'];
-    return result.map((e) => ChallengeRankResponse.fromJson(e)).toList();
+    return result.map((e) => ChallengeRank.fromJson(e)).toList();
   }
 
   static Future<List<Challenge>> getChallengesByKeyword({
@@ -235,14 +235,16 @@ class ChallengeService {
     required int page,
     required int pageSize,
   }) async {
-    String requestUrl = '/room/search?';
-    requestUrl += 'word=$word&';
-    requestUrl += 'condition_code=$conditionCode&';
+    Map<String, dynamic> queries = {
+      'word': word,
+      'condition_code': conditionCode,
+      'page': page,
+      'page_size': pageSize,
+    };
     for (final certCnt in certCntList) {
-      requestUrl += 'cert_cnt_list=$certCnt&';
+      queries['cert_cnt_list'] = certCnt;
     }
-    requestUrl += 'page=$page&page_size=$pageSize';
-    final res = await service.get(requestUrl);
+    final res = await service.get('/room/search', queryParameters: queries);
 
     List<dynamic> contents = res.data['result']['content'];
     List<Challenge> result =

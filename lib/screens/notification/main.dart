@@ -1,6 +1,6 @@
-import 'package:dodal_app/model/status_enum.dart';
+import 'package:dodal_app/enum/status_enum.dart';
 import 'package:dodal_app/providers/notification_list_bloc.dart';
-import 'package:dodal_app/services/alarm/response.dart';
+import 'package:dodal_app/model/alarm_content_model.dart';
 import 'package:dodal_app/theme/color.dart';
 import 'package:dodal_app/theme/typo.dart';
 import 'package:dodal_app/widgets/common/no_list_context.dart';
@@ -57,7 +57,7 @@ class NotiFicationScreen extends StatelessWidget {
 class AlarmContainer extends StatelessWidget {
   const AlarmContainer({super.key, required this.item});
 
-  final AlarmResponse item;
+  final AlarmContent item;
 
   @override
   Widget build(BuildContext context) {
