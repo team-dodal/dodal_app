@@ -1,17 +1,17 @@
 import 'dart:ui';
 
-import 'package:dodal_app/enum/status_enum.dart';
-import 'package:dodal_app/providers/category_list_bloc.dart';
-import 'package:dodal_app/providers/custom_feed_list_bloc.dart';
-import 'package:dodal_app/providers/feed_list_bloc.dart';
-import 'package:dodal_app/providers/my_challenge_list_bloc.dart';
-import 'package:dodal_app/providers/sign_in_bloc.dart';
-import 'package:dodal_app/providers/user_bloc.dart';
-import 'package:dodal_app/providers/user_room_feed_info_bloc.dart';
-import 'package:dodal_app/screens/main_route/main.dart';
-import 'package:dodal_app/screens/sign_in/main.dart';
-import 'package:dodal_app/theme/theme_data.dart';
-import 'package:dodal_app/utilities/fcm_setting.dart';
+import 'package:dodal_app/src/common/enum/status_enum.dart';
+import 'package:dodal_app/src/common/bloc/category_list_bloc.dart';
+import 'package:dodal_app/src/main/home/bloc/custom_challenge_list_bloc.dart';
+import 'package:dodal_app/src/main/feed_list/bloc/feed_list_bloc.dart';
+import 'package:dodal_app/src/main/my_challenge/bloc/my_challenge_list_bloc.dart';
+import 'package:dodal_app/src/sign_in/bloc/sign_in_bloc.dart';
+import 'package:dodal_app/src/common/bloc/user_bloc.dart';
+import 'package:dodal_app/src/main/my_info/bloc/user_room_feed_info_bloc.dart';
+import 'package:dodal_app/src/main/root/page/main_route.dart';
+import 'package:dodal_app/src/sign_in/page/sign_in_page.dart';
+import 'package:dodal_app/src/common/theme/theme_data.dart';
+import 'package:dodal_app/src/common/utils/fcm_setting.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -51,7 +51,7 @@ class _AppState extends State<App> {
       MaterialPageRoute(
         builder: (ctx) => BlocProvider(
           create: (context) => SignInBloc(const FlutterSecureStorage()),
-          child: const SignInScreen(),
+          child: const SignInPage(),
         ),
       ),
       (route) => false,
@@ -64,7 +64,7 @@ class _AppState extends State<App> {
         builder: (ctx) => MultiBlocProvider(
           providers: [
             BlocProvider(
-              create: (context) => CustomFeedListBloc(
+              create: (context) => CustomChallengeListBloc(
                 context.read<UserBloc>().state.result!.categoryList,
               ),
             ),
