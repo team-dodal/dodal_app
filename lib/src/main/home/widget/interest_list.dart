@@ -6,10 +6,7 @@ import 'package:dodal_app/src/common/bloc/bookmark_bloc.dart';
 import 'package:dodal_app/src/challenge/home/bloc/challenge_info_bloc.dart';
 import 'package:dodal_app/src/challenge/root/page/challenge_root_page.dart';
 import 'package:dodal_app/src/main/home/bloc/custom_challenge_list_bloc.dart';
-import 'package:dodal_app/src/modify_user/bloc/modify_user_cubit.dart';
-import 'package:dodal_app/src/common/bloc/nickname_check_bloc.dart';
 import 'package:dodal_app/src/common/bloc/user_bloc.dart';
-import 'package:dodal_app/src/modify_user/page/modify_user_page.dart';
 import 'package:dodal_app/src/common/theme/color.dart';
 import 'package:dodal_app/src/common/theme/typo.dart';
 import 'package:dodal_app/src/common/widget/challenge_box/list_challenge_box.dart';
@@ -18,6 +15,7 @@ import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class InterestList extends StatelessWidget {
   const InterestList({super.key});
@@ -53,40 +51,7 @@ class InterestList extends StatelessWidget {
                       color: AppColors.lightYellow,
                       child: InkWell(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MultiBlocProvider(
-                                providers: [
-                                  BlocProvider(
-                                    create: (context) {
-                                      final state = context
-                                          .read<UserBloc>()
-                                          .state
-                                          .result!;
-                                      return ModifyUserCubit(
-                                        nickname: state.nickname,
-                                        content: state.content,
-                                        image: state.profileUrl,
-                                        category: state.tagList,
-                                      );
-                                    },
-                                    child: const ModifyUserPage(),
-                                  ),
-                                  BlocProvider(
-                                    create: (context) => NicknameBloc(
-                                      nickname: context
-                                          .read<UserBloc>()
-                                          .state
-                                          .result!
-                                          .nickname,
-                                    ),
-                                  ),
-                                ],
-                                child: const ModifyUserPage(),
-                              ),
-                            ),
-                          );
+                          context.push('/modify-user');
                         },
                         child: const Row(
                           children: [

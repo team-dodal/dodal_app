@@ -1,11 +1,9 @@
-import 'package:dodal_app/src/challenge/home/bloc/challenge_info_bloc.dart';
 import 'package:dodal_app/src/common/model/feed_content_model.dart';
-import 'package:dodal_app/src/challenge/root/page/challenge_root_page.dart';
 import 'package:dodal_app/src/common/theme/color.dart';
 import 'package:dodal_app/src/common/theme/typo.dart';
 import 'package:dodal_app/src/common/widget/small_tag.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class FeedContentHeader extends StatelessWidget {
   const FeedContentHeader({super.key, required this.feedContent});
@@ -44,15 +42,7 @@ class FeedContentHeader extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BlocProvider(
-                      create: (context) =>
-                          ChallengeInfoBloc(feedContent.roomId),
-                      child: const ChallengeRootPage(),
-                    ),
-                  ));
+              context.push('/challenge/${feedContent.roomId}');
             },
             icon: const Icon(Icons.arrow_forward_ios_rounded),
           )

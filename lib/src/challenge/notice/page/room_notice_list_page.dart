@@ -1,39 +1,23 @@
 import 'package:dodal_app/src/common/enum/status_enum.dart';
 import 'package:dodal_app/src/challenge/notice/bloc/challenge_notice_list_bloc.dart';
-import 'package:dodal_app/src/challenge/notice/bloc/create_challenge_notice_bloc.dart';
-import 'package:dodal_app/src/challenge/notice/page/create_notice_page.dart';
 import 'package:dodal_app/src/common/theme/color.dart';
 import 'package:dodal_app/src/common/theme/typo.dart';
 import 'package:dodal_app/src/common/widget/no_list_context.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class RoomNoticeListPage extends StatefulWidget {
-  const RoomNoticeListPage({
-    super.key,
-    required this.id,
-    this.openIndex,
-    required this.isAdmin,
-  });
-
-  final int id;
-  final int? openIndex;
-  final bool isAdmin;
+  const RoomNoticeListPage({super.key});
 
   @override
   State<RoomNoticeListPage> createState() => _RoomNoticeListPageState();
 }
 
 class _RoomNoticeListPageState extends State<RoomNoticeListPage> {
-  void _goCreateNoticeScreen() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => BlocProvider(
-              create: (context) => CreateChallengeNoticeBloc(roomId: widget.id),
-              child: CreateNoticePage(roomId: widget.id)),
-        )).then((value) {
+  void _goCreateNoticeScreen(int id) {
+    context.push('/challenge/$id/create-notice').then((value) {
       context
           .read<ChallengeNoticeListBloc>()
           .add(LoadChallengeNoticeListEvent());
@@ -114,9 +98,12 @@ class _RoomNoticeListPageState extends State<RoomNoticeListPage> {
       appBar: AppBar(
         title: const Text('공지사항'),
         actions: [
-          if (widget.isAdmin)
+          if (context.read<ChallengeNoticeListBloc>().state.isAdmin)
             IconButton(
-              onPressed: _goCreateNoticeScreen,
+              onPressed: () {
+                _goCreateNoticeScreen(
+                    context.read<ChallengeNoticeListBloc>().state.roomId);
+              },
               icon: const Icon(Icons.add),
             )
         ],

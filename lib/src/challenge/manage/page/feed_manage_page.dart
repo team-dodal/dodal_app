@@ -3,7 +3,6 @@ import 'package:dodal_app/src/common/enum/status_enum.dart';
 import 'package:dodal_app/src/common/model/members_feed_model.dart';
 import 'package:dodal_app/src/challenge/manage/bloc/manage_challenge_feed_bloc.dart';
 import 'package:dodal_app/src/challenge/manage/bloc/manage_challenge_member_bloc.dart';
-import 'package:dodal_app/src/common/model/challenge_detail_model.dart';
 import 'package:dodal_app/src/common/theme/color.dart';
 import 'package:dodal_app/src/common/theme/typo.dart';
 import 'package:dodal_app/src/challenge/challenge_settings_menu/widget/certificate_feed_image.dart';
@@ -11,12 +10,11 @@ import 'package:dodal_app/src/common/widget/no_list_context.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class FeedManagePage extends StatefulWidget {
-  const FeedManagePage({super.key, required this.challenge});
-
-  final ChallengeDetail challenge;
+  const FeedManagePage({super.key});
 
   @override
   State<FeedManagePage> createState() => _FeedManagePageState();
@@ -116,9 +114,7 @@ class InformationHeader extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
+                onPressed: context.pop,
                 icon: const Icon(Icons.close_rounded),
               )
             ],

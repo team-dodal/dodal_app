@@ -1,16 +1,14 @@
 import 'package:dodal_app/src/common/model/user_model.dart';
-import 'package:dodal_app/src/sign_in/bloc/sign_in_bloc.dart';
 import 'package:dodal_app/src/common/bloc/user_bloc.dart';
-import 'package:dodal_app/src/sign_in/page/sign_in_page.dart';
+import 'package:dodal_app/src/sign_up/bloc/sign_up_cubit.dart';
 import 'package:dodal_app/src/sign_up/page/sign_up_agreement_page.dart';
-import 'package:dodal_app/src/sign_up/page/sign_up_complete_page.dart';
 import 'package:dodal_app/src/sign_up/page/sign_up_input_form_page.dart';
 import 'package:dodal_app/src/sign_up/page/sign_up_tag_select_page.dart';
 import 'package:dodal_app/src/common/layout/create_screen_layout.dart';
 import 'package:dodal_app/src/common/widget/system_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:go_router/go_router.dart';
 
 class SignUpRoute extends StatefulWidget {
   const SignUpRoute({super.key});
@@ -25,10 +23,10 @@ class _SignUpRouteState extends State<SignUpRoute> {
 
   createUserSuccess(User user) {
     context.read<UserBloc>().add(UpdateUserBlocEvent(user));
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (ctx) => const SignUpCompletePage()),
-      (route) => false,
-    );
+    final id = context.read<SignUpCubit>().socialId;
+    final email = context.read<SignUpCubit>().email;
+    final type = context.read<SignUpCubit>().socialType;
+    context.go('/sign-up/$id/$email/$type/complete');
   }
 
   createUserError(String errorMessage) {
@@ -41,16 +39,7 @@ class _SignUpRouteState extends State<SignUpRoute> {
           SystemDialogButton(
             text: '확인',
             onPressed: () {
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                  builder: (ctx) => BlocProvider(
-                    create: (context) =>
-                        SignInBloc(const FlutterSecureStorage()),
-                    child: const SignInPage(),
-                  ),
-                ),
-                (route) => false,
-              );
+              context.go('/sign-in');
             },
           )
         ],

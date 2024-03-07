@@ -1,6 +1,5 @@
 import 'package:dodal_app/src/common/enum/status_enum.dart';
 import 'package:dodal_app/src/create_feed/bloc/create_feed_bloc.dart';
-import 'package:dodal_app/src/common/model/challenge_detail_model.dart';
 import 'package:dodal_app/src/common/theme/color.dart';
 import 'package:dodal_app/src/common/theme/typo.dart';
 import 'package:dodal_app/src/common/widget/image_bottom_sheet.dart';
@@ -11,11 +10,12 @@ import 'package:dodal_app/src/create_feed/widget/feed_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class CreateFeedPage extends StatefulWidget {
-  const CreateFeedPage({super.key, required this.challenge});
+  const CreateFeedPage({super.key, required this.title});
 
-  final ChallengeDetail challenge;
+  final String title;
 
   @override
   State<CreateFeedPage> createState() => _CreateFeedPageState();
@@ -51,13 +51,13 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
         subTitle: '피드가 성공적으로 업로드되었습니다.',
         children: [
           ElevatedButton(
-            onPressed: Navigator.of(context).pop,
+            onPressed: context.pop,
             child: const Text('확인'),
           )
         ],
       ),
     );
-    Navigator.of(context).pop(true);
+    context.pop(true);
   }
 
   _errorAlert(String errorMessage) async {
@@ -65,7 +65,7 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
       context: context,
       builder: (ctx) => SystemDialog(subTitle: errorMessage),
     );
-    Navigator.pop(context);
+    context.pop();
   }
 
   _handleSubmit() async {
@@ -79,7 +79,7 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
             text: '취소',
             primary: false,
             onPressed: () {
-              Navigator.pop(context);
+              context.pop();
             },
           ),
           SystemDialogButton(
@@ -87,8 +87,8 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
             onPressed: () {
               context
                   .read<CreateFeedBloc>()
-                  .add(SubmitCreateFeedEvent(widget.challenge.id, frameKey));
-              Navigator.pop(context);
+                  .add(SubmitCreateFeedEvent(frameKey));
+              context.pop();
             },
           ),
         ],
@@ -123,7 +123,7 @@ class _CreateFeedPageState extends State<CreateFeedPage> {
       },
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(title: Text(widget.challenge.title)),
+          appBar: AppBar(title: Text(widget.title)),
           body: GestureDetector(
             onTap: _dismissKeyboard,
             child: SingleChildScrollView(

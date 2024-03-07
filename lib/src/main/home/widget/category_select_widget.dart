@@ -1,8 +1,5 @@
 import 'package:dodal_app/src/common/model/category_model.dart';
 import 'package:dodal_app/src/common/bloc/category_list_bloc.dart';
-import 'package:dodal_app/src/challenge_list/bloc/challenge_list_bloc.dart';
-import 'package:dodal_app/src/challenge_list/bloc/challenge_list_filter_cubit.dart';
-import 'package:dodal_app/src/challenge_list/page/challenge_list_page.dart';
 import 'package:dodal_app/src/common/theme/color.dart';
 import 'package:dodal_app/src/common/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -10,28 +7,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math' as math;
 
+import 'package:go_router/go_router.dart';
+
 class CategorySelect extends StatelessWidget {
   const CategorySelect({super.key});
 
   void _goListPage(BuildContext context, Category category) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => BlocProvider(
-          create: (ctx) => ChallengeListFilterCubit(category: category),
-          child: BlocProvider(
-            create: (context) => ChallengeListBloc(
-              category: context.read<ChallengeListFilterCubit>().state.category,
-              tag: context.read<ChallengeListFilterCubit>().state.tag,
-              condition:
-                  context.read<ChallengeListFilterCubit>().state.condition,
-              certCntList:
-                  context.read<ChallengeListFilterCubit>().state.certCntList,
-            ),
-            child: const ChallengeListPage(),
-          ),
-        ),
-      ),
-    );
+    context.push('/challenge-list', extra: category);
   }
 
   @override

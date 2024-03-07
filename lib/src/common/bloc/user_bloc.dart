@@ -2,10 +2,11 @@ import 'package:dodal_app/src/common/enum/status_enum.dart';
 import 'package:dodal_app/src/common/model/user_model.dart';
 import 'package:dodal_app/src/common/repositories/user_repository.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
+class UserBloc extends Bloc<UserBlocEvent, UserBlocState> with ChangeNotifier {
   String fcmToken;
   FlutterSecureStorage secureStorage;
 
@@ -37,6 +38,7 @@ class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
         errorMessage: '유저 정보를 불러오는데에 실패하였습니다.',
       ));
     }
+    notifyListeners();
   }
 
   _clearUser(ClearUserBlocEvent event, emit) async {

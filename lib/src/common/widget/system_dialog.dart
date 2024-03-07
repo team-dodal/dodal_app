@@ -1,6 +1,7 @@
 import 'package:dodal_app/src/common/theme/color.dart';
 import 'package:dodal_app/src/common/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class SystemDialog extends StatelessWidget {
   const SystemDialog({
@@ -57,9 +58,7 @@ class SystemDialog extends StatelessWidget {
                     Expanded(
                       child: SystemDialogButton(
                         text: '확인',
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
+                        onPressed: context.pop,
                       ),
                     )
                   ],

@@ -1,16 +1,13 @@
 import 'package:dodal_app/src/common/enum/status_enum.dart';
 import 'package:dodal_app/src/challenge/manage/bloc/manage_challenge_feed_bloc.dart';
 import 'package:dodal_app/src/challenge/manage/bloc/manage_challenge_member_bloc.dart';
-import 'package:dodal_app/src/common/model/challenge_detail_model.dart';
 import 'package:dodal_app/src/common/theme/color.dart';
 import 'package:dodal_app/src/challenge/challenge_settings_menu/widget/member_certification_box.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MemberManagePage extends StatelessWidget {
-  const MemberManagePage({super.key, required this.challenge});
-
-  final ChallengeDetail challenge;
+  const MemberManagePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +37,7 @@ class MemberManagePage extends StatelessWidget {
               itemBuilder: (context, index) {
                 return MemberCertificationBox(
                   user: state.result[index],
-                  challenge: challenge,
+                  challengeId: state.challengeId,
                 );
               },
             );

@@ -1,15 +1,12 @@
 import 'package:dodal_app/src/common/layout/filter_bottom_sheet_layout.dart';
-import 'package:dodal_app/src/comment/bloc/comment_bloc.dart';
-import 'package:dodal_app/src/comment/page/comment_page.dart';
-import 'package:dodal_app/src/report/page/report_page.dart';
 import 'package:dodal_app/src/common/model/feed_content_model.dart';
 import 'package:dodal_app/src/common/repositories/feed_repository.dart';
 import 'package:dodal_app/src/common/theme/color.dart';
 import 'package:dodal_app/src/common/theme/typo.dart';
 import 'package:dodal_app/src/common/widget/avatar_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 
 class FeedContentFooter extends StatefulWidget {
   const FeedContentFooter({super.key, required this.feedContent});
@@ -47,13 +44,7 @@ class _FeedContentFooterState extends State<FeedContentFooter> {
               ListTile(
                 title: Text('신고하기', style: context.body2()),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          ReportPage(userId: widget.feedContent.userId),
-                    ),
-                  );
+                  context.push('/report/${widget.feedContent.userId}');
                 },
               )
             ],
@@ -152,16 +143,9 @@ class _FeedContentFooterState extends State<FeedContentFooter> {
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => BlocProvider(
-                                create: (context) =>
-                                    CommentBloc(widget.feedContent.feedId),
-                                child: const CommentPage(),
-                              ),
-                            ),
-                          ).then((value) {
+                          context
+                              .push('/comment/${widget.feedContent.feedId}')
+                              .then((dynamic value) {
                             setState(() {
                               widget.feedContent.copyWith(commentCnt: value);
                             });

@@ -1,12 +1,12 @@
 import 'package:dodal_app/src/common/layout/filter_bottom_sheet_layout.dart';
 import 'package:dodal_app/src/common/model/comment_model.dart';
 import 'package:dodal_app/src/common/bloc/user_bloc.dart';
-import 'package:dodal_app/src/report/page/report_page.dart';
 import 'package:dodal_app/src/common/theme/color.dart';
 import 'package:dodal_app/src/common/theme/typo.dart';
 import 'package:dodal_app/src/common/widget/avatar_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 const String DELETED_MSG = '삭제된 메시지입니다.';
 
@@ -34,18 +34,13 @@ class CommentBox extends StatelessWidget {
                   onTap: () async {
                     await removeComment(comment.commentId);
                     if (!context.mounted) return;
-                    Navigator.pop(context);
+                    context.pop();
                   },
                 ),
               ListTile(
                 title: Text('신고하기', style: context.body2()),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ReportPage(userId: comment.userId),
-                    ),
-                  );
+                  context.push('/report${comment.userId}');
                 },
               ),
             ],

@@ -6,16 +6,14 @@ import 'package:dodal_app/src/common/bloc/bookmark_bloc.dart';
 import 'package:dodal_app/src/common/bloc/category_list_bloc.dart';
 import 'package:dodal_app/src/challenge/home/bloc/challenge_info_bloc.dart';
 import 'package:dodal_app/src/challenge/root/page/challenge_root_page.dart';
-import 'package:dodal_app/src/challenge_list/bloc/challenge_list_bloc.dart';
-import 'package:dodal_app/src/challenge_list/bloc/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/src/main/home/bloc/custom_challenge_list_bloc.dart';
-import 'package:dodal_app/src/challenge_list/page/challenge_list_page.dart';
 import 'package:dodal_app/src/common/theme/color.dart';
 import 'package:dodal_app/src/common/theme/typo.dart';
 import 'package:dodal_app/src/common/widget/challenge_box/grid_challenge_box.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class PopularList extends StatelessWidget {
   const PopularList({super.key});
@@ -89,36 +87,7 @@ class PopularList extends StatelessWidget {
                     .read<CategoryListBloc>()
                     .state
                     .categoryListForFilter();
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => BlocProvider(
-                      create: (ctx) => ChallengeListFilterCubit(
-                        category: list[0],
-                      ),
-                      child: BlocProvider(
-                        create: (context) => ChallengeListBloc(
-                          category: context
-                              .read<ChallengeListFilterCubit>()
-                              .state
-                              .category,
-                          tag: context
-                              .read<ChallengeListFilterCubit>()
-                              .state
-                              .tag,
-                          condition: context
-                              .read<ChallengeListFilterCubit>()
-                              .state
-                              .condition,
-                          certCntList: context
-                              .read<ChallengeListFilterCubit>()
-                              .state
-                              .certCntList,
-                        ),
-                        child: const ChallengeListPage(),
-                      ),
-                    ),
-                  ),
-                );
+                context.push('/challenge-list', extra: {'category': list[0]});
               },
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 0),

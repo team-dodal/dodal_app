@@ -2,11 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:dodal_app/src/common/enum/status_enum.dart';
 import 'package:dodal_app/src/common/model/host_challenge_model.dart';
 import 'package:dodal_app/src/common/model/joined_challenge_model.dart';
-import 'package:dodal_app/src/challenge/home/bloc/challenge_info_bloc.dart';
-import 'package:dodal_app/src/challenge/root/page/challenge_root_page.dart';
-import 'package:dodal_app/src/create_challenge/bloc/create_challenge_cubit.dart';
 import 'package:dodal_app/src/main/my_challenge/bloc/my_challenge_list_bloc.dart';
-import 'package:dodal_app/src/create_challenge/page/create_challenge_route.dart';
 import 'package:dodal_app/src/common/theme/color.dart';
 import 'package:dodal_app/src/common/widget/no_list_context.dart';
 import 'package:dodal_app/src/main/my_challenge/widget/admin_challenge_box.dart';
@@ -14,6 +10,7 @@ import 'package:dodal_app/src/main/my_challenge/widget/joined_challenge_box.dart
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class MyChallengePage extends StatefulWidget {
   const MyChallengePage({super.key});
@@ -95,12 +92,7 @@ class JoinedList extends StatelessWidget {
       itemBuilder: (context, index) {
         return InkWell(
           onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => BlocProvider(
-                create: (context) => ChallengeInfoBloc(list[index].id),
-                child: const ChallengeRootPage(),
-              ),
-            ));
+            context.push('/challenge/${list[index].id}');
           },
           child: JoinedChallengeBox(
             id: list[index].id,
@@ -168,14 +160,7 @@ class AdminList extends StatelessWidget {
           subTitle: '도전 그룹을 운영해 보는 건 어떠세요?',
           buttonText: '도전 생성하기',
           onButtonPress: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (ctx) => BlocProvider(
-                  create: (context) => CreateChallengeBloc(),
-                  child: const CreateChallengeRoute(),
-                ),
-              ),
-            );
+            context.push('/create-challenge');
           },
         ),
       ],
@@ -191,13 +176,7 @@ class AdminList extends StatelessWidget {
       itemBuilder: (context, index) {
         return InkWell(
           onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => BlocProvider(
-                create: (context) =>
-                    ChallengeInfoBloc(list[index].challengeRoomId),
-                child: const ChallengeRootPage(),
-              ),
-            ));
+            context.push('/challenge/${list[index].challengeRoomId}');
           },
           child: AdminChallengeBox(
             id: list[index].challengeRoomId,

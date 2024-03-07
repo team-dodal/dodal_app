@@ -6,9 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ManageChallengeMemberBloc
     extends Bloc<ManageChallengeMemberEvent, ManageChallengeMemberState> {
-  final int roomId;
-  ManageChallengeMemberBloc(this.roomId)
-      : super(ManageChallengeMemberState.init()) {
+  ManageChallengeMemberBloc(int challengeId)
+      : super(ManageChallengeMemberState.init(challengeId)) {
     on<LoadManageChallengeMemberEvent>(_loadManageChallengeMemberEvent);
     add(LoadManageChallengeMemberEvent());
   }
@@ -16,7 +15,8 @@ class ManageChallengeMemberBloc
   Future<void> _loadManageChallengeMemberEvent(event, emit) async {
     emit(state.copyWith(status: CommonStatus.loading));
     try {
-      final res = await ManageChallengeRepository.manageUsers(roomId: roomId);
+      final res = await ManageChallengeRepository.manageUsers(
+          roomId: state.challengeId);
       emit(state.copyWith(
         status: CommonStatus.loaded,
         result: res,
@@ -38,34 +38,39 @@ class LoadManageChallengeMemberEvent extends ManageChallengeMemberEvent {
 }
 
 class ManageChallengeMemberState extends Equatable {
+  final int challengeId;
   final CommonStatus status;
   final List<ChallengeMember> result;
   final String? errorMessage;
 
   const ManageChallengeMemberState({
     required this.status,
+    required this.challengeId,
     required this.result,
     this.errorMessage,
   });
 
-  ManageChallengeMemberState.init()
+  ManageChallengeMemberState.init(int challengeId)
       : this(
           status: CommonStatus.init,
+          challengeId: challengeId,
           result: [],
         );
 
   ManageChallengeMemberState copyWith({
     CommonStatus? status,
+    int? challengeId,
     List<ChallengeMember>? result,
     String? errorMessage,
   }) {
     return ManageChallengeMemberState(
       status: status ?? this.status,
+      challengeId: challengeId ?? this.challengeId,
       result: result ?? this.result,
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }
 
   @override
-  List<Object?> get props => [status, result, errorMessage];
+  List<Object?> get props => [challengeId, status, result, errorMessage];
 }

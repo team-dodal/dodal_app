@@ -1,10 +1,9 @@
-import 'package:dodal_app/src/settings_menu/page/personal_data_rule_page.dart';
-import 'package:dodal_app/src/settings_menu/page/service_rule_page.dart';
 import 'package:dodal_app/src/common/widget/create_form_title.dart';
 import 'package:dodal_app/src/sign_up/widget/agree_button.dart';
 import 'package:dodal_app/src/sign_up/widget/all_agree_button.dart';
 import 'package:dodal_app/src/common/widget/submit_button.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class SignUpAgreementPage extends StatefulWidget {
   const SignUpAgreementPage({
@@ -64,12 +63,7 @@ class _SignUpAgreementPageState extends State<SignUpAgreementPage> {
                 _onChanged(0, value);
               },
               morePress: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ServiceRulePage(),
-                  ),
-                );
+                context.push('/settings/service-rule');
               },
             ),
             const SizedBox(height: 16),
@@ -80,12 +74,7 @@ class _SignUpAgreementPageState extends State<SignUpAgreementPage> {
                 _onChanged(1, value);
               },
               morePress: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PersonalDataRulePage(),
-                  ),
-                );
+                context.push('/settings/personal-data-rule');
               },
             ),
           ],

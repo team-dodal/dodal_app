@@ -1,18 +1,7 @@
-import 'dart:ui';
-
-import 'package:dodal_app/src/common/enum/status_enum.dart';
+import 'package:dodal_app/src/app.dart';
 import 'package:dodal_app/src/common/bloc/category_list_bloc.dart';
-import 'package:dodal_app/src/main/home/bloc/custom_challenge_list_bloc.dart';
-import 'package:dodal_app/src/main/feed_list/bloc/feed_list_bloc.dart';
-import 'package:dodal_app/src/main/my_challenge/bloc/my_challenge_list_bloc.dart';
-import 'package:dodal_app/src/sign_in/bloc/sign_in_bloc.dart';
 import 'package:dodal_app/src/common/bloc/user_bloc.dart';
-import 'package:dodal_app/src/main/my_info/bloc/user_room_feed_info_bloc.dart';
-import 'package:dodal_app/src/main/root/page/main_route.dart';
-import 'package:dodal_app/src/sign_in/page/sign_in_page.dart';
-import 'package:dodal_app/src/common/theme/theme_data.dart';
 import 'package:dodal_app/src/common/utils/fcm_setting.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -33,52 +22,19 @@ void main() async {
   );
   await initializeDateFormatting();
 
-  runApp(App(fcmToken: fcmToken));
+  runApp(Main(fcmToken: fcmToken));
 }
 
-class App extends StatefulWidget {
-  const App({super.key, required this.fcmToken});
+class Main extends StatefulWidget {
+  const Main({super.key, required this.fcmToken});
 
   final String fcmToken;
 
   @override
-  State<App> createState() => _AppState();
+  State<Main> createState() => _MainState();
 }
 
-class _AppState extends State<App> {
-  _goSignInPage() {
-    navigatorKey.currentState!.pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (ctx) => BlocProvider(
-          create: (context) => SignInBloc(const FlutterSecureStorage()),
-          child: const SignInPage(),
-        ),
-      ),
-      (route) => false,
-    );
-  }
-
-  _goMainPage() {
-    navigatorKey.currentState!.pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (ctx) => MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (context) => CustomChallengeListBloc(
-                context.read<UserBloc>().state.result!.categoryList,
-              ),
-            ),
-            BlocProvider(create: (context) => FeedListBloc()),
-            BlocProvider(create: (context) => MyChallengeListBloc()),
-            BlocProvider(create: (context) => UserRoomFeedInfoBloc()),
-          ],
-          child: const MainRoute(),
-        ),
-      ),
-      (route) => false,
-    );
-  }
-
+class _MainState extends State<Main> {
   @override
   void initState() {
     super.initState();
@@ -90,42 +46,12 @@ class _AppState extends State<App> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => UserBloc(
-            widget.fcmToken,
-            const FlutterSecureStorage(),
-          ),
+          create: (context) =>
+              UserBloc(widget.fcmToken, const FlutterSecureStorage()),
         ),
         BlocProvider(create: (context) => CategoryListBloc()),
       ],
-      child: MaterialApp(
-        title: '도달',
-        theme: lightTheme,
-        navigatorKey: navigatorKey,
-        scrollBehavior: CustomScrollBehavior(),
-        home: BlocListener<UserBloc, UserBlocState>(
-          listener: (context, state) {
-            if (state.status == CommonStatus.error) {
-              _goSignInPage();
-            }
-            if (state.status == CommonStatus.loaded) {
-              if (state.result == null) {
-                _goSignInPage();
-              } else {
-                _goMainPage();
-              }
-            }
-          },
-          child: const Scaffold(
-            body: Center(child: CupertinoActivityIndicator()),
-          ),
-        ),
-      ),
+      child: const App(),
     );
   }
-}
-
-class CustomScrollBehavior extends MaterialScrollBehavior {
-  @override
-  Set<PointerDeviceKind> get dragDevices =>
-      {PointerDeviceKind.touch, PointerDeviceKind.mouse};
 }

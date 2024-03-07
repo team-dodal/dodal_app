@@ -1,4 +1,3 @@
-import 'package:dodal_app/src/challenge/feed/page/challenge_feed_page.dart';
 import 'package:dodal_app/src/common/model/challenge_detail_model.dart';
 import 'package:dodal_app/src/common/theme/color.dart';
 import 'package:dodal_app/src/common/theme/typo.dart';
@@ -8,6 +7,7 @@ import 'package:dodal_app/src/challenge/notice/widget/notice_box.dart';
 import 'package:dodal_app/src/common/widget/image_widget.dart';
 import 'package:dodal_app/src/common/widget/room_info_box.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ChallengeHomePage extends StatelessWidget {
   const ChallengeHomePage({super.key, required this.challenge});
@@ -52,14 +52,8 @@ class ChallengeHomePage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: TextButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) {
-                      return ChallengeFeedPage(
-                        roomId: challenge.id,
-                        roomName: challenge.title,
-                      );
-                    },
-                  ));
+                  context.push(
+                      '/challenge/${challenge.id}/feed/${challenge.title}');
                 },
                 style: TextButton.styleFrom(
                   minimumSize: const Size(double.infinity, 54),

@@ -1,13 +1,10 @@
-import 'package:dodal_app/src/sign_in/bloc/sign_in_bloc.dart';
 import 'package:dodal_app/src/common/bloc/user_bloc.dart';
-import 'package:dodal_app/src/settings_menu/page/personal_data_rule_page.dart';
-import 'package:dodal_app/src/settings_menu/page/service_rule_page.dart';
-import 'package:dodal_app/src/sign_in/page/sign_in_page.dart';
 import 'package:dodal_app/src/common/theme/color.dart';
 import 'package:dodal_app/src/common/widget/system_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:go_router/go_router.dart';
 
 class SettingsMenuPage extends StatefulWidget {
   const SettingsMenuPage({super.key});
@@ -30,7 +27,7 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
             text: '취소',
             primary: false,
             onPressed: () {
-              Navigator.pop(context);
+              context.pop();
             },
           ),
           SystemDialogButton(
@@ -39,15 +36,7 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
               secureStorage.deleteAll();
               if (!mounted) return;
               context.read<UserBloc>().add(ClearUserBlocEvent());
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder: (ctx) => BlocProvider(
-                      create: (context) =>
-                          SignInBloc(const FlutterSecureStorage()),
-                      child: const SignInPage(),
-                    ),
-                  ),
-                  (route) => false);
+              context.go('/sign-in');
             },
           )
         ],
@@ -65,7 +54,7 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
             text: '취소',
             primary: false,
             onPressed: () {
-              Navigator.pop(context);
+              context.pop();
             },
           ),
           SystemDialogButton(
@@ -74,15 +63,7 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
             onPressed: () {
               context.read<UserBloc>().add(RemoveUserBlocEvent());
               if (!mounted) return;
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder: (ctx) => BlocProvider(
-                      create: (context) =>
-                          SignInBloc(const FlutterSecureStorage()),
-                      child: const SignInPage(),
-                    ),
-                  ),
-                  (route) => false);
+              context.go('/sign-in');
             },
           )
         ],
@@ -120,23 +101,13 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
           ListTile(
             title: const Text('이용 약관'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ServiceRulePage(),
-                ),
-              );
+              context.push('/settings/service-rule');
             },
           ),
           ListTile(
             title: const Text('개인정보처리방침'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PersonalDataRulePage(),
-                ),
-              );
+              context.push('/settings/personal-data-rule');
             },
           ),
           const Divider(thickness: 8, color: AppColors.systemGrey4),

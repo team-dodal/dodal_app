@@ -1,15 +1,8 @@
-import 'package:dodal_app/src/main/home/bloc/custom_challenge_list_bloc.dart';
-import 'package:dodal_app/src/main/feed_list/bloc/feed_list_bloc.dart';
-import 'package:dodal_app/src/main/my_challenge/bloc/my_challenge_list_bloc.dart';
-import 'package:dodal_app/src/common/bloc/user_bloc.dart';
-import 'package:dodal_app/src/main/my_info/bloc/user_room_feed_info_bloc.dart';
-import 'package:dodal_app/src/main/root/page/main_route.dart';
-import 'package:dodal_app/src/report/page/report_page.dart';
 import 'package:dodal_app/src/common/model/challenge_detail_model.dart';
 import 'package:dodal_app/src/common/repositories/challenge_repository.dart';
 import 'package:dodal_app/src/common/widget/system_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class MemberMenu extends StatelessWidget {
   const MemberMenu({super.key, required this.challenge});
@@ -28,7 +21,7 @@ class MemberMenu extends StatelessWidget {
               text: '취소',
               primary: false,
               onPressed: () {
-                Navigator.pop(context);
+                context.pop();
               },
             ),
             SystemDialogButton(
@@ -38,30 +31,7 @@ class MemberMenu extends StatelessWidget {
                     await ChallengeRepository.out(challengeId: challenge.id);
                 if (!res) return;
                 if (context.mounted) {
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                      builder: (context) => MultiBlocProvider(
-                        providers: [
-                          BlocProvider(
-                            create: (context) => CustomChallengeListBloc(
-                              context
-                                  .read<UserBloc>()
-                                  .state
-                                  .result!
-                                  .categoryList,
-                            ),
-                          ),
-                          BlocProvider(create: (context) => FeedListBloc()),
-                          BlocProvider(
-                              create: (context) => MyChallengeListBloc()),
-                          BlocProvider(
-                              create: (context) => UserRoomFeedInfoBloc()),
-                        ],
-                        child: const MainRoute(),
-                      ),
-                    ),
-                    (route) => route.isFirst,
-                  );
+                  context.go('/main');
                 }
               },
             ),
@@ -81,11 +51,7 @@ class MemberMenu extends StatelessWidget {
           title: const Text('신고하기'),
           trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 16),
           onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => ReportPage(roomId: challenge.id),
-              ),
-            );
+            context.push('/report/${challenge.id}');
           },
         ),
       ],

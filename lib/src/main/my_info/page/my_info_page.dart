@@ -3,17 +3,14 @@ import 'package:dodal_app/src/common/enum/status_enum.dart';
 import 'package:dodal_app/src/common/model/users_rooms_info_model.dart';
 import 'package:dodal_app/src/main/my_info/bloc/calendar_feed_bloc.dart';
 import 'package:dodal_app/src/common/bloc/category_list_bloc.dart';
-import 'package:dodal_app/src/challenge_list/bloc/challenge_list_bloc.dart';
-import 'package:dodal_app/src/challenge_list/bloc/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/src/main/my_info/bloc/user_room_feed_info_bloc.dart';
-import 'package:dodal_app/src/challenge_list/page/challenge_list_page.dart';
 import 'package:dodal_app/src/common/widget/input/select_input.dart';
 import 'package:dodal_app/src/common/widget/no_list_context.dart';
 import 'package:dodal_app/src/main/my_info/widget/calendar.dart';
 import 'package:dodal_app/src/main/my_info/widget/user_info_box.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class MyInfoPage extends StatelessWidget {
   const MyInfoPage({super.key});
@@ -29,26 +26,7 @@ class MyInfoPage extends StatelessWidget {
           onButtonPress: () {
             List<Category> list =
                 context.read<CategoryListBloc>().state.categoryListForFilter();
-            ChallengeListFilterState filterState =
-                context.read<ChallengeListFilterCubit>().state;
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => BlocProvider(
-                  create: (context) =>
-                      ChallengeListFilterCubit(category: list[0]),
-                  child: BlocProvider(
-                    create: (context) => ChallengeListBloc(
-                      category: filterState.category,
-                      tag: filterState.tag,
-                      condition: filterState.condition,
-                      certCntList: filterState.certCntList,
-                    ),
-                    child: const ChallengeListPage(),
-                  ),
-                ),
-              ),
-            );
+            context.push('/challenge-list', extra: {'category': list[0]});
           },
         ),
       ],

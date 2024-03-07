@@ -3,7 +3,6 @@ import 'package:dodal_app/src/common/enum/day_enum.dart';
 import 'package:dodal_app/src/common/model/challenge_member_model.dart';
 import 'package:dodal_app/src/challenge/manage/bloc/manage_challenge_member_bloc.dart';
 import 'package:dodal_app/src/common/bloc/user_bloc.dart';
-import 'package:dodal_app/src/common/model/challenge_detail_model.dart';
 import 'package:dodal_app/src/common/theme/color.dart';
 import 'package:dodal_app/src/common/theme/typo.dart';
 import 'package:dodal_app/src/challenge/challenge_settings_menu/widget/member_manage_bottom_sheet.dart';
@@ -16,20 +15,20 @@ class MemberCertificationBox extends StatelessWidget {
   const MemberCertificationBox({
     super.key,
     required this.user,
-    required this.challenge,
+    required this.challengeId,
   });
 
   final ChallengeMember user;
-  final ChallengeDetail challenge;
+  final int challengeId;
 
   _showCountBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
       builder: (_) => BlocProvider.value(
-        value: ManageChallengeMemberBloc(challenge.id),
+        value: ManageChallengeMemberBloc(challengeId),
         child: MemberManageBottomSheet(
           userId: user.userId,
-          roomId: challenge.id,
+          roomId: challengeId,
         ),
       ),
     );

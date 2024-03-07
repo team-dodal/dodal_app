@@ -4,9 +4,6 @@ import 'package:dodal_app/src/common/bloc/bookmark_bloc.dart';
 import 'package:dodal_app/src/challenge/home/bloc/challenge_info_bloc.dart';
 import 'package:dodal_app/src/challenge/root/page/challenge_root_page.dart';
 import 'package:dodal_app/src/challenge_list/bloc/challenge_list_filter_cubit.dart';
-import 'package:dodal_app/src/create_challenge/bloc/create_challenge_cubit.dart';
-import 'package:dodal_app/src/create_challenge/page/create_challenge_route.dart';
-import 'package:dodal_app/src/search/page/search_page.dart';
 import 'package:dodal_app/src/common/repositories/challenge_repository.dart';
 import 'package:dodal_app/src/common/theme/color.dart';
 import 'package:dodal_app/src/common/theme/typo.dart';
@@ -15,6 +12,7 @@ import 'package:dodal_app/src/common/widget/challenge_box/list_challenge_box.dar
 import 'package:dodal_app/src/common/widget/no_list_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class SearchResultPage extends StatefulWidget {
@@ -89,14 +87,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                         subTitle: '도전 그룹을 운영해 보는 건 어떠세요?',
                         buttonText: '도전 생성하기',
                         onButtonPress: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (ctx) => BlocProvider(
-                                create: (context) => CreateChallengeBloc(),
-                                child: const CreateChallengeRoute(),
-                              ),
-                            ),
-                          );
+                          context.push('create-challenge');
                         },
                       ),
                     ],
@@ -160,12 +151,7 @@ class SearchAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SearchPage(word: word),
-          ),
-        );
+        context.replace('/search');
       },
       child: Container(
         height: 42,

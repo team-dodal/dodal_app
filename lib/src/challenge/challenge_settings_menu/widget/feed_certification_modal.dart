@@ -8,6 +8,7 @@ import 'package:dodal_app/src/common/widget/avatar_image.dart';
 import 'package:dodal_app/src/common/widget/image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class FeedCertificationModal extends StatelessWidget {
   const FeedCertificationModal({super.key, required this.feed});
@@ -17,7 +18,7 @@ class FeedCertificationModal extends StatelessWidget {
   _request(BuildContext context, bool value) {
     context.read<ManageChallengeFeedBloc>().add(
         ApproveOrRejectEvent(feedId: feed.challengeFeedId, approve: value));
-    Navigator.pop(context);
+    context.pop();
   }
 
   @override
@@ -41,9 +42,7 @@ class FeedCertificationModal extends StatelessWidget {
                 ],
               ),
               IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
+                onPressed: context.pop,
                 icon: const Icon(Icons.close_rounded),
               ),
             ],

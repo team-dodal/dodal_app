@@ -1,12 +1,8 @@
-import 'package:dodal_app/src/common/model/category_model.dart';
-import 'package:dodal_app/src/common/bloc/category_list_bloc.dart';
-import 'package:dodal_app/src/challenge_list/bloc/challenge_list_filter_cubit.dart';
-import 'package:dodal_app/src/search/page/search_result_page.dart';
 import 'package:dodal_app/src/common/theme/typo.dart';
 import 'package:dodal_app/src/search/widget/search_bar.dart';
 import 'package:dodal_app/src/search/widget/search_item_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SearchPage extends StatefulWidget {
@@ -61,17 +57,7 @@ class _SearchPageState extends State<SearchPage> {
 
   goResultScreen(String word) {
     if (!mounted) return;
-    List<Category> list =
-        context.read<CategoryListBloc>().state.categoryListForFilter();
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => BlocProvider(
-          create: (ctx) => ChallengeListFilterCubit(category: list[0]),
-          child: SearchResultPage(word: word),
-        ),
-      ),
-    );
+    context.replace('/search');
   }
 
   @override

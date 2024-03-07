@@ -1,12 +1,11 @@
 import 'package:animations/animations.dart';
-import 'package:dodal_app/src/common/model/challenge_detail_model.dart';
 import 'package:dodal_app/src/challenge/manage/page/feed_manage_page.dart';
 import 'package:dodal_app/src/challenge/manage/page/member_manage_page.dart';
 import 'package:flutter/material.dart';
 
 class Route {
   final String name;
-  final Widget Function(ChallengeDetail) screen;
+  final Widget Function() screen;
 
   Route({required this.name, required this.screen});
 }
@@ -14,22 +13,17 @@ class Route {
 List<Route> routeList = [
   Route(
     name: '인증 관리',
-    screen: (challenge) => FeedManagePage(challenge: challenge),
+    screen: () => const FeedManagePage(),
   ),
   Route(
     name: '멤버 관리',
-    screen: (challenge) => MemberManagePage(challenge: challenge),
+    screen: () => const MemberManagePage(),
   ),
 ];
 
 class ChallengeManagePage extends StatefulWidget {
-  const ChallengeManagePage({
-    super.key,
-    required this.index,
-    required this.challenge,
-  });
+  const ChallengeManagePage({super.key, required this.index});
 
-  final ChallengeDetail challenge;
   final int index;
 
   @override
@@ -81,9 +75,7 @@ class _ChallengeManagePageState extends State<ChallengeManagePage>
             child: child,
           );
         },
-        child: routeList
-            .map((route) => route.screen(widget.challenge))
-            .toList()[_currentIndex],
+        child: routeList.map((route) => route.screen()).toList()[_currentIndex],
       ),
     );
   }

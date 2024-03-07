@@ -9,7 +9,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState> {
-  CreateFeedBloc() : super(const CreateFeedState.init()) {
+  final int _challengeId;
+  CreateFeedBloc(this._challengeId) : super(const CreateFeedState.init()) {
     on<ChangeContentCreateFeedEvent>(_changeContent);
     on<ChangeImageCreateFeedEvent>(_changeImage);
     on<SubmitCreateFeedEvent>(_submitFeed);
@@ -32,7 +33,7 @@ class CreateFeedBloc extends Bloc<CreateFeedEvent, CreateFeedState> {
       final compressedFile = await imageCompress(file);
 
       await ChallengeRepository.createFeed(
-        challengeId: event.challengeId,
+        challengeId: _challengeId,
         content: state.content,
         image: compressedFile,
       );
@@ -63,11 +64,10 @@ class ChangeImageCreateFeedEvent extends CreateFeedEvent {
 }
 
 class SubmitCreateFeedEvent extends CreateFeedEvent {
-  final int challengeId;
   final GlobalKey frameKey;
-  SubmitCreateFeedEvent(this.challengeId, this.frameKey);
+  SubmitCreateFeedEvent(this.frameKey);
   @override
-  List<Object?> get props => [challengeId, frameKey];
+  List<Object?> get props => [frameKey];
 }
 
 class CreateFeedState extends Equatable {

@@ -4,11 +4,10 @@ import 'package:dodal_app/src/common/widget/input/text_input.dart';
 import 'package:dodal_app/src/common/widget/system_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class CreateNoticePage extends StatefulWidget {
-  const CreateNoticePage({super.key, required this.roomId});
-
-  final int roomId;
+  const CreateNoticePage({super.key});
 
   @override
   State<CreateNoticePage> createState() => _CreateNoticePageState();
@@ -51,7 +50,7 @@ class _CreateNoticePageState extends State<CreateNoticePage> {
           _error();
         }
         if (state.status == CommonStatus.loaded) {
-          Navigator.pop(context);
+          context.pop();
         }
       },
       builder: (context, state) {

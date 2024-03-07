@@ -1,5 +1,4 @@
 import 'package:animations/animations.dart';
-import 'package:dodal_app/src/common/helper/slide_page_route.dart';
 import 'package:dodal_app/src/common/model/challenge_model.dart';
 import 'package:dodal_app/src/common/enum/status_enum.dart';
 import 'package:dodal_app/src/common/bloc/bookmark_bloc.dart';
@@ -7,18 +6,13 @@ import 'package:dodal_app/src/challenge/home/bloc/challenge_info_bloc.dart';
 import 'package:dodal_app/src/challenge/root/page/challenge_root_page.dart';
 import 'package:dodal_app/src/challenge_list/bloc/challenge_list_bloc.dart';
 import 'package:dodal_app/src/challenge_list/bloc/challenge_list_filter_cubit.dart';
-import 'package:dodal_app/src/create_challenge/bloc/create_challenge_cubit.dart';
-import 'package:dodal_app/src/notification/bloc/notification_list_bloc.dart';
-import 'package:dodal_app/src/common/bloc/user_bloc.dart';
-import 'package:dodal_app/src/create_challenge/page/create_challenge_route.dart';
-import 'package:dodal_app/src/notification/page/notification_page.dart';
-import 'package:dodal_app/src/search/page/search_page.dart';
 import 'package:dodal_app/src/challenge_list/widget/list_tab_bar.dart';
 import 'package:dodal_app/src/common/widget/challenge_box/list_challenge_box.dart';
 import 'package:dodal_app/src/common/widget/no_list_context.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class ChallengeListPage extends StatefulWidget {
   const ChallengeListPage({super.key});
@@ -78,12 +72,7 @@ class _ChallengeListPageState extends State<ChallengeListPage> {
         subTitle: '도전 그룹을 운영해 보는 건 어떠세요?',
         buttonText: '도전 생성하기',
         onButtonPress: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (ctx) => BlocProvider(
-              create: (context) => CreateChallengeBloc(),
-              child: const CreateChallengeRoute(),
-            ),
-          ));
+          context.push('/create-challenge');
         },
       ),
     );
@@ -122,37 +111,19 @@ class _ChallengeListPageState extends State<ChallengeListPage> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context).push(
-                SlidePageRoute(screen: const SearchPage()),
-              );
+              context.push('/search');
             },
             icon: const Icon(Icons.search),
           ),
           IconButton(
             onPressed: () {
-              Navigator.of(context).push(
-                SlidePageRoute(
-                  screen: BlocProvider(
-                    create: (context) => NotificationListBloc(
-                      userId: context.read<UserBloc>().state.result!.id,
-                    ),
-                    child: const NotiFicationPage(),
-                  ),
-                ),
-              );
+              context.push('/notification');
             },
             icon: const Icon(Icons.notifications_none),
           ),
           IconButton(
             onPressed: () {
-              Navigator.of(context).push(
-                SlidePageRoute(
-                  screen: BlocProvider(
-                    create: (context) => CreateChallengeBloc(),
-                    child: const CreateChallengeRoute(),
-                  ),
-                ),
-              );
+              context.push('/create-challenge');
             },
             icon: const Icon(Icons.add_rounded),
           ),

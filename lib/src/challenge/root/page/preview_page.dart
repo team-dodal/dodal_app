@@ -1,7 +1,5 @@
-import 'package:dodal_app/src/common/helper/slide_page_route.dart';
 import 'package:dodal_app/src/common/bloc/bookmark_bloc.dart';
 import 'package:dodal_app/src/challenge/home/bloc/challenge_info_bloc.dart';
-import 'package:dodal_app/src/challenge/challenge_settings_menu/page/challenge_menu_page.dart';
 import 'package:dodal_app/src/common/theme/color.dart';
 import 'package:dodal_app/src/common/theme/typo.dart';
 import 'package:dodal_app/src/challenge/widget/feed_img_content.dart';
@@ -11,6 +9,7 @@ import 'package:dodal_app/src/common/widget/room_info_box.dart';
 import 'package:dodal_app/src/create_challenge/widget/certificate_image_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class ChallengePreviewPage extends StatelessWidget {
   const ChallengePreviewPage({super.key});
@@ -23,12 +22,7 @@ class ChallengePreviewPage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                SlidePageRoute(
-                  screen: ChallengeMenuPage(challenge: challenge),
-                ),
-              );
+              context.push('/challenge/${challenge.id}/settings');
             },
             icon: const Icon(Icons.more_vert),
           )

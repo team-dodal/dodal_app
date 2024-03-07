@@ -1,6 +1,5 @@
 import 'package:animations/animations.dart';
 import 'package:dodal_app/src/common/enum/certification_code_enum.dart';
-import 'package:dodal_app/src/common/helper/slide_page_route.dart';
 import 'package:dodal_app/src/common/enum/status_enum.dart';
 import 'package:dodal_app/src/common/bloc/bookmark_bloc.dart';
 import 'package:dodal_app/src/challenge/home/bloc/challenge_info_bloc.dart';
@@ -9,15 +8,13 @@ import 'package:dodal_app/src/challenge/chatting/page/challenge_chat_page.dart';
 import 'package:dodal_app/src/challenge/home/page/chllenge_home_page.dart';
 import 'package:dodal_app/src/challenge/root/page/preview_page.dart';
 import 'package:dodal_app/src/challenge/ranking/page/challenge_ranking_page.dart';
-import 'package:dodal_app/src/create_feed/bloc/create_feed_bloc.dart';
-import 'package:dodal_app/src/create_feed/page/create_feed_page.dart';
-import 'package:dodal_app/src/challenge/challenge_settings_menu/page/challenge_menu_page.dart';
 import 'package:dodal_app/src/common/model/challenge_detail_model.dart';
 import 'package:dodal_app/src/challenge/widget/challenge_bottom_sheet.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class Route extends Equatable {
   final String name;
@@ -54,30 +51,19 @@ class _ChallengeRootPageState extends State<ChallengeRootPage>
   late TabController _tabController;
 
   void _routeMenuScreen(ChallengeDetail challenge) {
-    Navigator.push(
-      context,
-      SlidePageRoute(
-        screen: ChallengeMenuPage(challenge: challenge),
-      ),
-    ).then((value) {
+    context.push('/challenge/${challenge.id}/settings').then((value) {
       context.read<ChallengeInfoBloc>().add(LoadChallengeInfoEvent());
     });
   }
 
   void _certificateFeed(ChallengeDetail challenge) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => BlocProvider(
-          create: (context) => CreateFeedBloc(),
-          child: CreateFeedPage(challenge: challenge),
-        ),
-      ),
-    ).then((isNeedRefresh) {
-      if (isNeedRefresh == true) {
-        context.read<ChallengeInfoBloc>().add(LoadChallengeInfoEvent());
-      }
-    });
+    context.push('/create-feed/${challenge.id}/${challenge.title}').then(
+      (isNeedRefresh) {
+        if (isNeedRefresh == true) {
+          context.read<ChallengeInfoBloc>().add(LoadChallengeInfoEvent());
+        }
+      },
+    );
   }
 
   @override

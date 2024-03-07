@@ -6,6 +6,7 @@ import 'package:dodal_app/src/comment/widget/comment_box.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class CommentPage extends StatefulWidget {
   const CommentPage({super.key});
@@ -29,7 +30,7 @@ class _CommentPageState extends State<CommentPage> {
       builder: (context, state) {
         return WillPopScope(
           onWillPop: () async {
-            Navigator.pop(context, state.list.length);
+            context.pop(state.list.length);
             return false;
           },
           child: Scaffold(

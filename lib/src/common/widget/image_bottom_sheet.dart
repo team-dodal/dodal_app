@@ -4,6 +4,7 @@ import 'package:dodal_app/src/common/theme/typo.dart';
 import 'package:dodal_app/src/common/utils/image_compress.dart';
 import 'package:dodal_app/src/common/widget/system_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImageBottomSheet extends StatefulWidget {
@@ -27,7 +28,7 @@ class _ImageBottomSheetState extends State<ImageBottomSheet> {
 
     if (type == null) {
       widget.setImage(null);
-      Navigator.pop(context);
+      context.pop();
       return;
     }
 

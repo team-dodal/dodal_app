@@ -4,6 +4,7 @@ import 'package:dodal_app/src/common/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class SortBottomSheet extends StatelessWidget {
   const SortBottomSheet({super.key});
@@ -12,7 +13,7 @@ class SortBottomSheet extends StatelessWidget {
     context
         .read<ChallengeListFilterCubit>()
         .updateCondition(condition: condition);
-    Navigator.pop(context);
+    context.pop();
   }
 
   @override

@@ -1,10 +1,7 @@
 import 'package:dodal_app/src/common/model/user_model.dart';
 import 'package:dodal_app/src/main/home/bloc/custom_challenge_list_bloc.dart';
-import 'package:dodal_app/src/modify_user/bloc/modify_user_cubit.dart';
-import 'package:dodal_app/src/common/bloc/nickname_check_bloc.dart';
 import 'package:dodal_app/src/common/bloc/user_bloc.dart';
 import 'package:dodal_app/src/main/my_info/bloc/user_room_feed_info_bloc.dart';
-import 'package:dodal_app/src/modify_user/page/modify_user_page.dart';
 import 'package:dodal_app/src/common/theme/color.dart';
 import 'package:dodal_app/src/common/theme/typo.dart';
 import 'package:dodal_app/src/common/widget/avatar_image.dart';
@@ -12,6 +9,7 @@ import 'package:dodal_app/src/common/widget/small_tag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class UserInfoBox extends StatelessWidget {
   const UserInfoBox({super.key});
@@ -47,32 +45,7 @@ class UserInfoBox extends StatelessWidget {
                     ),
                     IconButton(
                       onPressed: () {
-                        Navigator.of(context)
-                            .push(
-                          MaterialPageRoute(
-                            builder: (ctx) => MultiBlocProvider(
-                              providers: [
-                                BlocProvider(
-                                  create: (context) {
-                                    return ModifyUserCubit(
-                                      nickname: user.nickname,
-                                      content: user.content,
-                                      image: user.profileUrl,
-                                      category: user.tagList,
-                                    );
-                                  },
-                                ),
-                                BlocProvider(
-                                  create: (context) => NicknameBloc(
-                                    nickname: user.nickname,
-                                  ),
-                                ),
-                              ],
-                              child: const ModifyUserPage(),
-                            ),
-                          ),
-                        )
-                            .then(
+                        context.push('/modify-user').then(
                           (isNeedRefresh) {
                             if (isNeedRefresh == true) {
                               context

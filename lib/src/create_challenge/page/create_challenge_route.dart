@@ -5,10 +5,10 @@ import 'package:dodal_app/src/create_challenge/page/create_challenge_preview_pag
 import 'package:dodal_app/src/create_challenge/page/create_challenge_tag_page.dart';
 import 'package:dodal_app/src/create_challenge/page/create_challenge_title_page.dart';
 import 'package:dodal_app/src/common/layout/create_screen_layout.dart';
-import 'package:dodal_app/src/create_challenge/page/create_challenge_complete_page.dart';
 import 'package:dodal_app/src/common/widget/system_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class CreateChallengeRoute extends StatefulWidget {
   const CreateChallengeRoute({super.key});
@@ -29,13 +29,8 @@ class _CreateChallengeRouteState extends State<CreateChallengeRoute> {
   }
 
   void _success(bool isUpdate) {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (context) => CreateChallengeCompletePage(isUpdate: isUpdate),
-      ),
-      (route) => false,
-    );
+    context.go('/main');
+    context.push('/create-challenge/complete/$isUpdate');
   }
 
   @override

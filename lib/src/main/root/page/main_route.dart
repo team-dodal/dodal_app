@@ -1,22 +1,11 @@
 import 'package:animations/animations.dart';
-import 'package:dodal_app/src/common/helper/slide_page_route.dart';
-import 'package:dodal_app/src/create_challenge/bloc/create_challenge_cubit.dart';
-import 'package:dodal_app/src/my_bookmark/bloc/my_bookmark_cubit.dart';
-import 'package:dodal_app/src/notification/bloc/notification_list_bloc.dart';
-import 'package:dodal_app/src/common/bloc/user_bloc.dart';
-import 'package:dodal_app/src/my_bookmark/page/my_bookmark_page.dart';
-import 'package:dodal_app/src/create_challenge/page/create_challenge_route.dart';
-import 'package:dodal_app/src/notification/page/notification_page.dart';
-import 'package:dodal_app/src/search/page/search_page.dart';
-import 'package:dodal_app/src/settings_menu/page/settings_menu_page.dart';
+import 'package:dodal_app/src/main/feed_list/page/feed_list_page.dart';
+import 'package:dodal_app/src/main/home/page/main_page.dart';
+import 'package:dodal_app/src/main/my_challenge/page/my_challenge_page.dart';
+import 'package:dodal_app/src/main/my_info/page/my_info_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import '../../my_challenge/page/my_challenge_page.dart';
-import '../../feed_list/page/feed_list_page.dart';
-import '../../home/page/main_page.dart';
-import '../../my_info/page/my_info_page.dart';
+import 'package:go_router/go_router.dart';
 
 class Route {
   final String name;
@@ -69,10 +58,6 @@ class MainRoute extends StatefulWidget {
 class _MainRouteState extends State<MainRoute> {
   int _currentIndex = 0;
 
-  void _handleActionBtn(Widget screen) {
-    Navigator.of(context).push(SlidePageRoute(screen: screen));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,29 +72,19 @@ class _MainRouteState extends State<MainRoute> {
             ? [
                 IconButton(
                   onPressed: () {
-                    _handleActionBtn(const SearchPage());
+                    context.push('/search');
                   },
                   icon: SvgPicture.asset('assets/icons/search_icon.svg'),
                 ),
                 IconButton(
                   onPressed: () {
-                    _handleActionBtn(
-                      BlocProvider(
-                        create: (context) => NotificationListBloc(
-                          userId: context.read<UserBloc>().state.result!.id,
-                        ),
-                        child: const NotiFicationPage(),
-                      ),
-                    );
+                    context.push('/notification');
                   },
                   icon: SvgPicture.asset('assets/icons/bell_icon.svg'),
                 ),
                 IconButton(
                   onPressed: () {
-                    _handleActionBtn(BlocProvider(
-                      create: (context) => CreateChallengeBloc(),
-                      child: const CreateChallengeRoute(),
-                    ));
+                    context.push('create-challenge');
                   },
                   icon: SvgPicture.asset('assets/icons/plus_icon.svg'),
                 ),
@@ -117,29 +92,19 @@ class _MainRouteState extends State<MainRoute> {
             : [
                 IconButton(
                   onPressed: () {
-                    _handleActionBtn(BlocProvider(
-                      create: (context) => MyBookmarkCubit(),
-                      child: const MyBookmarkPage(),
-                    ));
+                    context.push('/bookmark');
                   },
                   icon: SvgPicture.asset('assets/icons/bookmark_icon.svg'),
                 ),
                 IconButton(
                   onPressed: () {
-                    _handleActionBtn(
-                      BlocProvider(
-                        create: (context) => NotificationListBloc(
-                          userId: context.read<UserBloc>().state.result!.id,
-                        ),
-                        child: const NotiFicationPage(),
-                      ),
-                    );
+                    context.push('/notification');
                   },
                   icon: SvgPicture.asset('assets/icons/bell_icon.svg'),
                 ),
                 IconButton(
                   onPressed: () {
-                    _handleActionBtn(const SettingsMenuPage());
+                    context.push('/settings');
                   },
                   icon: SvgPicture.asset('assets/icons/settings_icon.svg'),
                 ),

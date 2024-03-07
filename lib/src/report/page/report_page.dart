@@ -7,6 +7,7 @@ import 'package:dodal_app/src/common/widget/submit_button.dart';
 import 'package:dodal_app/src/common/widget/system_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 enum ReportItem {
   value_1('상업적/홍보성'),
@@ -44,7 +45,7 @@ class _ReportPageState extends State<ReportPage> {
       targetUserId: widget.userId,
     );
     if (res) {
-      Navigator.pop(context);
+      context.pop();
       showDialog(
         context: context,
         builder: (context) => const SystemDialog(subTitle: '신고가 완료되었습니다.'),

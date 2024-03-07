@@ -1,11 +1,11 @@
 import 'package:dodal_app/src/common/layout/filter_bottom_sheet_layout.dart';
 import 'package:dodal_app/src/challenge/manage/bloc/manage_challenge_member_bloc.dart';
-import 'package:dodal_app/src/report/page/report_page.dart';
 import 'package:dodal_app/src/common/repositories/manage_challenge_repository.dart';
 import 'package:dodal_app/src/common/theme/typo.dart';
 import 'package:dodal_app/src/common/widget/system_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class MemberManageBottomSheet extends StatelessWidget {
   const MemberManageBottomSheet({
@@ -23,7 +23,7 @@ class MemberManageBottomSheet extends StatelessWidget {
       userId: userId,
     );
     if (context.mounted) {
-      Navigator.pop(context);
+      context.pop();
 
       if (res) {
         showDialog(
@@ -32,10 +32,7 @@ class MemberManageBottomSheet extends StatelessWidget {
             subTitle: '방장 권한을 성공적으로 넘겼습니다',
           ),
         );
-        Navigator.popUntil(
-          context,
-          (route) => route.isFirst,
-        );
+        context.go('/main');
       }
     }
   }
@@ -48,15 +45,13 @@ class MemberManageBottomSheet extends StatelessWidget {
         children: [
           SystemDialogButton(
             text: '취소',
-            onPressed: () {
-              Navigator.pop(context);
-            },
+            onPressed: context.pop,
             primary: false,
           ),
           SystemDialogButton(
             text: '내보내기',
             onPressed: () async {
-              Navigator.pop(context);
+              context.pop();
               final res = await ManageChallengeRepository.banishUser(
                 roomId: roomId,
                 userId: userId,
@@ -93,12 +88,7 @@ class MemberManageBottomSheet extends StatelessWidget {
           ListTile(
             title: Center(child: Text('신고하기', style: context.body2())),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ReportPage(roomId: roomId),
-                ),
-              );
+              context.push('/report/$roomId');
             },
           ),
           ListTile(
@@ -112,9 +102,7 @@ class MemberManageBottomSheet extends StatelessWidget {
                     SystemDialogButton(
                       text: '취소',
                       primary: false,
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
+                      onPressed: context.pop,
                     ),
                     SystemDialogButton(
                       text: '확인',

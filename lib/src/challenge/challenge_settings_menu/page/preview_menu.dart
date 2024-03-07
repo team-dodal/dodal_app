@@ -1,6 +1,6 @@
 import 'package:dodal_app/src/common/model/challenge_detail_model.dart';
-import 'package:dodal_app/src/report/page/report_page.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class PreviewMenu extends StatelessWidget {
   const PreviewMenu({
@@ -17,11 +17,7 @@ class PreviewMenu extends StatelessWidget {
         title: const Text('신고하기'),
         trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 16),
         onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => ReportPage(roomId: challenge.id),
-            ),
-          );
+          context.push('/report/${challenge.id}');
         },
       ),
     ]);

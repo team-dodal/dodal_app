@@ -10,6 +10,7 @@ import 'package:dodal_app/src/common/widget/system_dialog.dart';
 import 'package:dodal_app/src/modify_user/widget/input_form_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class ModifyUserPage extends StatefulWidget {
   const ModifyUserPage({super.key});
@@ -42,7 +43,7 @@ class _ModifyUserPageState extends State<ModifyUserPage> {
 
   void _success(User user) async {
     context.read<UserBloc>().add(UpdateUserBlocEvent(user));
-    Navigator.of(context).pop(true);
+    context.pop(true);
   }
 
   void _error(String errorMessage) async {

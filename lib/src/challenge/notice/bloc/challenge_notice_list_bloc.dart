@@ -6,10 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChallengeNoticeListBloc
     extends Bloc<ChallengeNoticeListEvent, ChallengeNoticeListState> {
-  final int roomId;
-  final int? targetIndex;
-  ChallengeNoticeListBloc({required this.roomId, this.targetIndex})
-      : super(ChallengeNoticeListState.init(targetIndex)) {
+  ChallengeNoticeListBloc(int roomId, int? targetIndex, bool isAdmin)
+      : super(ChallengeNoticeListState.init(roomId, targetIndex, isAdmin)) {
     on<LoadChallengeNoticeListEvent>(_load);
     on<ChangeTargetIndexEvent>(_changeTargetIndex);
     add(LoadChallengeNoticeListEvent());
@@ -19,7 +17,7 @@ class ChallengeNoticeListBloc
     emit(state.copyWith(status: CommonStatus.loading));
     try {
       final noticeList =
-          await ChallengeRepository.getNoticeList(roomId: roomId);
+          await ChallengeRepository.getNoticeList(roomId: state.roomId);
       emit(state.copyWith(
         status: CommonStatus.loaded,
         noticeList: noticeList,
@@ -59,32 +57,42 @@ class ChangeTargetIndexEvent extends ChallengeNoticeListEvent {
 
 class ChallengeNoticeListState extends Equatable {
   final CommonStatus status;
+  final int roomId;
+  final bool isAdmin;
   final List<ChallengeNotice> noticeList;
   final List<int> openIndexList;
   final String? errorMessage;
 
   const ChallengeNoticeListState({
     required this.status,
+    required this.roomId,
+    required this.isAdmin,
     required this.noticeList,
     required this.openIndexList,
     this.errorMessage,
   });
 
-  ChallengeNoticeListState.init(int? targetIndex)
+  ChallengeNoticeListState.init(int roomId, int? targetIndex, bool isAdmin)
       : this(
           status: CommonStatus.init,
+          roomId: roomId,
+          isAdmin: isAdmin,
           noticeList: [],
           openIndexList: targetIndex != null ? [targetIndex] : [],
         );
 
   ChallengeNoticeListState copyWith({
     CommonStatus? status,
+    int? roomId,
+    bool? isAdmin,
     List<ChallengeNotice>? noticeList,
     List<int>? openIndexList,
     String? errorMessage,
   }) {
     return ChallengeNoticeListState(
       status: status ?? this.status,
+      roomId: roomId ?? this.roomId,
+      isAdmin: isAdmin ?? this.isAdmin,
       noticeList: noticeList ?? this.noticeList,
       openIndexList: openIndexList ?? this.openIndexList,
       errorMessage: errorMessage ?? this.errorMessage,
@@ -92,5 +100,6 @@ class ChallengeNoticeListState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [status, noticeList, openIndexList, errorMessage];
+  List<Object?> get props =>
+      [roomId, isAdmin, status, noticeList, openIndexList, errorMessage];
 }
