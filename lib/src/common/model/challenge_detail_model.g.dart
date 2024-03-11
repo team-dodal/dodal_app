@@ -35,7 +35,9 @@ ChallengeDetail _$ChallengeDetailFromJson(Map<String, dynamic> json) =>
       registeredAt: DateTime.parse(json['registered_at'] as String),
       userCertPerWeekList: ChallengeDetail.createUserCertListByJsonList(
           json['user_cert_per_week_list'] as List?),
-      continueCertCnt: int.parse(json['continue_cert_cnt'] as String),
+      continueCertCnt: json['continue_cert_cnt'] == null
+          ? 0
+          : int.parse(json['continue_cert_cnt'] as String),
     );
 
 Map<String, dynamic> _$ChallengeDetailToJson(ChallengeDetail instance) =>

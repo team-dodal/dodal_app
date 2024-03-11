@@ -43,7 +43,7 @@ class _ModifyUserPageState extends State<ModifyUserPage> {
 
   void _success(User user) async {
     context.read<AuthBloc>().add(UpdateUserBlocEvent(user));
-    context.pop(true);
+    context.go('/main');
   }
 
   void _error(String errorMessage) async {

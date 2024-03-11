@@ -13,10 +13,12 @@ class CreateChallengeTitlePage extends StatefulWidget {
     super.key,
     required this.steps,
     required this.step,
+    required this.previousStep,
     required this.nextStep,
   });
 
   final int steps, step;
+  final void Function() previousStep;
   final void Function() nextStep;
 
   @override
@@ -70,85 +72,91 @@ class _CreateChallengeTitlePageState extends State<CreateChallengeTitlePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreateChallengeBloc, CreateChallengeState>(
-        builder: (context, state) {
-      return Scaffold(
-        appBar: AppBar(title: Text(state.isUpdate ? '도전 수정하기' : '도전 만들기')),
-        body: SingleChildScrollView(
-          controller: scrollController,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 16, 20, 100),
-            child: Column(
-              children: [
-                CreateFormTitle(
-                  title: '어떤 도전을 만들고 싶나요?',
-                  steps: widget.steps,
-                  currentStep: widget.step,
-                ),
-                const SizedBox(height: 40),
-                TextInput(
-                  controller: titleController,
-                  title: '도전 제목',
-                  required: true,
-                  maxLength: 30,
-                  wordLength: '${titleController.text.length}/30',
-                  placeholder: '도전 제목을 입력해주세요.',
-                  textInputAction: TextInputAction.next,
-                  onChanged: (value) {
-                    context
-                        .read<CreateChallengeBloc>()
-                        .add(ChangeTitleEvent(value));
-                  },
-                ),
-                const SizedBox(height: 32),
-                ThumbnailImageInput(
-                  image: state.thumbnailImg,
-                  onChange: (image) {
-                    context
-                        .read<CreateChallengeBloc>()
-                        .add(ChangeThumbnailImgEvent(image));
-                  },
-                ),
-                const SizedBox(height: 32),
-                TextInput(
-                  controller: contentController,
-                  title: '도전 소개',
-                  required: true,
-                  maxLength: 500,
-                  wordLength: '${contentController.text.length}/500',
-                  multiLine: true,
-                  placeholder: '참여자들의 이해를 위해 설명할 내용이나\n참여 방법 등을 세부적으로 알려주세요.',
-                  textInputAction: TextInputAction.next,
-                  onChanged: (value) {
-                    context
-                        .read<CreateChallengeBloc>()
-                        .add(ChangeContentEvent(value));
-                  },
-                ),
-                const SizedBox(height: 32),
-                NumberInput(
-                  controller: headCountController,
-                  maxNumber: 20,
-                  title: '모집 인원',
-                  required: true,
-                  placeholder: '모집 인원을 설정해주세요.',
-                  onChanged: (value) {
-                    try {
+    return WillPopScope(
+      onWillPop: () async {
+        widget.previousStep();
+        return false;
+      },
+      child: BlocBuilder<CreateChallengeBloc, CreateChallengeState>(
+          builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(title: Text(state.isUpdate ? '도전 수정하기' : '도전 만들기')),
+          body: SingleChildScrollView(
+            controller: scrollController,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 100),
+              child: Column(
+                children: [
+                  CreateFormTitle(
+                    title: '어떤 도전을 만들고 싶나요?',
+                    steps: widget.steps,
+                    currentStep: widget.step,
+                  ),
+                  const SizedBox(height: 40),
+                  TextInput(
+                    controller: titleController,
+                    title: '도전 제목',
+                    required: true,
+                    maxLength: 30,
+                    wordLength: '${titleController.text.length}/30',
+                    placeholder: '도전 제목을 입력해주세요.',
+                    textInputAction: TextInputAction.next,
+                    onChanged: (value) {
                       context
                           .read<CreateChallengeBloc>()
-                          .add(ChangeRecruitCntEvent(int.parse(value)));
-                    } catch (err) {}
-                  },
-                ),
-              ],
+                          .add(ChangeTitleEvent(value));
+                    },
+                  ),
+                  const SizedBox(height: 32),
+                  ThumbnailImageInput(
+                    image: state.thumbnailImg,
+                    onChange: (image) {
+                      context
+                          .read<CreateChallengeBloc>()
+                          .add(ChangeThumbnailImgEvent(image));
+                    },
+                  ),
+                  const SizedBox(height: 32),
+                  TextInput(
+                    controller: contentController,
+                    title: '도전 소개',
+                    required: true,
+                    maxLength: 500,
+                    wordLength: '${contentController.text.length}/500',
+                    multiLine: true,
+                    placeholder: '참여자들의 이해를 위해 설명할 내용이나\n참여 방법 등을 세부적으로 알려주세요.',
+                    textInputAction: TextInputAction.next,
+                    onChanged: (value) {
+                      context
+                          .read<CreateChallengeBloc>()
+                          .add(ChangeContentEvent(value));
+                    },
+                  ),
+                  const SizedBox(height: 32),
+                  NumberInput(
+                    controller: headCountController,
+                    maxNumber: 20,
+                    title: '모집 인원',
+                    required: true,
+                    placeholder: '모집 인원을 설정해주세요.',
+                    onChanged: (value) {
+                      try {
+                        context
+                            .read<CreateChallengeBloc>()
+                            .add(ChangeRecruitCntEvent(int.parse(value)));
+                      } catch (err) {}
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        bottomSheet: SubmitButton(
-          onPress: _isSubmitAble() ? _submit : null,
-          title: '다음',
-        ),
-      );
-    });
+          bottomSheet: SubmitButton(
+            onPress: _isSubmitAble() ? _submit : null,
+            title: '다음',
+          ),
+        );
+      }),
+    );
   }
 }

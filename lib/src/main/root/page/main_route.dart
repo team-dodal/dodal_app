@@ -84,7 +84,7 @@ class _MainRouteState extends State<MainRoute> {
                 ),
                 IconButton(
                   onPressed: () {
-                    context.push('create-challenge');
+                    context.push('/create-challenge');
                   },
                   icon: SvgPicture.asset('assets/icons/plus_icon.svg'),
                 ),

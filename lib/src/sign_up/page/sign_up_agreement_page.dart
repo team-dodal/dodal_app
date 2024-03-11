@@ -10,11 +10,13 @@ class SignUpAgreementPage extends StatefulWidget {
     super.key,
     required this.steps,
     required this.step,
+    required this.previousStep,
     required this.nextStep,
   });
 
   final int steps;
   final int step;
+  final void Function() previousStep;
   final void Function() nextStep;
 
   @override
@@ -36,7 +38,12 @@ class _SignUpAgreementPageState extends State<SignUpAgreementPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: widget.previousStep,
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
         child: Column(

@@ -13,12 +13,14 @@ class SignUpTagSelectPage extends StatelessWidget {
     super.key,
     required this.step,
     required this.steps,
+    required this.previousStep,
     required this.success,
     required this.error,
   });
 
   final int step;
   final int steps;
+  final void Function() previousStep;
   final void Function(User user) success;
   final void Function(String errorMessage) error;
 
@@ -35,7 +37,13 @@ class SignUpTagSelectPage extends StatelessWidget {
       },
       builder: (context, createUser) {
         return Scaffold(
-          appBar: AppBar(title: const Text('프로필 설정')),
+          appBar: AppBar(
+            title: const Text('프로필 설정'),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: previousStep,
+            ),
+          ),
           body: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),

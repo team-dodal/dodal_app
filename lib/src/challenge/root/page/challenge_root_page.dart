@@ -51,7 +51,9 @@ class _ChallengeRootPageState extends State<ChallengeRootPage>
   late TabController _tabController;
 
   void _routeMenuScreen(ChallengeDetail challenge) {
-    context.push('/challenge/${challenge.id}/settings').then((value) {
+    context
+        .push('/challenge/${challenge.id}/settings', extra: challenge)
+        .then((value) {
       context.read<ChallengeInfoBloc>().add(LoadChallengeInfoEvent());
     });
   }

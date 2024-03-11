@@ -13,11 +13,13 @@ class SignUpInputFormPage extends StatefulWidget {
   const SignUpInputFormPage({
     super.key,
     required this.nextStep,
+    required this.previousStep,
     required this.step,
     required this.steps,
   });
 
   final void Function() nextStep;
+  final void Function() previousStep;
   final int step;
   final int steps;
 
@@ -51,7 +53,13 @@ class _SignUpInputFormPageState extends State<SignUpInputFormPage> {
     return BlocBuilder<SignUpCubit, SignUpState>(
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(title: const Text('프로필 설정')),
+          appBar: AppBar(
+            title: const Text('프로필 설정'),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: widget.previousStep,
+            ),
+          ),
           body: SingleChildScrollView(
             controller: scrollController,
             child: Padding(

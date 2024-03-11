@@ -45,7 +45,7 @@ import 'package:dodal_app/src/settings_menu/page/settings_menu_page.dart';
 import 'package:dodal_app/src/sign_in/bloc/sign_in_bloc.dart';
 import 'package:dodal_app/src/sign_in/page/sign_in_page.dart';
 import 'package:dodal_app/src/sign_up/bloc/sign_up_cubit.dart';
-import 'package:dodal_app/src/sign_up/page/sign_up_complete_page.dart';
+import 'package:dodal_app/src/sign_up_complete/page/sign_up_complete_page.dart';
 import 'package:dodal_app/src/sign_up/page/sign_up_route.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

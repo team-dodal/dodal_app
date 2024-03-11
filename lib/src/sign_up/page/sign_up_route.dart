@@ -39,15 +39,13 @@ class _SignUpRouteState extends State<SignUpRoute> {
   Widget build(BuildContext context) {
     return CreateScreenLayout(
       currentIndex: _currentIndex,
-      popStep: () {
-        setState(() {
-          _currentIndex -= 1;
-        });
-      },
       children: [
         SignUpAgreementPage(
           steps: steps,
           step: _currentIndex + 1,
+          previousStep: () {
+            context.read<AuthBloc>().add(ClearUserBlocEvent());
+          },
           nextStep: () {
             setState(() {
               _currentIndex += 1;
@@ -57,6 +55,11 @@ class _SignUpRouteState extends State<SignUpRoute> {
         SignUpInputFormPage(
           steps: steps,
           step: _currentIndex + 1,
+          previousStep: () {
+            setState(() {
+              _currentIndex -= 1;
+            });
+          },
           nextStep: () {
             setState(() {
               _currentIndex += 1;
@@ -66,6 +69,11 @@ class _SignUpRouteState extends State<SignUpRoute> {
         SignUpTagSelectPage(
           steps: steps,
           step: _currentIndex + 1,
+          previousStep: () {
+            setState(() {
+              _currentIndex -= 1;
+            });
+          },
           success: createUserSuccess,
           error: createUserError,
         ),

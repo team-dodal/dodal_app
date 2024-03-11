@@ -13,10 +13,12 @@ class CreateChallengeContentPage extends StatefulWidget {
     super.key,
     required this.steps,
     required this.step,
+    required this.previousStep,
     required this.nextStep,
   });
 
   final int steps, step;
+  final void Function() previousStep;
   final void Function() nextStep;
 
   @override
@@ -50,93 +52,99 @@ class _CreateChallengeContentPageState
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreateChallengeBloc, CreateChallengeState>(
-      builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(title: Text(state.isUpdate ? '도전 수정하기' : '도전 만들기')),
-          body: SingleChildScrollView(
-            controller: scrollController,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 100),
-              child: Column(
-                children: [
-                  CreateFormTitle(
-                    title: '인증 방법을 설정해주세요!',
-                    steps: widget.steps,
-                    currentStep: widget.step,
-                  ),
-                  const SizedBox(height: 40),
-                  SelectInput(
-                    title: '인증 빈도수',
-                    required: true,
-                    placeholder: '빈도수를 선택해주세요.',
-                    value: _selectList.firstWhere(
-                        (element) => element.value == state.certCnt),
-                    onChanged: (value) {
-                      context
-                          .read<CreateChallengeBloc>()
-                          .add(ChangeCertCntEvent(value.value));
-                    },
-                    list: _selectList,
-                  ),
-                  const SizedBox(height: 32),
-                  TextInput(
-                    controller: certContentController,
-                    title: '인증 방법',
-                    required: true,
-                    maxLength: 500,
-                    wordLength: '${certContentController.text.length}/500',
-                    multiLine: true,
-                    placeholder: '참여 인증 방법에 대해 세부적으로 알려주세요.',
-                    textInputAction: TextInputAction.next,
-                    onChanged: (value) {
-                      context
-                          .read<CreateChallengeBloc>()
-                          .add(ChangeCertContentEvent(value));
-                    },
-                  ),
-                  const SizedBox(height: 32),
-                  const InputTitle(
-                    title: '인증 예시',
-                    subTitle: '사진을 통해 인증 성공과 실패 예시를 추가해주세요.',
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: CertificateImageInput(
-                            image: state.certCorrectImg,
+    return WillPopScope(
+      onWillPop: () async {
+        widget.previousStep();
+        return false;
+      },
+      child: BlocBuilder<CreateChallengeBloc, CreateChallengeState>(
+        builder: (context, state) {
+          return Scaffold(
+            appBar: AppBar(title: Text(state.isUpdate ? '도전 수정하기' : '도전 만들기')),
+            body: SingleChildScrollView(
+              controller: scrollController,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 100),
+                child: Column(
+                  children: [
+                    CreateFormTitle(
+                      title: '인증 방법을 설정해주세요!',
+                      steps: widget.steps,
+                      currentStep: widget.step,
+                    ),
+                    const SizedBox(height: 40),
+                    SelectInput(
+                      title: '인증 빈도수',
+                      required: true,
+                      placeholder: '빈도수를 선택해주세요.',
+                      value: _selectList.firstWhere(
+                          (element) => element.value == state.certCnt),
+                      onChanged: (value) {
+                        context
+                            .read<CreateChallengeBloc>()
+                            .add(ChangeCertCntEvent(value.value));
+                      },
+                      list: _selectList,
+                    ),
+                    const SizedBox(height: 32),
+                    TextInput(
+                      controller: certContentController,
+                      title: '인증 방법',
+                      required: true,
+                      maxLength: 500,
+                      wordLength: '${certContentController.text.length}/500',
+                      multiLine: true,
+                      placeholder: '참여 인증 방법에 대해 세부적으로 알려주세요.',
+                      textInputAction: TextInputAction.next,
+                      onChanged: (value) {
+                        context
+                            .read<CreateChallengeBloc>()
+                            .add(ChangeCertContentEvent(value));
+                      },
+                    ),
+                    const SizedBox(height: 32),
+                    const InputTitle(
+                      title: '인증 예시',
+                      subTitle: '사진을 통해 인증 성공과 실패 예시를 추가해주세요.',
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: CertificateImageInput(
+                              image: state.certCorrectImg,
+                              onChange: (value) {
+                                context
+                                    .read<CreateChallengeBloc>()
+                                    .add(ChangeCertCorrectImgEvent(value));
+                              },
+                              certOption: CertOption.correct),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: CertificateImageInput(
+                            image: state.certWrongImg,
                             onChange: (value) {
                               context
                                   .read<CreateChallengeBloc>()
-                                  .add(ChangeCertCorrectImgEvent(value));
+                                  .add(ChangeCertWrongImgEvent(value));
                             },
-                            certOption: CertOption.correct),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: CertificateImageInput(
-                          image: state.certWrongImg,
-                          onChange: (value) {
-                            context
-                                .read<CreateChallengeBloc>()
-                                .add(ChangeCertWrongImgEvent(value));
-                          },
-                          certOption: CertOption.wrong,
-                        ),
-                      )
-                    ],
-                  ),
-                ],
+                            certOption: CertOption.wrong,
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          bottomSheet: SubmitButton(
-            onPress: state.certContent.isNotEmpty ? widget.nextStep : null,
-            title: '다음',
-          ),
-        );
-      },
+            bottomSheet: SubmitButton(
+              onPress: state.certContent.isNotEmpty ? widget.nextStep : null,
+              title: '다음',
+            ),
+          );
+        },
+      ),
     );
   }
 }

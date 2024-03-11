@@ -46,11 +46,6 @@ class _CreateChallengeRouteState extends State<CreateChallengeRoute> {
       },
       child: CreateScreenLayout(
         currentIndex: _currentIndex,
-        popStep: () {
-          setState(() {
-            _currentIndex -= 1;
-          });
-        },
         children: [
           CreateChallengeTagPage(
             step: _currentIndex + 1,
@@ -64,6 +59,11 @@ class _CreateChallengeRouteState extends State<CreateChallengeRoute> {
           CreateChallengeTitlePage(
             step: _currentIndex + 1,
             steps: steps,
+            previousStep: () {
+              setState(() {
+                _currentIndex -= 1;
+              });
+            },
             nextStep: () {
               setState(() {
                 _currentIndex += 1;
@@ -73,6 +73,11 @@ class _CreateChallengeRouteState extends State<CreateChallengeRoute> {
           CreateChallengeContentPage(
             step: _currentIndex + 1,
             steps: steps,
+            previousStep: () {
+              setState(() {
+                _currentIndex -= 1;
+              });
+            },
             nextStep: () {
               setState(() {
                 _currentIndex += 1;
@@ -82,6 +87,11 @@ class _CreateChallengeRouteState extends State<CreateChallengeRoute> {
           CreateChallengePreviewPage(
             step: _currentIndex + 1,
             steps: steps,
+            previousStep: () {
+              setState(() {
+                _currentIndex -= 1;
+              });
+            },
             nextStep: () {
               context
                   .read<CreateChallengeBloc>()
