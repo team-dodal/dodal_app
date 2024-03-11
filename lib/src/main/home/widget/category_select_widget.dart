@@ -13,7 +13,7 @@ class CategorySelect extends StatelessWidget {
   const CategorySelect({super.key});
 
   void _goListPage(BuildContext context, Category category) {
-    context.push('/challenge-list', extra: category);
+    context.push('/challenge-list', extra: {'category': category});
   }
 
   @override

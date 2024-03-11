@@ -1,5 +1,6 @@
 import 'package:dodal_app/src/common/model/category_model.dart';
 import 'package:dodal_app/src/common/model/tag_model.dart';
+import 'package:dodal_app/src/common/utils/social_auth.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -12,8 +13,10 @@ class User extends Equatable {
   final String email;
   final String nickname;
   final String content;
+  @JsonKey(name: 'social_id')
+  final String socialId;
   @JsonKey(name: 'social_type')
-  final String socialType;
+  final SocialType socialType;
   @JsonKey(name: 'profile_url')
   final String? profileUrl;
   @JsonKey(name: 'register_at', fromJson: DateTime.parse)
@@ -31,6 +34,7 @@ class User extends Equatable {
     required this.content,
     required this.profileUrl,
     required this.registerAt,
+    required this.socialId,
     required this.socialType,
     required this.categoryList,
     required this.tagList,
@@ -48,6 +52,7 @@ class User extends Equatable {
         content,
         profileUrl,
         registerAt,
+        socialId,
         socialType,
         categoryList,
         tagList,

@@ -16,11 +16,10 @@ import 'package:dodal_app/src/comment/bloc/comment_bloc.dart';
 import 'package:dodal_app/src/comment/page/comment_page.dart';
 import 'package:dodal_app/src/common/bloc/nickname_check_bloc.dart';
 import 'package:dodal_app/src/common/bloc/user_bloc.dart';
-import 'package:dodal_app/src/common/enum/status_enum.dart';
 import 'package:dodal_app/src/common/model/category_model.dart';
 import 'package:dodal_app/src/common/model/challenge_detail_model.dart';
+import 'package:dodal_app/src/common/model/tag_model.dart';
 import 'package:dodal_app/src/common/theme/theme_data.dart';
-import 'package:dodal_app/src/common/utils/social_auth.dart';
 import 'package:dodal_app/src/create_challenge/bloc/create_challenge_cubit.dart';
 import 'package:dodal_app/src/create_challenge/page/create_challenge_complete_page.dart';
 import 'package:dodal_app/src/create_challenge/page/create_challenge_route.dart';
@@ -69,22 +68,26 @@ class _AppState extends State<App> {
     super.initState();
     router = GoRouter(
       initialLocation: '/',
-      refreshListenable: context.read<UserBloc>(),
-      redirect: (context, state) {
-        CommonStatus authStatus = context.read<UserBloc>().state.status;
+      refreshListenable: context.read<AuthBloc>(),
+      redirect: (context, state) async {
+        AuthStatus authStatus = context.read<AuthBloc>().state.status;
         var blockPageInAuthenticationState = ['/', '/sign-in', '/sign-up'];
+
         switch (authStatus) {
-          case CommonStatus.init:
-          case CommonStatus.loading:
-            return '/';
-          case CommonStatus.loaded:
+          case AuthStatus.authenticated:
             return blockPageInAuthenticationState
                     .contains(state.matchedLocation)
                 ? '/main'
                 : state.matchedLocation;
-          case CommonStatus.error:
+          case AuthStatus.unauthenticated:
+            return '/sign-up';
+          case AuthStatus.unknown:
             return '/sign-in';
+          case AuthStatus.init:
+          case AuthStatus.error:
+            break;
         }
+        return state.path;
       },
       routes: [
         /* init */ GoRoute(
@@ -97,7 +100,7 @@ class _AppState extends State<App> {
             providers: [
               BlocProvider(
                 create: (context) => CustomChallengeListBloc(
-                  context.read<UserBloc>().state.result!.categoryList,
+                  context.read<AuthBloc>().state.user!.categoryList,
                 ),
               ),
               BlocProvider(create: (context) => FeedListBloc()),
@@ -115,33 +118,35 @@ class _AppState extends State<App> {
           ),
         ),
         /* sign-up */ GoRoute(
-          path: '/sign-up/:id/:email/:type',
+          path: '/sign-up',
           builder: (context, state) => MultiBlocProvider(
             providers: [
               BlocProvider(
-                create: (context) => SignUpCubit(
-                  secureStorage: const FlutterSecureStorage(),
-                  socialId: state.pathParameters['id'] as String,
-                  email: state.pathParameters['email'] as String,
-                  socialType: state.pathParameters['type'] as SocialType,
-                ),
+                create: (context) {
+                  final infoData =
+                      context.read<AuthBloc>().state.signInInfoData!;
+                  return SignUpCubit(
+                    secureStorage: const FlutterSecureStorage(),
+                    socialId: infoData.id,
+                    email: infoData.email,
+                    socialType: infoData.type,
+                  );
+                },
               ),
               BlocProvider(create: (context) => NicknameBloc()),
             ],
             child: const SignUpRoute(),
           ),
-          routes: [
-            GoRoute(
-              path: 'complete',
-              builder: (context, state) => const SignUpCompletePage(),
-            )
-          ],
+        ),
+        /* sign-up-complete */ GoRoute(
+          path: '/sign-up-complete',
+          builder: (context, state) => const SignUpCompletePage(),
         ),
         /* notification */ GoRoute(
           path: '/notification',
           builder: (context, state) => BlocProvider(
             create: (context) => NotificationListBloc(
-              userId: context.read<UserBloc>().state.result!.id,
+              userId: context.read<AuthBloc>().state.user!.id,
             ),
             child: const NotiFicationPage(),
           ),
@@ -158,7 +163,7 @@ class _AppState extends State<App> {
         /* modify-user */ GoRoute(
           path: '/modify-user',
           builder: (context, state) {
-            final user = context.read<UserBloc>().state.result!;
+            final user = context.read<AuthBloc>().state.user!;
             return MultiBlocProvider(
               providers: [
                 BlocProvider(
@@ -316,27 +321,26 @@ class _AppState extends State<App> {
         ),
         /* challenge-list */ GoRoute(
           path: '/challenge-list',
-          builder: (context, state) => BlocProvider(
-            create: (ctx) {
-              final extra = (state.extra as Map<String, dynamic>);
-              return ChallengeListFilterCubit(
-                category: extra['category'] as Category,
-                condition: extra['condition'] as ConditionEnum,
-              );
-            },
-            child: BlocProvider(
-              create: (context) => ChallengeListBloc(
-                category:
-                    context.read<ChallengeListFilterCubit>().state.category,
-                tag: context.read<ChallengeListFilterCubit>().state.tag,
-                condition:
-                    context.read<ChallengeListFilterCubit>().state.condition,
-                certCntList:
-                    context.read<ChallengeListFilterCubit>().state.certCntList,
+          builder: (context, state) {
+            final extra = (state.extra as Map<String, dynamic>);
+            return BlocProvider(
+              create: (ctx) {
+                return ChallengeListFilterCubit(
+                  category: extra['category'] as Category,
+                  condition: extra['condition'] as ConditionEnum,
+                );
+              },
+              child: BlocProvider(
+                create: (context) => ChallengeListBloc(
+                  category: extra['category'] as Category,
+                  tag: extra['tag'] as Tag,
+                  condition: extra['condition'] as ConditionEnum,
+                  certCntList: extra['certCntList'] as List<int>,
+                ),
+                child: const ChallengeListPage(),
               ),
-              child: const ChallengeListPage(),
-            ),
-          ),
+            );
+          },
         ),
       ],
     );

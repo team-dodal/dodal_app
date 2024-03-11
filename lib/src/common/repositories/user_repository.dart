@@ -49,7 +49,7 @@ class UserRepository {
     return Authentication.fromJson(res.data['result']);
   }
 
-  static Future<User?> user() async {
+  static Future<User> user() async {
     final res = await service.get('/api/v1/users/me');
     return User.fromJson(res.data['result']);
   }

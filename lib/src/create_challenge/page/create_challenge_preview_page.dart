@@ -40,8 +40,8 @@ class CreateChallengePreviewPage extends StatelessWidget {
               RoomInfoBox(
                 title: state.title,
                 tagName: state.tagValue!.name,
-                adminProfile: context.read<UserBloc>().state.result!.profileUrl,
-                adminNickname: context.read<UserBloc>().state.result!.nickname,
+                adminProfile: context.read<AuthBloc>().state.user!.profileUrl,
+                adminNickname: context.read<AuthBloc>().state.user!.nickname,
                 certCnt: state.certCnt,
                 curMember: 1,
                 maxMember: state.recruitCnt,

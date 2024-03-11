@@ -1,11 +1,25 @@
 import 'dart:developer';
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 enum SocialType { KAKAO, GOOGLE, APPLE }
+
+class SocialResponse extends Equatable {
+  final String id;
+  final String email;
+  final SocialType type;
+  const SocialResponse({
+    required this.id,
+    required this.email,
+    required this.type,
+  });
+  @override
+  List<Object?> get props => [id, email, type];
+}
 
 class AppleAuthService {
   static Future<Map<String, String>?> signIn() async {

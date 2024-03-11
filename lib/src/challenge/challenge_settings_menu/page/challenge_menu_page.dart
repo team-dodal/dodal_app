@@ -15,7 +15,7 @@ class ChallengeMenuPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userId = BlocProvider.of<UserBloc>(context).state.result!.id;
+    final userId = BlocProvider.of<AuthBloc>(context).state.user!.id;
     bool isHost = challenge.hostId == userId;
     bool isJoined = challenge.isJoin;
 

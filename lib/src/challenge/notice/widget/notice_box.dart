@@ -14,7 +14,7 @@ class NoticeBox extends StatelessWidget {
   final ChallengeDetail challenge;
 
   _goNoticeScreen(BuildContext context, int? openIndex) {
-    final user = BlocProvider.of<UserBloc>(context).state.result;
+    final user = BlocProvider.of<AuthBloc>(context).state.user;
     context.push(
         '/challenge/${challenge.id}/notice-list/$openIndex/${challenge.hostId == user!.id}');
   }

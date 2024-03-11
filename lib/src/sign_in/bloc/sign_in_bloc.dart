@@ -15,10 +15,16 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
   }
 
   Future<void> _signIn(SocialSignInEvent event, emit) async {
-    emit(state.copyWith(status: CommonStatus.loading, type: event.type));
+    emit(state.copyWith(status: CommonStatus.loading));
     try {
       final data = await _getSocialIdAndEmail(event.type);
-      emit(state.copyWith(id: data.id, email: data.email));
+      emit(state.copyWith(
+        socialInfoData: SocialResponse(
+          id: data.id,
+          email: data.email,
+          type: event.type,
+        ),
+      ));
       Authentication? res = await UserRepository.signIn(event.type, data.id);
       if (res != null) {
         secureStorage.write(key: 'accessToken', value: res.accessToken);
@@ -42,18 +48,21 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
         return SocialResponse(
           id: res!['id'].toString(),
           email: res['email'].toString(),
+          type: SocialType.GOOGLE,
         );
       case SocialType.KAKAO:
         final res = await KakaoAuthService.signIn();
         return SocialResponse(
           id: res!['id'].toString(),
           email: res['email'].toString(),
+          type: SocialType.KAKAO,
         );
       case SocialType.APPLE:
         final res = await AppleAuthService.signIn();
         return SocialResponse(
           id: res!['id'].toString(),
           email: res['email'].toString(),
+          type: SocialType.APPLE,
         );
     }
   }
@@ -71,58 +80,38 @@ class SocialSignInEvent extends SignInEvent {
 class SignInState extends Equatable {
   final CommonStatus status;
   final String? errorMessage;
-  final String id;
-  final String email;
+  final SocialResponse? socialInfoData;
   final User? user;
-  final SocialType? type;
 
   const SignInState({
     required this.status,
     this.errorMessage,
-    required this.id,
-    required this.email,
     required this.user,
-    required this.type,
+    required this.socialInfoData,
   });
 
   const SignInState.init()
       : this(
           status: CommonStatus.init,
-          id: '',
-          email: '',
+          errorMessage: null,
           user: null,
-          type: null,
+          socialInfoData: null,
         );
 
   SignInState copyWith({
     CommonStatus? status,
     String? errorMessage,
-    String? id,
-    String? email,
     User? user,
-    SocialType? type,
+    SocialResponse? socialInfoData,
   }) {
     return SignInState(
       status: status ?? this.status,
-      id: id ?? this.id,
-      email: email ?? this.email,
       errorMessage: errorMessage ?? this.errorMessage,
       user: user ?? this.user,
-      type: type ?? this.type,
+      socialInfoData: socialInfoData ?? this.socialInfoData,
     );
   }
 
   @override
-  List<Object?> get props => [status, errorMessage, id, email];
-}
-
-class SocialResponse extends Equatable {
-  final String id;
-  final String email;
-  const SocialResponse({
-    required this.id,
-    required this.email,
-  });
-  @override
-  List<Object?> get props => [id, email];
+  List<Object?> get props => [status, errorMessage, user, socialInfoData];
 }

@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:dodal_app/src/common/enum/status_enum.dart';
-import 'package:dodal_app/src/common/model/user_model.dart';
 import 'package:dodal_app/src/sign_in/bloc/sign_in_bloc.dart';
 import 'package:dodal_app/src/common/bloc/user_bloc.dart';
 import 'package:dodal_app/src/common/theme/color.dart';
@@ -10,16 +9,10 @@ import 'package:dodal_app/src/common/widget/system_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class SignInPage extends StatelessWidget {
   const SignInPage({super.key});
-
-  _goMainPage(BuildContext context, User user) {
-    context.read<UserBloc>().add(UpdateUserBlocEvent(user));
-    context.go('/main');
-  }
 
   _errorModal(BuildContext context, String errorMessage) {
     showDialog(
@@ -33,11 +26,9 @@ class SignInPage extends StatelessWidget {
     return BlocListener<SignInBloc, SignInState>(
       listener: (context, state) {
         if (state.status == CommonStatus.loaded) {
-          if (state.user != null) {
-            _goMainPage(context, state.user!);
-          } else {
-            context.push('/sign-up/${state.id}/${state.email}/${state.type}');
-          }
+          context
+              .read<AuthBloc>()
+              .add(SignInUserBlocEvent(state.user, state.socialInfoData!));
         }
         if (state.status == CommonStatus.error) {
           _errorModal(context, state.errorMessage!);

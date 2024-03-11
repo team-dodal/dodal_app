@@ -30,7 +30,7 @@ class SignUpCompletePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '${context.read<UserBloc>().state.result!.nickname}님, 환영해요',
+                    '${context.read<AuthBloc>().state.user!.nickname}님, 환영해요',
                     style: context.headline2(
                       fontWeight: FontWeight.bold,
                       color: AppColors.systemBlack,

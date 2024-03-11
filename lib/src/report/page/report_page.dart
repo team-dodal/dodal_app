@@ -37,8 +37,8 @@ class _ReportPageState extends State<ReportPage> {
 
   void _report() async {
     final res = await FireStoreRepository.reportUser(
-      userId: context.read<UserBloc>().state.result!.id,
-      userName: context.read<UserBloc>().state.result!.nickname,
+      userId: context.read<AuthBloc>().state.user!.id,
+      userName: context.read<AuthBloc>().state.user!.nickname,
       reason: _reportValue!.title,
       detailReason: textEditingController.text,
       targetRoomId: widget.roomId,

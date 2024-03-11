@@ -24,7 +24,7 @@ class CommentBox extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       builder: (context) {
-        final state = BlocProvider.of<UserBloc>(context).state.result;
+        final state = BlocProvider.of<AuthBloc>(context).state.user;
         return FilterBottomSheetLayout(
           child: Column(
             children: [

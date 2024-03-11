@@ -26,7 +26,7 @@ class RankListItem extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
       decoration: BoxDecoration(
-        color: context.read<UserBloc>().state.result!.id == userId
+        color: context.read<AuthBloc>().state.user!.id == userId
             ? AppColors.lightYellow
             : AppColors.systemWhite,
         border: const Border(

@@ -47,7 +47,7 @@ class _MainState extends State<Main> {
       providers: [
         BlocProvider(
           create: (context) =>
-              UserBloc(widget.fcmToken, const FlutterSecureStorage()),
+              AuthBloc(widget.fcmToken, const FlutterSecureStorage()),
         ),
         BlocProvider(create: (context) => CategoryListBloc()),
       ],

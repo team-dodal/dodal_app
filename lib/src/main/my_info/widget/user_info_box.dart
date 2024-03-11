@@ -1,4 +1,3 @@
-import 'package:dodal_app/src/common/model/user_model.dart';
 import 'package:dodal_app/src/main/home/bloc/custom_challenge_list_bloc.dart';
 import 'package:dodal_app/src/common/bloc/user_bloc.dart';
 import 'package:dodal_app/src/main/my_info/bloc/user_room_feed_info_bloc.dart';
@@ -16,9 +15,8 @@ class UserInfoBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserBloc, UserBlocState>(
+    return BlocBuilder<AuthBloc, UserBlocState>(
       builder: (context, state) {
-        User user = state.result!;
         return Container(
           color: AppColors.bgColor2,
           child: Padding(
@@ -32,13 +30,13 @@ class UserInfoBox extends StatelessWidget {
                     Row(
                       children: [
                         AvatarImage(
-                          image: user.profileUrl,
+                          image: state.user?.profileUrl,
                           width: 48,
                           height: 48,
                         ),
                         const SizedBox(width: 10),
                         Text(
-                          user.nickname,
+                          state.user?.nickname ?? '',
                           style: context.body2(fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -60,13 +58,13 @@ class UserInfoBox extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 10),
-                Text(user.content, style: context.body4()),
+                Text(state.user?.content ?? '', style: context.body4()),
                 const SizedBox(height: 16),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      for (final tag in user.tagList)
+                      for (final tag in state.user?.tagList ?? [])
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 2),
                           child: SmallTag(

@@ -1,6 +1,5 @@
 import 'package:dodal_app/src/common/model/user_model.dart';
 import 'package:dodal_app/src/common/bloc/user_bloc.dart';
-import 'package:dodal_app/src/sign_up/bloc/sign_up_cubit.dart';
 import 'package:dodal_app/src/sign_up/page/sign_up_agreement_page.dart';
 import 'package:dodal_app/src/sign_up/page/sign_up_input_form_page.dart';
 import 'package:dodal_app/src/sign_up/page/sign_up_tag_select_page.dart';
@@ -22,11 +21,8 @@ class _SignUpRouteState extends State<SignUpRoute> {
   int steps = 3;
 
   createUserSuccess(User user) {
-    context.read<UserBloc>().add(UpdateUserBlocEvent(user));
-    final id = context.read<SignUpCubit>().socialId;
-    final email = context.read<SignUpCubit>().email;
-    final type = context.read<SignUpCubit>().socialType;
-    context.go('/sign-up/$id/$email/$type/complete');
+    context.read<AuthBloc>().add(UpdateUserBlocEvent(user));
+    context.go('/sign-up-complete');
   }
 
   createUserError(String errorMessage) {
@@ -35,14 +31,6 @@ class _SignUpRouteState extends State<SignUpRoute> {
       builder: (context) => SystemDialog(
         title: '에러가 발생하였습니다',
         subTitle: errorMessage,
-        children: [
-          SystemDialogButton(
-            text: '확인',
-            onPressed: () {
-              context.go('/sign-in');
-            },
-          )
-        ],
       ),
     );
   }

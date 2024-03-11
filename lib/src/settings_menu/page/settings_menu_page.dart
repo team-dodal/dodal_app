@@ -35,8 +35,7 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
             onPressed: () {
               secureStorage.deleteAll();
               if (!mounted) return;
-              context.read<UserBloc>().add(ClearUserBlocEvent());
-              context.go('/sign-in');
+              context.read<AuthBloc>().add(ClearUserBlocEvent());
             },
           )
         ],
@@ -61,9 +60,7 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
             text: '확인',
             color: AppColors.danger,
             onPressed: () {
-              context.read<UserBloc>().add(RemoveUserBlocEvent());
-              if (!mounted) return;
-              context.go('/sign-in');
+              context.read<AuthBloc>().add(RemoveUserBlocEvent());
             },
           )
         ],

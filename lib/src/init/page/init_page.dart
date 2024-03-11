@@ -7,7 +7,7 @@ class InitPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text('Init Page'),
+        child: CircularProgressIndicator(strokeWidth: 1),
       ),
     );
   }

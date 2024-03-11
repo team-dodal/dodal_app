@@ -74,7 +74,7 @@ class MemberCertificationBox extends StatelessWidget {
               ),
               Builder(
                 builder: (context) {
-                  final state = BlocProvider.of<UserBloc>(context).state.result;
+                  final state = BlocProvider.of<AuthBloc>(context).state.user;
                   if (state!.id != user.userId) {
                     return TextButton(
                       onPressed: () {
