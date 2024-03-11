@@ -1,4 +1,5 @@
 import 'package:animations/animations.dart';
+import 'package:dodal_app/src/challenge_list/bloc/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/src/common/model/category_model.dart';
 import 'package:dodal_app/src/common/model/challenge_model.dart';
 import 'package:dodal_app/src/common/enum/status_enum.dart';
@@ -87,7 +88,12 @@ class PopularList extends StatelessWidget {
                     .read<CategoryListBloc>()
                     .state
                     .categoryListForFilter();
-                context.push('/challenge-list', extra: {'category': list[0]});
+                context.push('/challenge-list', extra: {
+                  'category': list[0],
+                  'condition': ConditionEnum.newest,
+                  'tag': list[0].tags![0],
+                  'certCntList': List.generate(7, (index) => index + 1),
+                });
               },
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 0),

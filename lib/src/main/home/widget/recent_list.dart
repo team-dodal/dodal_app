@@ -80,7 +80,9 @@ class RecentList extends StatelessWidget {
                     .categoryListForFilter();
                 context.push('/challenge-list', extra: {
                   'category': list[0],
-                  'condition': ConditionEnum.newest
+                  'condition': ConditionEnum.newest,
+                  'tag': list[0].tags![0],
+                  'certCntList': List.generate(7, (index) => index + 1),
                 });
               },
               style: OutlinedButton.styleFrom(

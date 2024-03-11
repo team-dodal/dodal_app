@@ -37,28 +37,28 @@ class ChallengeListBloc extends Bloc<ChallengeListEvent, ChallengeListState> {
     }
     if (state.isLastPage) return;
     emit(state.copyWith(status: CommonStatus.loading));
-    final res = await ChallengeRepository.getChallengesByCategory(
-      categoryValue: event.category.value,
-      tagValue: event.tag.value,
-      conditionCode: event.condition.index,
-      certCntList: event.certCntList,
-      page: state.currentPage,
-      pageSize: pageSize,
-    );
-    if (res == null) {
-      emit(
-        state.copyWith(
-          status: CommonStatus.error,
-          errorMessage: '불러오는 도중 에러가 발생하였습니다.',
-        ),
+    try {
+      final res = await ChallengeRepository.getChallengesByCategory(
+        categoryValue: event.category.value,
+        tagValue: event.tag.value,
+        conditionCode: event.condition.index,
+        certCntList: event.certCntList,
+        page: state.currentPage,
+        pageSize: pageSize,
       );
-    } else {
       emit(
         state.copyWith(
           status: CommonStatus.loaded,
           result: [...state.result, ...res],
           currentPage: state.currentPage + 1,
           isLastPage: res.length < pageSize,
+        ),
+      );
+    } catch (error) {
+      emit(
+        state.copyWith(
+          status: CommonStatus.error,
+          errorMessage: '불러오는 도중 에러가 발생하였습니다.',
         ),
       );
     }

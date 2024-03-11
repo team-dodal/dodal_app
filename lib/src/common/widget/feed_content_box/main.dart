@@ -1,6 +1,8 @@
+import 'package:dodal_app/src/common/bloc/feed_like_cubit.dart';
 import 'package:dodal_app/src/common/model/feed_content_model.dart';
 import 'package:dodal_app/src/common/widget/image_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'continue_cert_box.dart';
 import 'feed_content_footer.dart';
@@ -34,7 +36,15 @@ class FeedContentBox extends StatelessWidget {
               ),
             ],
           ),
-          FeedContentFooter(feedContent: feedContent),
+          BlocProvider(
+            create: (context) => FeedReactCubit(
+              feedContent.feedId,
+              isLiked: feedContent.likeYn,
+              likeCount: feedContent.likeCnt,
+              commentCount: feedContent.commentCnt,
+            ),
+            child: FeedContentFooter(feedContent: feedContent),
+          ),
         ],
       ),
     );

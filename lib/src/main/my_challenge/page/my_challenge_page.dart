@@ -160,7 +160,10 @@ class AdminList extends StatelessWidget {
           subTitle: '도전 그룹을 운영해 보는 건 어떠세요?',
           buttonText: '도전 생성하기',
           onButtonPress: () {
-            context.push('/create-challenge');
+            context.push('/create-challenge').then((value) {
+              context.read<MyChallengeListBloc>().add(LoadJoinedListEvent());
+              context.read<MyChallengeListBloc>().add(LoadAdminListEvent());
+            });
           },
         ),
       ],

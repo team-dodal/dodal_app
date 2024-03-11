@@ -1,3 +1,4 @@
+import 'package:dodal_app/src/common/bloc/feed_like_cubit.dart';
 import 'package:dodal_app/src/common/model/feed_content_model.dart';
 import 'package:dodal_app/src/common/repositories/feed_repository.dart';
 import 'package:dodal_app/src/common/theme/color.dart';
@@ -6,6 +7,7 @@ import 'package:dodal_app/src/common/widget/feed_content_box/feed_content_footer
 import 'package:dodal_app/src/common/widget/image_widget.dart';
 import 'package:dodal_app/src/common/widget/no_list_context.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class ChallengeFeedPage extends StatefulWidget {
@@ -97,7 +99,15 @@ class _ChallengeFeedPageState extends State<ChallengeFeedPage> {
                       ),
                     ],
                   ),
-                  FeedContentFooter(feedContent: item),
+                  BlocProvider(
+                    create: (context) => FeedReactCubit(
+                      item.feedId,
+                      isLiked: item.likeYn,
+                      likeCount: item.likeCnt,
+                      commentCount: item.commentCnt,
+                    ),
+                    child: FeedContentFooter(feedContent: item),
+                  ),
                 ],
               ),
             );

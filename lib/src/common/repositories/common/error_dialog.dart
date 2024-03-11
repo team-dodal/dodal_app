@@ -1,7 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:dodal_app/main.dart';
-import 'package:dodal_app/src/common/widget/system_dialog.dart';
-import 'package:flutter/material.dart';
 
 class ResponseErrorDialog {
   late String message;
@@ -16,11 +13,11 @@ class ResponseErrorDialog {
       this.message = '다시 로그인해주세요.';
     }
 
-    showDialog(
-      context: navigatorKey.currentContext!,
-      builder: (context) {
-        return SystemDialog(subTitle: this.message);
-      },
-    );
+    // showDialog(
+    //   context: navigatorKey.currentContext!,
+    //   builder: (context) {
+    //     return SystemDialog(subTitle: this.message);
+    //   },
+    // );
   }
 }

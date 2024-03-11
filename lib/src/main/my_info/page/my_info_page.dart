@@ -1,3 +1,4 @@
+import 'package:dodal_app/src/challenge_list/bloc/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/src/common/model/category_model.dart';
 import 'package:dodal_app/src/common/enum/status_enum.dart';
 import 'package:dodal_app/src/common/model/users_rooms_info_model.dart';
@@ -26,7 +27,12 @@ class MyInfoPage extends StatelessWidget {
           onButtonPress: () {
             List<Category> list =
                 context.read<CategoryListBloc>().state.categoryListForFilter();
-            context.push('/challenge-list', extra: {'category': list[0]});
+            context.push('/challenge-list', extra: {
+              'category': list[0],
+              'condition': ConditionEnum.newest,
+              'tag': list[0].tags![0],
+              'certCntList': List.generate(7, (index) => index + 1),
+            });
           },
         ),
       ],

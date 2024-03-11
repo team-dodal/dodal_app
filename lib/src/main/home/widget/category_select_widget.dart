@@ -1,3 +1,4 @@
+import 'package:dodal_app/src/challenge_list/bloc/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/src/common/model/category_model.dart';
 import 'package:dodal_app/src/common/bloc/category_list_bloc.dart';
 import 'package:dodal_app/src/common/theme/color.dart';
@@ -13,7 +14,12 @@ class CategorySelect extends StatelessWidget {
   const CategorySelect({super.key});
 
   void _goListPage(BuildContext context, Category category) {
-    context.push('/challenge-list', extra: {'category': category});
+    context.push('/challenge-list', extra: {
+      'category': category,
+      'condition': ConditionEnum.newest,
+      'tag': category.tags![0],
+      'certCntList': List.generate(7, (index) => index + 1),
+    });
   }
 
   @override
