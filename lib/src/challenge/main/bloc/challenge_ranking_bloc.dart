@@ -1,7 +1,7 @@
 import 'package:dodal_app/src/common/model/challenge_rank_model.dart';
 import 'package:dodal_app/src/common/enum/status_enum.dart';
 import 'package:dodal_app/src/common/repositories/challenge_repository.dart';
-import 'package:dodal_app/src/challenge/ranking/widget/rank_filter_bottom_sheet.dart';
+import 'package:dodal_app/src/challenge/main/widget/rank_filter_bottom_sheet.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

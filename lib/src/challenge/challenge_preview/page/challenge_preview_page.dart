@@ -1,5 +1,6 @@
+import 'package:dodal_app/src/challenge/challenge_settings_menu/bloc/challenge_join_cubit.dart';
 import 'package:dodal_app/src/common/bloc/bookmark_bloc.dart';
-import 'package:dodal_app/src/challenge/home/bloc/challenge_info_bloc.dart';
+import 'package:dodal_app/src/challenge/main/bloc/challenge_info_bloc.dart';
 import 'package:dodal_app/src/common/theme/color.dart';
 import 'package:dodal_app/src/common/theme/typo.dart';
 import 'package:dodal_app/src/challenge/widget/feed_img_content.dart';
@@ -22,7 +23,10 @@ class ChallengePreviewPage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              context.push('/challenge/${challenge.id}/settings');
+              context.push(
+                '/challenge/${challenge.id}/settings',
+                extra: challenge,
+              );
             },
             icon: const Icon(Icons.more_vert),
           )
@@ -37,7 +41,8 @@ class ChallengePreviewPage extends StatelessWidget {
         child: ChallengeBottomSheet(
           buttonText: '도전 참여하기',
           onPress: () {
-            context.read<ChallengeInfoBloc>().add(JoinChallengeEvent());
+            context.read<ChallengeJoinCubit>().join();
+            context.read<ChallengeInfoBloc>().add(LoadChallengeInfoEvent());
           },
         ),
       ),

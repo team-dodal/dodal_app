@@ -1,10 +1,7 @@
-import 'package:animations/animations.dart';
 import 'package:dodal_app/src/common/model/category_model.dart';
 import 'package:dodal_app/src/common/model/challenge_model.dart';
 import 'package:dodal_app/src/common/enum/status_enum.dart';
 import 'package:dodal_app/src/common/bloc/bookmark_bloc.dart';
-import 'package:dodal_app/src/challenge/home/bloc/challenge_info_bloc.dart';
-import 'package:dodal_app/src/challenge/root/page/challenge_root_page.dart';
 import 'package:dodal_app/src/main/home/bloc/custom_challenge_list_bloc.dart';
 import 'package:dodal_app/src/common/bloc/user_bloc.dart';
 import 'package:dodal_app/src/common/theme/color.dart';
@@ -149,36 +146,31 @@ class InterestCategoryCard extends StatelessWidget {
               Column(
                 children: [
                   for (final challenge in challenges)
-                    OpenContainer(
-                      transitionType: ContainerTransitionType.fadeThrough,
-                      closedElevation: 0,
-                      closedBuilder: (context, action) {
-                        return Container(
-                          padding: const EdgeInsets.only(top: 20),
-                          constraints: const BoxConstraints(minHeight: 80),
-                          child: BlocProvider(
-                            create: (context) => BookmarkBloc(
-                              roomId: challenge.id,
-                              isBookmarked: challenge.isBookmarked,
-                            ),
-                            child: ListChallengeBox(
-                              title: challenge.title,
-                              thumbnailImg: challenge.thumbnailImg,
-                              tag: challenge.tag,
-                              adminProfile: challenge.adminProfile,
-                              adminNickname: challenge.adminNickname,
-                              recruitCnt: challenge.recruitCnt,
-                              userCnt: challenge.userCnt,
-                              certCnt: challenge.certCnt,
-                            ),
-                          ),
-                        );
+                    GestureDetector(
+                      onTap: () {
+                        context.push('/challenge/${challenge.id}');
                       },
-                      openBuilder: (context, action) => BlocProvider(
-                        create: (context) => ChallengeInfoBloc(challenge.id),
-                        child: const ChallengeRootPage(),
+                      child: Container(
+                        padding: const EdgeInsets.only(top: 20),
+                        constraints: const BoxConstraints(minHeight: 80),
+                        child: BlocProvider(
+                          create: (context) => BookmarkBloc(
+                            roomId: challenge.id,
+                            isBookmarked: challenge.isBookmarked,
+                          ),
+                          child: ListChallengeBox(
+                            title: challenge.title,
+                            thumbnailImg: challenge.thumbnailImg,
+                            tag: challenge.tag,
+                            adminProfile: challenge.adminProfile,
+                            adminNickname: challenge.adminNickname,
+                            recruitCnt: challenge.recruitCnt,
+                            userCnt: challenge.userCnt,
+                            certCnt: challenge.certCnt,
+                          ),
+                        ),
                       ),
-                    )
+                    ),
                 ],
               ),
           ],

@@ -1,9 +1,6 @@
-import 'package:animations/animations.dart';
 import 'package:dodal_app/src/common/model/challenge_model.dart';
 import 'package:dodal_app/src/common/enum/status_enum.dart';
 import 'package:dodal_app/src/common/bloc/bookmark_bloc.dart';
-import 'package:dodal_app/src/challenge/home/bloc/challenge_info_bloc.dart';
-import 'package:dodal_app/src/challenge/root/page/challenge_root_page.dart';
 import 'package:dodal_app/src/challenge_list/bloc/challenge_list_bloc.dart';
 import 'package:dodal_app/src/challenge_list/bloc/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/src/challenge_list/widget/list_tab_bar.dart';
@@ -30,33 +27,25 @@ class _ChallengeListPageState extends State<ChallengeListPage> {
       itemBuilder: (context, index) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: OpenContainer(
-            transitionType: ContainerTransitionType.fadeThrough,
-            closedElevation: 0,
-            closedBuilder: (context, action) {
-              return InkWell(
-                onTap: action,
-                child: BlocProvider(
-                  create: (context) => BookmarkBloc(
-                    roomId: challenges[index].id,
-                    isBookmarked: challenges[index].isBookmarked,
-                  ),
-                  child: ListChallengeBox(
-                    title: challenges[index].title,
-                    tag: challenges[index].tag,
-                    thumbnailImg: challenges[index].thumbnailImg,
-                    adminProfile: challenges[index].adminProfile,
-                    adminNickname: challenges[index].adminNickname,
-                    userCnt: challenges[index].userCnt,
-                    certCnt: challenges[index].certCnt,
-                    recruitCnt: challenges[index].recruitCnt,
-                  ),
-                ),
-              );
+          child: GestureDetector(
+            onTap: () {
+              context.push('/challenge/${challenges[index].id}');
             },
-            openBuilder: (context, action) => BlocProvider(
-              create: (context) => ChallengeInfoBloc(challenges[index].id),
-              child: const ChallengeRootPage(),
+            child: BlocProvider(
+              create: (context) => BookmarkBloc(
+                roomId: challenges[index].id,
+                isBookmarked: challenges[index].isBookmarked,
+              ),
+              child: ListChallengeBox(
+                title: challenges[index].title,
+                tag: challenges[index].tag,
+                thumbnailImg: challenges[index].thumbnailImg,
+                adminProfile: challenges[index].adminProfile,
+                adminNickname: challenges[index].adminNickname,
+                userCnt: challenges[index].userCnt,
+                certCnt: challenges[index].certCnt,
+                recruitCnt: challenges[index].recruitCnt,
+              ),
             ),
           ),
         );

@@ -1,11 +1,11 @@
 import 'package:dodal_app/src/common/model/challenge_rank_model.dart';
 import 'package:dodal_app/src/common/enum/status_enum.dart';
-import 'package:dodal_app/src/challenge/ranking/bloc/challenge_ranking_bloc.dart';
+import 'package:dodal_app/src/challenge/main/bloc/challenge_ranking_bloc.dart';
 import 'package:dodal_app/src/common/model/challenge_detail_model.dart';
 import 'package:dodal_app/src/common/theme/color.dart';
-import 'package:dodal_app/src/challenge/ranking/widget/rank_filter_bottom_sheet.dart';
-import 'package:dodal_app/src/challenge/ranking/widget/rank_list_item.dart';
-import 'package:dodal_app/src/challenge/ranking/widget/rank_profile.dart';
+import 'package:dodal_app/src/challenge/main/widget/rank_filter_bottom_sheet.dart';
+import 'package:dodal_app/src/challenge/main/widget/rank_list_item.dart';
+import 'package:dodal_app/src/challenge/main/widget/rank_profile.dart';
 import 'package:dodal_app/src/common/widget/filter_button.dart';
 import 'package:dodal_app/src/common/widget/no_list_context.dart';
 import 'package:flutter/cupertino.dart';

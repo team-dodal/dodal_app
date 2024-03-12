@@ -1,12 +1,9 @@
-import 'package:animations/animations.dart';
 import 'package:dodal_app/src/challenge_list/bloc/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/src/common/model/category_model.dart';
 import 'package:dodal_app/src/common/model/challenge_model.dart';
 import 'package:dodal_app/src/common/enum/status_enum.dart';
 import 'package:dodal_app/src/common/bloc/bookmark_bloc.dart';
 import 'package:dodal_app/src/common/bloc/category_list_bloc.dart';
-import 'package:dodal_app/src/challenge/home/bloc/challenge_info_bloc.dart';
-import 'package:dodal_app/src/challenge/root/page/challenge_root_page.dart';
 import 'package:dodal_app/src/main/home/bloc/custom_challenge_list_bloc.dart';
 import 'package:dodal_app/src/common/theme/color.dart';
 import 'package:dodal_app/src/common/theme/typo.dart';
@@ -19,7 +16,7 @@ import 'package:go_router/go_router.dart';
 class PopularList extends StatelessWidget {
   const PopularList({super.key});
 
-  Widget _success(List<Challenge> list) {
+  Widget _success(BuildContext context, List<Challenge> list) {
     return GridView.count(
       crossAxisCount: 2,
       crossAxisSpacing: 8,
@@ -29,25 +26,20 @@ class PopularList extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       children: [
         for (final challenge in list)
-          OpenContainer(
-            transitionType: ContainerTransitionType.fadeThrough,
-            closedElevation: 0,
-            closedBuilder: (context, action) {
-              return Container(
-                padding: const EdgeInsets.only(top: 20),
-                constraints: const BoxConstraints(minHeight: 80),
-                child: BlocProvider(
-                  create: (context) => BookmarkBloc(
-                    roomId: challenge.id,
-                    isBookmarked: challenge.isBookmarked,
-                  ),
-                  child: GridChallengeBox(challenge: challenge),
-                ),
-              );
+          GestureDetector(
+            onTap: () {
+              context.push('/challenge/${challenge.id}');
             },
-            openBuilder: (context, action) => BlocProvider(
-              create: (context) => ChallengeInfoBloc(challenge.id),
-              child: const ChallengeRootPage(),
+            child: Container(
+              padding: const EdgeInsets.only(top: 20),
+              constraints: const BoxConstraints(minHeight: 80),
+              child: BlocProvider(
+                create: (context) => BookmarkBloc(
+                  roomId: challenge.id,
+                  isBookmarked: challenge.isBookmarked,
+                ),
+                child: GridChallengeBox(challenge: challenge),
+              ),
             ),
           )
       ],
@@ -77,7 +69,7 @@ class PopularList extends StatelessWidget {
                   case CommonStatus.error:
                     return Text(state.errorMessage!);
                   case CommonStatus.loaded:
-                    return _success(state.popularList);
+                    return _success(context, state.popularList);
                 }
               },
             ),

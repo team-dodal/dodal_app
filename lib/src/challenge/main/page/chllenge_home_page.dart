@@ -2,7 +2,7 @@ import 'package:dodal_app/src/common/model/challenge_detail_model.dart';
 import 'package:dodal_app/src/common/theme/color.dart';
 import 'package:dodal_app/src/common/theme/typo.dart';
 import 'package:dodal_app/src/challenge/widget/feed_img_content.dart';
-import 'package:dodal_app/src/challenge/home/widget/current_certification_box.dart';
+import 'package:dodal_app/src/challenge/main/widget/current_certification_box.dart';
 import 'package:dodal_app/src/challenge/notice/widget/notice_box.dart';
 import 'package:dodal_app/src/common/widget/image_widget.dart';
 import 'package:dodal_app/src/common/widget/room_info_box.dart';

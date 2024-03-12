@@ -1,6 +1,7 @@
+import 'package:dodal_app/src/challenge/challenge_settings_menu/bloc/challenge_join_cubit.dart';
 import 'package:dodal_app/src/challenge/challenge_settings_menu/page/challenge_menu_page.dart';
 import 'package:dodal_app/src/challenge/feed/page/challenge_feed_page.dart';
-import 'package:dodal_app/src/challenge/home/bloc/challenge_info_bloc.dart';
+import 'package:dodal_app/src/challenge/main/bloc/challenge_info_bloc.dart';
 import 'package:dodal_app/src/challenge/manage/bloc/manage_challenge_feed_bloc.dart';
 import 'package:dodal_app/src/challenge/manage/bloc/manage_challenge_member_bloc.dart';
 import 'package:dodal_app/src/challenge/manage/page/challenge_manage_page.dart';
@@ -253,31 +254,40 @@ class _AppState extends State<App> {
           ),
         ),
         /* challenge */ GoRoute(
-          path: '/challenge/:challengeId',
-          builder: (context, state) => BlocProvider(
-            create: (context) => ChallengeInfoBloc(
-                int.parse(state.pathParameters['challengeId'] as String)),
-            child: const ChallengeRootPage(),
-          ),
+          path: '/challenge/:id',
+          builder: (context, state) {
+            int id = int.parse(state.pathParameters['id'] as String);
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider(create: (context) => ChallengeInfoBloc(id)),
+                BlocProvider(create: (context) => ChallengeJoinCubit(id))
+              ],
+              child: const ChallengeRootPage(),
+            );
+          },
           routes: [
             GoRoute(
               path: 'feed/:title',
               builder: (context, state) => ChallengeFeedPage(
-                roomId:
-                    int.parse(state.pathParameters['challengeId'] as String),
+                roomId: int.parse(state.pathParameters['id'] as String),
                 roomName: state.pathParameters['title'] as String,
               ),
             ),
             GoRoute(
               path: 'settings',
-              builder: (context, state) =>
-                  ChallengeMenuPage(challenge: state.extra as ChallengeDetail),
+              builder: (context, state) => BlocProvider(
+                create: (context) =>
+                    ChallengeJoinCubit((state.extra as ChallengeDetail).id),
+                child: ChallengeMenuPage(
+                  challenge: state.extra as ChallengeDetail,
+                ),
+              ),
             ),
             GoRoute(
               path: 'notice-list/:targetIndex/:isAdmin',
               builder: (context, state) => BlocProvider(
                 create: (context) => ChallengeNoticeListBloc(
-                  int.parse(state.pathParameters['challengeId'] as String),
+                  int.parse(state.pathParameters['id'] as String),
                   state.pathParameters['targetIndex'] is String
                       ? int.parse(state.pathParameters['targetIndex'] as String)
                       : null,
@@ -290,8 +300,7 @@ class _AppState extends State<App> {
               path: 'create-notice',
               builder: (context, state) => BlocProvider(
                 create: (context) => CreateChallengeNoticeBloc(
-                  roomId:
-                      int.parse(state.pathParameters['challengeId'] as String),
+                  roomId: int.parse(state.pathParameters['id'] as String),
                 ),
                 child: const CreateNoticePage(),
               ),
@@ -302,12 +311,12 @@ class _AppState extends State<App> {
                 providers: [
                   BlocProvider(
                     create: (context) => ManageChallengeMemberBloc(
-                      int.parse(state.pathParameters['challengeId'] as String),
+                      int.parse(state.pathParameters['id'] as String),
                     ),
                   ),
                   BlocProvider(
                     create: (context) => ManageChallengeFeedBloc(
-                      int.parse(state.pathParameters['challengeId'] as String),
+                      int.parse(state.pathParameters['id'] as String),
                     ),
                   ),
                 ],

@@ -1,8 +1,5 @@
-import 'package:animations/animations.dart';
 import 'package:dodal_app/src/challenge_list/bloc/challenge_list_filter_cubit.dart';
 import 'package:dodal_app/src/common/bloc/bookmark_bloc.dart';
-import 'package:dodal_app/src/challenge/home/bloc/challenge_info_bloc.dart';
-import 'package:dodal_app/src/challenge/root/page/challenge_root_page.dart';
 import 'package:dodal_app/src/common/enum/status_enum.dart';
 import 'package:dodal_app/src/common/theme/color.dart';
 import 'package:dodal_app/src/common/theme/typo.dart';
@@ -97,36 +94,25 @@ class _SearchResultPageState extends State<SearchResultPage> {
                                   horizontal: 16,
                                   vertical: 8,
                                 ),
-                                child: OpenContainer(
-                                  transitionType:
-                                      ContainerTransitionType.fadeThrough,
-                                  closedElevation: 0,
-                                  closedBuilder: (context, action) {
-                                    return InkWell(
-                                      onTap: action,
-                                      child: BlocProvider(
-                                        create: (context) => BookmarkBloc(
-                                          roomId: item.id,
-                                          isBookmarked: item.isBookmarked,
-                                        ),
-                                        child: ListChallengeBox(
-                                          title: item.title,
-                                          tag: item.tag,
-                                          thumbnailImg: item.thumbnailImg,
-                                          adminProfile: item.adminProfile,
-                                          adminNickname: item.adminNickname,
-                                          userCnt: item.userCnt,
-                                          certCnt: item.certCnt,
-                                          recruitCnt: item.recruitCnt,
-                                        ),
-                                      ),
-                                    );
+                                child: GestureDetector(
+                                  onTap: () {
+                                    context.push('/challenge/${item.id}');
                                   },
-                                  openBuilder: (context, action) =>
-                                      BlocProvider(
-                                    create: (context) =>
-                                        ChallengeInfoBloc(item.id),
-                                    child: const ChallengeRootPage(),
+                                  child: BlocProvider(
+                                    create: (context) => BookmarkBloc(
+                                      roomId: item.id,
+                                      isBookmarked: item.isBookmarked,
+                                    ),
+                                    child: ListChallengeBox(
+                                      title: item.title,
+                                      tag: item.tag,
+                                      thumbnailImg: item.thumbnailImg,
+                                      adminProfile: item.adminProfile,
+                                      adminNickname: item.adminNickname,
+                                      userCnt: item.userCnt,
+                                      certCnt: item.certCnt,
+                                      recruitCnt: item.recruitCnt,
+                                    ),
                                   ),
                                 ),
                               )

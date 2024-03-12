@@ -8,7 +8,6 @@ class ChallengeInfoBloc extends Bloc<ChallengeInfoEvent, ChallengeInfoState> {
   final int challengeId;
   ChallengeInfoBloc(this.challengeId) : super(const ChallengeInfoState.init()) {
     on<LoadChallengeInfoEvent>(_load);
-    on<JoinChallengeEvent>(_join);
     add(LoadChallengeInfoEvent());
   }
 
@@ -28,30 +27,11 @@ class ChallengeInfoBloc extends Bloc<ChallengeInfoEvent, ChallengeInfoState> {
       ));
     }
   }
-
-  Future<void> _join(JoinChallengeEvent event, emit) async {
-    emit(state.copyWith(status: CommonStatus.loading));
-    try {
-      await ChallengeRepository.join(challengeId: challengeId);
-    } catch (error) {
-      emit(state.copyWith(
-        status: CommonStatus.error,
-        errorMessage: '에러가 발생하였습니다. 다시 시도해주세요.',
-      ));
-    }
-    await Future.delayed(const Duration(seconds: 1));
-    add(LoadChallengeInfoEvent());
-  }
 }
 
 abstract class ChallengeInfoEvent extends Equatable {}
 
 class LoadChallengeInfoEvent extends ChallengeInfoEvent {
-  @override
-  List<Object?> get props => [];
-}
-
-class JoinChallengeEvent extends ChallengeInfoEvent {
   @override
   List<Object?> get props => [];
 }

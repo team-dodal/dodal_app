@@ -150,14 +150,8 @@ class ChallengeRepository {
     await service.post('/rooms/$challengeId/join');
   }
 
-  static out({required int challengeId}) async {
-    try {
-      await service.delete('/rooms/$challengeId/join');
-      return true;
-    } on DioException catch (error) {
-      ResponseErrorDialog(error);
-      return false;
-    }
+  static Future<void> out({required int challengeId}) async {
+    await service.delete('/rooms/$challengeId/join');
   }
 
   static Future<void> createNotice({
