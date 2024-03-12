@@ -49,7 +49,7 @@ class ChallengeListBloc extends Bloc<ChallengeListEvent, ChallengeListState> {
       emit(
         state.copyWith(
           status: CommonStatus.loaded,
-          result: [...state.result, ...res],
+          result: List.unmodifiable([...state.result, ...res]),
           currentPage: state.currentPage + 1,
           isLastPage: res.length < pageSize,
         ),

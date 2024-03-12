@@ -143,8 +143,8 @@ class _ChallengeListPageState extends State<ChallengeListPage> {
           builder: (context, state) {
             switch (state.status) {
               case CommonStatus.init:
-                return const Center(child: CupertinoActivityIndicator());
               case CommonStatus.loading:
+                return const Center(child: CupertinoActivityIndicator());
               case CommonStatus.loaded:
                 if (state.result.isEmpty) {
                   return _empty();

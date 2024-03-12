@@ -1,11 +1,12 @@
 import 'package:dodal_app/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 // background push handle
 Future<void> _onBackgroundMessage(RemoteMessage message) async {
-  print(message);
+  debugPrint('$message');
 }
 
 Future<String> fcmSetting() async {
@@ -25,7 +26,7 @@ Future<String> fcmSetting() async {
     sound: true,
   );
 
-  print('User granted permission: ${settings.authorizationStatus}');
+  debugPrint('User granted permission: ${settings.authorizationStatus}');
 
   const AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel',
@@ -46,7 +47,7 @@ Future<String> fcmSetting() async {
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
 
-    print('message data : ${message.data}');
+    debugPrint('message data : ${message.data}');
 
     if (notification != null && android != null) {
       flutterLocalNotificationsPlugin.show(
@@ -67,6 +68,6 @@ Future<String> fcmSetting() async {
   });
 
   String firebaseToken = await messaging.getToken() ?? '';
-  print('FcmToken : $firebaseToken');
+  debugPrint('FcmToken : $firebaseToken');
   return firebaseToken;
 }

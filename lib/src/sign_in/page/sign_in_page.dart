@@ -9,7 +9,6 @@ import 'package:dodal_app/src/common/widget/system_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class SignInPage extends StatelessWidget {
   const SignInPage({super.key});
@@ -40,10 +39,7 @@ class SignInPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             mainAxisSize: MainAxisSize.max,
             children: [
-              FadeInImage(
-                placeholder: MemoryImage(kTransparentImage),
-                image: const AssetImage('assets/images/login_image.png'),
-              ),
+              Image.asset('assets/images/login_image.png'),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(

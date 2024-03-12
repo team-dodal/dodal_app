@@ -107,17 +107,14 @@ class ChallengeRepository {
     required int page,
     required int pageSize,
   }) async {
-    Map<String, dynamic> queries = {
-      'category_value': categoryValue,
-      'tag_value': tagValue,
-      'condition_code': conditionCode,
-      'page': page,
-      'page_size': pageSize,
-    };
+    String url = '/rooms/category?';
+    if (categoryValue != null) url += 'category_value=$categoryValue&';
+    if (tagValue != null) url += 'tag_value=$tagValue&';
+    url += 'condition_code=$conditionCode&page=$page&page_size=$pageSize';
     for (final certCnt in certCntList) {
-      queries['cert_cnt_list'] = certCnt;
+      url += '&cert_cnt_list=$certCnt';
     }
-    final res = await service.get('/rooms/category', queryParameters: queries);
+    final res = await service.get(url);
     List<dynamic> contents = res.data['result']['content'];
     List<Challenge> result =
         contents.map((item) => Challenge.fromJson(item)).toList();
@@ -237,16 +234,14 @@ class ChallengeRepository {
     required int page,
     required int pageSize,
   }) async {
-    Map<String, dynamic> queries = {
-      'word': word,
-      'condition_code': conditionCode,
-      'page': page,
-      'page_size': pageSize,
-    };
+    String url = '/room/search?';
+    url +=
+        'word=$word&condition_code=$conditionCode&page=$page&page_size=$pageSize';
+
     for (final certCnt in certCntList) {
-      queries['cert_cnt_list'] = certCnt;
+      url += '&cert_cnt_list=$certCnt';
     }
-    final res = await service.get('/room/search', queryParameters: queries);
+    final res = await service.get(url);
 
     List<dynamic> contents = res.data['result']['content'];
     List<Challenge> result =

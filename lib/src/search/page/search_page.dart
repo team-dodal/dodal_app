@@ -1,9 +1,10 @@
+import 'package:dodal_app/src/common/theme/color.dart';
 import 'package:dodal_app/src/common/theme/typo.dart';
+import 'package:dodal_app/src/search/bloc/search_history_list_cubit.dart';
 import 'package:dodal_app/src/search/widget/search_bar.dart';
-import 'package:dodal_app/src/search/widget/search_item_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key, this.word});
@@ -16,64 +17,6 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   TextEditingController controller = TextEditingController();
-  List<String> _list = [];
-
-  getSearchList() async {
-    final pref = await SharedPreferences.getInstance();
-    final list = pref.getStringList('search_list');
-    if (list == null) {
-      pref.setStringList('search_list', []);
-      setState(() {
-        _list = [];
-      });
-    } else {
-      setState(() {
-        _list = list;
-      });
-    }
-  }
-
-  addSearchItem(String word) async {
-    final pref = await SharedPreferences.getInstance();
-    final list = pref.getStringList('search_list');
-    if (list == null) return;
-    final newList = [word, ...list];
-    if (newList.length >= 20) {
-      newList.removeLast();
-    }
-    pref.setStringList('search_list', newList);
-    setState(() {
-      _list = newList;
-    });
-  }
-
-  removeList() async {
-    final pref = await SharedPreferences.getInstance();
-    pref.setStringList('search_list', []);
-    setState(() {
-      _list = [];
-    });
-  }
-
-  goResultScreen(String word) {
-    if (!mounted) return;
-    context.replace('/search');
-  }
-
-  @override
-  void initState() {
-    if (widget.word != null) {
-      controller.text = widget.word!;
-    }
-    getSearchList();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,9 +24,9 @@ class _SearchPageState extends State<SearchPage> {
       appBar: AppBar(
         title: SearchBarWidget(
           controller: controller,
-          onSubmit: (value) async {
-            await addSearchItem(value);
-            goResultScreen(value);
+          onSubmit: (value) {
+            context.read<SearchHistoryListCubit>().addSearchItem(value);
+            context.push('/search-result/$value');
           },
         ),
       ),
@@ -99,30 +42,85 @@ class _SearchPageState extends State<SearchPage> {
                   style: context.body1(fontWeight: FontWeight.bold),
                 ),
                 TextButton(
-                  onPressed: () async {
-                    await removeList();
-                  },
+                  onPressed: context.read<SearchHistoryListCubit>().removeAll,
                   child: const Text('전체 삭제'),
-                )
+                ),
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Wrap(
-              spacing: 6,
-              children: [
-                for (String word in _list)
-                  SearchItemButton(
-                    text: word,
-                    onTap: () {
-                      goResultScreen(word);
-                    },
-                  )
-              ],
-            ),
+          BlocBuilder<SearchHistoryListCubit, List<String>>(
+            builder: (context, state) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Wrap(
+                  spacing: 6,
+                  children: [
+                    for (final (index, word) in state.indexed)
+                      _SearchItemButton(
+                        text: word,
+                        onTap: () {
+                          context.push('/search-result/$word');
+                        },
+                        onCloseTap: () {
+                          context
+                              .read<SearchHistoryListCubit>()
+                              .removeItem(index);
+                        },
+                      )
+                  ],
+                ),
+              );
+            },
           )
         ],
+      ),
+    );
+  }
+}
+
+class _SearchItemButton extends StatelessWidget {
+  final String text;
+  final Function()? onTap;
+  final Function()? onCloseTap;
+
+  const _SearchItemButton({
+    required this.text,
+    this.onTap,
+    this.onCloseTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      clipBehavior: Clip.hardEdge,
+      shape: RoundedRectangleBorder(
+        side: const BorderSide(color: AppColors.systemGrey3),
+        borderRadius: BorderRadius.circular(100),
+      ),
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(16, 8, 12, 8),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                text,
+                style: context.body4(color: AppColors.systemGrey1),
+              ),
+              const SizedBox(width: 4),
+              InkWell(
+                borderRadius: BorderRadius.circular(100),
+                onTap: onCloseTap,
+                child: const Icon(
+                  Icons.close_rounded,
+                  size: 20,
+                  color: AppColors.systemGrey2,
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

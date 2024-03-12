@@ -14,6 +14,7 @@ import 'package:dodal_app/src/challenge_list/bloc/challenge_list_filter_cubit.da
 import 'package:dodal_app/src/challenge_list/page/challenge_list_page.dart';
 import 'package:dodal_app/src/comment/bloc/comment_bloc.dart';
 import 'package:dodal_app/src/comment/page/comment_page.dart';
+import 'package:dodal_app/src/common/bloc/category_list_bloc.dart';
 import 'package:dodal_app/src/common/bloc/nickname_check_bloc.dart';
 import 'package:dodal_app/src/common/bloc/user_bloc.dart';
 import 'package:dodal_app/src/common/model/category_model.dart';
@@ -25,7 +26,10 @@ import 'package:dodal_app/src/create_challenge/page/create_challenge_complete_pa
 import 'package:dodal_app/src/create_challenge/page/create_challenge_route.dart';
 import 'package:dodal_app/src/create_feed/bloc/create_feed_bloc.dart';
 import 'package:dodal_app/src/create_feed/page/create_feed_page.dart';
-import 'package:dodal_app/src/init/page/init_page.dart';
+import 'package:dodal_app/src/search/bloc/search_history_list_cubit.dart';
+import 'package:dodal_app/src/search/bloc/search_result_list_cubit.dart';
+import 'package:dodal_app/src/search/page/search_result_page.dart';
+import 'package:dodal_app/src/splash/page/splash_page.dart';
 import 'package:dodal_app/src/main/feed_list/bloc/feed_list_bloc.dart';
 import 'package:dodal_app/src/main/home/bloc/custom_challenge_list_bloc.dart';
 import 'package:dodal_app/src/main/my_challenge/bloc/my_challenge_list_bloc.dart';
@@ -92,7 +96,7 @@ class _AppState extends State<App> {
       routes: [
         /* init */ GoRoute(
           path: '/',
-          builder: (context, state) => const InitPage(),
+          builder: (context, state) => const SplashPage(),
         ),
         /* main */ GoRoute(
           path: '/main',
@@ -102,6 +106,7 @@ class _AppState extends State<App> {
                 create: (context) => CustomChallengeListBloc(
                   context.read<AuthBloc>().state.user!.categoryList,
                 ),
+                lazy: false,
               ),
               BlocProvider(create: (context) => FeedListBloc()),
               BlocProvider(create: (context) => MyChallengeListBloc()),
@@ -158,7 +163,32 @@ class _AppState extends State<App> {
         ),
         /* search */ GoRoute(
           path: '/search',
-          builder: (context, state) => const SearchPage(),
+          builder: (context, state) => BlocProvider(
+            create: (context) => SearchHistoryListCubit(),
+            child: const SearchPage(),
+          ),
+        ),
+        /* search-result */ GoRoute(
+          path: '/search-result/:word',
+          builder: (context, state) => BlocProvider(
+            create: (context) => ChallengeListFilterCubit(
+              category: context
+                  .read<CategoryListBloc>()
+                  .state
+                  .categoryListForFilter()
+                  .first,
+            ),
+            child: BlocProvider(
+              create: (context) => SearchResultListCubit(
+                word: state.pathParameters['word'] as String,
+                condition:
+                    context.read<ChallengeListFilterCubit>().state.condition,
+                certCntList:
+                    context.read<ChallengeListFilterCubit>().state.certCntList,
+              ),
+              child: const SearchResultPage(),
+            ),
+          ),
         ),
         /* modify-user */ GoRoute(
           path: '/modify-user',
