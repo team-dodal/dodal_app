@@ -321,14 +321,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.2.1+1"
-  dio_cache_interceptor:
-    dependency: "direct main"
-    description:
-      name: dio_cache_interceptor
-      sha256: fb7905c0d12075d8786a6b63bffd64ae062d053f682cfaf28d145a2686507308
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.5.0"
   encrypt:
     dependency: transitive
     description:
@@ -853,14 +845,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.1"
-  infinite_scroll_pagination:
-    dependency: "direct main"
-    description:
-      name: infinite_scroll_pagination
-      sha256: "9517328f4e373f08f57dbb11c5aac5b05554142024d6b60c903f3b73476d52db"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.2.0"
   intl:
     dependency: "direct main"
     description:
@@ -1245,14 +1229,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
-  shimmer:
-    dependency: "direct main"
-    description:
-      name: shimmer
-      sha256: "5f88c883a22e9f9f299e5ba0e4f7e6054857224976a5d9f839d4ebdc94a14ac9"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.0"
   sign_in_with_apple:
     dependency: "direct main"
     description:
@@ -1290,14 +1266,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
-  sliver_tools:
-    dependency: transitive
-    description:
-      name: sliver_tools
-      sha256: eae28220badfb9d0559207badcbbc9ad5331aac829a88cb0964d330d2a4636a6
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.12"
   source_gen:
     dependency: transitive
     description:

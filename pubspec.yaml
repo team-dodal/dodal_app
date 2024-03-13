@@ -55,14 +55,11 @@ dependencies:
   transparent_image: ^2.0.1
   flutter_native_splash: ^2.3.1
   flutter_image_compress: ^2.0.4
-  dio_cache_interceptor: ^3.4.2
-  infinite_scroll_pagination: ^3.2.0
   openapi_generator_annotations: ^4.11.0
   expandable_page_view: ^1.0.17
   path_provider: ^2.1.1
   cached_network_image: ^3.3.0
   webview_flutter: ^4.4.2
-  shimmer: ^3.0.0
   cloud_firestore: ^4.14.0
   bloc_concurrency: ^0.2.4
   uuid: ^4.2.2
