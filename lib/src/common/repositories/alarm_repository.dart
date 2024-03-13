@@ -1,5 +1,5 @@
 import 'package:dodal_app/src/common/model/alarm_content_model.dart';
-import 'package:dodal_app/src/common/repositories/common/main.dart';
+import 'package:dodal_app/src/common/utils/dio.dart';
 
 class AlarmRepository {
   static final service = dio('/api/v1/alarm');

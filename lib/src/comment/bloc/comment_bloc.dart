@@ -85,7 +85,7 @@ class SubmitCommentBlocEvent extends CommentBlocEvent {
 class CommentBlocState extends Equatable {
   final CommonStatus status;
   final String? errorMessage;
-  final List<CommentResponse> list;
+  final List<Comment> list;
 
   const CommentBlocState({
     required this.status,
@@ -102,7 +102,7 @@ class CommentBlocState extends Equatable {
   CommentBlocState copyWith({
     CommonStatus? status,
     String? errorMessage,
-    List<CommentResponse>? list,
+    List<Comment>? list,
   }) {
     return CommentBlocState(
       status: status ?? this.status,

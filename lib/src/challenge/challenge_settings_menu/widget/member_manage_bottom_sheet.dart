@@ -1,6 +1,5 @@
 import 'package:dodal_app/src/common/layout/filter_bottom_sheet_layout.dart';
 import 'package:dodal_app/src/challenge/manage/bloc/manage_challenge_member_bloc.dart';
-import 'package:dodal_app/src/common/repositories/manage_challenge_repository.dart';
 import 'package:dodal_app/src/common/theme/typo.dart';
 import 'package:dodal_app/src/common/widget/system_dialog.dart';
 import 'package:flutter/material.dart';
@@ -8,36 +7,42 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class MemberManageBottomSheet extends StatelessWidget {
-  const MemberManageBottomSheet({
-    super.key,
-    required this.userId,
-    required this.roomId,
-  });
+  const MemberManageBottomSheet({super.key, required this.userId});
 
   final int userId;
-  final int roomId;
 
-  handOverAdmin(BuildContext context) async {
-    final res = await ManageChallengeRepository.handOverAdmin(
-      roomId: roomId,
-      userId: userId,
-    );
-    if (context.mounted) {
-      context.pop();
-
-      if (res) {
-        showDialog(
-          context: context,
-          builder: (context) => const SystemDialog(
-            subTitle: '방장 권한을 성공적으로 넘겼습니다',
+  void assignmentUser(BuildContext context) async {
+    showDialog(
+      context: context,
+      builder: (_) => SystemDialog(
+        subTitle: '방장 권한을 넘기시겠습니까?',
+        children: [
+          SystemDialogButton(
+            text: '취소',
+            primary: false,
+            onPressed: context.pop,
           ),
-        );
-        context.go('/main');
-      }
-    }
+          SystemDialogButton(
+            text: '확인',
+            onPressed: () {
+              context
+                  .read<ManageChallengeMemberBloc>()
+                  .add(AssignmentAdminEvent(userId));
+              context.pop();
+              showDialog(
+                context: context,
+                builder: (context) => const SystemDialog(
+                  subTitle: '방장 권한을 넘겼습니다.',
+                ),
+              );
+            },
+          )
+        ],
+      ),
+    );
   }
 
-  banishUser(BuildContext context) {
+  void banishUser(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) => SystemDialog(
@@ -51,16 +56,10 @@ class MemberManageBottomSheet extends StatelessWidget {
           SystemDialogButton(
             text: '내보내기',
             onPressed: () async {
-              context.pop();
-              final res = await ManageChallengeRepository.banishUser(
-                roomId: roomId,
-                userId: userId,
-              );
-              if (res == null || !res) return;
-              if (!context.mounted) return;
               context
                   .read<ManageChallengeMemberBloc>()
-                  .add(LoadManageChallengeMemberEvent());
+                  .add(BanishUserEvent(userId));
+              context.pop();
               showDialog(
                 context: context,
                 builder: (context) => const SystemDialog(
@@ -88,7 +87,7 @@ class MemberManageBottomSheet extends StatelessWidget {
           ListTile(
             title: Center(child: Text('신고하기', style: context.body2())),
             onTap: () {
-              context.push('/report/$roomId');
+              context.push('/report/$userId');
             },
           ),
           ListTile(
@@ -106,8 +105,8 @@ class MemberManageBottomSheet extends StatelessWidget {
                     ),
                     SystemDialogButton(
                       text: '확인',
-                      onPressed: () async {
-                        await handOverAdmin(context);
+                      onPressed: () {
+                        assignmentUser(context);
                       },
                     )
                   ],

@@ -1,4 +1,3 @@
-import 'package:dodal_app/src/main/home/bloc/custom_challenge_list_bloc.dart';
 import 'package:dodal_app/src/common/bloc/user_bloc.dart';
 import 'package:dodal_app/src/main/my_info/bloc/user_room_feed_info_bloc.dart';
 import 'package:dodal_app/src/common/theme/color.dart';
@@ -43,15 +42,7 @@ class UserInfoBox extends StatelessWidget {
                     ),
                     IconButton(
                       onPressed: () {
-                        context.push('/modify-user').then(
-                          (isNeedRefresh) {
-                            if (isNeedRefresh == true) {
-                              context
-                                  .read<CustomChallengeListBloc>()
-                                  .add(LoadInterestListEvent());
-                            }
-                          },
-                        );
+                        context.push('/modify-user');
                       },
                       icon: SvgPicture.asset('assets/icons/pencil_icon.svg'),
                     ),

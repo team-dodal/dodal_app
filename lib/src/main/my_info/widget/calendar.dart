@@ -1,12 +1,11 @@
-import 'package:animations/animations.dart';
 import 'package:dodal_app/src/common/model/user_calendar_data_model.dart';
 import 'package:dodal_app/src/main/my_info/bloc/calendar_feed_bloc.dart';
 import 'package:dodal_app/src/common/theme/color.dart';
 import 'package:dodal_app/src/common/theme/typo.dart';
 import 'package:dodal_app/src/main/my_info/widget/calendar_marker.dart';
-import 'package:dodal_app/src/main/my_info/widget/my_feed_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -32,17 +31,14 @@ class _CalendarState extends State<Calendar> {
     return Padding(
       padding: const EdgeInsets.all(5),
       child: isInclude
-          ? OpenContainer(
-              transitionType: ContainerTransitionType.fadeThrough,
-              closedBuilder: (context, action) {
-                return ImageCalendarCell(
-                  text: '${day.day}',
-                  imageUrl: findList[0].certImageUrl,
-                );
+          ? GestureDetector(
+              onTap: () {
+                context.push('/main/my-feed/${findList[0].feedId}');
               },
-              openBuilder: (context, action) {
-                return MyFeedBox(feedId: findList[0].feedId);
-              },
+              child: ImageCalendarCell(
+                text: '${day.day}',
+                imageUrl: findList[0].certImageUrl,
+              ),
             )
           : CalendarCell(text: '${day.day}', disabled: disabled),
     );

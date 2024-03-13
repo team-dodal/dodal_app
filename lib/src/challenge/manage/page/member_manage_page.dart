@@ -35,10 +35,7 @@ class MemberManagePage extends StatelessWidget {
               ),
               itemCount: state.result.length,
               itemBuilder: (context, index) {
-                return MemberCertificationBox(
-                  user: state.result[index],
-                  challengeId: state.challengeId,
-                );
+                return MemberCertificationBox(user: state.result[index]);
               },
             );
         }

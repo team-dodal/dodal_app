@@ -12,24 +12,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MemberCertificationBox extends StatelessWidget {
-  const MemberCertificationBox({
-    super.key,
-    required this.user,
-    required this.challengeId,
-  });
+  const MemberCertificationBox({super.key, required this.user});
 
   final ChallengeMember user;
-  final int challengeId;
 
   _showCountBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
       builder: (_) => BlocProvider.value(
-        value: ManageChallengeMemberBloc(challengeId),
-        child: MemberManageBottomSheet(
-          userId: user.userId,
-          roomId: challengeId,
-        ),
+        value: context.read<ManageChallengeMemberBloc>(),
+        child: MemberManageBottomSheet(userId: user.userId),
       ),
     );
   }

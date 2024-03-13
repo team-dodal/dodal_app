@@ -16,11 +16,13 @@ class FeedReactCubit extends Cubit<FeedLikeState> {
         ));
 
   void changeLike() async {
-    await FeedRepository.feedLike(
-      feedId: _feedId,
-      value: !state.isLiked,
-    );
-    state.isLiked ? _unLike() : _like();
+    try {
+      await FeedRepository.feedLike(
+        feedId: _feedId,
+        value: !state.isLiked,
+      );
+      state.isLiked ? _unLike() : _like();
+    } catch (error) {}
   }
 
   void changeCommentCount(int count) {

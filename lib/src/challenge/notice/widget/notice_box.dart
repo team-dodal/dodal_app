@@ -1,9 +1,7 @@
-import 'package:dodal_app/src/common/bloc/user_bloc.dart';
 import 'package:dodal_app/src/common/model/challenge_detail_model.dart';
 import 'package:dodal_app/src/common/theme/color.dart';
 import 'package:dodal_app/src/common/theme/typo.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:math' as math;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -14,9 +12,10 @@ class NoticeBox extends StatelessWidget {
   final ChallengeDetail challenge;
 
   _goNoticeScreen(BuildContext context, int? openIndex) {
-    final user = BlocProvider.of<AuthBloc>(context).state.user;
     context.push(
-        '/challenge/${challenge.id}/notice-list/$openIndex/${challenge.hostId == user!.id}');
+      '/challenge/${challenge.id}/notice-list/$openIndex',
+      extra: challenge,
+    );
   }
 
   @override

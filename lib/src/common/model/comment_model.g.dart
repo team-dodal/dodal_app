@@ -6,8 +6,7 @@ part of 'comment_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-CommentResponse _$CommentResponseFromJson(Map<String, dynamic> json) =>
-    CommentResponse(
+Comment _$CommentResponseFromJson(Map<String, dynamic> json) => Comment(
       commentId: json['comment_id'] as int,
       feedId: json['feed_id'] as int,
       userId: json['user_id'] as int,
@@ -17,11 +16,10 @@ CommentResponse _$CommentResponseFromJson(Map<String, dynamic> json) =>
       content: json['content'] as String,
       registerCode: json['register_code'] as String,
       registeredAt: json['registered_at'] as String,
-      children:
-          CommentResponse.createCommentListByJsonList(json['children'] as List),
+      children: Comment.createCommentListByJsonList(json['children'] as List),
     );
 
-Map<String, dynamic> _$CommentResponseToJson(CommentResponse instance) =>
+Map<String, dynamic> _$CommentResponseToJson(Comment instance) =>
     <String, dynamic>{
       'comment_id': instance.commentId,
       'feed_id': instance.feedId,

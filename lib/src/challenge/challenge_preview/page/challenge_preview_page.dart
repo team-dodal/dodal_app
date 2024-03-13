@@ -32,7 +32,7 @@ class ChallengePreviewPage extends StatelessWidget {
           )
         ],
       ),
-      body: const PreviewScreen(),
+      body: const _PreviewScreen(),
       bottomSheet: BlocProvider(
         create: (context) => BookmarkBloc(
           roomId: challenge.id,
@@ -50,8 +50,8 @@ class ChallengePreviewPage extends StatelessWidget {
   }
 }
 
-class PreviewScreen extends StatelessWidget {
-  const PreviewScreen({super.key});
+class _PreviewScreen extends StatelessWidget {
+  const _PreviewScreen();
 
   @override
   Widget build(BuildContext context) {

@@ -1,3 +1,4 @@
+import 'package:dodal_app/src/challenge/challenge_settings_menu/page/preview_menu.dart';
 import 'package:dodal_app/src/common/bloc/user_bloc.dart';
 import 'package:dodal_app/src/common/model/challenge_detail_model.dart';
 import 'package:dodal_app/src/challenge/challenge_settings_menu/page/admin_menu.dart';
@@ -23,13 +24,15 @@ class ChallengeMenuPage extends StatelessWidget {
       appBar: AppBar(title: Text(challenge.title)),
       body: Builder(
         builder: (context) {
-          if (isHost) {
-            return AdminMenu(challenge: challenge);
-          }
           if (isJoined) {
-            return MemberMenu(challenge: challenge);
+            if (isHost) {
+              return AdminMenu(challenge: challenge);
+            } else {
+              return MemberMenu(challenge: challenge);
+            }
+          } else {
+            return PreviewMenu(challenge: challenge);
           }
-          return const SizedBox();
         },
       ),
     );

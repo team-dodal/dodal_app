@@ -17,7 +17,7 @@ class CommentBox extends StatelessWidget {
     required this.removeComment,
   });
 
-  final CommentResponse comment;
+  final Comment comment;
   final Future<void> Function(int value) removeComment;
 
   _openBottomSheet(BuildContext context) {

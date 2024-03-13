@@ -1,11 +1,9 @@
 import 'dart:io';
-import 'package:dio/dio.dart';
 import 'package:dodal_app/src/common/model/challenge_model.dart';
 import 'package:dodal_app/src/common/model/challenge_notice_model.dart';
 import 'package:dodal_app/src/common/model/challenge_rank_model.dart';
 import 'package:dodal_app/src/common/model/challenge_detail_model.dart';
-import 'package:dodal_app/src/common/repositories/common/error_dialog.dart';
-import 'package:dodal_app/src/common/repositories/common/main.dart';
+import 'package:dodal_app/src/common/utils/dio.dart';
 import 'package:dodal_app/src/common/repositories/presigned_url_repository.dart';
 
 class ChallengeRepository {
@@ -172,32 +170,23 @@ class ChallengeRepository {
     return result.map((notice) => ChallengeNotice.fromJson(notice)).toList();
   }
 
-  static updateNotice({
+  static Future<void> updateNotice({
     required int roomId,
     required int notiId,
     required String title,
     required String content,
   }) async {
-    try {
-      await service.patch(
-        '/rooms/$roomId/noti/$notiId',
-        data: {title: title, content: content},
-      );
-      return true;
-    } on DioException catch (error) {
-      ResponseErrorDialog(error);
-      return false;
-    }
+    await service.patch(
+      '/rooms/$roomId/noti/$notiId',
+      data: {title: title, content: content},
+    );
   }
 
-  static deleteNotice({required int roomId, required int notiId}) async {
-    try {
-      await service.delete('/rooms/$roomId/noti/$notiId');
-      return true;
-    } on DioException catch (error) {
-      ResponseErrorDialog(error);
-      return false;
-    }
+  static Future<void> deleteNotice({
+    required int roomId,
+    required int notiId,
+  }) async {
+    await service.delete('/rooms/$roomId/noti/$notiId');
   }
 
   static Future<void> createFeed({

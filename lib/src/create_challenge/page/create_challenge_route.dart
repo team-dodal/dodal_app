@@ -30,7 +30,9 @@ class _CreateChallengeRouteState extends State<CreateChallengeRoute> {
 
   void _success(bool isUpdate) {
     context.go('/main');
-    context.push('/create-challenge/complete/$isUpdate');
+    context.push(
+      '/create-challenge/complete/${isUpdate ? 'update' : 'create'}',
+    );
   }
 
   @override

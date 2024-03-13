@@ -1,5 +1,5 @@
 import 'package:dodal_app/src/common/model/category_model.dart';
-import 'package:dodal_app/src/common/repositories/common/main.dart';
+import 'package:dodal_app/src/common/utils/dio.dart';
 
 class CategoryRepository {
   static Future<List<Category>> getAllCategories() async {

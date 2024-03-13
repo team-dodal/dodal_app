@@ -52,7 +52,7 @@ class AdminMenu extends StatelessWidget {
           _error(context, state.errorMessage!);
         }
         if (state.status == CommonStatus.loaded) {
-          context.go('/main');
+          context.replace('/main');
         }
       },
       child: Column(

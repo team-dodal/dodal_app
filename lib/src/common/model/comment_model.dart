@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'comment_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class CommentResponse extends Equatable {
+class Comment extends Equatable {
   @JsonKey(name: 'comment_id')
   final int commentId;
   @JsonKey(name: 'feed_id')
@@ -22,9 +22,9 @@ class CommentResponse extends Equatable {
   @JsonKey(name: 'registered_at')
   final String registeredAt;
   @JsonKey(fromJson: createCommentListByJsonList)
-  final List<CommentResponse> children;
+  final List<Comment> children;
 
-  const CommentResponse({
+  const Comment({
     required this.commentId,
     required this.feedId,
     required this.userId,
@@ -37,14 +37,13 @@ class CommentResponse extends Equatable {
     required this.children,
   });
 
-  factory CommentResponse.fromJson(Map<String, dynamic> json) =>
+  factory Comment.fromJson(Map<String, dynamic> json) =>
       _$CommentResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$CommentResponseToJson(this);
 
-  static List<CommentResponse> createCommentListByJsonList(
-          List<dynamic> value) =>
-      value.map((e) => CommentResponse.fromJson(e)).toList();
+  static List<Comment> createCommentListByJsonList(List<dynamic> value) =>
+      value.map((e) => Comment.fromJson(e)).toList();
 
   @override
   List<Object?> get props => [

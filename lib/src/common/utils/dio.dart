@@ -1,7 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:dodal_app/src/common/repositories/common/refresh.dart';
+import 'package:dodal_app/src/app.dart';
+import 'package:dodal_app/src/common/widget/system_dialog.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:go_router/go_router.dart';
 
 Dio dio([String url = '']) {
   FlutterSecureStorage secureStorage = const FlutterSecureStorage();
@@ -17,8 +20,10 @@ Dio dio([String url = '']) {
   dio.interceptors.addAll([
     // DioCacheInterceptor(options: cacheOptions),
     InterceptorsWrapper(
-      onRequest:
-          (RequestOptions options, RequestInterceptorHandler handler) async {
+      onRequest: (
+        RequestOptions options,
+        RequestInterceptorHandler handler,
+      ) async {
         final accessToken = await secureStorage.read(key: 'accessToken');
         options.headers['Authorization'] = 'Bearer $accessToken';
         return handler.next(options);
@@ -79,15 +84,49 @@ FormData createRequestData(DioException e) {
 Future<Response> createCloneRequest(
   Dio dio,
   DioException e,
-  requestData,
+  dynamic requestData,
 ) async {
+  RequestOptions options = e.requestOptions;
   return await dio.request(
-    e.requestOptions.path,
-    options: Options(
-      method: e.requestOptions.method,
-      headers: e.requestOptions.headers,
-    ),
+    options.path,
+    options: Options(method: options.method, headers: options.headers),
     data: requestData,
-    queryParameters: e.requestOptions.queryParameters,
+    queryParameters: options.queryParameters,
   );
+}
+
+Future<Dio> refreshDio() async {
+  FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+
+  Dio dio = Dio(BaseOptions(baseUrl: dotenv.get('BASE_URL')));
+
+  dio.interceptors.clear();
+
+  dio.interceptors.add(InterceptorsWrapper(
+    onRequest: (options, handler) async {
+      // 엑세스 토큰 대신 리프레시 토큰 넣어 요청
+      final refreshToken = await secureStorage.read(key: 'refreshToken');
+      options.headers['Authorization'] = 'Bearer $refreshToken';
+      return handler.next(options);
+    },
+    onResponse: (Response response, ResponseInterceptorHandler handler) {
+      return handler.next(response);
+    },
+    onError: (e, handler) async {
+      // 리프레쉬 토큰도 만료되었을 때
+      if (e.response!.statusCode == 401) {
+        await showDialog(
+          context: navigatorKey.currentContext!,
+          builder: (context) => const SystemDialog(
+            subTitle: '세션이 만료되었습니다. 다시 로그인 해주세요.',
+          ),
+        );
+        navigatorKey.currentContext!.go('/sign-in');
+        await secureStorage.deleteAll();
+      }
+      return handler.next(e);
+    },
+  ));
+
+  return dio;
 }

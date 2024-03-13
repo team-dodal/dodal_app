@@ -1,5 +1,6 @@
 import 'package:dodal_app/src/challenge/challenge_settings_menu/bloc/challenge_join_cubit.dart';
 import 'package:dodal_app/src/challenge/challenge_settings_menu/page/challenge_menu_page.dart';
+import 'package:dodal_app/src/challenge/feed/bloc/challenge_feed_cubit.dart';
 import 'package:dodal_app/src/challenge/feed/page/challenge_feed_page.dart';
 import 'package:dodal_app/src/challenge/main/bloc/challenge_info_bloc.dart';
 import 'package:dodal_app/src/challenge/manage/bloc/manage_challenge_feed_bloc.dart';
@@ -27,6 +28,8 @@ import 'package:dodal_app/src/create_challenge/page/create_challenge_complete_pa
 import 'package:dodal_app/src/create_challenge/page/create_challenge_route.dart';
 import 'package:dodal_app/src/create_feed/bloc/create_feed_bloc.dart';
 import 'package:dodal_app/src/create_feed/page/create_feed_page.dart';
+import 'package:dodal_app/src/main/my_info/bloc/my_feed_cubit.dart';
+import 'package:dodal_app/src/main/my_info/page/my_feed_page.dart';
 import 'package:dodal_app/src/search/bloc/search_history_list_cubit.dart';
 import 'package:dodal_app/src/search/bloc/search_result_list_cubit.dart';
 import 'package:dodal_app/src/search/page/search_result_page.dart';
@@ -58,6 +61,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 
+final navigatorKey = GlobalKey<NavigatorState>();
+
 class App extends StatefulWidget {
   const App({super.key});
 
@@ -72,6 +77,7 @@ class _AppState extends State<App> {
   void initState() {
     super.initState();
     router = GoRouter(
+      navigatorKey: navigatorKey,
       initialLocation: '/',
       refreshListenable: context.read<AuthBloc>(),
       redirect: (context, state) async {
@@ -115,6 +121,17 @@ class _AppState extends State<App> {
             ],
             child: const MainRoute(),
           ),
+          routes: [
+            GoRoute(
+              path: 'my-feed/:id',
+              builder: (context, state) => BlocProvider(
+                create: (context) => MyFeedCubit(
+                  int.parse(state.pathParameters['id'] as String),
+                ),
+                child: const MyFeedPage(),
+              ),
+            ),
+          ],
         ),
         /* sign-in */ GoRoute(
           path: '/sign-in',
@@ -257,31 +274,43 @@ class _AppState extends State<App> {
           path: '/challenge/:id',
           builder: (context, state) {
             int id = int.parse(state.pathParameters['id'] as String);
-            return MultiBlocProvider(
-              providers: [
-                BlocProvider(create: (context) => ChallengeInfoBloc(id)),
-                BlocProvider(create: (context) => ChallengeJoinCubit(id))
-              ],
-              child: const ChallengeRootPage(),
+            return BlocProvider(
+              create: (context) => ChallengeInfoBloc(id),
+              lazy: false,
+              child: BlocProvider(
+                create: (context) {
+                  ChallengeDetail challenge =
+                      context.read<ChallengeInfoBloc>().state.result!;
+                  bool isAdmin = challenge.hostId ==
+                      context.read<AuthBloc>().state.user!.id;
+                  return ChallengeJoinCubit(challenge, isAdmin);
+                },
+                child: const ChallengeRootPage(),
+              ),
             );
           },
           routes: [
             GoRoute(
-              path: 'feed/:title',
-              builder: (context, state) => ChallengeFeedPage(
-                roomId: int.parse(state.pathParameters['id'] as String),
-                roomName: state.pathParameters['title'] as String,
+              path: 'feed',
+              builder: (context, state) => BlocProvider(
+                create: (context) =>
+                    ChallengeFeedCubit((state.extra as ChallengeDetail).id),
+                child: ChallengeFeedPage(
+                  roomName: (state.extra as ChallengeDetail).title,
+                ),
               ),
             ),
             GoRoute(
               path: 'settings',
-              builder: (context, state) => BlocProvider(
-                create: (context) =>
-                    ChallengeJoinCubit((state.extra as ChallengeDetail).id),
-                child: ChallengeMenuPage(
-                  challenge: state.extra as ChallengeDetail,
-                ),
-              ),
+              builder: (context, state) {
+                final challenge = state.extra as ChallengeDetail;
+                bool isAdmin =
+                    challenge.hostId == context.read<AuthBloc>().state.user!.id;
+                return BlocProvider(
+                  create: (context) => ChallengeJoinCubit(challenge, isAdmin),
+                  child: ChallengeMenuPage(challenge: challenge),
+                );
+              },
             ),
             GoRoute(
               path: 'notice-list/:targetIndex/:isAdmin',
@@ -291,7 +320,8 @@ class _AppState extends State<App> {
                   state.pathParameters['targetIndex'] is String
                       ? int.parse(state.pathParameters['targetIndex'] as String)
                       : null,
-                  (state.pathParameters['isAdmin'] == 'true'),
+                  (state.extra as ChallengeDetail).hostId ==
+                      context.read<AuthBloc>().state.user!.id,
                 ),
                 child: const RoomNoticeListPage(),
               ),
@@ -351,9 +381,9 @@ class _AppState extends State<App> {
           ),
           routes: [
             GoRoute(
-              path: 'complete/:isUpdate',
+              path: 'complete/:status',
               builder: (context, state) => CreateChallengeCompletePage(
-                isUpdate: state.pathParameters['isUpdate'] == 'true',
+                isUpdate: state.pathParameters['status'] == 'update',
               ),
             )
           ],

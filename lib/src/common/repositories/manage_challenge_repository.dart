@@ -1,10 +1,8 @@
-import 'package:dio/dio.dart';
 import 'package:dodal_app/src/common/model/challenge_member_model.dart';
 import 'package:dodal_app/src/common/model/host_challenge_model.dart';
 import 'package:dodal_app/src/common/model/joined_challenge_model.dart';
 import 'package:dodal_app/src/common/model/members_feed_model.dart';
-import 'package:dodal_app/src/common/repositories/common/error_dialog.dart';
-import 'package:dodal_app/src/common/repositories/common/main.dart';
+import 'package:dodal_app/src/common/utils/dio.dart';
 
 class ManageChallengeRepository {
   static final service = dio();
@@ -63,36 +61,26 @@ class ManageChallengeRepository {
         '/api/v1/users/me/challenges/manage/$roomId/certifications/$feedId?confirm_yn=${confirmValue ? 'Y' : 'N'}');
   }
 
-  static handOverAdmin({
-    required int roomId,
-    required int userId,
-  }) async {
-    try {
-      await service.patch(
-        '/api/v1/users/me/challenges/manage/$roomId/mandate',
-        data: {"user_id": userId},
-      );
-
-      return true;
-    } on DioException catch (error) {
-      ResponseErrorDialog(error);
-      return null;
-    }
+  static Future<void> deleteChallenge({required int challengeId}) async {
+    await service.delete('/api/v1/users/me/challenges/manage/$challengeId');
   }
 
-  static banishUser({
+  static Future<void> handOverAdmin({
     required int roomId,
     required int userId,
   }) async {
-    try {
-      await service.delete(
-        '/api/v1/users/me/challenges/manage/$roomId/users/$userId',
-      );
+    await service.patch(
+      '/api/v1/users/me/challenges/manage/$roomId/mandate',
+      data: {"user_id": userId},
+    );
+  }
 
-      return true;
-    } on DioException catch (error) {
-      ResponseErrorDialog(error);
-      return null;
-    }
+  static Future<void> banishUser({
+    required int roomId,
+    required int userId,
+  }) async {
+    await service.delete(
+      '/api/v1/users/me/challenges/manage/$roomId/users/$userId',
+    );
   }
 }

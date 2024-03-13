@@ -53,7 +53,9 @@ class ChallengeHomePage extends StatelessWidget {
               child: TextButton(
                 onPressed: () {
                   context.push(
-                      '/challenge/${challenge.id}/feed/${challenge.title}');
+                    '/challenge/${challenge.id}/feed',
+                    extra: challenge,
+                  );
                 },
                 style: TextButton.styleFrom(
                   minimumSize: const Size(double.infinity, 54),

@@ -11,7 +11,6 @@ import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart' as Kakao;
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:path_provider/path_provider.dart';
 
-final navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   await dotenv.load(fileName: ".env");
   String fcmToken = await fcmSetting();

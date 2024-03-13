@@ -3,7 +3,7 @@ import 'package:dodal_app/src/common/model/authentication_model.dart';
 import 'package:dodal_app/src/common/model/user_calendar_data_model.dart';
 import 'package:dodal_app/src/common/model/user_model.dart';
 import 'package:dodal_app/src/common/model/users_rooms_info_model.dart';
-import 'package:dodal_app/src/common/repositories/common/main.dart';
+import 'package:dodal_app/src/common/utils/dio.dart';
 import 'package:dodal_app/src/common/repositories/presigned_url_repository.dart';
 import 'package:dodal_app/src/common/utils/social_auth.dart';
 
