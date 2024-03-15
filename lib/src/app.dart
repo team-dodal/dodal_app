@@ -254,13 +254,15 @@ class _AppState extends State<App> {
           ],
         ),
         /* create-feed */ GoRoute(
-          path: '/create-feed/:challengeId/:challengeTitle',
-          builder: (context, state) => BlocProvider(
-            create: (context) => CreateFeedBloc(
-                int.parse(state.pathParameters['challengeId'] as String)),
-            child:
-                CreateFeedPage(title: state.pathParameters['title'] as String),
-          ),
+          path: '/create-feed/:id/:title',
+          builder: (context, state) {
+            return BlocProvider(
+              create: (context) => CreateFeedBloc(
+                  int.parse(state.pathParameters['id'] as String)),
+              child: CreateFeedPage(
+                  title: state.pathParameters['title'] as String),
+            );
+          },
         ),
         /* comment */ GoRoute(
           path: '/comment/:feedId',
